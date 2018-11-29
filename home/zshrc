@@ -1,0 +1,240 @@
+# If you come from bash you might have to change your $PATH.
+# export PATH=$HOME/bin:/usr/local/bin:$PATH
+
+# Path to your oh-my-zsh installation.
+export ZSH=/usr/share/oh-my-zsh
+
+POWERLEVEL9K_MODE='nerdfont-complete'
+
+# Set name of the theme to load. Optionally, if you set this to "random"
+# it'll load a random theme each time that oh-my-zsh is loaded.
+# See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
+ZSH_THEME="powerlevel9k"
+
+POWERLEVEL9K_DIR_HOME_BACKGROUND='blue'
+POWERLEVEL9K_DIR_HOME_FOREGROUND='white'
+POWERLEVEL9K_DIR_HOME_SUBFOLDER_BACKGROUND='blue'
+POWERLEVEL9K_DIR_HOME_SUBFOLDER_FOREGROUND='white'
+POWERLEVEL9K_DIR_DEFAULT_BACKGROUND='blue'
+POWERLEVEL9K_DIR_DEFAULT_FOREGROUND='white'
+#POWERLEVEL9K_DIR_OMIT_FIRST_CHARACTER=false
+POWERLEVEL9K_SHORTEN_DIR_LENGTH=2
+POWERLEVEL9K_SHORTEN_STRATEGY='truncate_to_unique'
+
+POWERLEVEL9K_DIR_WRITABLE_FORBIDDEN_BACKGROUND='red'
+POWERLEVEL9K_DIR_WRITABLE_FORBIDDEN_FOREGROUND='015'
+
+POWERLEVEL9K_VCS_CLEAN_BACKGROUND='076'
+POWERLEVEL9K_VCS_CLEAN_FOREGROUND='black'
+POWERLEVEL9K_VCS_UNTRACKED_BACKGROUND='076'
+POWERLEVEL9K_VCS_UNTRACKED_FOREGROUND='black'
+POWERLEVEL9K_VCS_MODIFIED_BACKGROUND='220'
+POWERLEVEL9K_VCS_MODIFIED_FOREGROUND='black'
+#POWERLEVEL9K_VCS_GIT_HOOKS=(vcs-detect-changes git-untracked git-aheadbehind git-stash git-remotebranch git-tagname)
+POWERLEVEL9K_HIDE_BRANCH_ICON=true
+
+POWERLEVEL9K_STATUS_ERROR_BACKGROUND='red'
+POWERLEVEL9K_STATUS_ERROR_FOREGROUND='226'
+POWERLEVEL9K_STATUS_OK_BACKGROUND='black'
+POWERLEVEL9K_STATUS_OK_FOREGROUND='green'
+POWERLEVEL9K_STATUS_OK=false
+
+POWERLEVEL9K_BACKGROUND_JOBS_FOREGROUND='cyan'
+POWERLEVEL9K_BACKGROUND_JOBS_BACKGROUND='black'
+
+POWERLEVEL9K_COMMAND_EXECUTION_TIME_BACKGROUND='245'
+POWERLEVEL9K_COMMAND_EXECUTION_TIME_FOREGROUND='black'
+POWERLEVEL9K_COMMAND_EXECUTION_TIME_THRESHOLD=2
+
+POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(root_indicator dir dir_writable)# vcs)
+POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status background_jobs command_execution_time)
+
+# Set list of themes to load
+# Setting this variable when ZSH_THEME=random
+# cause zsh load theme from this variable instead of
+# looking in ~/.oh-my-zsh/themes/
+# An empty array have no effect
+# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
+
+# Uncomment the following line to use case-sensitive completion.
+# CASE_SENSITIVE="true"
+
+# Uncomment the following line to use hyphen-insensitive completion. Case
+# sensitive completion must be off. _ and - will be interchangeable.
+HYPHEN_INSENSITIVE="true"
+
+# Uncomment the following line to disable bi-weekly auto-update checks.
+# DISABLE_AUTO_UPDATE="true"
+
+# Uncomment the following line to change how often to auto-update (in days).
+# export UPDATE_ZSH_DAYS=13
+
+# Uncomment the following line to disable colors in ls.
+# DISABLE_LS_COLORS="true"
+
+# Uncomment the following line to disable auto-setting terminal title.
+# DISABLE_AUTO_TITLE="true"
+
+# Uncomment the following line to enable command auto-correction.
+# ENABLE_CORRECTION="true"
+
+# Uncomment the following line to display red dots whilst waiting for completion.
+COMPLETION_WAITING_DOTS="true"
+
+# Uncomment the following line if you want to disable marking untracked files
+# under VCS as dirty. This makes repository status check for large repositories
+# much, much faster.
+DISABLE_UNTRACKED_FILES_DIRTY="true"
+
+# Uncomment the following line if you want to disable marking untracked files
+# under VCS as dirty. This makes repository status check for large repositories
+# much, much faster.
+DISABLE_UNTRACKED_FILES_DIRTY="true"
+
+# Uncomment the following line if you want to change the command execution time
+# stamp shown in the history command output.
+# The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
+# HIST_STAMPS="mm/dd/yyyy"
+
+# Would you like to use another custom folder than $ZSH/custom?
+ZSH_CUSTOM=~/.oh-my-zsh/custom
+
+# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
+# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
+# Example format: plugins=(rails git textmate ruby lighthouse)
+# Add wisely, as too many plugins slow down shell startup.
+plugins=(
+  cp
+  git
+  gitfast
+  sublime
+  sudo
+  tig
+  tmux
+  zsh-syntax-highlighting
+  zsh-autosuggestions
+)
+
+autoload -U compinit && compinit
+
+source $ZSH/oh-my-zsh.sh
+source /usr/share/z/z.sh
+
+# User configuration
+
+# export MANPATH="/usr/local/man:$MANPATH"
+
+LESS="--quit-at-eof"
+LESS="--quit-if-one-screen $LESS"
+LESS="--ignore-case $LESS"
+LESS="--LONG-PROMPT $LESS"
+LESS="--RAW-CONTROL-CHARS $LESS"
+LESS="--no-init $LESS"
+LESS="--hilite-unread $LESS"
+LESS="--window=-4 $LESS"
+LESS="--shift 5 $LESS"
+export LESS
+export PAGER="less --squeeze-blank-lines"
+#export EDITOR=emacs
+#export VISUAL="$EDITOR"
+export PATH=$PATH:~/.local/bin
+export NINJA_STATUS="[%s/%f/%t] (j%r/%e) "
+
+HISTSIZE=1000000
+SAVEHIST=1000000
+
+# Treat the '!' character specially during expansion.
+setopt BANG_HIST
+
+# Write the history file in the ":start:elapsed;command" format.
+setopt EXTENDED_HISTORY
+
+# Share history between all sessions.
+setopt SHARE_HISTORY
+
+# Expire duplicate entries first when trimming history.
+setopt HIST_EXPIRE_DUPS_FIRST
+
+# Don't record an entry that was just recorded again.
+setopt HIST_IGNORE_DUPS
+
+# Delete old recorded entry if new entry is a duplicate.
+setopt HIST_IGNORE_ALL_DUPS
+
+# Do not display a line previously found.
+setopt HIST_FIND_NO_DUPS
+
+# Don't record an entry starting with a space.
+setopt HIST_IGNORE_SPACE
+
+# Don't write duplicate entries in the history file.
+setopt HIST_SAVE_NO_DUPS
+
+# Remove superfluous blanks before recording entry.
+setopt HIST_REDUCE_BLANKS
+
+# Don't execute immediately upon history expansion.
+setopt HIST_VERIFY
+
+# Remove the history command from the history list when invoked.
+setopt HIST_NO_STORE
+
+# Make cd push the old directory onto the directory stack.
+setopt AUTO_PUSHD
+
+# Don’t push multiple copies of the same directory onto the directory stack.
+setopt PUSHD_IGNORE_DUPS
+
+# Do not print the directory stack after pushd or popd.
+setopt PUSHD_SILENT
+
+# Have pushd with no arguments act like ‘pushd $HOME’.
+setopt PUSHD_TO_HOME
+
+# Color to use when highlighting suggestion
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=60'
+#ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=180'
+
+# Max size of buffer to trigger autosuggestion. Leave null for no upper bound.
+ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=40
+
+# You may need to manually set your language environment
+# export LANG=en_US.UTF-8
+
+# Compilation flags
+# export ARCHFLAGS="-arch x86_64"
+
+# ssh
+# export SSH_KEY_PATH="~/.ssh/rsa_id"
+
+# Set personal aliases, overriding those provided by oh-my-zsh libs,
+# plugins, and themes. Aliases can be placed here, though oh-my-zsh
+# users are encouraged to define aliases within the ZSH_CUSTOM folder.
+# For a full list of active aliases, run `alias`.
+#
+# Example aliases
+# alias zshconfig="mate ~/.zshrc"
+# alias ohmyzsh="mate ~/.oh-my-zsh"
+
+# Check directories size
+alias du='du --max-depth=1 --human-readable'
+
+# Use exa instead
+alias ls='exa --classify --group-directories-first'
+alias ll='ls --long'
+alias la='ll --all'
+
+# Emacs
+alias ec='emacsclient -nw'
+alias ecg='emacsclient -c'
+
+alias gdg='git difftool --tool=p4merge --find-renames'
+alias gmg='git mergetool --tool=p4merge'
+
+alias fu='sudo !!'
+
+bindkey \^U backward-kill-line
+
+# All unquoted arguments of the form ‘anything=expression’ appearing after the command name have
+# filename expansion
+setopt MAGIC_EQUAL_SUBST

@@ -1,0 +1,27 @@
+dashboard -layout source stack
+dashboard -style syntax_highlighting 'monokai'
+dashboard source -style context 10
+dashboard source -style tab-size 4
+
+set history save on
+set history size 100000
+set history filename ~/.gdb_history
+set history expansion on
+
+# prevent "Type <return> to continue"
+set height 0
+# prevent line wrap
+set width 0
+
+set print pretty on
+set print array on
+set print object on
+
+python
+import sys, os.path
+sys.path.insert(0, os.path.expanduser('~/.config/gdb'))
+from libstdcxx.v6.printers import register_libstdcxx_printers
+from libcxx.v1.printers import register_libcxx_printers
+register_libstdcxx_printers (None)
+register_libcxx_printers (None)
+end

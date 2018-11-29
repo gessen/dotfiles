@@ -1,0 +1,240 @@
+{
+    "editor.codeLens": false,
+    "editor.detectIndentation": true,
+    "editor.fontFamily": "Fira Code",
+    "editor.fontLigatures": true,
+    "editor.fontSize": 16,
+    "editor.formatOnPaste": false,
+    "editor.formatOnSave": false,
+    "editor.multiCursorModifier": "ctrlCmd",
+    "editor.rulers": [
+        80,
+        100,
+        120
+    ],
+    "editor.renderControlCharacters": false,
+    "editor.renderWhitespace": "all",
+    "editor.selectionClipboard": false,
+    "editor.snippetSuggestions": "top",
+    "editor.tabSize": 4,
+    "[cmake]": {
+        "editor.tabSize": 2
+    },
+    "workbench.colorTheme": "Monokai",
+    "workbench.iconTheme": "vscode-icons",
+    "window.titleBarStyle": "custom",
+    "window.restoreWindows": "none",
+    "window.zoomLevel": 1,
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/.vscode": true,
+        "**/build": true,
+        "**/build-*": true,
+        "**/*.o": true
+    },
+    "files.hotExit": "off",
+    "files.insertFinalNewline": true,
+    "files.trimFinalNewlines": true,
+    "files.trimTrailingWhitespace": false,
+    "files.watcherExclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/.vscode": true,
+        "**/build": true,
+        "**/build-*": true,
+        "**/*.o": true
+    },
+    "explorer.confirmDelete": false,
+    "search.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/.vscode": true,
+        "**/build": true,
+        "**/build-*": true,
+        "**/*.o": true
+    },
+    "search.smartCase": false,
+    "search.useIgnoreFiles": false,
+    "search.useRipgrep": true,
+    "debug.inlineValues": true,
+    "breadcrumbs.enabled": true,
+    "extensions.showRecommendationsOnlyOnDemand": true,
+    "problems.decorations.enabled": false,
+    "telemetry.enableTelemetry": false,
+    "gitlens.advanced.messages": {
+        "suppressShowKeyBindingsNotice": true
+    },
+    "gitlens.codeLens.authors.enabled": false,
+    "gitlens.codeLens.recentChange.enabled": false,
+    "gitlens.currentLine.enabled": false,
+    "gitlens.historyExplorer.enabled": true,
+    "gitlens.keymap": "alternate",
+    "gitlens.views.fileHistory.enabled": true,
+    "gitlens.views.lineHistory.enabled": true,
+    "python.formatting.provider": "yapf",
+    "python.formatting.yapfPath": "/usr/bin/yapf2",
+    "python.jediEnabled": true,
+    "python.jediPath": "/usr/lib/python2.7/site-packages",
+    "python.linting.enabled": true,
+    "python.linting.lintOnSave": true,
+    "python.linting.maxNumberOfProblems": 100,
+    "python.linting.pep8Args": [],
+    "python.linting.pep8Enabled": true,
+    "python.linting.pep8Path": "pycodestyle",
+    "python.linting.pylintEnabled": false,
+    "python.linting.pep8CategorySeverity.E": "Error",
+    "python.linting.pep8CategorySeverity.W": "Warning",
+    "python.pythonPath": "/usr/bin/python2",
+    "vsicons.dontShowNewVersionMessage": true,
+    "git.confirmSync": false,
+    "rust-client.channel": "beta",
+    "clang-format.style": "file",
+    "cmake.configureOnOpen": false,
+    "cmake.defaultVariants": {
+        "buildType": {
+            "default": "debug",
+            "description": "The build type",
+            "choices": {
+                "debug": {
+                    "short": "Debug",
+                    "long": "Emit debug information without performing optimizations",
+                    "buildType": "Debug"
+                },
+                "release": {
+                    "short": "Release",
+                    "long": "Enable optimizations, omit debug info",
+                    "buildType": "Release"
+                },
+                "minsize": {
+                    "short": "MinSizeRel",
+                    "long": "Optimize for smallest binary size",
+                    "buildType": "MinSizeRel"
+                },
+                "reldeb": {
+                    "short": "RelWithDebInfo",
+                    "long": "Perform optimizations AND include debugging information",
+                    "buildType": "RelWithDebInfo"
+                },
+                "coverage": {
+                    "short": "Coverage",
+                    "long": "Perform coverage calculations with debug information",
+                    "buildType": "Coverage"
+                }
+            }
+        }
+    },
+    "cmake.useCMakeServer": false,
+    "cquery.cacheDirectory": "/home/jswierk/.cquery-cache",
+    "cquery.codeLens.onLocalVariables": false,
+    "cquery.codeLens.renderInline": false,
+    "cquery.completion.enableSnippetInsertion": true,
+    "cquery.completion.include.whitelistLiteralEnding": [
+        ".h",
+        ".hpp",
+        ".hh"
+    ],
+    "cquery.diagnostics.onParse": true,
+    "cquery.diagnostics.onType": true,
+    "cquery.highlighting.enabled.enumConstants": true,
+    "cquery.highlighting.enabled.enums": true,
+    "cquery.highlighting.enabled.freeStandingFunctions": true,
+    "cquery.highlighting.enabled.freeStandingVariables": true,
+    "cquery.highlighting.enabled.globalVariables": true,
+    "cquery.highlighting.enabled.macros": true,
+    "cquery.highlighting.enabled.memberFunctions": true,
+    "cquery.highlighting.enabled.memberVariables": true,
+    "cquery.highlighting.enabled.namespaces": true,
+    "cquery.highlighting.enabled.parameters": true,
+    "cquery.highlighting.enabled.staticMemberFunctions": true,
+    "cquery.highlighting.enabled.staticMemberVariables": true,
+    "cquery.highlighting.enabled.templateParameters": true,
+    "cquery.highlighting.enabled.typeAliases": true,
+    "cquery.highlighting.enabled.types": true,
+    "cquery.index.blacklist": [
+        ".*CMakeFiles.*"
+    ],
+    "cquery.index.extraClangArguments": [
+        "-Weverything",
+        "-Wno-c++98-compat",
+        "-Wno-c++98-compat-pedantic",
+        "-Wno-covered-switch-default",
+        "-Wno-global-constructors",
+        "-Wno-exit-time-destructors",
+        "-Wno-documentation",
+        "-Wno-padded",
+        "-Wno-unneeded-member-function",
+        "-Wno-unused-member-function",
+        "-Wno-language-extension-token",
+        "-Wno-gnu-zero-variadic-macro-arguments",
+        "-Wno-gnu-statement-expression",
+        "-Wno-error"
+    ],
+    "cquery.launch.args": [
+        "--log-file=/home/jswierk/cquery.log"
+    ],
+    "ccls.cacheDirectory": "/home/jswierk/.ccls-cache",
+    "ccls.clang.excludeArgs": [
+        "-mabi=lp64"
+    ],
+    "ccls.clang.extraArgs": [
+        "-Weverything",
+        "-Wno-c++98-compat",
+        "-Wno-c++98-compat-pedantic",
+        "-Wno-covered-switch-default",
+        "-Wno-global-constructors",
+        "-Wno-exit-time-destructors",
+        "-Wno-documentation",
+        "-Wno-padded",
+        "-Wno-unneeded-member-function",
+        "-Wno-unused-member-function",
+        "-Wno-language-extension-token",
+        "-Wno-gnu-zero-variadic-macro-arguments",
+        "-Wno-gnu-statement-expression",
+        "-Wno-error"
+    ],
+    "ccls.codeLens.localVariables": false,
+    "ccls.codeLens.renderInline": false,
+    "ccls.completion.caseSensitivity": 1,
+    "ccls.completion.detailedLabel": true,
+    "ccls.completion.enableSnippetInsertion": true,
+    "ccls.highlighting.enabled.enumConstants": true,
+    "ccls.highlighting.enabled.enums": true,
+    "ccls.highlighting.enabled.freeStandingFunctions": true,
+    "ccls.highlighting.enabled.freeStandingVariables": true,
+    "ccls.highlighting.enabled.globalVariables": true,
+    "ccls.highlighting.enabled.macros": true,
+    "ccls.highlighting.enabled.memberFunctions": true,
+    "ccls.highlighting.enabled.memberVariables": true,
+    "ccls.highlighting.enabled.namespaces": true,
+    "ccls.highlighting.enabled.parameters": true,
+    "ccls.highlighting.enabled.staticMemberFunctions": true,
+    "ccls.highlighting.enabled.staticMemberVariables": true,
+    "ccls.highlighting.enabled.templateParameters": true,
+    "ccls.highlighting.enabled.typeAliases": true,
+    "ccls.highlighting.enabled.types": true,
+    "ccls.index.blacklist": [
+        ".*CMakeFiles.*"
+    ],
+    "ccls.launch.args": [
+        "--log-file=/home/jswierk/ccls.log"
+    ],
+    "bashIde.path": "/usr/bin/bash-language-server",
+    "shellcheck.customArgs": [
+        "--shell=bash"
+    ],
+    "shellcheck.exclude": [
+        "SC2059"
+    ],
+    "shellcheck.run": "onSave",
+    "shellformat.flag": "-i 4"
+}

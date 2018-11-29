@@ -1,0 +1,34 @@
+[user]
+	name = Jacek Swierk
+	email = jacek.swierk@gmail.com
+[core]
+	editor = subl --new-window --wait
+	pager = diff-so-fancy | less --tabs=4 -RFX
+	excludesfile = ~/.gitignore_global
+[diff]
+	guitool = p4merge
+	tool = p4merge
+[pull]
+	rebase = true
+[merge]
+	tool = p4merge
+[http]
+	sslverify = false
+[https]
+	sslverify = false
+[credential]
+	helper = cache --timeout 3600
+[color]
+	ui = true
+[color "diff-highlight"]
+	oldnormal = red bold
+	oldhighlight = red bold 52
+	newnormal = green bold
+	newhighlight = green bold 22
+[color "diff"]
+	meta = yellow
+	frag = magenta bold
+	commit = yellow bold
+	old = red bold
+	new = green bold
+	whitespace = red reverse

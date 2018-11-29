@@ -1,0 +1,3 @@
+---
+dotfiles_src: '{{ home_dir }}/.dotfiles/home'
+dotfiles_dst: '{{ home_dir }}'

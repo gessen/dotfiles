@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+set -e
+
+if [[ -f /etc/os-release ]]; then
+    source /etc/os-release
+    case "$ID_LIKE" in
+        arch)
+            if [[ ! -x /usr/bin/ansible ]]; then
+                sudo pacman -S --needed --noconfirm ansible
+            fi
+            ;;
+        *)
+            echo "Unsupported Linux distribution: $ID"
+            exit 1
+    esac
+fi
+
+echo ""
+echo "To install everything run:"
+echo "$ ansible-playbook ansible/playbook.yml --ask-become-pass"

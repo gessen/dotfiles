@@ -1,0 +1,26 @@
+---
+dotfiles:
+  - config/alacritty/alacritty.yml
+  - config/Code/User/settings.json
+  - config/Code/User/keybindings.json
+  - config/gdb/libstdcxx
+  - config/gdb/libcxx
+  - config/ranger/rc.conf
+  - config/ranger/rifle.conf
+  - config/sublime-text-3/Packages/User
+  - config/terminator/config
+  - config/variety/ui.conf
+  - config/variety/variety.conf
+  - config/yay/config.json
+  - gdbinit.d/init
+  - oh-my-zsh/custom/plugins/zsh-autosuggestions
+  - oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+  - oh-my-zsh/custom/themes/powerlevel9k.zsh-theme
+  - ssh/config
+  - gdbinit
+  - gitconfig
+  - gitignore_global
+  - spacemacs
+  - tigrc
+  - tmux.conf
+  - zshrc
