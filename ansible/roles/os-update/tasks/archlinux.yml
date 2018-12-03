@@ -1,0 +1,12 @@
+---
+- name: Install keyring
+  command: pacman -Sy --noconfirm --needed archlinux-keyring manjaro-keyring
+  become: yes
+
+- name: Populate keys
+  command: pacman-key --populate archlinux manjaro
+  become: yes
+
+# - name: Refresh keys
+#   command: pacman-key --refresh-keys
+#   become: yes

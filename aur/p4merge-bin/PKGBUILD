@@ -1,0 +1,24 @@
+# Maintainer: Jacek Swierk <jacek.swierk@protonmail.com>
+
+pkgname=p4merge-bin
+_pkgname=p4v
+_pkg=p4v-2018.2.1666551
+pkgver=18.2
+pkgrel=1
+pkgdesc='Three-way merging and side-by-side file comparison tool (official binary version)'
+arch=('x86_64')
+url='https://www.perforce.com/downloads/visual-merge-tool'
+license=('custom: commercial')
+provides=('p4merge' 'p4v')
+replaces=('p4merge')
+conflicts=('p4merge')
+depends=(qt5-base)
+source=(https://cdist2.perforce.com/perforce/r18.2/bin.linux26x86_64/p4v.tgz)
+sha256sums=('f55b47a9c4e2f871d4281e1a9b01b9c151b84f7383f0b0f005f540e9cc277ff8')
+
+package() {
+    install -d "${pkgdir}/opt/${_pkgname}"
+    install -d "${pkgdir}/usr/bin"
+    cp -r "${srcdir}/${_pkg}/"* "${pkgdir}/opt/${_pkgname}" -R
+    ln -sfn "/opt/${_pkgname}/bin/p4merge" "${pkgdir}/usr/bin/p4merge"
+}

@@ -1,0 +1,17 @@
+pkgbase = p4merge-bin
+	pkgdesc = Three-way merging and side-by-side file comparison tool (official binary version)
+	pkgver = 18.2
+	pkgrel = 1
+	url = https://www.perforce.com/downloads/visual-merge-tool
+	arch = x86_64
+	license = custom: commercial
+	depends = qt5-base
+	provides = p4merge
+	provides = p4v
+	conflicts = p4merge
+	replaces = p4merge
+	source = https://cdist2.perforce.com/perforce/r18.2/bin.linux26x86_64/p4v.tgz
+	sha256sums = f55b47a9c4e2f871d4281e1a9b01b9c151b84f7383f0b0f005f540e9cc277ff8
+
+pkgname = p4merge-bin
+

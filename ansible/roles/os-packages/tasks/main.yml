@@ -1,0 +1,8 @@
+---
+- name: 'Include OS-specific variables for {{ ansible_os_family }}'
+  include_vars: archlinux.yml
+  when: ansible_os_family == 'Archlinux'
+
+- name: 'Include OS-specific tasks for {{ ansible_os_family }}'
+  import_tasks: archlinux.yml
+  when: ansible_os_family == 'Archlinux'

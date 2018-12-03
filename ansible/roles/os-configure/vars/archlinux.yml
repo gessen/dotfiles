@@ -1,0 +1,20 @@
+---
+pacman_options:
+  - regexp: '^#?Color'
+    line: 'Color'
+
+makepkg_options:
+  - regexp: '^#?MAKEFLAGS='
+    line: 'MAKEFLAGS="-j$(nproc)"'
+
+  - regexp: '^#?CFLAGS='
+    line: 'CFLAGS="-march=native -O3 -pipe -fstack-protector-strong -fno-plt"'
+
+  - regexp: '^#?CXXFLAGS='
+    line: 'CXXFLAGS="-march=native -O3 -pipe -fstack-protector-strong -fno-plt"'
+
+  - regexp: '^#?BUILDENV='
+    line: 'BUILDENV=(!distcc color ccache !check !sign)'
+
+  - regexp: '^#?COMPRESSXZ='
+    line: 'COMPRESSXZ=(xz -c -z - --threads=0)'

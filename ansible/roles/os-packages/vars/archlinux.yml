@@ -1,0 +1,84 @@
+---
+aur_src: '{{ home_dir }}/.dotfiles/aur'
+aur_dst: '{{ home_dir }}/Workspace/aur'
+
+packages_pacman:
+  - adobe-source-code-pro-fonts
+  - alacritty
+  - bash-language-server
+  - bat
+  - boost
+  - boost-libs
+  - grub-customizer
+  - ccache
+  - clang
+  - cmake
+  - colordiff
+  - diff-so-fancy
+  - doxygen
+  - emacs
+  - exa
+  - fd
+  - fzf
+  - gdb
+  - gdb-dashboard
+  - glances
+  - graphviz
+  - gtop
+  - lld
+  - lldb
+  - llvm
+  - llvm-libs
+  - ncdu
+  - ninja
+  - noto-fonts
+  - pygmentize
+  - python-jedi
+  - python-language-server
+  - python-pycodestyle
+  - python-pyflakes
+  - python-pygments
+  - python-rope
+  - ranger
+  - ripgrep
+  - rustup
+  - shellcheck
+  - shfmt
+  - terminator
+  - tig
+  - tmux
+  - tree
+  - ttf-fira-code
+  - ttf-hack
+  - variety
+  - yapf
+  - yay
+  - xsel
+  - z
+  - zsh-autosuggestions
+  - zsh-completions
+  - zsh-syntax-highlighting
+  - zsh-theme-powerlevel9k
+
+packages_aur:
+  - bear
+  - ccls-git
+  - cquery-git
+  - discord
+  - dropbox
+  - gcovr
+  - libc++
+  - oh-my-zsh-git
+  - signal-desktop-bin
+  - visual-studio-code-bin
+
+packages_own:
+  - name: p4merge-bin
+    install: no
+    files:
+      - PKGBUILD
+      - .SRCINFO
+  - name: ttf-nerd-fonts-glyphs
+    files:
+      - PKGBUILD
+      - .SRCINFO

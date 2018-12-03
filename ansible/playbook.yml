@@ -5,3 +5,18 @@
   roles:
     - role: dotfiles
       tags: dotfiles
+
+    - role: os-configure
+      tags: [os, os-configure]
+
+    - role: os-update
+      tags: [os, os-update]
+
+    - role: os-upgrade
+      tags: [os, os-upgrade]
+
+    - role: os-packages
+      tags: [os, os-packages]
+
+    - role: os-shell
+      tags: [os, os-shell]

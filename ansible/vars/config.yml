@@ -1,2 +1,3 @@
 ---
 home_dir: '{{ ansible_env.HOME }}'
+with_aur: False

@@ -1,0 +1,43 @@
+---
+- name: Install pacman packages
+  pacman:
+    name: '{{ packages_pacman | default([]) }}'
+    state: latest
+  become: yes
+  tags: pacman
+
+- block:
+  - name: Check if yay exists
+    stat:
+      path: /usr/bin/yay
+    register: yay_installed
+
+  - name: Install aur packages
+    command: 'yay -S --noconfirm --needed {{ packages_aur | join(" ") }}'
+    when: yay_installed.stat.executable is defined and yay_installed.stat.executable
+
+  - name: Create folders for own recipes
+    file:
+      path: '{{ aur_dst }}/{{ item.name }}'
+      state: directory
+    with_items: '{{ packages_own }}'
+
+  - name: Symlink own recipes
+    file:
+      path: '{{ aur_dst }}/{{ item[0].name }}/{{ item[1] }}'
+      src: '{{ aur_src }}/{{ item[0].name }}/{{ item[1] }}'
+      state: link
+      force: yes
+    with_subelements:
+      - '{{ packages_own }}'
+      - files
+
+  - name: Install own packages
+    command: 'makepkg -si --noconfirm'
+    args:
+      chdir: '{{ aur_dst }}/{{ item.name }}'
+    with_items: '{{ packages_own }}'
+    when: (item.install | default('yes')) == 'yes'
+
+  when: with_aur | default(False)
+  tags: aur
