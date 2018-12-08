@@ -1,0 +1,10 @@
+---
+- name: Check if VSCode exists
+  stat:
+    path: /usr/bin/code
+  register: code_installed
+
+- name: Install VSCode extensions
+  command: 'code --install-extension {{ item }} --force'
+  with_items: '{{ vscode_extensions }}'
+  when: code_installed.stat.executable is defined and code_installed.stat.executable

@@ -20,3 +20,15 @@
 
     - role: os-shell
       tags: [os, os-shell]
+
+    - role: dev-spacemacs
+      tags: [dev, dev-spacemacs]
+      when: with_spacemacs | default(False)
+
+    - role: dev-sublime-text
+      tags: [dev, dev-sublime-text]
+      when: with_sublime_text | default(False)
+
+    - role: dev-vscode-extensions
+      tags: [dev, dev-vscode-extensions]
+      when: with_vscode_extensions | default(False)

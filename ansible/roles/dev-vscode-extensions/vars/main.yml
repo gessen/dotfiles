@@ -1,0 +1,17 @@
+---
+vscode_extensions:
+  - ccls-project.ccls
+  - CoenraadS.bracket-pair-colorizer
+  - eamodio.gitlens
+  - foxundermoon.shell-format
+  - mads-hartmann.bash-ide-vscode
+  - ms-python.python
+  - ms-vscode.sublime-keybindings
+  - robertohuertasm.vscode-icons
+  - ryzngard.vscode-header-source
+  - shardulm94.trailing-spaces
+  - timonwong.shellcheck
+  - twxs.cmake
+  - vector-of-bool.cmake-tools
+  - webfreak.debug
+  - xaver.clang-format
