@@ -4,3 +4,4 @@ with_aur: False
 with_spacemacs: False
 with_sublime_text: True
 with_vscode_extensions: True
+with_rust: False

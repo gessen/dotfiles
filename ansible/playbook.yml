@@ -32,3 +32,7 @@
     - role: dev-vscode-extensions
       tags: [dev, dev-vscode-extensions]
       when: with_vscode_extensions | default(False)
+
+    - role: dev-rust
+      tags: [dev, dev-rust]
+      when: with_rust | default(False)

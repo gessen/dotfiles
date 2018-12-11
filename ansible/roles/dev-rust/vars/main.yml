@@ -1,0 +1,8 @@
+---
+toolchain: stable
+
+components:
+  - rustfmt-preview
+  - rls-preview
+  - rust-analysis
+  - rust-src
