@@ -34,7 +34,8 @@
         "**/.vscode": true,
         "**/build": true,
         "**/build-*": true,
-        "**/*.o": true
+        "**/*.o": true,
+        "**/*.d": true
     },
     "files.hotExit": "off",
     "files.insertFinalNewline": true,
@@ -49,7 +50,8 @@
         "**/.vscode": true,
         "**/build": true,
         "**/build-*": true,
-        "**/*.o": true
+        "**/*.o": true,
+        "**/*.d": true
     },
     "explorer.confirmDelete": false,
     "search.exclude": {
@@ -61,7 +63,8 @@
         "**/.vscode": true,
         "**/build": true,
         "**/build-*": true,
-        "**/*.o": true
+        "**/*.o": true,
+        "**/*.d": true
     },
     "search.smartCase": false,
     "search.useIgnoreFiles": false,
