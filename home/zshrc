@@ -134,8 +134,8 @@ LESS="--window=-4 $LESS"
 LESS="--shift 5 $LESS"
 export LESS
 export PAGER="less --squeeze-blank-lines"
-#export EDITOR=emacs
-#export VISUAL="$EDITOR"
+export EDITOR="emacsclient --tty --alternate-editor="
+export VISUAL="$EDITOR"
 export PATH=$PATH:~/.local/bin
 export NINJA_STATUS="[%s/%f/%t] (j%r/%e) "
 
@@ -224,8 +224,8 @@ alias ll='ls --long'
 alias la='ll --all'
 
 # Emacs
-alias ec='emacsclient -nw'
-alias ecg='emacsclient -c'
+alias ec='emacsclient --tty --alternate-editor='
+alias ecg='emacsclient --create-frame --alternate-editor='
 
 alias gdg='git difftool --tool=p4merge --find-renames'
 alias gmg='git mergetool --tool=p4merge'
