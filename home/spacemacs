@@ -40,6 +40,7 @@ This function should only modify configuration layer settings."
      ;; `M-m f e R' (Emacs style) to install them.
      ;; ----------------------------------------------------------------
      helm
+     ansible
      (auto-completion :variables
                       auto-completion-enable-help-tooltip t)
      better-defaults
@@ -102,9 +103,11 @@ This function should only modify configuration layer settings."
      ;; markdown
      ;; neotree
      ;; org
-     ;; (shell :variables
-     ;;        shell-default-height 30
-     ;;        shell-default-position 'bottom)
+     (ranger :variables
+             ranger-show-hidden t)
+     search-engine
+     (shell :variables
+            shell-default-height 45)
      ;; spell-checking
      ;; syntax-checking
      themes-megapack
