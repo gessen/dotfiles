@@ -47,7 +47,7 @@ This function should only modify configuration layer settings."
      (c-c++ :variables
             c-c++-adopt-subprojects t
             c-c++-lsp-sem-highlight-rainbow t
-            c-c++-lsp-sem-highlight-method 'font-lock
+            c-c++-lsp-sem-highlight-method 'overlay
             c-c++-backend 'lsp-ccls
             c-c++-lsp-executable "ccls"
             c-c++-lsp-cache-dir (file-truename "~/.ccls-cache")
@@ -98,8 +98,11 @@ This function should only modify configuration layer settings."
      (git :variables
           git-magit-status-fullscreen t)
      (lsp :variables
+          lsp-auto-guess-root t
+          lsp-prefer-flymake t
           lsp-remap-xref-keybindings t
-          lsp-navigation 'peek)
+          lsp-navigation 'peek
+          lsp-ui-flycheck-enable nil)
      ;; markdown
      ;; neotree
      ;; org
