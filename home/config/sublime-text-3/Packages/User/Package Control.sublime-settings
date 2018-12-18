@@ -1,0 +1,17 @@
+{
+	"bootstrapped": true,
+	"in_process_packages":
+	[
+	],
+	"installed_packages":
+	[
+		"Clang Format",
+		"CMakeEditor",
+		"FileIcons",
+		"GitGutter",
+		"MarkdownPreview",
+		"Meson",
+		"Package Control",
+		"TrailingSpaces"
+	]
+}
