@@ -51,7 +51,7 @@ This function should only modify configuration layer settings."
             c-c++-backend 'lsp-ccls
             c-c++-lsp-executable "ccls"
             c-c++-lsp-cache-dir (file-truename "~/.ccls-cache")
-            c-c++-lsp-args (list (concat "--log-file=" (file-truename "~/ccls.log")))
+            c-c++-lsp-args (list (concat "-log-file=" (file-truename "~/ccls.log")) "-v=1")
             c-c++-lsp-initialization-options '(:clang
                                                (:extraArgs
                                                 [
