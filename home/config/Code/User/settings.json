@@ -137,54 +137,6 @@
         }
     },
     "cmake.useCMakeServer": false,
-    "cquery.cacheDirectory": "/home/jswierk/.cquery-cache",
-    "cquery.codeLens.onLocalVariables": false,
-    "cquery.codeLens.renderInline": false,
-    "cquery.completion.enableSnippetInsertion": true,
-    "cquery.completion.include.whitelistLiteralEnding": [
-        ".h",
-        ".hpp",
-        ".hh"
-    ],
-    "cquery.diagnostics.onParse": true,
-    "cquery.diagnostics.onType": true,
-    "cquery.highlighting.enabled.enumConstants": true,
-    "cquery.highlighting.enabled.enums": true,
-    "cquery.highlighting.enabled.freeStandingFunctions": true,
-    "cquery.highlighting.enabled.freeStandingVariables": true,
-    "cquery.highlighting.enabled.globalVariables": true,
-    "cquery.highlighting.enabled.macros": true,
-    "cquery.highlighting.enabled.memberFunctions": true,
-    "cquery.highlighting.enabled.memberVariables": true,
-    "cquery.highlighting.enabled.namespaces": true,
-    "cquery.highlighting.enabled.parameters": true,
-    "cquery.highlighting.enabled.staticMemberFunctions": true,
-    "cquery.highlighting.enabled.staticMemberVariables": true,
-    "cquery.highlighting.enabled.templateParameters": true,
-    "cquery.highlighting.enabled.typeAliases": true,
-    "cquery.highlighting.enabled.types": true,
-    "cquery.index.blacklist": [
-        ".*CMakeFiles.*"
-    ],
-    "cquery.index.extraClangArguments": [
-        "-Weverything",
-        "-Wno-c++98-compat",
-        "-Wno-c++98-compat-pedantic",
-        "-Wno-covered-switch-default",
-        "-Wno-global-constructors",
-        "-Wno-exit-time-destructors",
-        "-Wno-documentation",
-        "-Wno-padded",
-        "-Wno-unneeded-member-function",
-        "-Wno-unused-member-function",
-        "-Wno-language-extension-token",
-        "-Wno-gnu-zero-variadic-macro-arguments",
-        "-Wno-gnu-statement-expression",
-        "-Wno-error"
-    ],
-    "cquery.launch.args": [
-        "--log-file=/home/jswierk/cquery.log"
-    ],
     "ccls.cacheDirectory": "/home/jswierk/.ccls-cache",
     "ccls.clang.excludeArgs": [
         "-mabi=lp64"

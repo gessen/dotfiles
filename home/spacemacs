@@ -51,7 +51,6 @@ This function should only modify configuration layer settings."
             c-c++-backend 'lsp-ccls
             c-c++-lsp-executable "ccls"
             c-c++-lsp-cache-dir (file-truename "~/.ccls-cache")
-            c-c++-lsp-extra-args (list (concat "--log-file=" (file-truename "~/cquery.log")))
             c-c++-lsp-args (list (concat "--log-file=" (file-truename "~/ccls.log")))
             c-c++-lsp-initialization-options '(:clang
                                                (:extraArgs
@@ -74,26 +73,7 @@ This function should only modify configuration layer settings."
                                                 :excludeArgs
                                                 [
                                                  "-mabi=lp64"
-                                                ]))
-            c-c++-lsp-extra-init-params '(:cacheFormat "msgpack"
-                                          :discoverSystemIncludes :json-false
-                                          :extraClangArguments
-                                          [
-                                           "-Weverything"
-                                           "-Wno-c++98-compat"
-                                           "-Wno-c++98-compat-pedantic"
-                                           "-Wno-covered-switch-default"
-                                           "-Wno-global-constructors"
-                                           "-Wno-exit-time-destructors"
-                                           "-Wno-documentation"
-                                           "-Wno-padded"
-                                           "-Wno-unneeded-member-function"
-                                           "-Wno-unused-member-function"
-                                           "-Wno-language-extension-token"
-                                           "-Wno-gnu-zero-variadic-macro-arguments"
-                                           "-Wno-gnu-statement-expression"
-                                           "-Wno-error"
-                                          ]))
+                                                ])))
      emacs-lisp
      (git :variables
           git-magit-status-fullscreen t)
