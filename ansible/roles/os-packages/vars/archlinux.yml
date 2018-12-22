@@ -63,7 +63,6 @@ packages_pacman:
 packages_aur:
   - bear
   - ccls-git
-  - cquery-git
   - discord
   - dropbox
   - gcovr
