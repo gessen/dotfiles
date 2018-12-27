@@ -82,7 +82,9 @@ This function should only modify configuration layer settings."
           lsp-auto-guess-root t
           lsp-prefer-flymake t
           lsp-remap-xref-keybindings t
-          lsp-navigation 'peek)
+          lsp-navigation 'peek
+          lsp-ui-peek-fontify 'always
+          lsp-ui-peek-always-show t)
      ;; markdown
      ;; org
      (ranger :variables
