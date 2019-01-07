@@ -118,6 +118,8 @@ autoload -U compinit && compinit
 
 source $ZSH/oh-my-zsh.sh
 source /usr/share/z/z.sh
+source /usr/share/fzf/completion.zsh
+source /usr/share/fzf/key-bindings.zsh
 
 # User configuration
 
