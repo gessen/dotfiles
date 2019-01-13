@@ -1,5 +1,6 @@
 ---
 home_dir: '{{ ansible_env.HOME }}'
+with_pacman: True
 with_aur: False
 with_spacemacs: False
 with_sublime_text: True

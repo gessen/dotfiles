@@ -4,7 +4,7 @@
     name: '{{ packages_pacman | default([]) }}'
     state: latest
   become: yes
-  tags: pacman
+  when: with_pacman | default(True)
 
 - block:
   - name: Check if yay exists
@@ -40,4 +40,3 @@
     when: (item.install | default('yes')) == 'yes'
 
   when: with_aur | default(False)
-  tags: aur
