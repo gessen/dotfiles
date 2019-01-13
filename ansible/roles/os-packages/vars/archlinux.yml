@@ -52,6 +52,7 @@ packages_pacman:
   - variety
   - yapf
   - yay
+  - xclip
   - xsel
   - z
   - zsh-autosuggestions
