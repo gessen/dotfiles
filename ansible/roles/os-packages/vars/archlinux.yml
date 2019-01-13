@@ -4,7 +4,6 @@ aur_dst: '{{ home_dir }}/Workspace/aur'
 
 packages_pacman:
   - adobe-source-code-pro-fonts
-  - alacritty
   - bash-language-server
   - bat
   - boost

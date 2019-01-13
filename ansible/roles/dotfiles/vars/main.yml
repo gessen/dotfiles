@@ -1,6 +1,5 @@
 ---
 dotfiles:
-  - config/alacritty/alacritty.yml
   - config/Code/User/settings.json
   - config/Code/User/keybindings.json
   - config/gdb/libstdcxx
