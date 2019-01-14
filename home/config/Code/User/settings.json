@@ -187,7 +187,8 @@
     ],
     "bashIde.path": "/usr/bin/bash-language-server",
     "shellcheck.customArgs": [
-        "--shell=bash"
+        "--shell=bash",
+        "--external-sources"
     ],
     "shellcheck.exclude": [
         "SC2059"
