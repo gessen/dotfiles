@@ -155,6 +155,7 @@
         "-Wno-language-extension-token",
         "-Wno-gnu-zero-variadic-macro-arguments",
         "-Wno-gnu-statement-expression",
+        "-Wno-unused-macros",
         "-Wno-error"
     ],
     "ccls.codeLens.localVariables": false,

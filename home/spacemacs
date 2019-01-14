@@ -68,6 +68,7 @@ This function should only modify configuration layer settings."
                                                  "-Wno-language-extension-token"
                                                  "-Wno-gnu-zero-variadic-macro-arguments"
                                                  "-Wno-gnu-statement-expression"
+                                                 "-Wno-unused-macros"
                                                  "-Wno-error"
                                                 ]
                                                 :excludeArgs
