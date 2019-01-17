@@ -7,11 +7,11 @@ pkgbase = p4merge-bin
 	license = custom: commercial
 	depends = qt5-base
 	provides = p4merge
-	provides = p4v
 	conflicts = p4merge
 	replaces = p4merge
+	noextract = p4v.tgz
 	source = https://cdist2.perforce.com/perforce/r18.2/bin.linux26x86_64/p4v.tgz
-	sha256sums = f55b47a9c4e2f871d4281e1a9b01b9c151b84f7383f0b0f005f540e9cc277ff8
+	sha256sums = 9b1da4f908f24b17d3fb4e8aa6ea7ede6fd72f93d6964a8c3e3704e0fd40f114
 
 pkgname = p4merge-bin
 

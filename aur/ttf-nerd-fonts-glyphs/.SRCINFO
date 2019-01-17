@@ -4,7 +4,6 @@ pkgbase = ttf-nerd-fonts-glyphs
 	pkgrel = 1
 	url = https://github.com/ryanoasis/nerd-fonts
 	arch = x86_64
-	arch = i686
 	license = MIT
 	source = https://raw.githubusercontent.com/ryanoasis/nerd-fonts/2.0.0/src/glyphs/Symbols-2048-em%20Nerd%20Font%20Complete.ttf
 	source = https://raw.githubusercontent.com/ryanoasis/nerd-fonts/2.0.0/10-nerd-font-symbols.conf
