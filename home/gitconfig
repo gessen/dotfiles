@@ -36,3 +36,4 @@
 	autoSetupRebase = always
 [rebase]
 	autoStash = true
+	abbreviateCommands = true
