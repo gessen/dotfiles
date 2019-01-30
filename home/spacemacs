@@ -108,7 +108,9 @@ This function should only modify configuration layer settings."
    ;; To use a local version of a package, use the `:location' property:
    ;; '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
-   dotspacemacs-additional-packages '(xclip)
+   dotspacemacs-additional-packages '(xclip
+                                      (bb-mode :location (recipe :fetcher github
+                                                                 :repo "mferland/bb-mode")))
 
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -549,6 +551,12 @@ before packages are loaded."
   ;; Enables xclip integration for copy/paste to system clipboard.
   ;; The `xclip` package needs to be installed on the machine emacs is running.
   (xclip-mode 1)
+  (require 'bb-mode)
+  (setq auto-mode-alist (cons '("\\.bb$" . bb-mode) auto-mode-alist))
+  (setq auto-mode-alist (cons '("\\.inc$" . bb-mode) auto-mode-alist))
+  (setq auto-mode-alist (cons '("\\.bbappend$" . bb-mode) auto-mode-alist))
+  (setq auto-mode-alist (cons '("\\.bbclass$" . bb-mode) auto-mode-alist))
+  (setq auto-mode-alist (cons '("\\.conf$" . bb-mode) auto-mode-alist))
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
