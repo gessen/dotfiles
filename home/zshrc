@@ -104,12 +104,14 @@ ZSH_CUSTOM=~/.oh-my-zsh/custom
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
   cp
+  fzf
   git
   gitfast
   sublime
   sudo
   tig
   tmux
+  z
   zsh-syntax-highlighting
   zsh-autosuggestions
 )
@@ -117,9 +119,6 @@ plugins=(
 autoload -U compinit && compinit
 
 source $ZSH/oh-my-zsh.sh
-source /usr/share/z/z.sh
-source /usr/share/fzf/completion.zsh
-source /usr/share/fzf/key-bindings.zsh
 
 # User configuration
 

@@ -54,7 +54,6 @@ packages_pacman:
   - yay
   - xclip
   - xsel
-  - z
   - zsh-autosuggestions
   - zsh-completions
   - zsh-syntax-highlighting
