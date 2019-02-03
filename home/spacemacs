@@ -109,6 +109,7 @@ This function should only modify configuration layer settings."
    ;; '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
    dotspacemacs-additional-packages '(xclip
+                                      fzf
                                       (bb-mode :location (recipe :fetcher github
                                                                  :repo "mferland/bb-mode")))
 
