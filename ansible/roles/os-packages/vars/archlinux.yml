@@ -8,7 +8,6 @@ packages_pacman:
   - bat
   - boost
   - boost-libs
-  - grub-customizer
   - ccache
   - clang
   - cmake
@@ -23,6 +22,7 @@ packages_pacman:
   - gdb-dashboard
   - glances
   - graphviz
+  - grub-customizer
   - gtop
   - lld
   - lldb
