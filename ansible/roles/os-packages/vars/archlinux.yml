@@ -3,7 +3,6 @@ aur_src: '{{ home_dir }}/.dotfiles/aur'
 aur_dst: '{{ home_dir }}/Workspace/aur'
 
 packages_pacman:
-  - adobe-source-code-pro-fonts
   - bash-language-server
   - bat
   - boost
@@ -49,7 +48,6 @@ packages_pacman:
   - tmux
   - tree
   - ttf-fira-code
-  - ttf-hack
   - variety
   - yapf
   - yay
