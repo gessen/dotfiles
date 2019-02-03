@@ -207,6 +207,9 @@ ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=40
 # ssh
 # export SSH_KEY_PATH="~/.ssh/rsa_id"
 
+# By default use plain bat
+export BAT_STYLE="plain"
+
 # Set personal aliases, overriding those provided by oh-my-zsh libs,
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.
@@ -230,6 +233,9 @@ alias ecg='emacsclient --create-frame --alternate-editor='
 
 alias gdg='git difftool --tool=p4merge --find-renames'
 alias gmg='git mergetool --tool=p4merge'
+
+# Use bat
+alias cat='bat'
 
 alias fu='sudo !!'
 
