@@ -5,6 +5,12 @@
   broadcast_all = None
   broadcast_group = None
   broadcast_off = None
+  cycle_next = <Shift>Tab
+  cycle_prev = <Primary><Shift>Tab
+  go_down = <Shift>Down
+  go_left = <Shift>Left
+  go_right = <Shift>Right
+  go_up = <Shift>Up
   layout_launcher = None
   switch_to_tab_1 = <Alt>1
   switch_to_tab_10 = <Alt>0
