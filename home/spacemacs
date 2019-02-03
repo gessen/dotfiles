@@ -545,6 +545,9 @@ before packages are loaded."
      '((c-mode . treemacs-icon-c)
        (c++-mode . treemacs-icon-cpp))))
 
+  ;; Use fd instead of find for ffip
+  (setq ffip-use-rust-fd t)
+
   ;;-----------------------------------------------------------------------------
   ;; Xclip
   ;;-----------------------------------------------------------------------------
