@@ -33,3 +33,5 @@
 [rebase]
 	autoStash = true
 	abbreviateCommands = true
+[rerere]
+	enabled = true
