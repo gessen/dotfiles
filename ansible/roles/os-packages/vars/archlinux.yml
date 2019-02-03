@@ -81,3 +81,8 @@ packages_own:
     files:
       - PKGBUILD
       - .SRCINFO
+  - name: zsh-interactive-cd-git
+    files:
+      - PKGBUILD
+      - .SRCINFO
+      - zsh-interactive-cd.install

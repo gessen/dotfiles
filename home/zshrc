@@ -117,6 +117,7 @@ plugins=(
   tig
   tmux
   zsh-autosuggestions
+  zsh-interactive-cd
   zsh-syntax-highlighting
 )
 

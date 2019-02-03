@@ -1,0 +1,30 @@
+# Maintainer: Jacek Swierk <jacek.swierk@protonmail.com>
+
+pkgname="zsh-interactive-cd-git"
+pkgver=18.2859ca7
+pkgrel=1
+pkgdesc="Fish like interactive tab completion for cd in zsh "
+arch=("any")
+url="https://github.com/changyuheng/zsh-interactive-cd"
+license=("MPL-2.0")
+depends=("zsh" "fzf")
+makedepends=("git")
+provides=("${pkgname%-git}")
+conflicts=("${pkgname%-git}")
+install="${pkgname%-git}.install"
+source=("${pkgname%-git}::git+${url}")
+sha256sums=("SKIP")
+
+pkgver() {
+  cd "${srcdir}/${pkgname%-git}"
+  printf "%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+package() {
+  cd "${srcdir}/${pkgname%-git}"
+
+  install -d "${pkgdir}/usr/share/zsh/plugins/${pkgname%-git}"
+  install -Dm644 "${pkgname%-git}.plugin.zsh" "${pkgdir}/usr/share/zsh/plugins/${pkgname%-git}"
+  ln -s "${pkgname%-git}.plugin.zsh" "${pkgdir}/usr/share/zsh/plugins/${pkgname%-git}/${pkgname%-git}.zsh"
+  install -Dm644 "LICENSE" "${pkgdir}/usr/share/licenses/${pkgname%-git}/LICENSE"
+}
