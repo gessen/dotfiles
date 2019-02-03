@@ -12,10 +12,6 @@
 	rebase = true
 [merge]
 	tool = p4merge
-[http]
-	sslverify = false
-[https]
-	sslverify = false
 [credential]
 	helper = cache --timeout 3600
 [color]
