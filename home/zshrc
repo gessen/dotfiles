@@ -285,6 +285,11 @@ bindkey -s '^[9' '^A^[f^[f^[f^[f^[f^[f^[f^[f'
 
 bindkey "^U" backward-kill-line
 
+# Swap ALT-H with CTRL-ALT-H
+bindkey "^[^H" run-help
+bindkey "^[H" backward-kill-word
+bindkey "^[h" backward-kill-word
+
 # Use CTRL-{A/F/D} for fasd completion
 bindkey '^X^A' fasd-complete
 bindkey '^X^F' fasd-complete-f
