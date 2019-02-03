@@ -16,6 +16,7 @@ packages_pacman:
   - doxygen
   - emacs
   - exa
+  - fasd
   - fd
   - fzf
   - gdb

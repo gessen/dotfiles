@@ -98,12 +98,17 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 # Would you like to use another custom folder than $ZSH/custom?
 ZSH_CUSTOM=~/.oh-my-zsh/custom
 
+# Move cache to home dir
+ZSH_CACHE_DIR=~/.oh-my-zsh/cache
+mkdir -p $ZSH_CACHE_DIR
+
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
   cp
+  fasd
   fzf
   git
   gitfast
@@ -111,7 +116,6 @@ plugins=(
   sudo
   tig
   tmux
-  z
   zsh-autosuggestions
   zsh-syntax-highlighting
 )
@@ -237,13 +241,17 @@ alias gmg='git mergetool --tool=p4merge'
 # Use bat
 alias cat='bat'
 
+# To open file with $EDITOR with fasd
+alias e='v'
+
 alias fu='sudo !!'
 
 # Normal z when used with arguments but displays an fzf prompt when used without
 unalias z 2> /dev/null
 z() {
-  [ $# -gt 0 ] && _z "$*" && return
-  cd "$(_z -l 2>&1 | fzf --height 40% --nth 2.. --reverse --inline-info +s --tac --query "${*##-* }" | sed 's/^[0-9,.]* *//')"
+  [ $# -gt 0 ] && fasd_cd -d "$*" && return
+  local dir
+  dir="$(fasd -Rdl "$1" | fzf -1 -0 --no-sort +m)" && cd "${dir}" || return 1
 }
 
 # Quick jumping to n-th arguments by pressing Alt-number
@@ -258,6 +266,11 @@ bindkey -s '^[8' '^A^[f^[f^[f^[f^[f^[f^[f'
 bindkey -s '^[9' '^A^[f^[f^[f^[f^[f^[f^[f^[f'
 
 bindkey "^U" backward-kill-line
+
+# Use CTRL-{A/F/D} for fasd completion
+bindkey '^X^A' fasd-complete
+bindkey '^X^F' fasd-complete-f
+bindkey '^X^D' fasd-complete-d
 
 # All unquoted arguments of the form ‘anything=expression’ appearing after the command name have
 # filename expansion
