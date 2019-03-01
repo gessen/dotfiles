@@ -8,6 +8,8 @@ set history size 100000
 set history filename ~/.gdb_history
 set history expansion on
 
+set auto-load safe-path /
+
 # prevent "Type <return> to continue"
 set height 0
 # prevent line wrap
