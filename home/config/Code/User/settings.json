@@ -137,7 +137,7 @@
         }
     },
     "cmake.useCMakeServer": false,
-    "ccls.cacheDirectory": "/home/jswierk/.ccls-cache",
+    "ccls.cache.directory": "/home/jswierk/.ccls-cache",
     "ccls.clang.excludeArgs": [
         "-mabi=lp64"
     ],
