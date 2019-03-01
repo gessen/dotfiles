@@ -6,8 +6,8 @@
   broadcast_all = None
   broadcast_group = None
   broadcast_off = None
-  cycle_next = <Shift>Tab
-  cycle_prev = <Primary><Shift>Tab
+  cycle_next = None
+  cycle_prev = None
   go_down = <Shift>Down
   go_left = <Shift>Left
   go_right = <Shift>Right
