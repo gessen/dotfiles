@@ -8,6 +8,7 @@
 [diff]
 	guitool = p4merge
 	tool = p4merge
+	submodule = log
 [pull]
 	rebase = true
 [merge]
@@ -35,3 +36,5 @@
 	abbreviateCommands = true
 [rerere]
 	enabled = true
+[status]
+	submodulessummary = 1
