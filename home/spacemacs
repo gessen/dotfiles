@@ -111,7 +111,8 @@ This function should only modify configuration layer settings."
    dotspacemacs-additional-packages '(xclip
                                       fzf
                                       (bb-mode :location (recipe :fetcher github
-                                                                 :repo "mferland/bb-mode")))
+                                                                 :repo "mferland/bb-mode"))
+                                      multiple-cursors)
 
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -512,9 +513,9 @@ This function is called at the very end of Spacemacs startup, after layer
 configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
-  ;;-----------------------------------------------------------------------------
+  ;;----------------------------------------------------------------------------
   ;; Emacs
-  ;;-----------------------------------------------------------------------------
+  ;;----------------------------------------------------------------------------
   ;; Disable lockfiles (those pesky .# symlinks).
   (setq create-lockfiles nil)
 
@@ -549,9 +550,9 @@ before packages are loaded."
   ;; Use fd instead of find for ffip
   (setq ffip-use-rust-fd t)
 
-  ;;-----------------------------------------------------------------------------
+  ;;----------------------------------------------------------------------------
   ;; Xclip
-  ;;-----------------------------------------------------------------------------
+  ;;----------------------------------------------------------------------------
   ;; Enables xclip integration for copy/paste to system clipboard.
   ;; The `xclip` package needs to be installed on the machine emacs is running.
   (xclip-mode 1)
@@ -561,6 +562,21 @@ before packages are loaded."
   (setq auto-mode-alist (cons '("\\.bbappend$" . bb-mode) auto-mode-alist))
   (setq auto-mode-alist (cons '("\\.bbclass$" . bb-mode) auto-mode-alist))
   (setq auto-mode-alist (cons '("\\.conf$" . bb-mode) auto-mode-alist))
+
+  ;;----------------------------------------------------------------------------
+  ;; multiple-cursors
+  ;;----------------------------------------------------------------------------
+  (require 'multiple-cursors)
+  (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
+  (global-set-key (kbd "C-S-c C-S-d") 'mc/mark-more-like-this-extended)
+  (global-set-key (kbd "C-.") 'mc/mark-next-like-this)
+  (global-set-key (kbd "C-,") 'mc/mark-previous-like-this)
+  (global-set-key (kbd "C->") 'mc/mark-next-like-this-word)
+  (global-set-key (kbd "C-<") 'mc/mark-previous-like-this-word)
+  (global-set-key (kbd "C-c C-.") 'mc/unmark-next-like-this)
+  (global-set-key (kbd "C-c C-,") 'mc/unmark-previous-like-this)
+  (global-set-key (kbd "C-c C->") 'mc/mark-all-like-this)
+  (global-set-key (kbd "C-c C-<") 'mc/mark-all-words-like-this)
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
