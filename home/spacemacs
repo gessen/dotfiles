@@ -96,7 +96,6 @@ This function should only modify configuration layer settings."
             shell-default-height 45)
      ;; spell-checking
      ;; syntax-checking
-     themes-megapack
      treemacs
      version-control
      )
@@ -108,7 +107,9 @@ This function should only modify configuration layer settings."
    ;; To use a local version of a package, use the `:location' property:
    ;; '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
-   dotspacemacs-additional-packages '(xclip
+   dotspacemacs-additional-packages '(monokai-theme
+                                      solarized-theme
+                                      xclip
                                       fzf
                                       (bb-mode :location (recipe :fetcher github
                                                                  :repo "mferland/bb-mode"))
@@ -237,9 +238,7 @@ It should only modify the values of Spacemacs settings."
    ;; with 2 themes variants, one dark and one light)
    dotspacemacs-themes '(monokai
                          solarized-dark
-                         solarized-light
-                         spacemacs-dark
-                         spacemacs-light)
+                         solarized-light)
 
    ;; Set the theme for the Spaceline. Supported themes are `spacemacs',
    ;; `all-the-icons', `custom', `doom', `vim-powerline' and `vanilla'. The
