@@ -54,6 +54,7 @@
     "workbench.list.keyboardNavigation": "filter",
     "workbench.colorTheme": "Solarized Dark",
     "workbench.iconTheme": "vscode-icons",
+    "workbench.tree.indent": 16,
     "explorer.confirmDelete": false,
     "search.exclude": {
         "**/.git": true,
