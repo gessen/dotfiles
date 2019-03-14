@@ -68,6 +68,7 @@ packages_aur:
   - oh-my-zsh-git
   - signal-desktop-bin
   - visual-studio-code-bin
+  - zsh-theme-powerlevel10k
 
 packages_own:
   - name: p4merge-bin

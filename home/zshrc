@@ -9,7 +9,7 @@ POWERLEVEL9K_MODE='nerdfont-complete'
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-ZSH_THEME="powerlevel9k"
+ZSH_THEME="powerlevel10k"
 
 POWERLEVEL9K_DIR_HOME_BACKGROUND='blue'
 POWERLEVEL9K_DIR_HOME_FOREGROUND='white'
@@ -45,7 +45,7 @@ POWERLEVEL9K_COMMAND_EXECUTION_TIME_BACKGROUND='245'
 POWERLEVEL9K_COMMAND_EXECUTION_TIME_FOREGROUND='black'
 POWERLEVEL9K_COMMAND_EXECUTION_TIME_THRESHOLD=2
 
-POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(root_indicator dir dir_writable)# vcs)
+POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(root_indicator dir dir_writable vcs)
 POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status background_jobs command_execution_time)
 
 # Set list of themes to load
