@@ -20,8 +20,6 @@
     "[cmake]": {
         "editor.tabSize": 2
     },
-    "workbench.colorTheme": "Monokai",
-    "workbench.iconTheme": "vscode-icons",
     "window.titleBarStyle": "custom",
     "window.restoreWindows": "none",
     "window.zoomLevel": 1,
@@ -53,6 +51,8 @@
         "**/*.o": true,
         "**/*.d": true
     },
+    "workbench.colorTheme": "Solarized Dark",
+    "workbench.iconTheme": "vscode-icons",
     "explorer.confirmDelete": false,
     "search.exclude": {
         "**/.git": true,
