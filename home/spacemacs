@@ -80,7 +80,7 @@ This function should only modify configuration layer settings."
      (lsp :variables
           ; lsp-print-io t
           lsp-auto-guess-root t
-          lsp-prefer-flymake t
+          lsp-prefer-flymake nil
           lsp-remap-xref-keybindings t
           lsp-navigation 'peek
           lsp-ui-peek-fontify 'always
@@ -105,7 +105,8 @@ This function should only modify configuration layer settings."
    ;; To use a local version of a package, use the `:location' property:
    ;; '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
-   dotspacemacs-additional-packages '(monokai-theme
+   dotspacemacs-additional-packages '(flycheck
+                                      monokai-theme
                                       solarized-theme
                                       xclip
                                       fzf
