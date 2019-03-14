@@ -589,6 +589,11 @@ before packages are loaded."
   (global-set-key (kbd "C-c C-,") 'mc/unmark-previous-like-this)
   (global-set-key (kbd "C-c C->") 'mc/mark-all-like-this)
   (global-set-key (kbd "C-c C-<") 'mc/mark-all-words-like-this)
+
+  ;;----------------------------------------------------------------------------
+  ;; smartparens
+  ;;----------------------------------------------------------------------------
+  (setq-default sp-escape-quotes-after-insert nil)
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
