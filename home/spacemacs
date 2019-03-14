@@ -54,28 +54,26 @@ This function should only modify configuration layer settings."
             c-c++-lsp-cache-dir (file-truename "~/.ccls-cache")
             c-c++-lsp-args (list (concat "-log-file=" (file-truename "~/ccls.log")) "-v=1")
             c-c++-lsp-initialization-options '(:clang
-                                               (:extraArgs
-                                                [
-                                                 "-Weverything"
-                                                 "-Wno-c++98-compat"
-                                                 "-Wno-c++98-compat-pedantic"
-                                                 "-Wno-covered-switch-default"
-                                                 "-Wno-global-constructors"
-                                                 "-Wno-exit-time-destructors"
-                                                 "-Wno-documentation"
-                                                 "-Wno-padded"
-                                                 "-Wno-unneeded-member-function"
-                                                 "-Wno-unused-member-function"
-                                                 "-Wno-language-extension-token"
-                                                 "-Wno-gnu-zero-variadic-macro-arguments"
-                                                 "-Wno-gnu-statement-expression"
-                                                 "-Wno-unused-macros"
-                                                 "-Wno-error"
-                                                ]
-                                                :excludeArgs
-                                                [
-                                                 "-mabi=lp64"
-                                                ])))
+                                                (:extraArgs [
+                                                   "-Weverything"
+                                                   "-Wno-c++98-compat"
+                                                   "-Wno-c++98-compat-pedantic"
+                                                   "-Wno-covered-switch-default"
+                                                   "-Wno-global-constructors"
+                                                   "-Wno-exit-time-destructors"
+                                                   "-Wno-documentation"
+                                                   "-Wno-padded"
+                                                   "-Wno-unneeded-member-function"
+                                                   "-Wno-unused-member-function"
+                                                   "-Wno-language-extension-token"
+                                                   "-Wno-gnu-zero-variadic-macro-arguments"
+                                                   "-Wno-gnu-statement-expression"
+                                                   "-Wno-unused-macros"
+                                                   "-Wno-error"]
+                                                 :excludeArgs ["-mabi=lp64"])
+                                               :codeLens (:localVariables :json-false)
+                                               :completion (:caseSensitivity 1)
+                                               :index (:blacklist [".*CMakeFiles.*"])))
      emacs-lisp
      (git :variables
           git-magit-status-fullscreen t)
