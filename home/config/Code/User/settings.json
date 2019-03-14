@@ -51,6 +51,7 @@
         "**/*.o": true,
         "**/*.d": true
     },
+    "workbench.list.keyboardNavigation": "filter",
     "workbench.colorTheme": "Solarized Dark",
     "workbench.iconTheme": "vscode-icons",
     "explorer.confirmDelete": false,
