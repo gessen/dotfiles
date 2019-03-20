@@ -3,6 +3,11 @@ dashboard -style syntax_highlighting 'monokai'
 dashboard source -style context 10
 dashboard source -style tab-size 4
 
+skip -gfi /usr/include/c++/**/*
+skip -gfi /usr/include/c++/*/*/*
+skip -gfi /usr/include/c++/*/*
+skip -gfi /usr/include/c++/*
+
 set history save on
 set history size 100000
 set history filename ~/.gdb_history
