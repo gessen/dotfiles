@@ -20,6 +20,7 @@ dotfiles:
   - oh-my-zsh/custom/themes/powerlevel10k.zsh-theme
   - ssh/config
   - gdbinit
+  - gitattributes_global
   - gitconfig
   - gitignore_global
   - spacemacs
