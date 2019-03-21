@@ -20,7 +20,6 @@ packages_pacman:
   - fzf
   - gdb
   - gdb-dashboard
-  - glances
   - graphviz
   - grub-customizer
   - gtop
@@ -30,7 +29,6 @@ packages_pacman:
   - llvm-libs
   - ncdu
   - ninja
-  - noto-fonts
   - pygmentize
   - python-jedi
   - python-language-server
@@ -46,7 +44,6 @@ packages_pacman:
   - terminator
   - tig
   - tmux
-  - tree
   - ttf-fira-code
   - variety
   - yapf
@@ -64,7 +61,6 @@ packages_aur:
   - discord
   - dropbox
   - gcovr
-  - libc++
   - oh-my-zsh-git
   - signal-desktop-bin
   - visual-studio-code-bin
