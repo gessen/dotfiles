@@ -20,6 +20,9 @@
     "[cmake]": {
         "editor.tabSize": 2
     },
+    "[cpp]": {
+        "editor.defaultFormatter": "xaver.clang-format"
+    },
     "window.titleBarStyle": "custom",
     "window.restoreWindows": "none",
     "window.zoomLevel": 1,
