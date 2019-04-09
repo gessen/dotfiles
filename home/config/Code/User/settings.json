@@ -101,7 +101,6 @@
     "python.linting.pep8CategorySeverity.E": "Error",
     "python.linting.pep8CategorySeverity.W": "Warning",
     "python.pythonPath": "/usr/bin/python2",
-    "vsicons.dontShowNewVersionMessage": true,
     "git.confirmSync": false,
     "rust-client.channel": "beta",
     "clang-format.style": "file",
