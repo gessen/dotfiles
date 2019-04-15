@@ -3,6 +3,7 @@ aur_src: '{{ home_dir }}/.dotfiles/aur'
 aur_dst: '{{ home_dir }}/Workspace/aur'
 
 packages_pacman:
+  - atool
   - bash-language-server
   - bat
   - boost
@@ -23,6 +24,7 @@ packages_pacman:
   - graphviz
   - grub-customizer
   - gtop
+  - highlight
   - lld
   - lldb
   - llvm
