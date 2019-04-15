@@ -241,8 +241,8 @@ export BAT_STYLE="plain"
 # Check directories size
 alias du='du --max-depth=1 --human-readable'
 
-# Use exa instead
-alias ls='exa --classify --group-directories-first'
+# Use lsd instead
+alias ls='lsd --classify --group-dirs=first --date=relative'
 alias ll='ls --long'
 alias la='ll --all'
 

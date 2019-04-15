@@ -15,7 +15,6 @@ packages_pacman:
   - diff-so-fancy
   - doxygen
   - emacs
-  - exa
   - fasd
   - fd
   - fzf
@@ -29,6 +28,7 @@ packages_pacman:
   - lldb
   - llvm
   - llvm-libs
+  - lsd
   - ncdu
   - ninja
   - pygmentize
