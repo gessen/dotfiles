@@ -14,13 +14,6 @@
         ],
     },
 
-    { "keys": ["ctrl+shift+c"], "command": "clang_format",
-      "context":
-        [
-            {"key": "selector", "operator": "equal", "operand": "source.js"}
-        ]
-    },
-
     { "keys": ["f12"], "command": "lsp_symbol_definition",
       "context":
         [
