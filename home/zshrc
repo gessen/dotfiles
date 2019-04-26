@@ -142,7 +142,7 @@ export LESS
 export PAGER="less --squeeze-blank-lines"
 export EDITOR="emacsclient --tty --alternate-editor="
 export VISUAL="$EDITOR"
-export PATH=$PATH:~/.local/bin
+export PATH="/usr/lib/ccache/bin:$HOME/.local/bin:$PATH"
 export NINJA_STATUS="[%s/%f/%t] (j%r/%e) "
 
 HISTSIZE=1000000
