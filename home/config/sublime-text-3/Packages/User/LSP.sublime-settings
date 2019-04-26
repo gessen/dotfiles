@@ -1,0 +1,14 @@
+{
+	"clients":
+	{
+		"clangd":
+		{
+			"command": [
+				"clangd",
+				"-log=info"
+			],
+			"enabled": true
+		}
+	},
+	"log_stderr": true
+}
