@@ -129,11 +129,6 @@
                     "short": "RelWithDebInfo",
                     "long": "Perform optimizations AND include debugging information",
                     "buildType": "RelWithDebInfo"
-                },
-                "coverage": {
-                    "short": "Coverage",
-                    "long": "Perform coverage calculations with debug information",
-                    "buildType": "Coverage"
                 }
             }
         }
