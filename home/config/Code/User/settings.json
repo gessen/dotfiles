@@ -182,7 +182,7 @@
         ".*CMakeFiles.*"
     ],
     "ccls.launch.args": [
-        "-log-file=/home/jswierk/ccls.log",
+        "-log-file=/tmp/ccls.log",
         "-v=1"
     ],
     "bashIde.path": "/usr/bin/bash-language-server",
