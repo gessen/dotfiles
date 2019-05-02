@@ -684,6 +684,9 @@ before packages are loaded."
   ;; Use fd instead of find for ffip
   (setq ffip-use-rust-fd t)
 
+  ;; Dired ls options
+  (setq dired-listing-switches "-alvFh --group-directories-first")
+
   ;;----------------------------------------------------------------------------
   ;; xclip
   ;;----------------------------------------------------------------------------
