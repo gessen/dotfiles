@@ -758,6 +758,11 @@ before packages are loaded."
   ;;----------------------------------------------------------------------------
   (spacemacs/toggle-aggressive-indent-on)
 
+  ;;----------------------------------------------------------------------------
+  ;; whitespace-cleanup-mode
+  ;;----------------------------------------------------------------------------
+  (spacemacs/toggle-whitespace-cleanup-on)
+
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
