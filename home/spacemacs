@@ -113,6 +113,7 @@ This function should only modify configuration layer settings."
      fzf
      (bb-mode :location (recipe :fetcher github :repo "mferland/bb-mode"))
      multiple-cursors
+     phi-search
      cmake-font-lock
     )
 
@@ -714,6 +715,13 @@ before packages are loaded."
   (global-set-key (kbd "C-c C-,") 'mc/unmark-previous-like-this)
   (global-set-key (kbd "C-c C->") 'mc/mark-all-like-this)
   (global-set-key (kbd "C-c C-<") 'mc/mark-all-words-like-this)
+
+  ;;----------------------------------------------------------------------------
+  ;; phi-search
+  ;;----------------------------------------------------------------------------
+  (require 'phi-search)
+  (global-set-key (kbd "C-s") 'phi-search)
+  (global-set-key (kbd "C-r") 'phi-search-backward)
 
   ;;----------------------------------------------------------------------------
   ;; move-text
