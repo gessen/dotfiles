@@ -753,6 +753,11 @@ before packages are loaded."
   (autoload 'cmake-font-lock-activate "cmake-font-lock" nil t)
   (add-hook 'cmake-mode-hook 'cmake-font-lock-activate)
 
+  ;;----------------------------------------------------------------------------
+  ;; aggressive-indent-mode
+  ;;----------------------------------------------------------------------------
+  (spacemacs/toggle-aggressive-indent-on)
+
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
