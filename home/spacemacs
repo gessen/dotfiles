@@ -114,6 +114,7 @@ This function should only modify configuration layer settings."
      (bb-mode :location (recipe :fetcher github :repo "mferland/bb-mode"))
      multiple-cursors
      phi-search
+     phi-search-mc
      cmake-font-lock
     )
 
@@ -724,6 +725,13 @@ before packages are loaded."
   (global-set-key (kbd "C-s") 'phi-search)
   (global-set-key (kbd "C-r") 'phi-search-backward)
   (global-set-key (kbd "M-%") 'phi-replace-query)
+
+  ;;----------------------------------------------------------------------------
+  ;; phi-search-mc
+  ;;----------------------------------------------------------------------------
+  (require 'phi-search-mc)
+  (phi-search-mc/setup-keys)
+  (add-hook 'isearch-mode-hook 'phi-search-from-isearch-mc/setup-keys)
 
   ;;----------------------------------------------------------------------------
   ;; move-text
