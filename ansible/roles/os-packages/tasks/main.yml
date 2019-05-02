@@ -1,8 +1,29 @@
 ---
-- name: 'Include OS-specific variables for {{ ansible_os_family }}'
-  include_vars: archlinux.yml
-  when: ansible_os_family == 'Archlinux'
+- name: 'Include OS-family specific variables for {{ ansible_os_family }}'
+  include_vars: '{{ var_file }}'
+  with_first_found:
+      - files:
+          - "vars/{{ ansible_os_family | lower }}-common.yml"
+        skip: true
+  loop_control:
+    loop_var: var_file
 
-- name: 'Include OS-specific tasks for {{ ansible_os_family }}'
-  import_tasks: archlinux.yml
-  when: ansible_os_family == 'Archlinux'
+- name: 'Include distribution specific variables for {{ ansible_distribution }}'
+  include_vars: '{{ var_file }}'
+  with_first_found:
+      - files:
+          - "vars/{{ ansible_distribution | lower }}.yml"
+          - "vars/{{ ansible_os_family | lower }}.yml"
+        skip: true
+  loop_control:
+    loop_var: var_file
+
+- name: 'Include distribution specific tasks for {{ ansible_distribution }}'
+  include_tasks: '{{ task_file }}'
+  with_first_found:
+      - files:
+          - "tasks/{{ ansible_distribution | lower }}.yml"
+          - "tasks/{{ ansible_os_family | lower }}.yml"
+        skip: true
+  loop_control:
+    loop_var: task_file

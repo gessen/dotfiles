@@ -2,8 +2,7 @@
 aur_src: '{{ home_dir }}/.dotfiles/aur'
 aur_dst: '{{ home_dir }}/Workspace/aur'
 
-packages_pacman:
-  - atool
+packages_common:
   - bash-language-server
   - bat
   - boost
@@ -20,24 +19,19 @@ packages_pacman:
   - fzf
   - gdb
   - gdb-dashboard
-  - graphviz
   - grub-customizer
   - gtop
-  - highlight
   - lld
   - lldb
-  - llvm
-  - llvm-libs
   - lsd
   - ncdu
   - ninja
-  - pygmentize
-  - python-jedi
-  - python-language-server
-  - python-pycodestyle
-  - python-pyflakes
-  - python-pygments
-  - python-rope
+  # - python-jedi
+  # - python-language-server
+  # - python-pycodestyle
+  # - python-pyflakes
+  # - python-pygments
+  # - python-rope
   - ranger
   - ripgrep
   - rustup
@@ -46,10 +40,10 @@ packages_pacman:
   - terminator
   - tig
   - tmux
+  - tree
   - ttf-fira-code
   - variety
   - yapf
-  - yay
   - xclip
   - xsel
   - zsh-autosuggestions
@@ -57,7 +51,13 @@ packages_pacman:
   - zsh-syntax-highlighting
   - zsh-theme-powerlevel9k
 
-packages_aur:
+packages_common_asdeps:
+  - atool
+  - graphviz
+  - highlight
+  - llvm
+
+packages_common_aur:
   - bear
   - ccls-git
   - discord
@@ -68,7 +68,7 @@ packages_aur:
   - visual-studio-code-bin
   - zsh-theme-powerlevel10k
 
-packages_own:
+packages_common_own:
   - name: p4merge-bin
     install: no
     files:

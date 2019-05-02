@@ -1,8 +1,12 @@
 ---
-- name: 'Include OS-specific variables for {{ ansible_os_family }}'
-  include_vars: archlinux.yml
-  when: ansible_os_family == 'Archlinux'
+- name: Check if preferred {{ login_shell }} is installed
+  stat:
+    path: '{{ login_shell }}'
+  register: login_shell_installed
 
-- name: 'Include OS-specific tasks for {{ ansible_os_family }}'
-  import_tasks: archlinux.yml
-  when: ansible_os_family == 'Archlinux'
+- name: Set default shell as {{ login_shell }}
+  user:
+    name: '{{ ansible_user_id }}'
+    shell: '{{ login_shell }}'
+  when: login_shell_installed.stat.exists
+  become: yes

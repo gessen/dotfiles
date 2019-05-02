@@ -12,3 +12,27 @@
     state: link
     force: yes
   with_items: '{{ dotfiles }}'
+
+- name: 'Include distribution specific variables for {{ ansible_distribution }}'
+  include_vars: '{{ var_file }}'
+  with_first_found:
+      - files:
+          - "vars/{{ ansible_distribution | lower }}.yml"
+          - "vars/{{ ansible_os_family | lower }}.yml"
+        skip: true
+  loop_control:
+    loop_var: var_file
+
+- name: 'Create folders for config files for {{ ansible_distribution }}'
+  file:
+    path: '{{ (dotfiles_dst + "/." + item) | dirname }}'
+    state: directory
+  with_items: '{{ dotfiles }}'
+
+- name: 'Symlink config files for {{ ansible_distribution }}'
+  file:
+    path: '{{ dotfiles_dst }}/.{{ item }}'
+    src: '{{ dotfiles_src }}/{{ item }}'
+    state: link
+    force: yes
+  with_items: '{{ dotfiles }}'

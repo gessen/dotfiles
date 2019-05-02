@@ -1,10 +1,24 @@
 ---
-- name: Install pacman packages
-  pacman:
-    name: '{{ packages_pacman | default([]) }}'
-    state: latest
-  become: yes
-  when: with_pacman | default(True)
+- block:
+  - name: Install pacman packages
+    command: 'pacman -S --noconfirm --needed {{ item }}'
+    with_items:
+      - '{{ packages_common | default([]) }}'
+      - '{{ packages | default([]) }}'
+    register: pacman_output
+    changed_when: '"there is nothing to do" not in pacman_output.stdout'
+    become: yes
+
+  - name: Install pacman packages as dependencies
+    command: 'pacman -S --noconfirm --needed --asdeps {{ item }}'
+    with_items:
+      - '{{ packages_common_asdeps | default([]) }}'
+      - '{{ packages_asdeps | default([]) }}'
+    register: pacman_output
+    changed_when: '"there is nothing to do" not in pacman_output.stdout'
+    become: yes
+
+  when: with_pacman | default(False)
 
 - block:
   - name: Check if yay exists
@@ -13,14 +27,23 @@
     register: yay_installed
 
   - name: Install aur packages
-    command: 'yay -S --noconfirm --needed {{ packages_aur | join(" ") }}'
-    when: yay_installed.stat.executable is defined and yay_installed.stat.executable
+    command: 'yay -S --noconfirm --needed {{ item }}'
+    with_items:
+      - '{{ packages_common_aur | default([]) }}'
+      - '{{ packages_aur | default([]) }}'
+    when:
+      - yay_installed.stat.executable is defined
+      - yay_installed.stat.executable
+    register: yay_output
+    changed_when: '"is up to date" not in yay_output.stdout'
 
   - name: Create folders for own recipes
     file:
       path: '{{ aur_dst }}/{{ item.name }}'
       state: directory
-    with_items: '{{ packages_own }}'
+    with_items:
+      - '{{ packages_common_own | default([]) }}'
+      - '{{ packages_own | default([]) }}'
 
   - name: Symlink own recipes
     file:
@@ -29,14 +52,18 @@
       state: link
       force: yes
     with_subelements:
-      - '{{ packages_own }}'
+      - '{{ packages_common_own | default([]) + packages_own | default([]) }}'
       - files
 
   - name: Install own packages
-    command: 'makepkg -si --noconfirm'
+    command: 'makepkg -si --noconfirm --needed'
     args:
       chdir: '{{ aur_dst }}/{{ item.name }}'
-    with_items: '{{ packages_own }}'
+    with_items:
+      - '{{ packages_common_own | default([]) }}'
+      - '{{ packages_own | default([]) }}'
     when: (item.install | default('yes')) == 'yes'
+    register: makepkg_output
+    changed_when: '"there is nothing to do" not in makepkg_output.stdout'
 
   when: with_aur | default(False)
