@@ -113,6 +113,7 @@ This function should only modify configuration layer settings."
      fzf
      (bb-mode :location (recipe :fetcher github :repo "mferland/bb-mode"))
      multiple-cursors
+     cmake-font-lock
     )
 
    ;; A list of packages that cannot be updated.
@@ -603,6 +604,14 @@ before packages are loaded."
   ;; smartparens
   ;;----------------------------------------------------------------------------
   (setq-default sp-escape-quotes-after-insert nil)
+
+  ;;----------------------------------------------------------------------------
+  ;; cmake-font-lock
+  ;;----------------------------------------------------------------------------
+  (require 'cmake-font-lock)
+  (autoload 'cmake-font-lock-activate "cmake-font-lock" nil t)
+  (add-hook 'cmake-mode-hook 'cmake-font-lock-activate)
+
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
