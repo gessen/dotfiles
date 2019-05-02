@@ -4,6 +4,9 @@ set -e
 
 if [[ -f /etc/os-release ]]; then
     source /etc/os-release
+    if [[ -z "$ID_LIKE" ]]; then
+        ID_LIKE="$ID"
+    fi
     case "$ID_LIKE" in
         arch)
             if [[ ! -x /usr/bin/ansible ]]; then
