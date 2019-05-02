@@ -53,27 +53,26 @@ This function should only modify configuration layer settings."
             c-c++-lsp-executable "ccls"
             c-c++-lsp-cache-dir ".ccls-cache"
             c-c++-lsp-args (list "-log-file=/tmp/ccls.log" "-v=1")
-            c-c++-lsp-initialization-options '(:clang
-                                                (:extraArgs [
-                                                   "-Weverything"
-                                                   "-Wno-c++98-compat"
-                                                   "-Wno-c++98-compat-pedantic"
-                                                   "-Wno-covered-switch-default"
-                                                   "-Wno-global-constructors"
-                                                   "-Wno-exit-time-destructors"
-                                                   "-Wno-documentation"
-                                                   "-Wno-padded"
-                                                   "-Wno-unneeded-member-function"
-                                                   "-Wno-unused-member-function"
-                                                   "-Wno-language-extension-token"
-                                                   "-Wno-gnu-zero-variadic-macro-arguments"
-                                                   "-Wno-gnu-statement-expression"
-                                                   "-Wno-unused-macros"
-                                                   "-Wno-error"]
-                                                 :excludeArgs ["-mabi=lp64"])
-                                               :codeLens (:localVariables :json-false)
-                                               :completion (:caseSensitivity 1)
-                                               :index (:blacklist [".*CMakeFiles.*"])))
+            c-c++-lsp-initialization-options '
+              (:clang (:extraArgs ["-Weverything"
+                                   "-Wno-c++98-compat"
+                                   "-Wno-c++98-compat-pedantic"
+                                   "-Wno-covered-switch-default"
+                                   "-Wno-global-constructors"
+                                   "-Wno-exit-time-destructors"
+                                   "-Wno-documentation"
+                                   "-Wno-padded"
+                                   "-Wno-unneeded-member-function"
+                                   "-Wno-unused-member-function"
+                                   "-Wno-language-extension-token"
+                                   "-Wno-gnu-zero-variadic-macro-arguments"
+                                   "-Wno-gnu-statement-expression"
+                                   "-Wno-unused-macros"
+                                   "-Wno-error"]
+                       :excludeArgs ["-mabi=lp64"])
+                       :codeLens (:localVariables :json-false)
+                       :completion (:caseSensitivity 1)
+                       :index (:blacklist [".*CMakeFiles.*"])))
      emacs-lisp
      (git :variables
           git-magit-status-fullscreen t)
@@ -96,7 +95,7 @@ This function should only modify configuration layer settings."
      ;; syntax-checking
      treemacs
      version-control
-     )
+    )
 
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
@@ -105,14 +104,16 @@ This function should only modify configuration layer settings."
    ;; To use a local version of a package, use the `:location' property:
    ;; '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
-   dotspacemacs-additional-packages '(flycheck
-                                      monokai-theme
-                                      solarized-theme
-                                      xclip
-                                      fzf
-                                      (bb-mode :location (recipe :fetcher github
-                                                                 :repo "mferland/bb-mode"))
-                                      multiple-cursors)
+   dotspacemacs-additional-packages
+   '(
+     flycheck
+     monokai-theme
+     solarized-theme
+     xclip
+     fzf
+     (bb-mode :location (recipe :fetcher github :repo "mferland/bb-mode"))
+     multiple-cursors
+    )
 
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -561,11 +562,15 @@ before packages are loaded."
   (setq ffip-use-rust-fd t)
 
   ;;----------------------------------------------------------------------------
-  ;; Xclip
+  ;; xclip
   ;;----------------------------------------------------------------------------
   ;; Enables xclip integration for copy/paste to system clipboard.
   ;; The `xclip` package needs to be installed on the machine emacs is running.
   (xclip-mode 1)
+
+  ;;----------------------------------------------------------------------------
+  ;; bb-mode
+  ;;----------------------------------------------------------------------------
   (require 'bb-mode)
   (setq auto-mode-alist (cons '("\\.bb$" . bb-mode) auto-mode-alist))
   (setq auto-mode-alist (cons '("\\.inc$" . bb-mode) auto-mode-alist))
