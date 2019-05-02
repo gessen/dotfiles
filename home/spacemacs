@@ -661,6 +661,9 @@ before packages are loaded."
   ;; Always follow symlinks.
   (setq vc-follow-symlinks t)
 
+  ;; Use SSH by default for tramp
+  (setq tramp-default-method "ssh")
+
   (with-eval-after-load "treemacs"
     (treemacs-map-icons-with-auto-mode-alist
      '(".h")
