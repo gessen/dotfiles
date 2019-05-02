@@ -116,6 +116,7 @@ This function should only modify configuration layer settings."
      phi-search
      phi-search-mc
      cmake-font-lock
+     treemacs-icons-dired
     )
 
    ;; A list of packages that cannot be updated.
@@ -750,6 +751,14 @@ before packages are loaded."
   (require 'cmake-font-lock)
   (autoload 'cmake-font-lock-activate "cmake-font-lock" nil t)
   (add-hook 'cmake-mode-hook 'cmake-font-lock-activate)
+
+  ;;----------------------------------------------------------------------------
+  ;; treemacs-icons-dired
+  ;;----------------------------------------------------------------------------
+  (use-package treemacs-icons-dired
+    :after dired
+    :ensure t
+    :config (treemacs-icons-dired-mode))
 
   ;;----------------------------------------------------------------------------
   ;; aggressive-indent-mode
