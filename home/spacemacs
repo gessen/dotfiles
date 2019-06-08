@@ -74,6 +74,7 @@ This function should only modify configuration layer settings."
                        :completion (:caseSensitivity 1)
                        :index (:blacklist [".*CMakeFiles.*"])))
      emacs-lisp
+     fasd
      (git :variables
           git-magit-status-fullscreen t)
      (lsp :variables
