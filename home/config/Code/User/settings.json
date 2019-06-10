@@ -191,5 +191,28 @@
         "SC2059"
     ],
     "shellcheck.run": "onSave",
-    "shellformat.flag": "-i 4"
+    "shellformat.flag": "-i 4",
+    "remote.SSH.showLoginTerminal": true,
+    "remote.SSH.defaultExtensions": [
+        "ccls-project.ccls",
+        "eamodio.gitlens",
+        "ms-vscode.sublime-keybindings",
+        "ryzngard.vscode-header-source",
+        "shardulm94.trailing-spaces",
+        "twxs.cmake",
+        "vector-of-bool.cmake-tools",
+        "webfreak.debug",
+        "xaver.clang-format"
+    ],
+    "remote.containers.defaultExtensions": [
+        "ccls-project.ccls",
+        "eamodio.gitlens",
+        "ms-vscode.sublime-keybindings",
+        "ryzngard.vscode-header-source",
+        "shardulm94.trailing-spaces",
+        "twxs.cmake",
+        "vector-of-bool.cmake-tools",
+        "webfreak.debug",
+        "xaver.clang-format"
+    ]
 }
