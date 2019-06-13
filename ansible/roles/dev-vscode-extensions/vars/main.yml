@@ -3,6 +3,7 @@ vscode_extensions:
   - ccls-project.ccls
   - CoenraadS.bracket-pair-colorizer
   - eamodio.gitlens
+  - EugenWiens.bitbake
   - foxundermoon.shell-format
   - mads-hartmann.bash-ide-vscode
   - ms-python.python
