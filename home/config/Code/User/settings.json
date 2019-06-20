@@ -57,6 +57,8 @@
     "workbench.list.keyboardNavigation": "filter",
     "workbench.colorTheme": "Solarized Dark",
     "workbench.iconTheme": "vscode-icons",
+    "workbench.settings.editor": "json",
+    "workbench.settings.useSplitJSON": true,
     "workbench.tree.indent": 16,
     "explorer.confirmDelete": false,
     "search.exclude": {
