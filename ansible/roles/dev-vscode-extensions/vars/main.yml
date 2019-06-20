@@ -19,5 +19,6 @@ vscode_extensions:
   - twxs.cmake
   - vector-of-bool.cmake-tools
   - vscode-icons-team.vscode-icons
+  - vscoss.vscode-ansible
   - webfreak.debug
   - xaver.clang-format
