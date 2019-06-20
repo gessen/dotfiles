@@ -112,6 +112,7 @@ This function should only modify configuration layer settings."
      solarized-theme
      xclip
      fzf
+     deadgrep
      (bb-mode :location (recipe :fetcher github :repo "mferland/bb-mode"))
      multiple-cursors
      phi-search
@@ -695,6 +696,11 @@ before packages are loaded."
   ;; Enables xclip integration for copy/paste to system clipboard.
   ;; The `xclip` package needs to be installed on the machine emacs is running.
   (xclip-mode 1)
+
+  ;;----------------------------------------------------------------------------
+  ;; deadgrep
+  ;;----------------------------------------------------------------------------
+  (global-set-key (kbd "<f5>") #'deadgrep)
 
   ;;----------------------------------------------------------------------------
   ;; bb-mode
