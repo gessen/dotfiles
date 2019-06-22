@@ -710,16 +710,18 @@ before packages are loaded."
   ;; multiple-cursors
   ;;----------------------------------------------------------------------------
   (require 'multiple-cursors)
-  (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
-  (global-set-key (kbd "C-S-c C-S-d") 'mc/mark-more-like-this-extended)
   (global-set-key (kbd "C-.") 'mc/mark-next-like-this)
   (global-set-key (kbd "C-,") 'mc/mark-previous-like-this)
   (global-set-key (kbd "C->") 'mc/mark-next-like-this-word)
   (global-set-key (kbd "C-<") 'mc/mark-previous-like-this-word)
-  (global-set-key (kbd "C-c C-.") 'mc/unmark-next-like-this)
-  (global-set-key (kbd "C-c C-,") 'mc/unmark-previous-like-this)
-  (global-set-key (kbd "C-c C->") 'mc/mark-all-like-this)
-  (global-set-key (kbd "C-c C-<") 'mc/mark-all-words-like-this)
+  (global-set-key (kbd "C-c .") 'mc/mark-next-like-this)
+  (global-set-key (kbd "C-c ,") 'mc/mark-previous-like-this)
+  (global-set-key (kbd "C-c >") 'mc/mark-next-like-this-word)
+  (global-set-key (kbd "C-c <") 'mc/mark-previous-like-this-word)
+  (global-set-key (kbd "C-c M-.") 'mc/unmark-next-like-this)
+  (global-set-key (kbd "C-c M-,") 'mc/unmark-previous-like-this)
+  (global-set-key (kbd "C-c M->") 'mc/mark-all-like-this)
+  (global-set-key (kbd "C-c M-<") 'mc/mark-all-words-like-this)
 
   ;;----------------------------------------------------------------------------
   ;; phi-search
