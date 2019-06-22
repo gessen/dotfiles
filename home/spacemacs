@@ -668,12 +668,6 @@ before packages are loaded."
   ;; Use SSH by default for tramp
   (setq tramp-default-method "ssh")
 
-  (with-eval-after-load "treemacs"
-    (treemacs-map-icons-with-auto-mode-alist
-     '(".h")
-     '((c-mode . treemacs-icon-c)
-       (c++-mode . treemacs-icon-cpp))))
-
   ;; Default window size
   (setq initial-frame-alist
         '((tool-bar-lines . 0)
