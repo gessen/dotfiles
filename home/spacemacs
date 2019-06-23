@@ -86,6 +86,8 @@ This function should only modify configuration layer settings."
           lsp-ui-peek-fontify 'always
           lsp-ui-peek-always-show t)
      ;; markdown
+     (multiple-cursors :variables
+                       multiple-cursors-backend 'mc)
      ;; org
      (ranger :variables
              ranger-show-hidden t)
@@ -114,7 +116,6 @@ This function should only modify configuration layer settings."
      fzf
      deadgrep
      (bb-mode :location (recipe :fetcher github :repo "mferland/bb-mode"))
-     multiple-cursors
      phi-search
      phi-search-mc
      cmake-font-lock
