@@ -45,7 +45,6 @@ packages_common:
   - variety
   - yapf
   - xclip
-  - xsel
   - zsh-autosuggestions
   - zsh-completions
   - zsh-syntax-highlighting
