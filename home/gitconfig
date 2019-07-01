@@ -2,7 +2,6 @@
 	name = Jacek Swierk
 	email = jacek.swierk@gmail.com
 [core]
-	editor = subl --new-window --wait 2> /dev/null
 	pager = diff-so-fancy | less --tabs=4 -RFX
 	attributesfile = ~/.gitattributes_global
 	excludesfile = ~/.gitignore_global
