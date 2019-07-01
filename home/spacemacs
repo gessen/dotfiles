@@ -668,6 +668,7 @@ before packages are loaded."
 
   ;; Use SSH by default for tramp
   (setq tramp-default-method "ssh")
+  (setq tramp-ssh-controlmaster-options "")
 
   ;; Default window size
   (setq initial-frame-alist
