@@ -2,3 +2,4 @@ Host *
     Compression yes
     ControlMaster auto
     ControlPath ~/.ssh/master-%r@%h:%p
+    ControlPersist 600
