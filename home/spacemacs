@@ -69,7 +69,11 @@ This function should only modify configuration layer settings."
                                    "-Wno-gnu-statement-expression"
                                    "-Wno-unused-macros"
                                    "-Wno-error"]
-                       :excludeArgs ["-mabi=lp64"])
+                       :excludeArgs ["-fconserve-stack"
+                                     "-fmacro-prefix-map"
+                                     "-fmerge-constants"
+                                     "-fno-var-tracking-assignments"
+                                     "-mabi=lp64"])
                        :codeLens (:localVariables :json-false)
                        :completion (:caseSensitivity 1)
                        :index (:blacklist [".*CMakeFiles.*"])))

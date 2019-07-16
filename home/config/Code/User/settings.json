@@ -110,6 +110,10 @@
     "cmake.useCMakeServer": true,
     "ccls.cache.directory": ".ccls-cache",
     "ccls.clang.excludeArgs": [
+        "-fconserve-stack",
+        "-fmacro-prefix-map",
+        "-fmerge-constants",
+        "-fno-var-tracking-assignments",
         "-mabi=lp64"
     ],
     "ccls.clang.extraArgs": [
