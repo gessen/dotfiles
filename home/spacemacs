@@ -125,6 +125,7 @@ This function should only modify configuration layer settings."
      cmake-font-lock
      treemacs-icons-dired
      duplicate-thing
+     zop-to-char
     )
 
    ;; A list of packages that cannot be updated.
@@ -791,6 +792,11 @@ before packages are loaded."
   ;;----------------------------------------------------------------------------
   (require 'duplicate-thing)
   (global-set-key (kbd "M-c") 'duplicate-thing)
+
+  ;;----------------------------------------------------------------------------
+  ;; zop-to-char
+  ;;----------------------------------------------------------------------------
+  (global-set-key [remap zap-to-char] 'zop-up-to-char)
 
   ;;----------------------------------------------------------------------------
   ;; aggressive-indent-mode
