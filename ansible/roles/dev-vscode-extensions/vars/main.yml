@@ -13,6 +13,7 @@ vscode_extensions:
   - ms-vscode-remote.remote-ssh-edit
   - ms-vscode-remote.remote-ssh-explorer
   - ms-vscode.sublime-keybindings
+  - rust-lang.rust
   - ryzngard.vscode-header-source
   - shardulm94.trailing-spaces
   - timonwong.shellcheck

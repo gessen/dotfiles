@@ -95,6 +95,8 @@ This function should only modify configuration layer settings."
      ;; org
      (ranger :variables
              ranger-show-hidden t)
+     (rust :variables
+           rust-backend 'lsp)
      search-engine
      (shell :variables
             shell-default-height 45)
