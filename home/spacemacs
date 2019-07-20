@@ -275,7 +275,7 @@ It should only modify the values of Spacemacs settings."
 
    ;; Default font or prioritized list of fonts.
    dotspacemacs-default-font '("Fira Code"
-                               :size 19
+                               :size 13.0
                                :weight normal
                                :width normal)
 
@@ -693,12 +693,12 @@ before packages are loaded."
   ;; Default window size
   (setq initial-frame-alist
         '((tool-bar-lines . 0)
-          (width . 120)
-          (height . 36)))
+          (width . 160)
+          (height . 40)))
   (setq default-frame-alist
         '((tool-bar-lines . 0)
-          (width . 120)
-          (height . 36)))
+          (width . 160)
+          (height . 40)))
 
   ;; Use fd instead of find for ffip
   (setq ffip-use-rust-fd t)
