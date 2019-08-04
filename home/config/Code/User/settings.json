@@ -20,6 +20,9 @@
     "[cmake]": {
         "editor.tabSize": 2
     },
+    "[c]": {
+        "editor.defaultFormatter": "xaver.clang-format"
+    },
     "[cpp]": {
         "editor.defaultFormatter": "xaver.clang-format"
     },
