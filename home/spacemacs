@@ -711,7 +711,7 @@ before packages are loaded."
   ;;----------------------------------------------------------------------------
   ;; deadgrep
   ;;----------------------------------------------------------------------------
-  (global-set-key (kbd "<f5>") #'deadgrep)
+  (require 'deadgrep)
 
   ;;----------------------------------------------------------------------------
   ;; bb-mode
@@ -727,27 +727,12 @@ before packages are loaded."
   ;; multiple-cursors
   ;;----------------------------------------------------------------------------
   (require 'multiple-cursors)
-  (global-set-key (kbd "C-.") 'mc/mark-next-like-this)
-  (global-set-key (kbd "C-,") 'mc/mark-previous-like-this)
-  (global-set-key (kbd "C->") 'mc/mark-next-like-this-word)
-  (global-set-key (kbd "C-<") 'mc/mark-previous-like-this-word)
-  (global-set-key (kbd "C-c .") 'mc/mark-next-like-this)
-  (global-set-key (kbd "C-c ,") 'mc/mark-previous-like-this)
-  (global-set-key (kbd "C-c >") 'mc/mark-next-like-this-word)
-  (global-set-key (kbd "C-c <") 'mc/mark-previous-like-this-word)
-  (global-set-key (kbd "C-c M-.") 'mc/unmark-next-like-this)
-  (global-set-key (kbd "C-c M-,") 'mc/unmark-previous-like-this)
-  (global-set-key (kbd "C-c M->") 'mc/mark-all-like-this)
-  (global-set-key (kbd "C-c M-<") 'mc/mark-all-words-like-this)
 
   ;;----------------------------------------------------------------------------
   ;; phi-search
   ;;----------------------------------------------------------------------------
   (require 'phi-search)
   (require 'phi-replace)
-  (global-set-key (kbd "C-s") 'phi-search)
-  (global-set-key (kbd "C-r") 'phi-search-backward)
-  (global-set-key (kbd "M-%") 'phi-replace-query)
 
   ;;----------------------------------------------------------------------------
   ;; phi-search-mc
@@ -784,12 +769,6 @@ before packages are loaded."
   ;; duplicate-thing
   ;;----------------------------------------------------------------------------
   (require 'duplicate-thing)
-  (global-set-key (kbd "M-c") 'duplicate-thing)
-
-  ;;----------------------------------------------------------------------------
-  ;; zop-to-char
-  ;;----------------------------------------------------------------------------
-  (global-set-key [remap zap-to-char] 'zop-up-to-char)
 
   ;;----------------------------------------------------------------------------
   ;; aggressive-indent-mode
@@ -818,6 +797,47 @@ before packages are loaded."
    '(lambda ()
       (setq fill-column 72)
       (turn-on-auto-fill)))
+
+  ;;----------------------------------------------------------------------------
+  ;; Key bindings
+  ;;----------------------------------------------------------------------------
+  (setq-default my-keys (make-sparse-keymap))
+
+  ;; zop-to-char
+  (define-key my-keys [remap zap-to-char] 'zop-up-to-char)
+
+  ;; deadgrep
+  (define-key my-keys (kbd "<f5>") #'deadgrep)
+
+  ;; multiple-cursors
+  (define-key my-keys (kbd "C-.")     'mc/mark-next-like-this)
+  (define-key my-keys (kbd "C-,")     'mc/mark-previous-like-this)
+  (define-key my-keys (kbd "C->")     'mc/mark-next-like-this-word)
+  (define-key my-keys (kbd "C-<")     'mc/mark-previous-like-this-word)
+  (define-key my-keys (kbd "C-c l")   'mc/edit-lines)
+  (define-key my-keys (kbd "C-c .")   'mc/mark-next-like-this)
+  (define-key my-keys (kbd "C-c ,")   'mc/mark-previous-like-this)
+  (define-key my-keys (kbd "C-c >")   'mc/mark-next-like-this-word)
+  (define-key my-keys (kbd "C-c <")   'mc/mark-previous-like-this-word)
+  (define-key my-keys (kbd "C-c M-.") 'mc/unmark-next-like-this)
+  (define-key my-keys (kbd "C-c M-,") 'mc/unmark-previous-like-this)
+  (define-key my-keys (kbd "C-c M->") 'mc/mark-all-like-this)
+  (define-key my-keys (kbd "C-c M-<") 'mc/mark-all-words-like-this)
+
+  ;; phi-search
+  (define-key my-keys (kbd "C-s") 'phi-search)
+  (define-key my-keys (kbd "C-r") 'phi-search-backward)
+  (define-key my-keys (kbd "M-%") 'phi-replace-query)
+
+  ;; duplicate-thing
+  (define-key my-keys (kbd "M-c") 'duplicate-thing)
+
+  (define-minor-mode my-keys-mode
+    "A minor mode to set key binds that will not be overridden by major modes"
+    :init-value t
+    :keymap my-keys)
+
+  (my-keys-mode 1)
 
   )
 
