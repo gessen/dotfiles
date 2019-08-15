@@ -809,7 +809,6 @@ before packages are loaded."
   (add-hook 'c-mode-common-hook
    '(lambda ()
       (c-set-style "personal")
-      (c-toggle-auto-newline 1)
       (c-toggle-hungry-state 1)
       ;; Move cursor by camelCase, PascalCase and smart_case
       (subword-mode)
