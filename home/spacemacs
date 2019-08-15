@@ -814,6 +814,11 @@ before packages are loaded."
       (push 'c-electric-paren sp--special-self-insert-commands)
       (push 'c-electric-brace sp--special-self-insert-commands)))
 
+  (add-hook 'git-commit-mode-hook
+   '(lambda ()
+      (setq fill-column 72)
+      (turn-on-auto-fill)))
+
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
