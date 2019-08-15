@@ -766,8 +766,6 @@ before packages are loaded."
   ;; smartparens
   ;;----------------------------------------------------------------------------
   (setq-default sp-escape-quotes-after-insert nil)
-  ; (remove-hook 'prog-mode-hook #'smartparens-mode)
-  ; (spacemacs/toggle-smartparens-globally-off)
 
   ;;----------------------------------------------------------------------------
   ;; cmake-font-lock
@@ -813,7 +811,8 @@ before packages are loaded."
       ;; Move cursor by camelCase, PascalCase and smart_case
       (subword-mode)
       ;; Smartparens
-      (sp-pair "{" nil :actions :rem)))
+      (push 'c-electric-paren sp--special-self-insert-commands)
+      (push 'c-electric-brace sp--special-self-insert-commands)))
 
   )
 
