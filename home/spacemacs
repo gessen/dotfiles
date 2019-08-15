@@ -117,18 +117,18 @@ This function should only modify configuration layer settings."
    ;; Also include the dependencies as they will not be resolved automatically.
    dotspacemacs-additional-packages
    '(
-     flycheck
-     monokai-theme
-     solarized-theme
-     xclip
-     fzf
-     deadgrep
      (bb-mode :location (recipe :fetcher github :repo "mferland/bb-mode"))
+     cmake-font-lock
+     deadgrep
+     duplicate-thing
+     flycheck
+     fzf
+     monokai-theme
      phi-search
      phi-search-mc
-     cmake-font-lock
+     solarized-theme
      treemacs-icons-dired
-     duplicate-thing
+     xclip
      zop-to-char
     )
 
