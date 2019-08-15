@@ -98,8 +98,10 @@ This function should only modify configuration layer settings."
      (rust :variables
            rust-backend 'lsp)
      search-engine
+     semantic
      (shell :variables
             shell-default-height 45)
+     shell-scripts
      ;; spell-checking
      ;; syntax-checking
      treemacs
