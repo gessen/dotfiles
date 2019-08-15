@@ -129,6 +129,8 @@ This function should only modify configuration layer settings."
      phi-search-mc
      solarized-theme
      treemacs-icons-dired
+     vterm
+     vterm-toggle
      xclip
      zop-to-char
     )
@@ -777,6 +779,14 @@ before packages are loaded."
   (require 'hideshow-org)
 
   ;;----------------------------------------------------------------------------
+  ;; libvterm
+  ;;----------------------------------------------------------------------------
+  (require 'vterm)
+  (require 'vterm-toggle)
+  (define-key vterm-mode-map (kbd "s-n") 'vterm-toggle-forward)
+  (define-key vterm-mode-map (kbd "s-p") 'vterm-toggle-backward)
+
+  ;;----------------------------------------------------------------------------
   ;; aggressive-indent-mode
   ;;----------------------------------------------------------------------------
   (spacemacs/toggle-aggressive-indent-on)
@@ -855,6 +865,10 @@ before packages are loaded."
 
   ;; hideshow-org
   (define-key my-keys (kbd "C-c h") 'hs-org/minor-mode)
+
+  ;; libvterm-toggle
+  (define-key my-keys (kbd "<f2>")   'vterm-toggle)
+  (define-key my-keys (kbd "C-<f2>") 'vterm-toggle-cd)
 
   (define-minor-mode my-keys-mode
     "A minor mode to set key binds that will not be overridden by major modes"
