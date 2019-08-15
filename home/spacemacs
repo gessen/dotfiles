@@ -787,6 +787,8 @@ before packages are loaded."
    '(lambda ()
       (c-set-style "personal")
       (c-toggle-hungry-state 1)
+      ;; Show ruler
+      (display-fill-column-indicator-mode)
       ;; Move cursor by camelCase, PascalCase and smart_case
       (subword-mode)
       ;; Smartparens
@@ -814,6 +816,10 @@ before packages are loaded."
 
   ;; zop-to-char
   (define-key my-keys [remap zap-to-char] 'zop-up-to-char)
+
+  ;; display-fill-column-indicator-mode
+  (define-key my-keys [remap spacemacs/toggle-fill-column-indicator]
+   'display-fill-column-indicator-mode)
 
   ;; deadgrep
   (define-key my-keys (kbd "<f5>") #'deadgrep)
