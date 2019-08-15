@@ -803,6 +803,15 @@ before packages are loaded."
   ;;----------------------------------------------------------------------------
   (setq-default my-keys (make-sparse-keymap))
 
+  ;; Some default keybinds changes
+  (define-key my-keys (kbd "M-o") 'ace-window)
+  (define-key my-keys (kbd "M-n") 'next-error)
+  (define-key my-keys (kbd "M-p") 'previous-error)
+  (define-key my-keys (kbd "M-g") 'goto-line)
+  (define-key my-keys (kbd "M-j") 'evil-avy-goto-char-timer)
+  (define-key my-keys (kbd "C-q") 'ido-kill-buffer)
+  (define-key my-keys (kbd "C-o") 'helm-buffers-list)
+
   ;; zop-to-char
   (define-key my-keys [remap zap-to-char] 'zop-up-to-char)
 
