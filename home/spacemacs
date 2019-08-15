@@ -667,14 +667,6 @@ before packages are loaded."
     "My personal C/C++ programming style")
   (c-add-style "personal" my-cc-style)
 
-  (defun my-c-mode-common-hook ()
-    (c-set-style "personal")
-    (c-toggle-auto-newline 1)
-    (c-toggle-hungry-state 1)
-    (subword-mode)
-    (sp-pair "{" nil :actions :rem))
-  (add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
-
   ;; Column length
   (setq-default fill-column 120)
   (setq column-enforce-column fill-column)
@@ -810,6 +802,19 @@ before packages are loaded."
   ;; whitespace-cleanup-mode
   ;;----------------------------------------------------------------------------
   (spacemacs/toggle-whitespace-cleanup-on)
+
+  ;;----------------------------------------------------------------------------
+  ;; Modes' hooks
+  ;;----------------------------------------------------------------------------
+  (add-hook 'c-mode-common-hook
+   '(lambda ()
+      (c-set-style "personal")
+      (c-toggle-auto-newline 1)
+      (c-toggle-hungry-state 1)
+      ;; Move cursor by camelCase, PascalCase and smart_case
+      (subword-mode)
+      ;; Smartparens
+      (sp-pair "{" nil :actions :rem)))
 
   )
 
