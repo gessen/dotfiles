@@ -123,6 +123,7 @@ This function should only modify configuration layer settings."
      duplicate-thing
      flycheck
      fzf
+     hideshow-org
      monokai-theme
      phi-search
      phi-search-mc
@@ -771,6 +772,11 @@ before packages are loaded."
   (require 'duplicate-thing)
 
   ;;----------------------------------------------------------------------------
+  ;; hideshow-org
+  ;;----------------------------------------------------------------------------
+  (require 'hideshow-org)
+
+  ;;----------------------------------------------------------------------------
   ;; aggressive-indent-mode
   ;;----------------------------------------------------------------------------
   (spacemacs/toggle-aggressive-indent-on)
@@ -846,6 +852,9 @@ before packages are loaded."
 
   ;; duplicate-thing
   (define-key my-keys (kbd "M-c") 'duplicate-thing)
+
+  ;; hideshow-org
+  (define-key my-keys (kbd "C-c h") 'hs-org/minor-mode)
 
   (define-minor-mode my-keys-mode
     "A minor mode to set key binds that will not be overridden by major modes"
