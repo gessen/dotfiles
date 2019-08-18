@@ -671,7 +671,7 @@ before packages are loaded."
   (c-add-style "personal" my-cc-style)
 
   ;; Column length
-  (setq-default fill-column 120)
+  (setq-default fill-column 80)
   (setq column-enforce-column fill-column)
 
   ;; Display indentation guides with a delay for performance.
