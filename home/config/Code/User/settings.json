@@ -16,10 +16,7 @@
     "editor.renderWhitespace": "all",
     "editor.selectionClipboard": false,
     "editor.snippetSuggestions": "top",
-    "editor.tabSize": 4,
-    "[cmake]": {
-        "editor.tabSize": 2
-    },
+    "editor.tabSize": 2,
     "[c]": {
         "editor.defaultFormatter": "xaver.clang-format"
     },

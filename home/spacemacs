@@ -550,13 +550,13 @@ before packages are loaded."
   (setq create-lockfiles nil)
 
   ;; General indentation.
-  (setq-default tab-width 8)
+  (setq-default tab-width 2)
   (setq-default indent-tabs-mode nil)
 
   ;; Indentation for CC Mode
   (defconst my-cc-style
     '((c-recognize-knr-p . nil)
-      (c-basic-offset . 4)
+      (c-basic-offset . 2)
       (c-tab-always-indent . t)
       (c-comment-only-line-offset . 0)
       (comment-column . 40)
