@@ -124,10 +124,8 @@ This function should only modify configuration layer settings."
      flycheck
      fzf
      hideshow-org
-     monokai-theme
      phi-search
      phi-search-mc
-     solarized-theme
      treemacs-icons-dired
      vterm
      vterm-toggle
