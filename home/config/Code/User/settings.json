@@ -26,7 +26,7 @@
     "[cpp]": {
         "editor.defaultFormatter": "xaver.clang-format"
     },
-    "workbench.colorTheme": "Solarized Dark",
+    "workbench.colorTheme": "Spacemacs",
     "workbench.iconTheme": "vscode-icons",
     "workbench.list.keyboardNavigation": "filter",
     "workbench.settings.editor": "json",
