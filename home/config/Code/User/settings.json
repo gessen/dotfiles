@@ -1,7 +1,7 @@
 {
     "editor.codeLens": false,
     "editor.detectIndentation": true,
-    "editor.fontFamily": "Fira Code",
+    "editor.fontFamily": "Source Code Pro",
     "editor.fontLigatures": true,
     "editor.fontSize": 16,
     "editor.formatOnPaste": false,
