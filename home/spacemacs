@@ -704,6 +704,18 @@ before packages are loaded."
   (require 'deadgrep)
 
   ;;----------------------------------------------------------------------------
+  ;; projectile
+  ;;----------------------------------------------------------------------------
+  (require 'projectile)
+  (projectile-register-project-type 'cmake '("CMakeLists.txt")
+    :compilation-dir "build"
+    :configure (string-join
+      '("cmake" ".." "-GNinja" "-DCMAKE_BUILD_TYPE=Debug"
+        "-DCMAKE_INSTALL_PREFIX=/usr" "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON") " ")
+    :compile "cmake --build . -- -j$(nproc)"
+    :test "cmake --build . -- -j$(nproc) && ctest --output-on-failure")
+
+  ;;----------------------------------------------------------------------------
   ;; bb-mode
   ;;----------------------------------------------------------------------------
   (require 'bb-mode)
@@ -823,6 +835,11 @@ before packages are loaded."
   ;; display-fill-column-indicator-mode
   (define-key my-keys [remap spacemacs/toggle-fill-column-indicator]
    'display-fill-column-indicator-mode)
+
+  ;; projectile
+  (spacemacs/set-leader-keys "pC" 'projectile-configure-project)
+  (spacemacs/set-leader-keys "pt" 'projectile-test-project)
+  (spacemacs/set-leader-keys "pT" 'spacemacs/treemacs-project-toggle)
 
   ;; deadgrep
   (define-key my-keys (kbd "<f5>") #'deadgrep)
