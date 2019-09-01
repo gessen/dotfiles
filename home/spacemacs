@@ -127,6 +127,7 @@ This function should only modify configuration layer settings."
      phi-search
      phi-search-mc
      treemacs-icons-dired
+     vlf
      vterm
      vterm-toggle
      xclip
@@ -776,6 +777,11 @@ before packages are loaded."
   ;; hideshow-org
   ;;----------------------------------------------------------------------------
   (require 'hideshow-org)
+
+  ;;----------------------------------------------------------------------------
+  ;; vlf
+  ;;----------------------------------------------------------------------------
+  (require 'vlf-setup)
 
   ;;----------------------------------------------------------------------------
   ;; libvterm
