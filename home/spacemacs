@@ -887,6 +887,17 @@ before packages are loaded."
 
   (my-keys-mode 1)
 
+  ;; lsp-ui-flycheck
+  (with-eval-after-load 'lsp-ui
+     (define-key lsp-ui-flycheck-list-mode-map (kbd "n") 'next-line)
+     (define-key lsp-ui-flycheck-list-mode-map (kbd "p") 'previous-line)
+     (define-key lsp-ui-flycheck-list-mode-map (kbd "RET")
+       'lsp-ui-flycheck-list--view)
+     (define-key lsp-ui-flycheck-list-mode-map (kbd "M-RET")
+       'lsp-ui-flycheck-list--visit)
+     (define-key lsp-ui-flycheck-list-mode-map (kbd "o")
+       'lsp-ui-flycheck-list--visit))
+
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
