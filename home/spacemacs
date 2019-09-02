@@ -672,6 +672,9 @@ before packages are loaded."
   (setq-default fill-column 80)
   (setq column-enforce-column fill-column)
 
+  ;; Ensure newline is present at the end of the file
+  (setq require-final-newline t)
+
   ;; Display indentation guides with a delay for performance.
   (setq indent-guide-delay 0.1)
   ; (setq indent-guide-recursive t)
