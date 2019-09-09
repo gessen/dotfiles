@@ -20,13 +20,12 @@ This function should only modify configuration layer settings."
    ;; installation feature and you have to explicitly list a layer in the
    ;; variable `dotspacemacs-configuration-layers' to install it.
    ;; (default 'unused)
-   dotspacemacs-enable-lazy-installation 'unused
+   dotspacemacs-enable-lazy-installation nil
 
    ;; If non-nil then Spacemacs will ask for confirmation before installing
    ;; a layer lazily. (default t)
    dotspacemacs-ask-for-lazy-installation t
 
-   ;; If non-nil layers with lazy install support are lazy installed.
    ;; List of additional paths where to look for configuration layers.
    ;; Paths must have a trailing slash (i.e. `~/.mycontribs/')
    dotspacemacs-configuration-layer-path '()
@@ -39,10 +38,8 @@ This function should only modify configuration layer settings."
      ;; Uncomment some layer names and press `SPC f e R' (Vim style) or
      ;; `M-m f e R' (Emacs style) to install them.
      ;; ----------------------------------------------------------------
-     helm
-     ansible
      (auto-completion :variables
-                      auto-completion-enable-help-tooltip t)
+                      auto-completion-enable-help-tooltip 'manual)
      better-defaults
      cmake
      (c-c++ :variables
@@ -81,19 +78,20 @@ This function should only modify configuration layer settings."
      fasd
      (git :variables
           git-magit-status-fullscreen t)
+     helm
      (lsp :variables
           ; lsp-print-io t
           lsp-auto-guess-root t
           lsp-prefer-flymake nil
           lsp-remap-xref-keybindings t
           lsp-navigation 'peek
+          lsp-enable-file-watchers nil
           lsp-ui-peek-fontify 'always
           lsp-ui-peek-always-show t)
-     ;; markdown
      (multiple-cursors :variables
                        multiple-cursors-backend 'mc)
-     ;; org
      (ranger :variables
+             ranger-cleanup-on-disable t
              ranger-show-hidden t)
      (rust :variables
            rust-backend 'lsp)
@@ -102,11 +100,9 @@ This function should only modify configuration layer settings."
      (shell :variables
             shell-default-height 45)
      shell-scripts
-     ;; spell-checking
-     ;; syntax-checking
      treemacs
      version-control
-    )
+     )
 
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
@@ -117,22 +113,19 @@ This function should only modify configuration layer settings."
    ;; Also include the dependencies as they will not be resolved automatically.
    dotspacemacs-additional-packages
    '(
+     ace-mc
      (bb-mode :location (recipe :fetcher github :repo "mferland/bb-mode"))
      cmake-font-lock
      deadgrep
      duplicate-thing
-     flycheck
-     fzf
-     hideshow-org
-     phi-search
-     phi-search-mc
+     frog-jump-buffer
      treemacs-icons-dired
      vlf
      vterm
      vterm-toggle
      xclip
      zop-to-char
-    )
+     )
 
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -161,12 +154,12 @@ It should only modify the values of Spacemacs settings."
    ;; to compile Emacs 27 from source following the instructions in file
    ;; EXPERIMENTAL.org at to root of the git repository.
    ;; (default nil)
-   dotspacemacs-enable-emacs-pdumper nil
+   dotspacemacs-enable-emacs-pdumper t
 
-   ;; File path pointing to emacs 27.1 executable compiled with support
-   ;; for the portable dumper (this is currently the branch pdumper).
-   ;; (default "emacs-27.0.50")
-   dotspacemacs-emacs-pdumper-executable-file "emacs-27.0.50"
+   ;; Name of executable file pointing to emacs 27+. This executable must be
+   ;; in your PATH.
+   ;; (default "emacs")
+   dotspacemacs-emacs-pdumper-executable-file "emacs"
 
    ;; Name of the Spacemacs dump file. This is the file will be created by the
    ;; portable dumper in the cache directory under dumps sub-directory.
@@ -174,7 +167,7 @@ It should only modify the values of Spacemacs settings."
    ;; when invoking Emacs 27.1 executable on the command line, for instance:
    ;;   ./emacs --dump-file=~/.emacs.d/.cache/dumps/spacemacs.pdmp
    ;; (default spacemacs.pdmp)
-   dotspacemacs-emacs-dumper-dump-file "spacemacs.pdmp"
+   dotspacemacs-emacs-dumper-dump-file "emacs.pdmp"
 
    ;; If non-nil ELPA repositories are contacted via HTTPS whenever it's
    ;; possible. Set it to nil if you have no way to use HTTPS in your
@@ -200,8 +193,8 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-use-spacelpa nil
 
    ;; If non-nil then verify the signature for downloaded Spacelpa archives.
-   ;; (default nil)
-   dotspacemacs-verify-spacelpa-archives nil
+   ;; (default t)
+   dotspacemacs-verify-spacelpa-archives t
 
    ;; If non-nil then spacemacs will check for updates at startup
    ;; when the current branch is not `develop'. Note that checking for
@@ -221,9 +214,6 @@ It should only modify the values of Spacemacs settings."
    ;; section of the documentation for details on available variables.
    ;; (default 'vim)
    dotspacemacs-editing-style 'emacs
-
-   ;; If non-nil output loading progress in `*Messages*' buffer. (default nil)
-   dotspacemacs-verbose-loading nil
 
    ;; Specify the startup banner. Default value is `official', it displays
    ;; the official spacemacs logo. An integer value is the index of text
@@ -260,9 +250,7 @@ It should only modify the values of Spacemacs settings."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(spacemacs-dark
-                         monokai
-                         solarized-dark)
+   dotspacemacs-themes '(spacemacs-dark)
 
    ;; Set the theme for the Spaceline. Supported themes are `spacemacs',
    ;; `all-the-icons', `custom', `doom', `vim-powerline' and `vanilla'. The
@@ -271,6 +259,7 @@ It should only modify the values of Spacemacs settings."
    ;; refer to the DOCUMENTATION.org for more info on how to create your own
    ;; spaceline theme. Value can be a symbol or list with additional properties.
    ;; (default '(spacemacs :separator wave :separator-scale 1.5))
+   ; dotspacemacs-mode-line-theme '(spacemacs :separator wave :separator-scale 1.5)
    dotspacemacs-mode-line-theme 'all-the-icons
 
    ;; If non-nil the cursor color matches the state color in GUI Emacs.
@@ -367,7 +356,7 @@ It should only modify the values of Spacemacs settings."
    ;; If non-nil a progress bar is displayed when spacemacs is loading. This
    ;; may increase the boot time on some systems and emacs builds, set it to
    ;; nil to boost the loading time. (default t)
-   dotspacemacs-loading-progress-bar t
+   dotspacemacs-loading-progress-bar nil
 
    ;; If non-nil the frame is fullscreen when Emacs starts up. (default nil)
    ;; (Emacs 24.4+ only)
@@ -442,7 +431,7 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-smartparens-strict-mode nil
 
    ;; If non-nil pressing the closing parenthesis `)' key in insert mode passes
-   ;; over any automatically added closing parenthesis, bracket, quote, etc…
+   ;; over any automatically added closing parenthesis, bracket, quote, etc...
    ;; This can be temporary disabled by pressing `C-q' before `)'. (default nil)
    dotspacemacs-smart-closing-parenthesis nil
 
@@ -526,9 +515,6 @@ It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
   (setq custom-file "~/.emacs.d/.cache/.custom-settings")
   (load-file custom-file)
-  (setq-default
-   ; debug-on-error t
-   )
   )
 
 (defun dotspacemacs/user-load ()
@@ -545,7 +531,7 @@ configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
   ;;----------------------------------------------------------------------------
-  ;; Emacs
+  ;; Emacs general
   ;;----------------------------------------------------------------------------
   ;; Disable lockfiles (those pesky .# symlinks).
   (setq create-lockfiles nil)
@@ -553,6 +539,9 @@ before packages are loaded."
   ;; General indentation.
   (setq-default tab-width 2)
   (setq-default indent-tabs-mode nil)
+
+  ;; Column length
+  (setq-default fill-column 80)
 
   ;; Indentation for CC Mode
   (defconst my-cc-style
@@ -668,247 +657,348 @@ before packages are loaded."
     "My personal C/C++ programming style")
   (c-add-style "personal" my-cc-style)
 
-  ;; Column length
-  (setq-default fill-column 80)
-  (setq column-enforce-column fill-column)
+  ;;----------------------------------------------------------------------------
+  ;; Builtin configuration
+  ;;----------------------------------------------------------------------------
+  (use-package simple
+    :defer t
+    :bind (("M-g" . goto-line)
+           ("M-n" . next-error)
+           ("M-p" . previous-error)
+           ("C-q" . spacemacs/kill-this-buffer)))
 
-  ;; Ensure newline is present at the end of the file
-  (setq require-final-newline t)
+  ;;----------------------------------------------------------------------------
+  ;; cc-mode
+  ;;----------------------------------------------------------------------------
+  (use-package cc-mode
+    :defer t
+    :bind (:map c-mode-base-map
+           ("C-c ." . nil))
+    :init
+    (add-hook 'c-mode-common-hook
+     '(lambda ()
+        (c-set-style "personal")
+        (c-toggle-hungry-state +1)
+        (aggressive-indent-mode +1)
+        (spacemacs-whitespace-cleanup-mode +1)
+        ;; Show ruler
+        (display-fill-column-indicator-mode +1)
+        ;; Mark too long lines
+        (column-enforce-mode +1)
+        ;; Move cursor by camelCase, PascalCase and smart_case
+        (subword-mode +1)
+        ;; Smartparens
+        (push 'c-electric-paren sp--special-self-insert-commands)
+        (push 'c-electric-brace sp--special-self-insert-commands))))
 
-  ;; Display indentation guides with a delay for performance.
-  (setq indent-guide-delay 0.1)
-  ; (setq indent-guide-recursive t)
+  ;;----------------------------------------------------------------------------
+  ;; git-commit-mode
+  ;;----------------------------------------------------------------------------
+  (use-package git-commit
+    :defer t
+    :init
+    (add-hook 'git-commit-mode-hook
+     '(lambda ()
+        (setq fill-column 72)
+        (turn-on-auto-fill)
+        (spacemacs-whitespace-cleanup-mode +1)
+        ;; Show ruler
+        (display-fill-column-indicator-mode +1)
+        ;; Mark too long lines
+        (column-enforce-mode +1))))
 
-  ;; Display indentation guides in all buffers.
-  (spacemacs/toggle-indent-guide-globally-on)
+  ;;----------------------------------------------------------------------------
+  ;; dired
+  ;;----------------------------------------------------------------------------
+  (use-package dired
+    :defer t
+    :config
+    (progn
+      (setq dired-listing-switches "-alvFh --group-directories-first"))
+    :bind (:map dired-mode-map
+           ("C-o" . nil)))
 
-  ;; Always follow symlinks.
-  (setq vc-follow-symlinks t)
+  ;;----------------------------------------------------------------------------
+  ;; display-fill-column-indicator
+  ;;----------------------------------------------------------------------------
+  (use-package display-fill-column-indicator
+    :defer t
+    :bind ([remap spacemacs/toggle-fill-column-indicator] .
+            display-fill-column-indicator-mode))
 
-  ;; Use SSH by default for tramp
-  (setq tramp-default-method "ssh")
-  (setq tramp-ssh-controlmaster-options "")
+  ;;----------------------------------------------------------------------------
+  ;; files
+  ;;----------------------------------------------------------------------------
+  (use-package files
+    :defer
+    :config
+    (progn
+      (setq require-final-newline t)))
 
-  ;; Use fd instead of find for ffip
-  (setq ffip-use-rust-fd t)
+  ;;----------------------------------------------------------------------------
+  ;; tramp
+  ;;----------------------------------------------------------------------------
+  (use-package tramp
+    :defer t
+    :config
+    (progn
+      (setq tramp-default-method "ssh")
+      (setq tramp-ssh-controlmaster-options "")))
 
-  ;; Dired ls options
-  (setq dired-listing-switches "-alvFh --group-directories-first")
+  ;;----------------------------------------------------------------------------
+  ;; vc-hooks
+  ;;----------------------------------------------------------------------------
+  (use-package vc-hooks
+    :defer t
+    :config
+    (progn
+      (setq vc-follow-symlinks t)))
+
+  ;;----------------------------------------------------------------------------
+  ;; ace-mc
+  ;;----------------------------------------------------------------------------
+  (use-package ace-mc
+    :defer t
+    :bind ("M-i" . ace-mc-add-multiple-cursors))
+
+  ;;----------------------------------------------------------------------------
+  ;; ace-window
+  ;;----------------------------------------------------------------------------
+  (use-package ace-window
+    :defer t
+    :bind ("M-o" . ace-window))
+
+  ;;----------------------------------------------------------------------------
+  ;; anzu
+  ;;----------------------------------------------------------------------------
+  (use-package anzu
+    :defer t
+    :after isearch
+    :bind (([remap query-replace]        . anzu-query-replace)
+           ([remap query-replace-regexp] . anzu-query-replace-regexp)
+           :map isearch-mode-map
+           ([remap isearch-query-replace] . anzu-isearch-query-replace)
+           ([remap isearch-query-replace-regexp] .
+              anzu-isearch-query-replace-regexp)))
+
+  ;;----------------------------------------------------------------------------
+  ;; avy
+  ;;----------------------------------------------------------------------------
+  (use-package avy
+    :defer t
+    :bind (("M-j"     . nil)
+           ("M-j j"   . avy-goto-char-timer)
+           ("M-j M-j" . avy-goto-char-timer)
+           ("M-j k"   . avy-goto-char-2)
+           ("M-j M-k" . avy-goto-char-2)
+           ("M-j l"   . avy-goto-line)
+           ("M-j M-l" . avy-goto-line)
+           ("M-j n"   . avy-goto-end-of-line)
+           ("M-j M-n" . avy-goto-end-of-line)
+           ("M-j w"   . avy-goto-subword-1)
+           ("M-j M-w" . avy-goto-subword-1)))
+
+  ;;----------------------------------------------------------------------------
+  ;; bb-mode
+  ;;----------------------------------------------------------------------------
+  (use-package bb-mode
+    :defer t
+    :mode ("\\.bb$" "\\.bbappend$" "\\.bbclass$" "\\.conf$" "\\.inc$"))
+
+  ;;----------------------------------------------------------------------------
+  ;; cmake-font-lock
+  ;;----------------------------------------------------------------------------
+  (use-package cmake-font-lock
+    :after cmake-mode
+    :hook (cmake-mode . cmake-font-lock-activate))
+
+  ;;----------------------------------------------------------------------------
+  ;; column-enforce-mode
+  ;;----------------------------------------------------------------------------
+  (use-package column-enforce-mode
+    :defer t
+    :config
+    (progn
+      (setq column-enforce-column fill-column)))
+
+  ;;----------------------------------------------------------------------------
+  ;; deadgrep
+  ;;----------------------------------------------------------------------------
+  (use-package deadgrep
+    :defer t
+    :bind ("<f5>" . deadgrep))
+
+  ;;----------------------------------------------------------------------------
+  ;; duplicate-thing
+  ;;----------------------------------------------------------------------------
+  (use-package duplicate-thing
+    :defer t
+    :bind ("M-c" . duplicate-thing))
+
+  ;;----------------------------------------------------------------------------
+  ;; frog-jump-buffer
+  ;;----------------------------------------------------------------------------
+  (use-package frog-jump-buffer
+    :defer t
+    :config
+    (progn
+      (setq frog-jump-buffer-include-current-buffer nil))
+    :bind ("C-o" . frog-jump-buffer))
+
+  ;;----------------------------------------------------------------------------
+  ;; helm-ctest
+  ;;----------------------------------------------------------------------------
+  (use-package helm-ctest
+    :defer t
+    :after projectile
+    :config
+    (progn
+      (setq helm-ctest-dir (projectile-compilation-dir))))
+
+  ;;----------------------------------------------------------------------------
+  ;; helm-make
+  ;;----------------------------------------------------------------------------
+  (use-package helm-make
+    :defer t
+    :after projectile
+    :config
+    (progn
+      (setq helm-make-executable "make -s")
+      (setq helm-make-build-dir (projectile-compilation-dir))
+      (setq helm-make-nproc 0)
+      (setq helm-make-sort-targets t)
+      (setq helm-make-fuzzy-matching t)))
+
+  ;;----------------------------------------------------------------------------
+  ;; iedit
+  ;;----------------------------------------------------------------------------
+  (use-package iedit
+    :defer t
+    :bind ([remap evil-iedit-state/iedit-mode] . iedit-mode))
+
+  ;;----------------------------------------------------------------------------
+  ;; lsp-ui
+  ;;----------------------------------------------------------------------------
+  (use-package lsp-ui
+    :defer t
+    :bind (:map lsp-ui-flycheck-list-mode-map
+           ("n"     . next-line)
+           ("p"     . previous-line)
+           ("RET"   . lsp-ui-flycheck-list--view)
+           ("M-RET" . lsp-ui-flycheck-list--visit)
+           ("o"     . lsp-ui-flycheck-list--visit)))
+
+  ;;----------------------------------------------------------------------------
+  ;; move-text
+  ;;----------------------------------------------------------------------------
+  (use-package move-text
+    :defer t
+    :bind (("M-<down>" . move-text-down)
+           ("M-<up>"   . move-text-up)))
+
+  ;;----------------------------------------------------------------------------
+  ;; multiple-cursors
+  ;;----------------------------------------------------------------------------
+  (use-package multiple-cursors
+    :defer t
+    :bind (("C-."     . mc/mark-next-like-this)
+           ("C-,"     . mc/mark-previous-like-this)
+           ("C->"     . mc/mark-next-like-this-word)
+           ("C-<"     . mc/mark-previous-like-this-word)
+           ("C-c l"   . mc/edit-lines)
+           ("C-c ."   . mc/mark-next-like-this)
+           ("C-c ,"   . mc/mark-previous-like-this)
+           ("C-c >"   . mc/mark-next-like-this-word)
+           ("C-c <"   . mc/mark-previous-like-this-word)
+           ("C-c M-." . mc/unmark-next-like-this)
+           ("C-c M-," . mc/unmark-previous-like-this)
+           ("C-c M->" . mc/mark-all-like-this)
+           ("C-c M-<" . mc/mark-all-words-like-this)))
+
+  ;;----------------------------------------------------------------------------
+  ;; projectile
+  ;;----------------------------------------------------------------------------
+  (use-package projectile
+    :defer t
+    :init
+    (progn
+      (spacemacs/set-leader-keys
+        "pC" 'projectile-configure-project
+        "pt" 'projectile-test-project
+        "pT" 'spacemacs/treemacs-project-toggle))
+    :config
+    (progn
+      (projectile-register-project-type 'cmake '("CMakeLists.txt")
+        :compilation-dir "build"
+        :configure (string-join '("cmake" ".."
+          "-DCMAKE_BUILD_TYPE=Debug"
+          "-DCMAKE_INSTALL_PREFIX=/usr"
+          "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON") " ")
+        :compile "cmake --build . -- -j$(nproc)"
+        :test "cmake --build . -- -j$(nproc) && ctest --output-on-failure")))
+
+  ;;----------------------------------------------------------------------------
+  ;; smartparens
+  ;;----------------------------------------------------------------------------
+  (use-package smartparens
+    :defer t
+    :config
+    (progn
+      (setq sp-escape-quotes-after-insert nil)))
+
+  ;;----------------------------------------------------------------------------
+  ;; treemacs-icons-dired
+  ;;----------------------------------------------------------------------------
+  (use-package treemacs-icons-dired
+    :after treemacs dired
+    :config (treemacs-icons-dired-mode))
+
+  ;;----------------------------------------------------------------------------
+  ;; vlf
+  ;;----------------------------------------------------------------------------
+  (use-package vlf
+    :defer t
+    :config (require 'vlf-setup))
+
+  ;;----------------------------------------------------------------------------
+  ;; vterm
+  ;;----------------------------------------------------------------------------
+  (use-package vterm
+    :defer t)
+
+  ;;----------------------------------------------------------------------------
+  ;; vterm-toggle
+  ;;----------------------------------------------------------------------------
+  (use-package vterm-toggle
+    :defer t
+    :bind (("<f2>"   . vterm-toggle)
+           ("C-<f2>" . vterm-toggle-cd)))
 
   ;;----------------------------------------------------------------------------
   ;; xclip
   ;;----------------------------------------------------------------------------
   ;; Enables xclip integration for copy/paste to system clipboard.
   ;; The `xclip` package needs to be installed on the machine emacs is running.
-  (xclip-mode 1)
+  (use-package xclip
+    :defer t
+    :config
+    (xclip-mode 1))
 
   ;;----------------------------------------------------------------------------
-  ;; deadgrep
+  ;; which-key
   ;;----------------------------------------------------------------------------
-  (require 'deadgrep)
+  (use-package which-key
+    :defer t
+    :init
+    (progn
+      (setq which-key-compute-remaps t)))
 
   ;;----------------------------------------------------------------------------
-  ;; projectile
-  ;;----------------------------------------------------------------------------
-  (require 'projectile)
-  (projectile-register-project-type 'cmake '("CMakeLists.txt")
-    :compilation-dir "build"
-    :configure (string-join
-      '("cmake" ".." "-GNinja" "-DCMAKE_BUILD_TYPE=Debug"
-        "-DCMAKE_INSTALL_PREFIX=/usr" "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON") " ")
-    :compile "cmake --build . -- -j$(nproc)"
-    :test "cmake --build . -- -j$(nproc) && ctest --output-on-failure")
-
-  ;;----------------------------------------------------------------------------
-  ;; bb-mode
-  ;;----------------------------------------------------------------------------
-  (require 'bb-mode)
-  (setq auto-mode-alist (cons '("\\.bb$" . bb-mode) auto-mode-alist))
-  (setq auto-mode-alist (cons '("\\.inc$" . bb-mode) auto-mode-alist))
-  (setq auto-mode-alist (cons '("\\.bbappend$" . bb-mode) auto-mode-alist))
-  (setq auto-mode-alist (cons '("\\.bbclass$" . bb-mode) auto-mode-alist))
-  (setq auto-mode-alist (cons '("\\.conf$" . bb-mode) auto-mode-alist))
-
-  ;;----------------------------------------------------------------------------
-  ;; multiple-cursors
-  ;;----------------------------------------------------------------------------
-  (require 'multiple-cursors)
-
-  ;;----------------------------------------------------------------------------
-  ;; phi-search
-  ;;----------------------------------------------------------------------------
-  (require 'phi-search)
-  (require 'phi-replace)
-
-  ;;----------------------------------------------------------------------------
-  ;; phi-search-mc
-  ;;----------------------------------------------------------------------------
-  (require 'phi-search-mc)
-  (phi-search-mc/setup-keys)
-  (add-hook 'isearch-mode-hook 'phi-search-from-isearch-mc/setup-keys)
-
-  ;;----------------------------------------------------------------------------
-  ;; move-text
-  ;;----------------------------------------------------------------------------
-  (require 'move-text)
-  (move-text-default-bindings)
-
-  ;;----------------------------------------------------------------------------
-  ;; smartparens
-  ;;----------------------------------------------------------------------------
-  (setq-default sp-escape-quotes-after-insert nil)
-
-  ;;----------------------------------------------------------------------------
-  ;; cmake-font-lock
-  ;;----------------------------------------------------------------------------
-  (require 'cmake-font-lock)
-
-  ;;----------------------------------------------------------------------------
-  ;; treemacs-icons-dired
-  ;;----------------------------------------------------------------------------
-  (use-package treemacs-icons-dired
-    :after dired
-    :ensure t
-    :config (treemacs-icons-dired-mode))
-
-  ;;----------------------------------------------------------------------------
-  ;; duplicate-thing
-  ;;----------------------------------------------------------------------------
-  (require 'duplicate-thing)
-
-  ;;----------------------------------------------------------------------------
-  ;; hideshow-org
-  ;;----------------------------------------------------------------------------
-  (require 'hideshow-org)
-
-  ;;----------------------------------------------------------------------------
-  ;; vlf
-  ;;----------------------------------------------------------------------------
-  (require 'vlf-setup)
-
-  ;;----------------------------------------------------------------------------
-  ;; libvterm
-  ;;----------------------------------------------------------------------------
-  (require 'vterm)
-  (require 'vterm-toggle)
-  (define-key vterm-mode-map (kbd "s-n") 'vterm-toggle-forward)
-  (define-key vterm-mode-map (kbd "s-p") 'vterm-toggle-backward)
-
-  ;;----------------------------------------------------------------------------
-  ;; aggressive-indent-mode
-  ;;----------------------------------------------------------------------------
-  (spacemacs/toggle-aggressive-indent-on)
-
-  ;;----------------------------------------------------------------------------
-  ;; whitespace-cleanup-mode
-  ;;----------------------------------------------------------------------------
-  (spacemacs/toggle-whitespace-cleanup-on)
-
-  ;;----------------------------------------------------------------------------
-  ;; Modes' hooks
-  ;;----------------------------------------------------------------------------
-  (add-hook 'c-mode-common-hook
-   '(lambda ()
-      (c-set-style "personal")
-      (c-toggle-hungry-state 1)
-      ;; Show ruler
-      (display-fill-column-indicator-mode)
-      ;; Move cursor by camelCase, PascalCase and smart_case
-      (subword-mode)
-      ;; Smartparens
-      (push 'c-electric-paren sp--special-self-insert-commands)
-      (push 'c-electric-brace sp--special-self-insert-commands)))
-
-  (add-hook 'git-commit-mode-hook
-   '(lambda ()
-      (setq fill-column 72)
-      (turn-on-auto-fill)))
-
-  ;;----------------------------------------------------------------------------
-  ;; Key bindings
-  ;;----------------------------------------------------------------------------
-  (setq-default my-keys (make-sparse-keymap))
-
-  ;; Some default keybinds changes
-  (define-key my-keys (kbd "M-o") 'ace-window)
-  (define-key my-keys (kbd "M-n") 'next-error)
-  (define-key my-keys (kbd "M-p") 'previous-error)
-  (define-key my-keys (kbd "M-g") 'goto-line)
-  (define-key my-keys (kbd "M-j k") 'avy-goto-char-2)
-  (define-key my-keys (kbd "M-j M-k") 'avy-goto-char-2)
-  (define-key my-keys (kbd "M-j j") 'avy-goto-char-timer)
-  (define-key my-keys (kbd "M-j M-j") 'avy-goto-char-timer)
-  (define-key my-keys (kbd "M-j l") 'avy-goto-line)
-  (define-key my-keys (kbd "M-j M-l") 'avy-goto-line)
-  (define-key my-keys (kbd "M-j n") 'avy-goto-end-of-line)
-  (define-key my-keys (kbd "M-j M-n") 'avy-goto-end-of-line)
-  (define-key my-keys (kbd "M-j w") 'avy-goto-subword-1)
-  (define-key my-keys (kbd "M-j M-w") 'avy-goto-subword-1)
-  (define-key my-keys (kbd "C-q") 'ido-kill-buffer)
-  (define-key my-keys (kbd "C-o") 'helm-buffers-list)
-
   ;; zop-to-char
-  (define-key my-keys [remap zap-to-char] 'zop-up-to-char)
-
-  ;; display-fill-column-indicator-mode
-  (define-key my-keys [remap spacemacs/toggle-fill-column-indicator]
-   'display-fill-column-indicator-mode)
-
-  ;; projectile
-  (spacemacs/set-leader-keys "pC" 'projectile-configure-project)
-  (spacemacs/set-leader-keys "pt" 'projectile-test-project)
-  (spacemacs/set-leader-keys "pT" 'spacemacs/treemacs-project-toggle)
-
-  ;; deadgrep
-  (define-key my-keys (kbd "<f5>") #'deadgrep)
-
-  ;; multiple-cursors
-  (define-key my-keys (kbd "C-.")     'mc/mark-next-like-this)
-  (define-key my-keys (kbd "C-,")     'mc/mark-previous-like-this)
-  (define-key my-keys (kbd "C->")     'mc/mark-next-like-this-word)
-  (define-key my-keys (kbd "C-<")     'mc/mark-previous-like-this-word)
-  (define-key my-keys (kbd "C-c l")   'mc/edit-lines)
-  (define-key my-keys (kbd "C-c .")   'mc/mark-next-like-this)
-  (define-key my-keys (kbd "C-c ,")   'mc/mark-previous-like-this)
-  (define-key my-keys (kbd "C-c >")   'mc/mark-next-like-this-word)
-  (define-key my-keys (kbd "C-c <")   'mc/mark-previous-like-this-word)
-  (define-key my-keys (kbd "C-c M-.") 'mc/unmark-next-like-this)
-  (define-key my-keys (kbd "C-c M-,") 'mc/unmark-previous-like-this)
-  (define-key my-keys (kbd "C-c M->") 'mc/mark-all-like-this)
-  (define-key my-keys (kbd "C-c M-<") 'mc/mark-all-words-like-this)
-
-  ;; phi-search
-  (define-key my-keys (kbd "C-s") 'phi-search)
-  (define-key my-keys (kbd "C-r") 'phi-search-backward)
-  (define-key my-keys (kbd "M-%") 'phi-replace-query)
-
-  ;; duplicate-thing
-  (define-key my-keys (kbd "M-c") 'duplicate-thing)
-
-  ;; hideshow-org
-  (define-key my-keys (kbd "C-c h") 'hs-org/minor-mode)
-
-  ;; libvterm-toggle
-  (define-key my-keys (kbd "<f2>")   'vterm-toggle)
-  (define-key my-keys (kbd "C-<f2>") 'vterm-toggle-cd)
-
-  (define-minor-mode my-keys-mode
-    "A minor mode to set key binds that will not be overridden by major modes"
-    :init-value t
-    :keymap my-keys)
-
-  (my-keys-mode 1)
-
-  ;; lsp-ui-flycheck
-  (with-eval-after-load 'lsp-ui
-     (define-key lsp-ui-flycheck-list-mode-map (kbd "n") 'next-line)
-     (define-key lsp-ui-flycheck-list-mode-map (kbd "p") 'previous-line)
-     (define-key lsp-ui-flycheck-list-mode-map (kbd "RET")
-       'lsp-ui-flycheck-list--view)
-     (define-key lsp-ui-flycheck-list-mode-map (kbd "M-RET")
-       'lsp-ui-flycheck-list--visit)
-     (define-key lsp-ui-flycheck-list-mode-map (kbd "o")
-       'lsp-ui-flycheck-list--visit))
+  ;;----------------------------------------------------------------------------
+  (use-package zop-to-char
+    :defer t
+    :bind ([remap zap-to-char] . zop-up-to-char))
 
   )
 
