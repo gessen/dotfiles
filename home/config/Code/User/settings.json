@@ -167,7 +167,7 @@
         "SC2059"
     ],
     "shellcheck.run": "onSave",
-    "shellformat.flag": "-i 4",
+    "shellformat.flag": "-i 4 -bn -sr",
     "remote.SSH.showLoginTerminal": true,
     "remote.SSH.defaultExtensions": [
         "ccls-project.ccls",
