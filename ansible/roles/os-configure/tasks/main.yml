@@ -5,7 +5,7 @@
       - files:
           - "vars/{{ ansible_distribution | lower }}.yml"
           - "vars/{{ ansible_os_family | lower }}.yml"
-        skip: true
+        errors: ignore
   loop_control:
     loop_var: var_file
 
@@ -15,6 +15,6 @@
       - files:
           - "tasks/{{ ansible_distribution | lower }}.yml"
           - "tasks/{{ ansible_os_family | lower }}.yml"
-        skip: true
+        errors: ignore
   loop_control:
     loop_var: task_file
