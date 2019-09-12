@@ -74,6 +74,7 @@ This function should only modify configuration layer settings."
                        :codeLens (:localVariables :json-false)
                        :completion (:caseSensitivity 1)
                        :index (:blacklist [".*CMakeFiles.*"])))
+     dap
      emacs-lisp
      fasd
      (git :variables
