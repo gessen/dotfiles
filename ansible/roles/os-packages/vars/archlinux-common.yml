@@ -63,16 +63,12 @@ packages_common_aur:
   - dropbox
   - gcovr
   - oh-my-zsh-git
+  - p4v
   - signal-desktop-bin
   - visual-studio-code-bin
   - zsh-theme-powerlevel10k
 
 packages_common_own:
-  - name: p4merge-bin
-    install: no
-    files:
-      - PKGBUILD
-      - .SRCINFO
   - name: ttf-nerd-fonts-glyphs
     files:
       - PKGBUILD
