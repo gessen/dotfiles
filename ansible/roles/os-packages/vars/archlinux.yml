@@ -1,0 +1,6 @@
+---
+packages_aur:
+  - yay-bin
+
+packages_yay:
+  - ttf-nerd-fonts-symbols

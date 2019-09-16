@@ -21,22 +21,6 @@
   when: with_pacman | default(False)
 
 - block:
-  - name: Check if yay exists
-    stat:
-      path: /usr/bin/yay
-    register: yay_installed
-
-  - name: Install aur packages
-    command: 'yay -S --noconfirm --needed {{ item }}'
-    with_items:
-      - '{{ packages_common_aur | default([]) }}'
-      - '{{ packages_aur | default([]) }}'
-    when:
-      - yay_installed.stat.executable is defined
-      - yay_installed.stat.executable
-    register: yay_output
-    changed_when: '"is up to date" not in yay_output.stdout'
-
   - name: Create folders for own recipes
     file:
       path: '{{ aur_dst }}/{{ item.name }}'
@@ -62,8 +46,52 @@
     with_items:
       - '{{ packages_common_own | default([]) }}'
       - '{{ packages_own | default([]) }}'
-    when: (item.install | default('yes')) == 'yes'
     register: makepkg_output
     changed_when: '"there is nothing to do" not in makepkg_output.stdout'
+
+  - name: Create folders for AUR recipes
+    file:
+      path: '{{ aur_dst }}'
+      state: directory
+    with_items:
+      - '{{ packages_common_aur | default([]) }}'
+      - '{{ packages_aur | default([]) }}'
+
+  - name: Clone AUR recipes
+    git:
+      repo: 'https://aur.archlinux.org/{{ item }}'
+      dest: '{{ aur_dst }}/{{ item }}'
+      clone: yes
+      force: yes
+      depth: 1
+    with_items:
+      - '{{ packages_common_aur | default([]) }}'
+      - '{{ packages_aur | default([]) }}'
+
+  - name: Install AUR packages
+    command: 'makepkg -si --noconfirm --needed'
+    args:
+      chdir: '{{ aur_dst }}/{{ item }}'
+    with_items:
+      - '{{ packages_common_aur | default([]) }}'
+      - '{{ packages_aur | default([]) }}'
+    register: makepkg_output
+    changed_when: '"there is nothing to do" not in makepkg_output.stdout'
+
+  - name: Check if yay exists
+    stat:
+      path: /usr/bin/yay
+    register: yay_installed
+
+  - name: Install AUR packages with yay
+    command: 'yay -S --noconfirm --needed {{ item }}'
+    with_items:
+      - '{{ packages_common_yay | default([]) }}'
+      - '{{ packages_yay | default([]) }}'
+    when:
+      - yay_installed.stat.executable is defined
+      - yay_installed.stat.executable
+    register: yay_output
+    changed_when: '"is up to date" not in yay_output.stdout'
 
   when: with_aur | default(False)

@@ -19,6 +19,7 @@ packages_common:
   - fzf
   - gdb
   - gdb-dashboard
+  - git
   - grub-customizer
   - gtop
   - lld
@@ -56,7 +57,14 @@ packages_common_asdeps:
   - highlight
   - llvm
 
-packages_common_aur:
+packages_common_own:
+  - name: zsh-interactive-cd-git
+    files:
+      - PKGBUILD
+      - .SRCINFO
+      - zsh-interactive-cd.install
+
+packages_common_yay:
   - bear
   - ccls-git
   - discord
@@ -67,14 +75,3 @@ packages_common_aur:
   - signal-desktop-bin
   - visual-studio-code-bin
   - zsh-theme-powerlevel10k
-
-packages_common_own:
-  - name: ttf-nerd-fonts-glyphs
-    files:
-      - PKGBUILD
-      - .SRCINFO
-  - name: zsh-interactive-cd-git
-    files:
-      - PKGBUILD
-      - .SRCINFO
-      - zsh-interactive-cd.install
