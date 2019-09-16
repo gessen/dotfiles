@@ -878,6 +878,14 @@ before packages are loaded."
     :bind ([remap evil-iedit-state/iedit-mode] . iedit-mode))
 
   ;;----------------------------------------------------------------------------
+  ;; lsp
+  ;;----------------------------------------------------------------------------
+  (use-package lsp
+    :defer t
+    :bind ([remap lsp-ui-peek-find-workspace-symbol] .
+             helm-lsp-workspace-symbol))
+
+  ;;----------------------------------------------------------------------------
   ;; lsp-ui
   ;;----------------------------------------------------------------------------
   (use-package lsp-ui
