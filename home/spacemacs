@@ -989,7 +989,6 @@ before packages are loaded."
   ;; Enables xclip integration for copy/paste to system clipboard.
   ;; The `xclip` package needs to be installed on the machine emacs is running.
   (use-package xclip
-    :defer t
     :config
     (xclip-mode 1))
 
