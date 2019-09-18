@@ -140,6 +140,7 @@ LESS="--window=-4 $LESS"
 LESS="--shift 5 $LESS"
 export LESS
 export PAGER="less --squeeze-blank-lines"
+export MANPAGER="sh -c 'col -b | bat -l man -p'"
 export EDITOR="emacsclient --tty --alternate-editor="
 export VISUAL="$EDITOR"
 export PATH="/usr/lib/ccache/bin:$HOME/.local/bin:$PATH"
