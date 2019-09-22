@@ -14,3 +14,18 @@
     regexp: '{{ item.regexp }}'
   with_items: '{{ makepkg_options }}'
   become: yes
+
+- name: Add archlinuxcn repository to pacman
+  ini_file:
+    path: /etc/pacman.conf
+    section: archlinuxcn
+    option: Server
+    value: https://repo.archlinuxcn.org/{{ ansible_architecture }}
+  become: yes
+
+- name: Install archlinuxcn keyring
+  pacman:
+    name: archlinuxcn-keyring
+    state: latest
+    update_cache: yes
+  become: yes

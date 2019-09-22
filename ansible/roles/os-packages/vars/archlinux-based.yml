@@ -5,15 +5,17 @@ aur_dst: '{{ home_dir }}/Workspace/aur'
 packages_common:
   - bash-language-server
   - bat
+  - bear
   - boost
   - boost-libs
   - ccache
+  - ccls-git
   - clang
   - cmake
   - colordiff
   - diff-so-fancy
   - doxygen
-  - emacs
+  - emacs-git
   - fasd
   - fd
   - fzf
@@ -27,6 +29,7 @@ packages_common:
   - lsd
   - ncdu
   - ninja
+  - oh-my-zsh-git
   - otf-fira-code
   # - python-jedi
   # - python-language-server
@@ -44,6 +47,7 @@ packages_common:
   - tmux
   - tree
   - variety
+  - visual-studio-code-bin
   - yapf
   - xclip
   - zsh-autosuggestions
@@ -65,13 +69,9 @@ packages_common_own:
       - zsh-interactive-cd.install
 
 packages_common_yay:
-  - bear
-  - ccls-git
   - discord
   - dropbox
   - gcovr
-  - oh-my-zsh-git
   - p4v
   - signal-desktop-bin
-  - visual-studio-code-bin
   - zsh-theme-powerlevel10k
