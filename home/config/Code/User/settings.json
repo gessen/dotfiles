@@ -103,8 +103,7 @@
     "python.linting.pep8CategorySeverity.W": "Warning",
     "python.pythonPath": "/usr/bin/python2",
     "git.confirmSync": false,
-    "cmake.configureOnOpen": true,
-    "cmake.copyCompileCommands": "${workspaceRoot}/compile_commands.json",
+    "cmake.configureOnOpen": false,
     "cmake.useCMakeServer": true,
     "ccls.cache.directory": ".ccls-cache",
     "ccls.clang.excludeArgs": [
