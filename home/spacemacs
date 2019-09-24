@@ -70,6 +70,7 @@ This function should only modify configuration layer settings."
                                      "-fmacro-prefix-map"
                                      "-fmerge-constants"
                                      "-fno-var-tracking-assignments"
+                                     "-fstack-usage"
                                      "-mabi=lp64"])
                        :codeLens (:localVariables :json-false)
                        :completion (:caseSensitivity 1)

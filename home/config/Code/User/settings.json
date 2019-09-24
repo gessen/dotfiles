@@ -112,6 +112,7 @@
         "-fmacro-prefix-map",
         "-fmerge-constants",
         "-fno-var-tracking-assignments",
+        "-fstack-usage",
         "-mabi=lp64"
     ],
     "ccls.clang.extraArgs": [
