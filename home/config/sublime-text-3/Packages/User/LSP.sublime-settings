@@ -7,7 +7,7 @@
 				"clangd",
 				"-log=info"
 			],
-			"enabled": true
+			"enabled": false
 		}
 	},
 	"log_stderr": true
