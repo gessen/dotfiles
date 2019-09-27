@@ -681,7 +681,6 @@ before packages are loaded."
      '(lambda ()
         (c-set-style "personal")
         (c-toggle-hungry-state +1)
-        (aggressive-indent-mode +1)
         (spacemacs-whitespace-cleanup-mode +1)
         ;; Show ruler
         (display-fill-column-indicator-mode +1)
