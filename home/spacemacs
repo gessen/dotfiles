@@ -675,6 +675,7 @@ before packages are loaded."
   (use-package cc-mode
     :defer t
     :bind (:map c-mode-base-map
+           ("M-j"   . nil)
            ("C-c ." . nil))
     :init
     (add-hook 'c-mode-common-hook
