@@ -24,12 +24,14 @@ packages_common:
   - git
   - grub-customizer
   - gtop
+  - htop
   - lld
   - lldb
   - lsd
   - ncdu
   - ninja
   - oh-my-zsh-git
+  - openssh
   - otf-fira-code
   # - python-jedi
   # - python-language-server
