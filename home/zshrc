@@ -200,6 +200,9 @@ setopt PUSHD_TO_HOME
 # Splitting to be performed on unquoted parameter expansions
 setopt SH_WORD_SPLIT
 
+# Do not ask for confirmation while removing glob
+setopt RM_STAR_SILENT
+
 # Color to use when highlighting suggestion
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=60'
 #ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=180'
