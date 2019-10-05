@@ -664,6 +664,9 @@ before packages are loaded."
   ;;----------------------------------------------------------------------------
   (use-package simple
     :defer t
+    :config
+    (progn
+      (setq kill-whole-line t))
     :bind (("M-g" . goto-line)
            ("M-n" . next-error)
            ("M-p" . previous-error)
