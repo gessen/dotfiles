@@ -7,7 +7,6 @@ packages_common:
   - bat
   - bear
   - boost
-  - boost-libs
   - ccache
   - ccls-git
   - clang
