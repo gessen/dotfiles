@@ -4,7 +4,17 @@
     path: /usr/bin/code
   register: code_installed
 
-- name: Install VSCode extensions
-  command: 'code --install-extension {{ item }} --force'
-  with_items: '{{ vscode_extensions }}'
+- block:
+  - name: List already installed VSCode extensions
+    command: 'code --list-extensions'
+    register: code_extensions
+    changed_when: False
+
+  - name: Install VSCode extensions
+    command: 'code --install-extension {{ item }}'
+    with_items: '{{ vscode_extensions }}'
+    register: code_output
+    changed_when: '"is already installed" not in code_output.stdout'
+    when: 'item not in code_extensions.stdout'
+
   when: code_installed.stat.executable is defined and code_installed.stat.executable
