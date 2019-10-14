@@ -120,7 +120,8 @@ plugins=(
   zsh-syntax-highlighting
 )
 
-autoload -U compinit && compinit
+autoload -U +X compinit && compinit
+autoload -U +X bashcompinit && bashcompinit
 
 source $ZSH/oh-my-zsh.sh
 source /usr/share/bash-completion/completions/tig
