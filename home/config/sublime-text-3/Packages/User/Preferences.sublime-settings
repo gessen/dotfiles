@@ -38,5 +38,6 @@
 	"spell_check": true,
 	"tab_size": 4,
 	"theme": "Adaptive.sublime-theme",
-	"translate_tabs_to_spaces": true
+	"translate_tabs_to_spaces": true,
+	"ui_scale": 1.1
 }
