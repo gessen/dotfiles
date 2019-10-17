@@ -535,6 +535,9 @@ before packages are loaded."
   ;;----------------------------------------------------------------------------
   ;; Emacs general
   ;;----------------------------------------------------------------------------
+  ;; Set cursor as white IBeam
+  (setq evil-emacs-state-cursor '("seashell2" bar))
+
   ;; Disable lockfiles (those pesky .# symlinks).
   (setq create-lockfiles nil)
 
