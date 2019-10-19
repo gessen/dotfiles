@@ -3,6 +3,12 @@ pacman_options:
   - regexp: '^#?Color'
     line: 'Color'
 
+  - regexp: '^#?TotalDownload'
+    line: 'TotalDownload'
+
+  - regexp: '^#?VerbosePkgLists'
+    line: 'VerbosePkgLists'
+
 makepkg_options:
   - regexp: '^#?MAKEFLAGS='
     line: 'MAKEFLAGS="-j$(nproc)"'
