@@ -100,6 +100,7 @@ This function should only modify configuration layer settings."
      search-engine
      semantic
      (shell :variables
+            shell-default-shell 'vterm
             shell-default-height 45)
      shell-scripts
      treemacs
