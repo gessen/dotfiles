@@ -82,6 +82,9 @@ CTestTestfile.cmake
 # ccls
 .ccls-cache
 
+# clangd
+.clangd
+
 # Build directories
 /**/build*
 /**/bin
