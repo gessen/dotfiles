@@ -8,7 +8,6 @@ dotfiles:
   - config/ranger/rc.conf
   - config/ranger/rifle.conf
   - config/sublime-text-3/Packages/User
-  - config/terminator/config
   - config/variety/ui.conf
   - config/variety/variety.conf
   - config/yay/config.json
