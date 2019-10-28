@@ -48,7 +48,6 @@ packages_common:
   - zsh-autosuggestions
   - zsh-completions
   - zsh-syntax-highlighting
-  - zsh-theme-powerlevel9k
 
 packages_common_asdeps:
   - atool
