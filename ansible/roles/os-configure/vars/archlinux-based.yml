@@ -23,4 +23,7 @@ makepkg_options:
     line: 'BUILDENV=(!distcc color ccache !check !sign)'
 
   - regexp: '^#?COMPRESSXZ='
-    line: 'COMPRESSXZ=(xz -c -z - --threads=0)'
+    line: 'COMPRESSXZ=(xz -c -z --threads=0 -)'
+
+  - regexp: '^#?COMPRESSZST='
+    line: 'COMPRESSZST=(zstd -c -z -q -T0 -)'
