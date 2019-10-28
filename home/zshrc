@@ -113,6 +113,7 @@ plugins=(
   fzf
   git
   gitfast
+  rsync
   sublime
   sudo
   tig
