@@ -1,0 +1,18 @@
+pkgbase = zsh-fzf-kill-git
+	pkgdesc = Kill processes with fzf
+	pkgver = 1.d6f7d1e
+	pkgrel = 1
+	url = https://github.com/gessen/zsh-fzf-kill
+	install = zsh-fzf-kill-git.install
+	arch = any
+	license = UNLICENSE
+	makedepends = git
+	depends = zsh
+	depends = fzf
+	provides = zsh-fzf-kill
+	conflicts = zsh-fzf-kill
+	source = zsh-fzf-kill::git+https://github.com/gessen/zsh-fzf-kill
+	sha256sums = SKIP
+
+pkgname = zsh-fzf-kill-git
+

@@ -2,6 +2,7 @@
 dotfiles_src: '{{ home_dir }}/.dotfiles/home/{{ ansible_os_family | lower }}'
 
 dotfiles:
+  - oh-my-zsh/custom/plugins/fzf-kill
   - oh-my-zsh/custom/plugins/gitstatus
   - oh-my-zsh/custom/plugins/zsh-autosuggestions
   - oh-my-zsh/custom/plugins/zsh-interactive-cd

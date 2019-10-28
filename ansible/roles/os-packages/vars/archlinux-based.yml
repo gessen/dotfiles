@@ -57,6 +57,11 @@ packages_common_asdeps:
   - llvm
 
 packages_common_own:
+  - name: zsh-fzf-kill-git
+    files:
+      - PKGBUILD
+      - .SRCINFO
+      - zsh-fzf-kill.install
   - name: zsh-interactive-cd-git
     files:
       - PKGBUILD

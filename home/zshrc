@@ -111,6 +111,7 @@ plugins=(
   dirhistory
   fasd
   fzf
+  fzf-kill
   git
   gitfast
   rsync

@@ -1,0 +1,30 @@
+# Maintainer: Jacek Swierk <jacek.swierk@gmail.com>
+
+pkgname="zsh-fzf-kill-git"
+pkgver=1.d6f7d1e
+pkgrel=1
+pkgdesc="Kill processes with fzf"
+arch=("any")
+url="https://github.com/gessen/zsh-fzf-kill"
+license=("UNLICENSE")
+depends=("zsh" "fzf")
+makedepends=("git")
+provides=("${pkgname%-git}")
+conflicts=("${pkgname%-git}")
+install="${pkgname%-git}.install"
+source=("${pkgname%-git}::git+${url}")
+sha256sums=("SKIP")
+
+pkgver() {
+  cd "${srcdir}/${pkgname%-git}"
+  printf "%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+package() {
+  cd "${srcdir}/${pkgname%-git}"
+
+  install -d "${pkgdir}/usr/share/zsh/plugins/fzf-kill"
+  install -Dm644 "fzf-kill.plugin.zsh" "${pkgdir}/usr/share/zsh/plugins/fzf-kill"
+  ln -s "fzf-kill.plugin.zsh" "${pkgdir}/usr/share/zsh/plugins/fzf-kill/fzf-kill.zsh"
+  install -Dm644 "UNLICENSE" "${pkgdir}/usr/share/licenses/${pkgname%-git}/UNLICENSE"
+}
