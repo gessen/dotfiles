@@ -24,6 +24,7 @@ packages_common:
   - glances
   - grub-customizer
   - htop
+  - kitty
   - lld
   - lldb
   - lsd
