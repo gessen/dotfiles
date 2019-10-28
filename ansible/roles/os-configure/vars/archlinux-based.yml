@@ -27,3 +27,7 @@ makepkg_options:
 
   - regexp: '^#?COMPRESSZST='
     line: 'COMPRESSZST=(zstd -c -z -q -T0 -)'
+
+  - regexp: '^#?PKGEXT='
+    line: |
+      PKGEXT='.pkg.tar'
