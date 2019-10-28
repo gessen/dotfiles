@@ -107,6 +107,8 @@ mkdir -p $ZSH_CACHE_DIR
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
   cp
+  dircycle
+  dirhistory
   fasd
   fzf
   git
@@ -297,6 +299,10 @@ bindkey "^U" backward-kill-line
 bindkey "^[^H" run-help
 bindkey "^[H" backward-kill-word
 bindkey "^[h" backward-kill-word
+
+# Use ALT-Shift-{Left/Right} for dircycle
+bindkey '^[[1;4D' insert-cycledleft
+bindkey '^[[1;4C' insert-cycledright
 
 # Use CTRL-{A/F/D} for fasd completion
 bindkey '^X^A' fasd-complete
