@@ -44,13 +44,11 @@ This function should only modify configuration layer settings."
      cmake
      (c-c++ :variables
             c-c++-adopt-subprojects t
-            c-c++-lsp-sem-highlight-rainbow t
-            c-c++-lsp-sem-highlight-method 'overlay
             c-c++-backend 'lsp-ccls
-            c-c++-lsp-executable "ccls"
-            c-c++-lsp-cache-dir ".ccls-cache"
-            c-c++-lsp-args (list "-log-file=/tmp/ccls.log" "-v=1")
-            c-c++-lsp-initialization-options '
+            c-c++-lsp-enable-semantic-highlight 'rainbow
+            c-c++-lsp-semantic-highlight-method 'overlay
+            ccls-args (list "-log-file=/tmp/ccls.log" "-v=1")
+            ccls-initialization-options '
               (:clang (:extraArgs ["-Weverything"
                                    "-Wno-c++98-compat"
                                    "-Wno-c++98-compat-pedantic"
@@ -72,9 +70,9 @@ This function should only modify configuration layer settings."
                                      "-fno-var-tracking-assignments"
                                      "-fstack-usage"
                                      "-mabi=lp64"])
-                       :codeLens (:localVariables :json-false)
-                       :completion (:caseSensitivity 1)
-                       :index (:blacklist [".*CMakeFiles.*"])))
+               :codeLens (:localVariables :json-false)
+               :completion (:caseSensitivity 1)
+               :index (:blacklist [".*CMakeFiles.*"])))
      dap
      emacs-lisp
      fasd
