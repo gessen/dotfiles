@@ -715,6 +715,23 @@ before packages are loaded."
         (column-enforce-mode +1))))
 
   ;;----------------------------------------------------------------------------
+  ;; shell-script
+  ;;----------------------------------------------------------------------------
+  (use-package sh-script
+    :defer t
+    :init
+    (add-hook 'shell-script-mode-hook
+     '(lambda ()
+        (spacemacs-whitespace-cleanup-mode +1)
+        ;; Show ruler
+        (display-fill-column-indicator-mode +1)
+        ;; Mark too long lines
+        (column-enforce-mode +1)))
+    :config
+    (progn
+      (setq sh-basic-offset 2)))
+
+  ;;----------------------------------------------------------------------------
   ;; dired
   ;;----------------------------------------------------------------------------
   (use-package dired
