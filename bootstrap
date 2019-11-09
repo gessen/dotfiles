@@ -1,22 +1,24 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
-set -e
+set -o errexit
+set -o nounset
 
-if [[ -f /etc/os-release ]]; then
-    source /etc/os-release
-    if [[ -z "$ID_LIKE" ]]; then
-        ID_LIKE="$ID"
-    fi
-    case "$ID_LIKE" in
-        arch)
-            if [[ ! -x /usr/bin/ansible ]]; then
-                sudo pacman -S --needed --noconfirm ansible
-            fi
-            ;;
-        *)
-            echo "Unsupported Linux distribution: $ID"
-            exit 1
-    esac
+if [ -f /etc/os-release ]; then
+  . /etc/os-release
+  if [ -z "$ID_LIKE" ]; then
+    ID_LIKE="$ID"
+  fi
+  case "$ID_LIKE" in
+    arch)
+      if [ ! -x /usr/bin/ansible ]; then
+        sudo pacman -S --needed --noconfirm ansible
+      fi
+      ;;
+    *)
+      echo "Unsupported Linux distribution: $ID"
+      exit 1
+      ;;
+  esac
 fi
 
 echo ""
