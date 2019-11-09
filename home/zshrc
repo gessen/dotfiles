@@ -281,14 +281,18 @@ unalias z 2> /dev/null
 z() {
   [ $# -gt 0 ] && fasd_cd -d "$*" && return
   local dir
-  dir="$(fasd -Rdl | fzf -1 -0 --no-sort +m)" && cd "${dir}" || return 1
+  dir="$(fasd -Rdl | fzf --select-1 --exit-0 --no-sort --no-multi)" \
+    && cd "${dir}" \
+    || return 1
 }
 
 # Display fzf prompt when using zz
 unalias zz 2> /dev/null
 zz() {
   local dir
-  dir="$(fasd -Rdl "$1" | fzf -1 -0 --no-sort +m)" && cd "${dir}" || return 1
+  dir="$(fasd -Rdl "$1" | fzf --select-1 --exit-0 --no-sort --no-multi)" \
+    && cd "${dir}" \
+    || return 1
 }
 
 # Quick jumping to n-th arguments by pressing Alt-number
