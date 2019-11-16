@@ -5,10 +5,10 @@ set -o nounset
 
 if [ -f /etc/os-release ]; then
   . /etc/os-release
-  if [ -z "$ID_LIKE" ]; then
-    ID_LIKE="$ID"
+  if [ -z "${ID_LIKE-}" ]; then
+    ID_LIKE="${ID}"
   fi
-  case "$ID_LIKE" in
+  case "${ID_LIKE}" in
     arch)
       if [ ! -x /usr/bin/ansible ]; then
         sudo pacman -S --needed --noconfirm ansible
