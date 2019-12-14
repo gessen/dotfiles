@@ -8,6 +8,7 @@ vscode_extensions:
   - mads-hartmann.bash-ide-vscode
   - ms-azuretools.vscode-docker
   - ms-python.python
+  - ms-vscode.cmake-tools
   - ms-vscode-remote.remote-containers
   - ms-vscode-remote.remote-ssh
   - ms-vscode-remote.remote-ssh-edit
@@ -19,7 +20,6 @@ vscode_extensions:
   - shardulm94.trailing-spaces
   - timonwong.shellcheck
   - twxs.cmake
-  - vector-of-bool.cmake-tools
   - vscode-icons-team.vscode-icons
   - vscoss.vscode-ansible
   - webfreak.debug
