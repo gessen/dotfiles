@@ -22,7 +22,6 @@ packages_common:
   - gdb-dashboard
   - git
   - glances
-  - grub-customizer
   - htop
   - kitty
   - lld
