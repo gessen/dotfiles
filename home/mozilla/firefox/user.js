@@ -3,8 +3,11 @@
 // Does not close the browser with the last tab
 user_pref("browser.tabs.closeWindowWithLastTab", false);
 
+// Load userChrome.css
+user_pref("toolkit.legacyUserProfileCustomizations.stylesheets", true);
+
 // Increases pixels per px
-user_pref("layout.css.devPixelsPerPx", 1.25);
+user_pref("layout.css.devPixelsPerPx", 1.125);
 
 // Isolates all browser identifier sources
 user_pref("privacy.firstparty.isolate", true);

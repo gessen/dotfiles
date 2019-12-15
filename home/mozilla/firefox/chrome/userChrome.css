@@ -1,6 +1,5 @@
-@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"); /* set default namespace to XUL */
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
 
-* {font-size: 13px !important;
-
-  }
-
+* {
+  font-size: 15px !important;
+}
