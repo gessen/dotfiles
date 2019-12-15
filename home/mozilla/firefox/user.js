@@ -7,7 +7,7 @@ user_pref("browser.tabs.closeWindowWithLastTab", false);
 user_pref("toolkit.legacyUserProfileCustomizations.stylesheets", true);
 
 // Increases pixels per px
-user_pref("layout.css.devPixelsPerPx", 1.125);
+user_pref("layout.css.devPixelsPerPx", "1.125");
 
 // Isolates all browser identifier sources
 user_pref("privacy.firstparty.isolate", true);
@@ -19,7 +19,7 @@ user_pref("browser.sessionstore.max_tabs_undo", 10);
 user_pref("media.peerconnection.enabled", false);
 
 // Speculative URLs
-user_pref("browser.urlbar.speculativeConnect.enabled", true)
+user_pref("browser.urlbar.speculativeConnect.enabled", true);
 
 // Disables that websites can get notifications if you copy, paste, or cut something
 user_pref("dom.event.clipboardevents.enabled", false);
@@ -237,7 +237,7 @@ user_pref("network.cookie.lifetimePolicy", 0);
 user_pref("dom.flyweb.enabled", false);
 
 // Disables WebGL
-user_pref("webgl.disabled", true)
+user_pref("webgl.disabled", true);
 
 //
 user_pref("browser.uitour.enabled", false);
@@ -246,8 +246,12 @@ user_pref("browser.uitour.enabled", false);
 user_pref("privacy.donottrackheader.enabled", false);
 
 //
-user_pref("privacy.trackingprotection.enabled", false);
+user_pref("privacy.trackingprotection.enabled", true);
 user_pref("privacy.trackingprotection.pbmode.enabled", true);
+
+// Block fingerprinting and cryptomining
+user_pref("privacy.trackingprotection.fingerprinting.enabled", true);
+user_pref("privacy.trackingprotection.cryptomining.enabled", true);
 
 //
 user_pref("browser.casting.enabled", false);
@@ -302,7 +306,7 @@ user_pref("general.buildID.override", "20100101");
 user_pref("browser.display.use_document_fonts", 1);
 
 //
-user_pref("privacy.resistFingerprinting", false);
+user_pref("privacy.resistFingerprinting", true);
 
 // Social
 user_pref("social.remote-install.enabled", false);
