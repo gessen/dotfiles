@@ -5,9 +5,10 @@
 		{
 			"command": [
 				"clangd",
-				"-log=info"
+				"-log=info",
+				"--completion-style=bundled"
 			],
-			"enabled": false
+			"enabled": true
 		},
 		"ccls":
 		{
