@@ -24,6 +24,8 @@
 	singlekey = true
 [pull]
 	rebase = true
+[push]
+	followtags = true
 [merge]
 	tool = p4merge
 [credential]
