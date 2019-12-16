@@ -867,7 +867,11 @@ before packages are loaded."
   ;;----------------------------------------------------------------------------
   (use-package deadgrep
     :defer t
-    :bind ("<f5>" . deadgrep))
+    :bind ("<f5>" . deadgrep)
+    :config
+    (setq deadgrep-executable
+      "rg --no-config --hidden --follow --smart-case --max-columns=150 \
+      --max-columns-preview"))
 
   ;;----------------------------------------------------------------------------
   ;; duplicate-thing

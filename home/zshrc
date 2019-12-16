@@ -251,6 +251,9 @@ export FZF_TMUX_HEIGHT=40%
 # Include the current load to the ninja status
 export NINJA_STATUS="[%s/%f/%t] (j%r/%e) "
 
+# Use persistent configuration file for ripgrep
+export RIPGREP_CONFIG_PATH="${XDG_CONFIG_HOME:-$HOME/.config}/ripgrep/config"
+
 # Quick jumping to n-th arguments by pressing Alt-number
 bindkey '^[1' beginning-of-line
 bindkey -s '^[2' '^A^[f'

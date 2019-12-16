@@ -1,0 +1,17 @@
+# Searches case insensitively
+--smart-case
+
+# Follow symbolic links
+--follow
+
+# Don't let ripgrep vomit really long lines to my terminal, and show a preview
+--max-columns=150
+--max-columns-preview
+
+# Configure color settings and styles
+--colors=path:bg:0x3b,0x3b,0x3b
+--colors=path:fg:white
+--colors=line:fg:0xf2,0xc2,0x60
+--colors=match:bg:0xd3,0x36,0x82
+--colors=match:fg:0xff,0xff,0xff
+--colors=match:style:nobold

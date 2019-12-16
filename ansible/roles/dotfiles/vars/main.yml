@@ -8,6 +8,7 @@ dotfiles:
   - config/kitty/kitty.conf
   - config/ranger/rc.conf
   - config/ranger/rifle.conf
+  - config/ripgrep/config
   - config/sublime-text-3/Packages/User
   - config/variety/ui.conf
   - config/variety/variety.conf
