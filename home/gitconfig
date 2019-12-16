@@ -20,6 +20,8 @@
 	submodulesummary = true
 [rerere]
 	enabled = true
+[interactive]
+	singlekey = true
 [pull]
 	rebase = true
 [merge]
