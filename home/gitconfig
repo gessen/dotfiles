@@ -20,6 +20,9 @@
 	abbreviatecommands = true
 	stat = true
 [status]
+	short = true
+	branch = true
+	showstash = true
 	submodulesummary = true
 [rerere]
 	enabled = true
@@ -40,6 +43,10 @@
 	oldhighlight = red bold 52
 	newnormal = green bold
 	newhighlight = green bold 22
+[color "branch"]
+	current = green reverse
+	local = yellow
+	remote = red
 [color "diff"]
 	meta = yellow
 	frag = magenta bold
@@ -47,3 +54,7 @@
 	old = red bold
 	new = green bold
 	whitespace = red reverse
+[color "status"]
+	added = green bold
+	changed = yellow
+	untracked = red
