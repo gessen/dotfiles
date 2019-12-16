@@ -5,10 +5,19 @@
 	pager = diff-so-fancy | less --tabs=4 -RFX
 	attributesfile = ~/.gitattributes_global
 	excludesfile = ~/.gitignore_global
+[branch]
+	autosetuprebase = always
 [diff]
 	guitool = p4merge
 	tool = p4merge
 	submodule = log
+[rebase]
+	autostash = true
+	abbreviatecommands = true
+[status]
+	submodulesummary = true
+[rerere]
+	enabled = true
 [pull]
 	rebase = true
 [merge]
@@ -29,12 +38,3 @@
 	old = red bold
 	new = green bold
 	whitespace = red reverse
-[branch]
-	autoSetupRebase = always
-[rebase]
-	autoStash = true
-	abbreviateCommands = true
-[rerere]
-	enabled = true
-[status]
-	submodulessummary = 1
