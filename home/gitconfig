@@ -11,12 +11,14 @@
 	autosetuprebase = always
 [diff]
 	mnemonicprefix = true
+	algorithm = patience
 	guitool = p4merge
 	tool = p4merge
 	submodule = log
 [rebase]
 	autostash = true
 	abbreviatecommands = true
+	stat = true
 [status]
 	submodulesummary = true
 [rerere]
