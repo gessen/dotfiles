@@ -4,6 +4,7 @@ dotfiles:
   - config/Code/User/keybindings.json
   - config/gdb/libstdcxx
   - config/gdb/libcxx
+  - config/htop/htoprc
   - config/kitty/kitty.conf
   - config/ranger/rc.conf
   - config/ranger/rifle.conf
