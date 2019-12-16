@@ -131,29 +131,7 @@ autoload -U +X bashcompinit && bashcompinit
 source $ZSH/oh-my-zsh.sh
 source /usr/share/bash-completion/completions/tig
 
-# User configuration
-
-# export MANPATH="/usr/local/man:$MANPATH"
-
-LESS="--quit-at-eof"
-LESS="--quit-if-one-screen $LESS"
-LESS="--ignore-case $LESS"
-LESS="--LONG-PROMPT $LESS"
-LESS="--RAW-CONTROL-CHARS $LESS"
-LESS="--no-init $LESS"
-LESS="--hilite-unread $LESS"
-LESS="--window=-4 $LESS"
-LESS="--shift 5 $LESS"
-export LESS
-export PAGER="less --squeeze-blank-lines"
-export MANPAGER="sh -c 'col -b | bat -l man -p'"
-export EDITOR="emacsclient --tty --alternate-editor="
-export VISUAL="$EDITOR"
-export PATH="/usr/lib/ccache/bin:$PATH"
-export NINJA_STATUS="[%s/%f/%t] (j%r/%e) "
-
-HISTSIZE=1000000
-SAVEHIST=1000000
+# ZSH configuration
 
 # Treat the '!' character specially during expansion.
 setopt BANG_HIST
@@ -209,21 +187,49 @@ setopt SH_WORD_SPLIT
 # Do not ask for confirmation while removing glob
 setopt RM_STAR_SILENT
 
+# All unquoted arguments of the form ‘anything=expression’ appearing after the
+# command name have filename expansion
+setopt MAGIC_EQUAL_SUBST
+
 # Color to use when highlighting suggestion
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=60'
-#ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=180'
 
 # Max size of buffer to trigger autosuggestion. Leave null for no upper bound.
 ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=40
 
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
+# History limits
+HISTSIZE=1000000
+SAVEHIST=1000000
 
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
+# User configuration
 
-# ssh
-# export SSH_KEY_PATH="~/.ssh/rsa_id"
+# Set both EDITOR and VISUAL to emacsclient with autostarted server
+export EDITOR="emacsclient --tty --alternate-editor="
+export VISUAL="$EDITOR"
+
+# Default less options
+LESS="--quit-at-eof"
+LESS="--quit-if-one-screen $LESS"
+LESS="--ignore-case $LESS"
+LESS="--LONG-PROMPT $LESS"
+LESS="--RAW-CONTROL-CHARS $LESS"
+LESS="--no-init $LESS"
+LESS="--hilite-unread $LESS"
+LESS="--window=-4 $LESS"
+LESS="--shift 5 $LESS"
+export LESS
+
+# Use less as PAGER
+export PAGER="less --squeeze-blank-lines"
+
+# By default use plain bat
+export BAT_STYLE="plain"
+
+# Use bat as MANPAGER
+export MANPAGER="sh -c 'col -b | bat -l man -p'"
+
+# Use ccache by default
+export PATH="/usr/lib/ccache/bin:$PATH"
 
 # Set fd as the default source for fzf
 export FZF_DEFAULT_COMMAND='fd --type file --type directory --follow --hidden --exclude .git'
@@ -242,8 +248,36 @@ export FZF_ALT_C_OPTS="--preview 'tree -C {} | head -200'"
 export FZF_TMUX=1
 export FZF_TMUX_HEIGHT=40%
 
-# By default use plain bat
-export BAT_STYLE="plain"
+# Include the current load to the ninja status
+export NINJA_STATUS="[%s/%f/%t] (j%r/%e) "
+
+# Quick jumping to n-th arguments by pressing Alt-number
+bindkey '^[1' beginning-of-line
+bindkey -s '^[2' '^A^[f'
+bindkey -s '^[3' '^A^[f^[f'
+bindkey -s '^[4' '^A^[f^[f^[f'
+bindkey -s '^[5' '^A^[f^[f^[f^[f'
+bindkey -s '^[6' '^A^[f^[f^[f^[f^[f'
+bindkey -s '^[7' '^A^[f^[f^[f^[f^[f^[f'
+bindkey -s '^[8' '^A^[f^[f^[f^[f^[f^[f^[f'
+bindkey -s '^[9' '^A^[f^[f^[f^[f^[f^[f^[f^[f'
+
+# Use CTRL-U to kill whole line backward
+bindkey "^U" backward-kill-line
+
+# Swap ALT-H with CTRL-ALT-H
+bindkey "^[^H" run-help
+bindkey "^[H" backward-kill-word
+bindkey "^[h" backward-kill-word
+
+# Use ALT-Shift-{Left/Right} for dircycle
+bindkey '^[[1;4D' insert-cycledleft
+bindkey '^[[1;4C' insert-cycledright
+
+# Use CTRL-{A/F/D} for fasd completion
+bindkey '^X^A' fasd-complete
+bindkey '^X^F' fasd-complete-f
+bindkey '^X^D' fasd-complete-d
 
 # Set personal aliases, overriding those provided by oh-my-zsh libs,
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
@@ -298,34 +332,3 @@ zz() {
     && cd "${dir}" \
     || return 1
 }
-
-# Quick jumping to n-th arguments by pressing Alt-number
-bindkey '^[1' beginning-of-line
-bindkey -s '^[2' '^A^[f'
-bindkey -s '^[3' '^A^[f^[f'
-bindkey -s '^[4' '^A^[f^[f^[f'
-bindkey -s '^[5' '^A^[f^[f^[f^[f'
-bindkey -s '^[6' '^A^[f^[f^[f^[f^[f'
-bindkey -s '^[7' '^A^[f^[f^[f^[f^[f^[f'
-bindkey -s '^[8' '^A^[f^[f^[f^[f^[f^[f^[f'
-bindkey -s '^[9' '^A^[f^[f^[f^[f^[f^[f^[f^[f'
-
-bindkey "^U" backward-kill-line
-
-# Swap ALT-H with CTRL-ALT-H
-bindkey "^[^H" run-help
-bindkey "^[H" backward-kill-word
-bindkey "^[h" backward-kill-word
-
-# Use ALT-Shift-{Left/Right} for dircycle
-bindkey '^[[1;4D' insert-cycledleft
-bindkey '^[[1;4C' insert-cycledright
-
-# Use CTRL-{A/F/D} for fasd completion
-bindkey '^X^A' fasd-complete
-bindkey '^X^F' fasd-complete-f
-bindkey '^X^D' fasd-complete-d
-
-# All unquoted arguments of the form ‘anything=expression’ appearing after the command name have
-# filename expansion
-setopt MAGIC_EQUAL_SUBST
