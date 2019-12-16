@@ -10,6 +10,7 @@
 [branch]
 	autosetuprebase = always
 [diff]
+	mnemonicprefix = true
 	guitool = p4merge
 	tool = p4merge
 	submodule = log
