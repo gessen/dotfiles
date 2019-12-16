@@ -5,6 +5,8 @@
 	pager = diff-so-fancy | less --tabs=4 -RFX
 	attributesfile = ~/.gitattributes_global
 	excludesfile = ~/.gitignore_global
+[commit]
+	verbose = true
 [branch]
 	autosetuprebase = always
 [diff]
