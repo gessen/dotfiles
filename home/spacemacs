@@ -104,7 +104,8 @@ This function should only modify configuration layer settings."
             shell-default-height 45)
      shell-scripts
      treemacs
-     version-control
+     (version-control :variables
+                      version-control-diff-side 'left)
      )
 
    ;; List of additional packages that will be installed without being
