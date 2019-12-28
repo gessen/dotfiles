@@ -6,8 +6,8 @@ dotfiles:
   - config/gdb/libcxx
   - config/htop/htoprc
   - config/kitty/kitty.conf
+  - config/ranger/commands.py
   - config/ranger/rc.conf
-  - config/ranger/rifle.conf
   - config/ripgrep/config
   - config/sublime-text-3/Packages/User
   - config/variety/ui.conf
