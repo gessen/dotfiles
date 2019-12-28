@@ -109,6 +109,7 @@ plugins=(
   cp
   dircycle
   dirhistory
+  extract
   fasd
   fzf
   fzf-git
