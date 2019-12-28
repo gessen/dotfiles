@@ -548,6 +548,9 @@ before packages are loaded."
   ;; Column length
   (setq-default fill-column 80)
 
+  ;; Completion styles
+  (add-to-list 'completion-styles 'flex t)
+
   ;; Indentation for CC Mode
   (defconst my-cc-style
     '((c-recognize-knr-p . nil)
