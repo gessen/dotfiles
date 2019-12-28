@@ -34,6 +34,7 @@ packages_common:
   - otf-fira-code
   - ranger
   - ripgrep
+  - rsync
   - rustup
   - shellcheck
   - shfmt
