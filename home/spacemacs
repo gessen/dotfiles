@@ -698,10 +698,7 @@ before packages are loaded."
         ;; Mark too long lines
         (column-enforce-mode +1)
         ;; Move cursor by camelCase, PascalCase and smart_case
-        (subword-mode +1)
-        ;; Smartparens
-        (push 'c-electric-paren sp--special-self-insert-commands)
-        (push 'c-electric-brace sp--special-self-insert-commands))))
+        (subword-mode +1))))
 
   ;;----------------------------------------------------------------------------
   ;; git-commit-mode
