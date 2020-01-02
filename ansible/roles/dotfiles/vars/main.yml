@@ -2,6 +2,7 @@
 dotfiles:
   - config/Code/User/settings.json
   - config/Code/User/keybindings.json
+  - config/ccache/config
   - config/gdb/libstdcxx
   - config/gdb/libcxx
   - config/git/attributes

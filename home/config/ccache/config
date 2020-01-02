@@ -1,0 +1,5 @@
+# Ignore locale and __TIME__/__DATE__ macros
+sloppiness = locale,time_macros
+
+# Set maximum cache size to 2 GiB:
+max_size = 2G

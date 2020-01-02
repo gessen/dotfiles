@@ -237,6 +237,10 @@ export MANPAGER="sh -c 'col -b | bat -l man -p'"
 # Use ccache by default
 export PATH="/usr/lib/ccache/bin:$PATH"
 
+# Conform to XDG with ccache
+export CCACHE_CONFIGPATH="${XDG_CONFIG_HOME:-$HOME/.config}/ccache/config"
+export CCACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/ccache"
+
 # Set fd as the default source for fzf
 export FZF_DEFAULT_COMMAND='fd --type file --type directory --follow --hidden --exclude .git'
 
