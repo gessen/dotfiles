@@ -3,6 +3,15 @@ export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
 export XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
 
+# Set bash/zsh history file
+if [ -n "${BASH_SOURCE}" ]; then
+  export HISTFILE="${XDG_DATA_HOME}/bash/history"
+  mkdir -p "${XDG_DATA_HOME}/bash"
+elif [ -n "${ZSH_NAME}" ]; then
+  export HISTFILE="${XDG_DATA_HOME}/zsh/history"
+  mkdir -p "${XDG_DATA_HOME}/zsh"
+fi
+
 # History limits
 export HISTSIZE=1000000
 export SAVEHIST=1000000
@@ -23,6 +32,9 @@ LESS="--window=-4 $LESS"
 LESS="--shift 5 $LESS"
 export LESS
 
+# Do not save less search history in ~/.lesshst
+export LESSHISTFILE="-"
+
 # Use less as PAGER
 export PAGER="less --squeeze-blank-lines"
 
@@ -32,12 +44,18 @@ export BAT_STYLE="plain"
 # Use bat as MANPAGER
 export MANPAGER="sh -c 'col -b | bat -l man -p'"
 
+# Conform to XDG with cargo
+export CARGO_HOME="${XDG_DATA_HOME}/cargo"
+
 # Use ccache by default
 export PATH="/usr/lib/ccache/bin:$PATH"
 
 # Conform to XDG with ccache
 export CCACHE_CONFIGPATH="${XDG_CONFIG_HOME}/ccache/config"
 export CCACHE_DIR="${XDG_CACHE_HOME}/ccache"
+
+# Conform to XDG with fasd cache
+export _FASD_DATA="${XDG_CACHE_HOME}/fasd"
 
 # Set fd as the default source for fzf
 export FZF_DEFAULT_COMMAND='fd --type file --type directory --follow --hidden --exclude .git'
@@ -56,11 +74,23 @@ export FZF_ALT_C_OPTS="--preview 'tree -C {} | head -200'"
 export FZF_TMUX=1
 export FZF_TMUX_HEIGHT=40%
 
+# Conform to XDG with GnuPG
+export GNUPGHOME="${XDG_DATA_HOME}/gnupg"
+
+# Conform to XDG with GTK 2
+export GTK2_RC_FILES="${XDG_CONFIG_HOME}/gtk-2.0/gtkrc"
+
 # Include the current load to the ninja status
 export NINJA_STATUS="[%s/%f/%t] (j%r/%e) "
 
 # Use persistent configuration file for ripgrep
 export RIPGREP_CONFIG_PATH="${XDG_CONFIG_HOME}/ripgrep/config"
+
+# Conform to XDG with rustup
+export RUSTUP_HOME="${XDG_DATA_HOME}/rustup"
+
+# Conform to XDG with vode
+export VSCODE_EXTENSIONS="${XDG_DATA_HOME}/code/extensions"
 
 # Check directories size
 alias du='du --max-depth=1 --human-readable'
