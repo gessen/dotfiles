@@ -203,66 +203,8 @@ ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=60'
 # Max size of buffer to trigger autosuggestion. Leave null for no upper bound.
 ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=40
 
-# History limits
-HISTSIZE=1000000
-SAVEHIST=1000000
-
 # User configuration
-
-# Set both EDITOR and VISUAL to emacsclient with autostarted server
-export EDITOR="emacsclient --tty --alternate-editor="
-export VISUAL="$EDITOR"
-
-# Default less options
-LESS="--quit-at-eof"
-LESS="--quit-if-one-screen $LESS"
-LESS="--ignore-case $LESS"
-LESS="--LONG-PROMPT $LESS"
-LESS="--RAW-CONTROL-CHARS $LESS"
-LESS="--no-init $LESS"
-LESS="--hilite-unread $LESS"
-LESS="--window=-4 $LESS"
-LESS="--shift 5 $LESS"
-export LESS
-
-# Use less as PAGER
-export PAGER="less --squeeze-blank-lines"
-
-# By default use plain bat
-export BAT_STYLE="plain"
-
-# Use bat as MANPAGER
-export MANPAGER="sh -c 'col -b | bat -l man -p'"
-
-# Use ccache by default
-export PATH="/usr/lib/ccache/bin:$PATH"
-
-# Conform to XDG with ccache
-export CCACHE_CONFIGPATH="${XDG_CONFIG_HOME:-$HOME/.config}/ccache/config"
-export CCACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/ccache"
-
-# Set fd as the default source for fzf
-export FZF_DEFAULT_COMMAND='fd --type file --type directory --follow --hidden --exclude .git'
-
-# Display fzf window below the cursor with the given height instead of using fullscreen
-export FZF_DEFAULT_OPTS='--height=40%'
-
-# Use fd for CTRL-T
-export FZF_CTRL_T_COMMAND='$FZF_DEFAULT_COMMAND'
-
-# Use fd for ALT-C with preview
-export FZF_ALT_C_COMMAND='fd --type directory --follow --hidden --exclude .git'
-export FZF_ALT_C_OPTS="--preview 'tree -C {} | head -200'"
-
-# Open CTRL-T, CTRL-R and ALT-C in tmux-pane
-export FZF_TMUX=1
-export FZF_TMUX_HEIGHT=40%
-
-# Include the current load to the ninja status
-export NINJA_STATUS="[%s/%f/%t] (j%r/%e) "
-
-# Use persistent configuration file for ripgrep
-export RIPGREP_CONFIG_PATH="${XDG_CONFIG_HOME:-$HOME/.config}/ripgrep/config"
+source "${XDG_CONFIG_HOME:-$HOME/.config}/profile"
 
 # Quick jumping to n-th arguments by pressing Alt-number
 bindkey '^[1' beginning-of-line
@@ -300,55 +242,3 @@ bindkey '^X^D' fasd-complete-d
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-
-# Check directories size
-alias du='du --max-depth=1 --human-readable'
-
-# Use lsd instead
-alias ls='lsd --classify --group-dirs=first --date=relative'
-alias ll='ls --long'
-alias la='ll --all'
-
-# Emacs
-alias ec='emacsclient --tty --alternate-editor='
-alias ecg='emacsclient --create-frame --alternate-editor='
-
-alias gdg='git difftool --tool=p4merge --find-renames'
-alias gmg='git mergetool --tool=p4merge'
-
-# Use bat
-alias cat='bat'
-
-# To open file with $EDITOR with fasd
-alias e='v'
-
-alias fu='sudo !!'
-
-# Use fzf-tmux
-alias fzf='fzf-tmux -d 40%'
-
-# Tig for all refs
-alias tia='tig --all'
-
-mkcd() {
-  mkdir "$1" && cd "$1"
-}
-
-# Normal z when used with arguments but displays an fzf prompt when used without
-unalias z 2> /dev/null
-z() {
-  [ $# -gt 0 ] && fasd_cd -d "$*" && return
-  local dir
-  dir="$(fasd -Rdl | fzf --select-1 --exit-0 --no-sort --no-multi)" \
-    && cd "${dir}" \
-    || return 1
-}
-
-# Display fzf prompt when using zz
-unalias zz 2> /dev/null
-zz() {
-  local dir
-  dir="$(fasd -Rdl "$1" | fzf --select-1 --exit-0 --no-sort --no-multi)" \
-    && cd "${dir}" \
-    || return 1
-}
