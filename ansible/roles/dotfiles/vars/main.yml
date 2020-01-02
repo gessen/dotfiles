@@ -4,6 +4,9 @@ dotfiles:
   - config/Code/User/keybindings.json
   - config/gdb/libstdcxx
   - config/gdb/libcxx
+  - config/git/attributes
+  - config/git/config
+  - config/git/ignore
   - config/htop/htoprc
   - config/kitty/kitty.conf
   - config/ranger/commands.py
@@ -15,9 +18,6 @@ dotfiles:
   - config/yay/config.json
   - gdbinit.d/init
   - ssh/config
-  - gitattributes_global
-  - gitconfig
-  - gitignore_global
   - spacemacs
   - tigrc
   - tmux.conf
