@@ -2,11 +2,11 @@
 dotfiles_src: '{{ home_dir }}/.dotfiles/home/{{ ansible_os_family | lower }}'
 
 dotfiles:
-  - oh-my-zsh/custom/plugins/fzf-git
-  - oh-my-zsh/custom/plugins/fzf-kill
-  - oh-my-zsh/custom/plugins/gitstatus
-  - oh-my-zsh/custom/plugins/zsh-autosuggestions
-  - oh-my-zsh/custom/plugins/zsh-interactive-cd
-  - oh-my-zsh/custom/plugins/zsh-syntax-highlighting
-  - oh-my-zsh/custom/themes/powerlevel10k.zsh-theme
+  - config/oh-my-zsh/plugins/fzf-git
+  - config/oh-my-zsh/plugins/fzf-kill
+  - config/oh-my-zsh/plugins/gitstatus
+  - config/oh-my-zsh/plugins/zsh-autosuggestions
+  - config/oh-my-zsh/plugins/zsh-interactive-cd
+  - config/oh-my-zsh/plugins/zsh-syntax-highlighting
+  - config/oh-my-zsh/themes/powerlevel10k.zsh-theme
   - gdbinit

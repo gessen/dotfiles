@@ -95,11 +95,14 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 # HIST_STAMPS="mm/dd/yyyy"
 
 # Would you like to use another custom folder than $ZSH/custom?
-ZSH_CUSTOM=~/.oh-my-zsh/custom
+ZSH_CUSTOM="${XDG_CONFIG_HOME:-$HOME/.config}/oh-my-zsh"
 
-# Move cache to home dir
-ZSH_CACHE_DIR=~/.oh-my-zsh/cache
+# Move cache to XDG cache dir
+ZSH_CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/oh-my-zsh"
 mkdir -p $ZSH_CACHE_DIR
+
+# Move completion dump to XDG cache dir
+ZSH_COMPDUMP="${ZSH_CACHE_DIR}/zcompdump-${ZSH_VERSION}"
 
 # FIXME: Use XDG directory for tmux - it's already on master
 ZSH_TMUX_CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/tmux/tmux.conf"
@@ -129,7 +132,6 @@ plugins=(
   zsh-syntax-highlighting
 )
 
-autoload -U +X compinit && compinit
 autoload -U +X bashcompinit && bashcompinit
 
 source $ZSH/oh-my-zsh.sh
