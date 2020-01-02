@@ -101,6 +101,9 @@ ZSH_CUSTOM=~/.oh-my-zsh/custom
 ZSH_CACHE_DIR=~/.oh-my-zsh/cache
 mkdir -p $ZSH_CACHE_DIR
 
+# FIXME: Use XDG directory for tmux - it's already on master
+ZSH_TMUX_CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/tmux/tmux.conf"
+
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)

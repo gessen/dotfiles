@@ -14,11 +14,11 @@ dotfiles:
   - config/ripgrep/config
   - config/sublime-text-3/Packages/User
   - config/tig/config
+  - config/tmux/tmux.conf
   - config/variety/ui.conf
   - config/variety/variety.conf
   - config/yay/config.json
   - gdbinit.d/init
   - ssh/config
   - spacemacs
-  - tmux.conf
   - zshrc
