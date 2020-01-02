@@ -17,6 +17,7 @@
 	submodule = log
 [rebase]
 	autostash = true
+	autosquash = true
 	abbreviatecommands = true
 	stat = true
 [status]
