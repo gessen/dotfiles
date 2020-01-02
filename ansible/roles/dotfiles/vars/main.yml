@@ -13,12 +13,12 @@ dotfiles:
   - config/ranger/rc.conf
   - config/ripgrep/config
   - config/sublime-text-3/Packages/User
+  - config/tig/config
   - config/variety/ui.conf
   - config/variety/variety.conf
   - config/yay/config.json
   - gdbinit.d/init
   - ssh/config
   - spacemacs
-  - tigrc
   - tmux.conf
   - zshrc
