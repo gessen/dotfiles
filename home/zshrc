@@ -318,6 +318,9 @@ alias fu='sudo !!'
 # Use fzf-tmux
 alias fzf='fzf-tmux -d 40%'
 
+# Tig for all refs
+alias tia='tig --all'
+
 mkcd() {
   mkdir "$1" && cd "$1"
 }
