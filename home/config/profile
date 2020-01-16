@@ -60,8 +60,11 @@ export _FASD_DATA="${XDG_CACHE_HOME}/fasd"
 # Set fd as the default source for fzf
 export FZF_DEFAULT_COMMAND='fd --type file --type directory --follow --hidden --exclude .git'
 
-# Display fzf window below the cursor with the given height instead of using fullscreen
-export FZF_DEFAULT_OPTS='--height=40%'
+# Default fzf options
+FZF_DEFAULT_OPTS='
+--height=60%
+'
+export FZF_DEFAULT_OPTS
 
 # Use fd for CTRL-T
 export FZF_CTRL_T_COMMAND='$FZF_DEFAULT_COMMAND'
