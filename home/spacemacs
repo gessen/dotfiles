@@ -675,8 +675,6 @@ before packages are loaded."
     (progn
       (setq kill-whole-line t))
     :bind (("M-g" . goto-line)
-           ("M-n" . next-error)
-           ("M-p" . previous-error)
            ("C-q" . spacemacs/kill-this-buffer)))
 
   ;;----------------------------------------------------------------------------
@@ -882,6 +880,15 @@ before packages are loaded."
     :bind ("M-c" . duplicate-thing))
 
   ;;----------------------------------------------------------------------------
+  ;; flycheck
+  ;;----------------------------------------------------------------------------
+  (use-package flycheck
+    :defer t
+    :bind (("M-n" . flycheck-next-error)
+           ("M-p" . flycheck-previous-error)
+           ([remap lsp-ui-flycheck-list] . spacemacs/goto-flycheck-error-list)))
+
+  ;;----------------------------------------------------------------------------
   ;; frog-jump-buffer
   ;;----------------------------------------------------------------------------
   (use-package frog-jump-buffer
@@ -929,6 +936,17 @@ before packages are loaded."
     :defer t
     :bind ([remap lsp-ui-peek-find-workspace-symbol] .
              helm-lsp-workspace-symbol))
+
+  ;;----------------------------------------------------------------------------
+  ;; lsp-treemacs
+  ;;----------------------------------------------------------------------------
+  (use-package lsp-treemacs
+    :defer t
+    :after lsp
+    :init
+    (progn
+      (spacemacs/set-leader-keys-for-minor-mode 'lsp-mode
+        "gE" #'lsp-treemacs-errors-list)))
 
   ;;----------------------------------------------------------------------------
   ;; lsp-ui
