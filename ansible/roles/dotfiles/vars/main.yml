@@ -18,6 +18,7 @@ dotfiles:
   - config/tmux/tmux.conf
   - config/variety/ui.conf
   - config/variety/variety.conf
+  - config/vlc/vlcrc
   - config/yay/config.json
   - config/profile
   - gdbinit.d/init
