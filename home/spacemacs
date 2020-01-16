@@ -123,6 +123,7 @@ This function should only modify configuration layer settings."
      cmake-font-lock
      deadgrep
      dired-k
+     diredfl
      duplicate-thing
      frog-jump-buffer
      treemacs-icons-dired
@@ -902,6 +903,14 @@ before packages are loaded."
       (setq dired-k-padding 1))
     :bind (:map dired-mode-map
            ("g" . dired-k)))
+
+  ;;----------------------------------------------------------------------------
+  ;; diredfl
+  ;;----------------------------------------------------------------------------
+  (use-package diredfl
+    :defer t
+    :after dired
+    :hook (dired-mode . diredfl-mode))
 
   ;;----------------------------------------------------------------------------
   ;; duplicate-thing
