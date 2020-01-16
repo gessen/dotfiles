@@ -38,6 +38,7 @@ packages_common:
   - rustup
   - shellcheck
   - shfmt
+  - signal-desktop
   - tig
   - tmux
   - tree
@@ -77,5 +78,4 @@ packages_common_yay:
   - dropbox
   - gcovr
   - p4v
-  - signal-desktop-bin
   - zsh-theme-powerlevel10k
