@@ -63,6 +63,7 @@ export FZF_DEFAULT_COMMAND='fd --type file --type directory --follow --hidden --
 # Default fzf options
 FZF_DEFAULT_OPTS='
 --height=60%
+--bind alt-p:preview-up,alt-n:preview-down
 '
 export FZF_DEFAULT_OPTS
 
