@@ -17,7 +17,7 @@ export HISTSIZE=1000000
 export SAVEHIST=1000000
 
 # Set both EDITOR and VISUAL to emacsclient with autostarted server
-export EDITOR="emacsclient --tty --alternate-editor="
+export EDITOR="emacsclient --tty"
 export VISUAL="$EDITOR"
 
 # Default less options
@@ -43,6 +43,9 @@ export BAT_STYLE="plain"
 
 # Use bat as MANPAGER
 export MANPAGER="sh -c 'col -b | bat -l man -p'"
+
+# emacsclient starts emacs in daemon mode if it can't connect to it
+export ALTERNATE_EDITOR=''
 
 # Conform to XDG with cargo
 export CARGO_HOME="${XDG_DATA_HOME}/cargo"
@@ -105,8 +108,8 @@ alias ll='ls --long'
 alias la='ll --all'
 
 # Emacs
-alias ec='emacsclient --tty --alternate-editor='
-alias ecg='emacsclient --create-frame --alternate-editor='
+alias ec='emacsclient --tty'
+alias ecg='emacsclient --create-frame'
 
 alias gdg='git difftool --tool=p4merge --find-renames'
 alias gmg='git mergetool --tool=p4merge'
