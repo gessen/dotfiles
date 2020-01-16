@@ -122,6 +122,7 @@ This function should only modify configuration layer settings."
      (bb-mode :location (recipe :fetcher github :repo "mferland/bb-mode"))
      cmake-font-lock
      deadgrep
+     dired-k
      duplicate-thing
      frog-jump-buffer
      treemacs-icons-dired
@@ -888,6 +889,19 @@ before packages are loaded."
     (setq deadgrep-executable
       "rg --no-config --hidden --follow --smart-case --max-columns=150 \
       --max-columns-preview"))
+
+  ;;----------------------------------------------------------------------------
+  ;; dired-k
+  ;;----------------------------------------------------------------------------
+  (use-package dired-k
+    :defer t
+    :after dired
+    :hook (dired-initial-position . dired-k)
+    :config
+    (progn
+      (setq dired-k-padding 1))
+    :bind (:map dired-mode-map
+           ("g" . dired-k)))
 
   ;;----------------------------------------------------------------------------
   ;; duplicate-thing
