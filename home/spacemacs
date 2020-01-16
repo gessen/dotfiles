@@ -118,6 +118,7 @@ This function should only modify configuration layer settings."
    dotspacemacs-additional-packages
    '(
      ace-mc
+     all-the-icons-dired
      (bb-mode :location (recipe :fetcher github :repo "mferland/bb-mode"))
      cmake-font-lock
      deadgrep
@@ -799,6 +800,14 @@ before packages are loaded."
   (use-package ace-window
     :defer t
     :bind ("M-o" . ace-window))
+
+  ;;----------------------------------------------------------------------------
+  ;; all-the-icons-dired
+  ;;----------------------------------------------------------------------------
+  (use-package all-the-icons-dired
+    :defer t
+    :after dired
+    :hook (dired-mode . all-the-icons-dired-mode))
 
   ;;----------------------------------------------------------------------------
   ;; anzu
