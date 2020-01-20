@@ -1,11 +1,11 @@
 # Maintainer: Jacek Swierk <jacek.swierk@protonmail.com>
 
 pkgname="zsh-interactive-cd-git"
-pkgver=18.2859ca7
+pkgver=19.6a592ec
 pkgrel=1
 pkgdesc="Fish like interactive tab completion for cd in zsh "
 arch=("any")
-url="https://github.com/changyuheng/zsh-interactive-cd"
+url="https://github.com/gessen/zsh-interactive-cd"
 license=("MPL-2.0")
 depends=("zsh" "fzf")
 makedepends=("git")
