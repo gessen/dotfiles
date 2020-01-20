@@ -1,7 +1,7 @@
 # Maintainer: Jacek Swierk <jacek.swierk@gmail.com>
 
 pkgname="zsh-fzf-git-git"
-pkgver=1.5f1f580
+pkgver=2.c401732
 pkgrel=1
 pkgdesc="Get git info with fzf"
 arch=("any")
