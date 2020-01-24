@@ -1001,6 +1001,15 @@ before packages are loaded."
            ("o"     . lsp-ui-flycheck-list--visit)))
 
   ;;----------------------------------------------------------------------------
+  ;; magit
+  ;;----------------------------------------------------------------------------
+  (use-package magit
+   :defer t
+   :config
+    (transient-append-suffix 'magit-rebase "-d"
+      '("-D" "Use current timestamp for author date" "--ignore-date")))
+
+  ;;----------------------------------------------------------------------------
   ;; move-text
   ;;----------------------------------------------------------------------------
   (use-package move-text
