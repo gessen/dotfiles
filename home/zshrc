@@ -187,9 +187,6 @@ setopt PUSHD_SILENT
 # Have pushd with no arguments act like ‘pushd $HOME’.
 setopt PUSHD_TO_HOME
 
-# Splitting to be performed on unquoted parameter expansions
-setopt SH_WORD_SPLIT
-
 # Do not ask for confirmation while removing glob
 setopt RM_STAR_SILENT
 
