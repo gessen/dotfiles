@@ -1,6 +1,6 @@
-dashboard -layout source stack
+dashboard -layout source variables
 dashboard -style syntax_highlighting 'monokai'
-dashboard source -style context 10
+dashboard source -style height 10
 dashboard source -style tab-size 4
 
 skip -gfi /usr/include/c++/**/*
@@ -32,3 +32,6 @@ from libcxx.v1.printers import register_libcxx_printers
 register_libstdcxx_printers (None)
 register_libcxx_printers (None)
 end
+
+# Uncomment it to disable when using with other GDB frontends
+#dashboard -enabled off

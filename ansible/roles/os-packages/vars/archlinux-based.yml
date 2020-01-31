@@ -55,6 +55,7 @@ packages_common_asdeps:
   - graphviz
   - highlight
   - llvm
+  - python-pygments
 
 packages_common_own:
   - name: zsh-fzf-git-git
