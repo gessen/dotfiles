@@ -555,6 +555,9 @@ before packages are loaded."
   ;; Completion styles
   (add-to-list 'completion-styles 'flex t)
 
+  ;; Maximum number of bytes to read from subprocess in a single chunk
+  (setq read-process-output-max (* 1024 1024))
+
   ;; Indentation for CC Mode
   (defconst my-cc-style
     '((c-recognize-knr-p . nil)
