@@ -1,5 +1,4 @@
 ---
 packages:
   - libc++
-  - ttf-nerd-fonts-symbols
   - yay

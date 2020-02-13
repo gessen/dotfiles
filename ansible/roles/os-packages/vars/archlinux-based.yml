@@ -42,6 +42,7 @@ packages_common:
   - tig
   - tmux
   - tree
+  - ttf-nerd-fonts-symbols
   - variety
   - visual-studio-code-bin
   - yapf
