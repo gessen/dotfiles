@@ -1,4 +1,3 @@
 ---
 packages:
-  - libc++
   - yay
