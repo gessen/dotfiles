@@ -84,6 +84,8 @@ This function should only modify configuration layer settings."
      (lsp :variables
           ; lsp-print-io t
           lsp-auto-guess-root t
+          lsp-idle-delay 0.500
+          lsp-prefer-capf t
           lsp-prefer-flymake nil
           lsp-remap-xref-keybindings t
           lsp-navigation 'peek
