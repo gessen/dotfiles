@@ -122,6 +122,7 @@ This function should only modify configuration layer settings."
      ace-mc
      all-the-icons-dired
      (bb-mode :location (recipe :fetcher github :repo "mferland/bb-mode"))
+     centaur-tabs
      cmake-font-lock
      deadgrep
      dired-k
@@ -868,6 +869,25 @@ before packages are loaded."
   (use-package bb-mode
     :defer t
     :mode ("\\.bb$" "\\.bbappend$" "\\.bbclass$" "\\.conf$" "\\.inc$"))
+
+  (use-package centaur-tabs
+    :demand
+    :config
+    (progn
+      (centaur-tabs-mode t)
+      (centaur-tabs-group-by-projectile-project)
+      (centaur-tabs-headline-match)
+      (setq centaur-tabs-style "alternate"
+            centaur-tabs-height 32
+            centaur-tabs-set-icons t
+            centaur-tabs-set-modified-marker t
+            centaur-tabs-set-bar 'under
+            centaur-tabs-show-navigation-buttons t
+            centaur-tabs-gray-out-icons 'buffer))
+    :bind (("C-<prior>" . centaur-tabs-backward)
+           ("C-<next>" . centaur-tabs-forward)
+           ("C-<home>" . centaur-tabs-backward-group)
+           ("C-<end>" . centaur-tabs-forward-group)))
 
   ;;----------------------------------------------------------------------------
   ;; cmake-font-lock
