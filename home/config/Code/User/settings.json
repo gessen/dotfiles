@@ -74,7 +74,7 @@
         "**/*.o": true,
         "**/*.d": true
     },
-    "search.smartCase": false,
+    "search.smartCase": true,
     "search.useIgnoreFiles": false,
     "debug.inlineValues": true,
     "extensions.showRecommendationsOnlyOnDemand": true,
