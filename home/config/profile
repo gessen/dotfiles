@@ -54,6 +54,9 @@ export CARGO_HOME="${XDG_DATA_HOME}/cargo"
 export CCACHE_CONFIGPATH="${XDG_CONFIG_HOME}/ccache/config"
 export CCACHE_DIR="${XDG_CACHE_HOME}/ccache"
 
+# Generates compile_commands.json by default
+export CMAKE_EXPORT_COMPILE_COMMANDS=ON
+
 # Use ccache by default
 export CMAKE_C_COMPILER_LAUNCHER="CCACHE_CPP2=yes;CCACHE_HASHDIR=yes;ccache"
 export CMAKE_CXX_COMPILER_LAUNCHER="CCACHE_CPP2=yes;CCACHE_HASHDIR=yes;ccache"
