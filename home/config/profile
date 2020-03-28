@@ -50,12 +50,13 @@ export ALTERNATE_EDITOR=''
 # Conform to XDG with cargo
 export CARGO_HOME="${XDG_DATA_HOME}/cargo"
 
-# Use ccache by default
-export PATH="/usr/lib/ccache/bin:$PATH"
-
 # Conform to XDG with ccache
 export CCACHE_CONFIGPATH="${XDG_CONFIG_HOME}/ccache/config"
 export CCACHE_DIR="${XDG_CACHE_HOME}/ccache"
+
+# Use ccache by default
+export CMAKE_C_COMPILER_LAUNCHER="CCACHE_CPP2=yes;CCACHE_HASHDIR=yes;ccache"
+export CMAKE_CXX_COMPILER_LAUNCHER="CCACHE_CPP2=yes;CCACHE_HASHDIR=yes;ccache"
 
 # Conform to XDG with fasd cache
 export _FASD_DATA="${XDG_CACHE_HOME}/fasd"
