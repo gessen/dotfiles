@@ -121,9 +121,6 @@ alias gmg='git mergetool --tool=p4merge'
 # Use bat
 alias cat='bat'
 
-# To open file with $EDITOR with fasd
-alias e='v'
-
 alias fu='sudo !!'
 
 # Use fzf-tmux
@@ -154,6 +151,53 @@ zz() {
   dir="$(fasd -Rdl "$1" | fzf --select-1 --exit-0 --no-sort --no-multi)" \
     && cd "${dir}" \
     || return 1
+}
+
+# Open the selected file with EDITOR with fzf+fasd
+e() {
+  local file
+  file="$(fasd -Rfl "$1" \
+    | fzf --select-1 --exit-0 --no-sort --no-multi)"
+
+  if [[ -n "${file}" ]]; then
+     eval "${EDITOR}" "${file}"
+  fi
+}
+
+# Open the selected file with EDITOR with fzf
+fec() {
+  local file
+  IFS=$'\n' file="$(fzf --query="$1" --select-1 --exit-0)"
+  [[ -n "${file}" ]] && eval "${EDITOR}" "${file}"
+}
+
+# Fuzzy grep open via ripgrep
+eg() {
+  local file
+  local line
+  local column
+
+  read -r file line column <<< \
+    "$(rg --no-heading --column --line-number --pretty "$@" \
+    | fzf --ansi --select-1 --exit-0 \
+    | awk -F: '{print $1, $2, $3}')"
+
+  if [[ -n "${file}" ]]; then
+     eval "${EDITOR}" +${line}:${column} "${file}"
+  fi
+}
+
+# Fuzzy grep open with preview via ripgrep
+egp() {
+  local file
+  if [[ "$#" == 0 ]]; then return 1; fi
+  file="$(rg --max-count=1 --files-with-matches --no-messages "$@" \
+    | fzf --select-1 --exit-0 \
+      --preview="rg --pretty --context 10 '"$@"' {}")"
+
+  if [[ -n "${file}" ]]; then
+     eval "${EDITOR}" "${file}"
+  fi
 }
 
 # Open gdb within 2 tmux panes
