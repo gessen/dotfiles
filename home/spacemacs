@@ -129,6 +129,7 @@ This function should only modify configuration layer settings."
      diredfl
      duplicate-thing
      frog-jump-buffer
+     highlight-indent-guides
      treemacs-icons-dired
      vlf
      vterm
@@ -986,6 +987,18 @@ before packages are loaded."
       (setq helm-make-nproc 0)
       (setq helm-make-sort-targets t)
       (setq helm-make-fuzzy-matching t)))
+
+  ;;----------------------------------------------------------------------------
+  ;; highlight-indent-guides
+  ;;----------------------------------------------------------------------------
+  (use-package highlight-indent-guides
+    :defer t
+    :hook (prog-mode . highlight-indent-guides-mode)
+    :config
+    (progn
+      (setq highlight-indent-guides-method 'character
+            highlight-indent-guides-responsive 'top)
+      (highlight-indent-guides-auto-set-faces)))
 
   ;;----------------------------------------------------------------------------
   ;; iedit
