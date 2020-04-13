@@ -1139,8 +1139,8 @@ before packages are loaded."
   (use-package which-key
     :defer t
     :init
-    (progn
-      (setq which-key-compute-remaps t)))
+      (setq which-key-compute-remaps t
+            which-key-sort-order 'which-key-key-order-alpha))
 
   ;;----------------------------------------------------------------------------
   ;; zop-to-char
