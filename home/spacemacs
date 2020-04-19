@@ -1079,6 +1079,21 @@ before packages are loaded."
            ("C-c M-<" . mc/mark-all-words-like-this)))
 
   ;;----------------------------------------------------------------------------
+  ;; mwim
+  ;;----------------------------------------------------------------------------
+  (use-package mwim
+    :defer t
+    :init
+    (progn
+      (if better-defaults-move-to-beginning-of-code-first
+        (global-set-key (kbd "M-a") 'mwim-beginning-of-code-or-line)
+        (global-set-key (kbd "M-a") 'mwim-beginning-of-line-or-code))
+
+      (if better-defaults-move-to-end-of-code-first
+        (global-set-key (kbd "M-e") 'mwim-end-of-code-or-line)
+        (global-set-key (kbd "M-e") 'mwim-end-of-line-or-code))))
+
+  ;;----------------------------------------------------------------------------
   ;; projectile
   ;;----------------------------------------------------------------------------
   (use-package projectile

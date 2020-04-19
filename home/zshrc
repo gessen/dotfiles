@@ -203,6 +203,10 @@ ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=40
 # User configuration
 source "${XDG_CONFIG_HOME:-$HOME/.config}/profile"
 
+# Use ALT-{A/E} for the same effect as CTRL-{A/E}
+bindkey '^[a' beginning-of-line
+bindkey '^[e' end-of-line
+
 # Quick jumping to n-th arguments by pressing Alt-number
 bindkey '^[1' beginning-of-line
 bindkey -s '^[2' '^A^[f'
