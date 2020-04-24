@@ -129,7 +129,6 @@ This function should only modify configuration layer settings."
      duplicate-thing
      frog-jump-buffer
      highlight-indent-guides
-     treemacs-icons-dired
      vlf
      vterm
      vterm-toggle
@@ -1117,13 +1116,6 @@ before packages are loaded."
     :config
     (progn
       (setq sp-escape-quotes-after-insert nil)))
-
-  ;;----------------------------------------------------------------------------
-  ;; treemacs-icons-dired
-  ;;----------------------------------------------------------------------------
-  (use-package treemacs-icons-dired
-    :after treemacs dired
-    :config (treemacs-icons-dired-mode))
 
   ;;----------------------------------------------------------------------------
   ;; vlf
