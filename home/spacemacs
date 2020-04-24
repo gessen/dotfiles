@@ -981,6 +981,15 @@ before packages are loaded."
       (setq helm-make-fuzzy-matching t)))
 
   ;;----------------------------------------------------------------------------
+  ;; helm-lsp
+  ;;----------------------------------------------------------------------------
+  (use-package helm-lsp
+    :defer t
+    :after helm lsp-mode
+    :bind (([remap lsp-execute-code-action] . helm-lsp-code-actions)
+           ("M-\"" . helm-lsp-workspace-symbol)))
+
+  ;;----------------------------------------------------------------------------
   ;; highlight-indent-guides
   ;;----------------------------------------------------------------------------
   (use-package highlight-indent-guides
