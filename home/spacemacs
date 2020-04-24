@@ -1013,6 +1013,7 @@ before packages are loaded."
   ;;----------------------------------------------------------------------------
   (use-package lsp-treemacs
     :defer t
+    :if window-system
     :after lsp
     :init
     (progn
