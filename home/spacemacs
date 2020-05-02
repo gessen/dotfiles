@@ -90,6 +90,7 @@ This function should only modify configuration layer settings."
           ; lsp-print-io t
           lsp-auto-execute-action nil
           lsp-auto-guess-root t
+          lsp-client-packages '(ccls lsp-clients)
           lsp-diagnostics-package 'flycheck
           lsp-enable-file-watchers nil
           lsp-semantic-highlighting 'immediate
