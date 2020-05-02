@@ -134,7 +134,7 @@ alias tia='tig --all'
 
 # mkdir + cd
 mkcd() {
-  mkdir "$1" && cd "$1"
+  mkdir -p "$1" && cd "$1"
 }
 
 # Normal z when used with arguments but displays an fzf prompt when used without
