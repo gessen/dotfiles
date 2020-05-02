@@ -13,21 +13,36 @@
     { "keys": ["ctrl+shift+c"], "command": "clang_format",
       "context":
         [
-            {"key": "selector", "operator": "equal", "operand": "source.c++"}
+            { "key": "selector", "operator": "equal", "operand": "source.c++" }
         ],
     },
 
     { "keys": ["ctrl+shift+c"], "command": "clang_format",
       "context":
         [
-            {"key": "selector", "operator": "equal", "operand": "source.c"}
+            { "key": "selector", "operator": "equal", "operand": "source.c" }
         ],
+    },
+
+    { "keys": ["f1"], "command": "show_overlay",
+      "args":
+        {
+            "overlay": "command_palette",
+            "text": "LSP: ",
+        }
+    },
+
+    { "keys": ["f2"], "command": "lsp_symbol_rename",
+      "context":
+        [
+            { "key": "setting.lsp_active" }
+        ]
     },
 
     { "keys": ["f12"], "command": "lsp_symbol_definition",
       "context":
         [
-            {"key": "selector", "operator": "equal", "operand": "source.c, source.c++, source.python"}
+            { "key": "setting.lsp_active" }
         ]
     }
 ]
