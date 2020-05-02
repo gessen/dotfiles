@@ -1163,7 +1163,9 @@ before packages are loaded."
   ;; vterm
   ;;----------------------------------------------------------------------------
   (use-package vterm
-    :defer t)
+    :defer t
+    :config
+    (setq vterm-kill-buffer-on-exit t))
 
   ;;----------------------------------------------------------------------------
   ;; vterm-toggle
