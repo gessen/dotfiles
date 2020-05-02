@@ -918,9 +918,14 @@ before packages are loaded."
     :defer t
     :bind ("<f5>" . deadgrep)
     :config
-    (setq deadgrep-executable
-      "rg --no-config --hidden --follow --smart-case --max-columns=150 \
-      --max-columns-preview"))
+    (progn
+      (defun deadgrep--arguments-patch (args)
+        (push "--max-columns-preview" args)
+        (push "--max-columns=150" args)
+        (push "--follow" args)
+        (push "--hidden" args)
+        (push "--no-config" args))
+      (advice-add 'deadgrep--arguments :filter-return #'deadgrep--arguments-patch)))
 
   ;;----------------------------------------------------------------------------
   ;; dired-k
