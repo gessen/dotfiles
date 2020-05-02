@@ -914,7 +914,8 @@ before packages are loaded."
   ;;----------------------------------------------------------------------------
   (use-package company
     :defer t
-    :bind (("M-\'" . company-complete)))
+    :bind (("M-\'"    . company-complete)
+           ("C-c C-y" . company-yasnippet)))
 
   ;;----------------------------------------------------------------------------
   ;; deadgrep
