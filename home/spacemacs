@@ -921,7 +921,12 @@ before packages are loaded."
     :config
     (progn
       (setq company-idle-delay 0.0
-            company-minimum-prefix-length 1)))
+            company-minimum-prefix-length 1)
+      (custom-set-faces
+       '(company-tooltip-common
+         ((t (:inherit company-tooltip :weight bold :underline nil))))
+       '(company-tooltip-common-selection
+         ((t (:inherit company-tooltip-selection :weight bold :underline nil)))))))
 
   ;;----------------------------------------------------------------------------
   ;; deadgrep
