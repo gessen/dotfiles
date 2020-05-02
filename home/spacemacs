@@ -88,6 +88,7 @@ This function should only modify configuration layer settings."
      helm
      (lsp :variables
           ; lsp-print-io t
+          lsp-auto-execute-action nil
           lsp-auto-guess-root t
           lsp-diagnostics-package 'flycheck
           lsp-enable-file-watchers nil
