@@ -90,10 +90,10 @@ This function should only modify configuration layer settings."
           ; lsp-print-io t
           lsp-auto-guess-root t
           lsp-diagnostics-package 'flycheck
-          lsp-idle-delay 0.500
-          lsp-remap-xref-keybindings t
-          lsp-navigation 'peek
           lsp-enable-file-watchers nil
+          lsp-idle-delay 0.500
+          lsp-navigation 'peek
+          lsp-remap-xref-keybindings t
           lsp-ui-peek-fontify 'always
           lsp-ui-peek-always-show t
           lsp-ui-doc-position 'top)
