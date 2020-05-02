@@ -91,6 +91,7 @@ This function should only modify configuration layer settings."
           lsp-auto-guess-root t
           lsp-diagnostics-package 'flycheck
           lsp-enable-file-watchers nil
+          lsp-semantic-highlighting 'immediate
           lsp-idle-delay 0.500
           lsp-navigation 'peek
           lsp-remap-xref-keybindings t
