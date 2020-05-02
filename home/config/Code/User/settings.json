@@ -136,14 +136,18 @@
     "ccls.codeLens.localVariables": false,
     "ccls.codeLens.renderInline": false,
     "ccls.completion.caseSensitivity": 1,
-    "ccls.completion.detailedLabel": true,
+    "ccls.completion.detailedLabel": false,
+    "ccls.completion.duplicateOptional": true,
     "ccls.completion.enableSnippetInsertion": true,
+    "ccls.completion.include.maxPathSize": 30,
+    "ccls.completion.include.suffixWhitelist": [],
     "ccls.highlight.function.face": ["enabled"],
     "ccls.highlight.type.face": ["enabled"],
     "ccls.highlight.variable.face": ["enabled"],
     "ccls.index.blacklist": [
         ".*CMakeFiles.*"
     ],
+    "ccls.index.maxInitializerLines": 15,
     "ccls.launch.args": [
         "-log-file=/tmp/ccls.log",
         "-v=1"

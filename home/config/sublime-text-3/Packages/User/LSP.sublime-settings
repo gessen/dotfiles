@@ -72,12 +72,18 @@
 					"localVariables": false
 				},
 				"completion": {
-					"caseSensitivity": 1
+					"caseSensitivity": 1,
+					"detailedLabel": true,
+					"duplicateOptional": true,
+					"include": {
+						"maxPathSize": 30
+					}
 				},
 				"index": {
 					"blacklist": [
 						".*CMakeFiles.*"
-					]
+					],
+					"maxInitializerLines": 15
 				}
 			},
 			"enabled": false
