@@ -95,7 +95,8 @@ This function should only modify configuration layer settings."
           lsp-navigation 'peek
           lsp-enable-file-watchers nil
           lsp-ui-peek-fontify 'always
-          lsp-ui-peek-always-show t)
+          lsp-ui-peek-always-show t
+          lsp-ui-doc-position 'top)
      (multiple-cursors :variables
                        multiple-cursors-backend 'mc)
      (ranger :variables
