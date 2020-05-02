@@ -74,8 +74,12 @@ This function should only modify configuration layer settings."
                                      "-fstack-usage"
                                      "-mabi=lp64"])
                :codeLens (:localVariables :json-false)
-               :completion (:caseSensitivity 1)
-               :index (:blacklist [".*CMakeFiles.*"])))
+               :completion (:caseSensitivity 1
+                            :detailedLabel t
+                            :duplicateOptional t
+                            :include (:maxPathSize 30))
+               :index (:blacklist [".*CMakeFiles.*"]
+                       :maxInitializerLines 15)))
      debug
      emacs-lisp
      fasd
