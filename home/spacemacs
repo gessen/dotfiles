@@ -915,7 +915,9 @@ before packages are loaded."
   (use-package company
     :defer t
     :bind (("M-\'"    . company-complete)
-           ("C-c C-y" . company-yasnippet)))
+           ("C-c C-y" . company-yasnippet)
+           (:map company-active-map)
+            ("C-f" . company-filter-candidates)))
 
   ;;----------------------------------------------------------------------------
   ;; deadgrep
