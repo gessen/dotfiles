@@ -917,7 +917,11 @@ before packages are loaded."
     :bind (("M-\'"    . company-complete)
            ("C-c C-y" . company-yasnippet)
            (:map company-active-map)
-            ("C-f" . company-filter-candidates)))
+            ("C-f" . company-filter-candidates))
+    :config
+    (progn
+      (setq company-idle-delay 0.0
+            company-minimum-prefix-length 1)))
 
   ;;----------------------------------------------------------------------------
   ;; deadgrep
