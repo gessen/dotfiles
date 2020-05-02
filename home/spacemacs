@@ -131,6 +131,7 @@ This function should only modify configuration layer settings."
      dired-k
      diredfl
      duplicate-thing
+     easy-kill
      frog-jump-buffer
      (helm-treemacs-icons :location
        (recipe :fetcher github :repo "yyoncho/helm-treemacs-icons"))
@@ -140,7 +141,7 @@ This function should only modify configuration layer settings."
      vterm-toggle
      xclip
      zop-to-char
-     )
+    )
 
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -954,6 +955,14 @@ before packages are loaded."
   (use-package duplicate-thing
     :defer t
     :bind ("M-c" . duplicate-thing))
+
+  ;;----------------------------------------------------------------------------
+  ;; easy-kill
+  ;;----------------------------------------------------------------------------
+  (use-package easy-kill
+    :defer t
+    :bind (([remap kill-ring-save] . easy-kill)
+           ([remap mark-sexp] . easy-mark)))
 
   ;;----------------------------------------------------------------------------
   ;; flycheck
