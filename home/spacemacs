@@ -1172,8 +1172,9 @@ before packages are loaded."
   ;;----------------------------------------------------------------------------
   (use-package vterm-toggle
     :defer t
-    :bind (("<f2>"   . vterm-toggle)
-           ("C-<f2>" . vterm-toggle-cd)))
+    :bind (("<f2>"    . vterm-toggle)
+           :map vterm-mode-map
+           ("<f2>"    . vterm-toggle)))
 
   ;;----------------------------------------------------------------------------
   ;; xclip
