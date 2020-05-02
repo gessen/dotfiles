@@ -48,7 +48,7 @@ This function should only modify configuration layer settings."
             c-c++-lsp-enable-semantic-highlight 'rainbow
             c-c++-lsp-semantic-highlight-method 'overlay
             lsp-clients-clangd-args
-              (list "-log=info" "--completion-style=bundled")
+              (list "-log=info" "--completion-style=detailed")
             ccls-args (list "-log-file=/tmp/ccls.log" "-v=1")
             ccls-initialization-options '
               (:clang (:extraArgs ["-Weverything"

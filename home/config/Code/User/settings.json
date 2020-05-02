@@ -154,7 +154,7 @@
     ],
     "clangd.arguments": [
         "-log=info",
-        "--completion-style=bundled"
+        "--completion-style=detailed"
     ],
     "clangd.semanticHighlighting": true,
     "bashIde.path": "/usr/bin/bash-language-server",
