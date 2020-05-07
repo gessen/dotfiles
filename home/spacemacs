@@ -568,6 +568,7 @@ before packages are loaded."
   (setq-default fill-column 80)
 
   ;; Completion styles
+  (setq completion-ignore-case t)
   (add-to-list 'completion-styles 'flex t)
 
   ;; Maximum number of bytes to read from subprocess in a single chunk
