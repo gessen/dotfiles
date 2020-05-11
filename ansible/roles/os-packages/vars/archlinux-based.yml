@@ -44,8 +44,8 @@ packages_common:
   - tree
   - ttf-nerd-fonts-symbols
   - variety
-  - visual-studio-code-bin
   - yapf
+  - vscodium-bin
   - xclip
   - zsh-autosuggestions
   - zsh-completions

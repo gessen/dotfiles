@@ -1,7 +1,7 @@
 ---
 dotfiles:
-  - config/Code/User/settings.json
-  - config/Code/User/keybindings.json
+  - config/VSCodium/User/settings.json
+  - config/VSCodium/User/keybindings.json
   - config/ccache/config
   - config/gdb/libstdcxx
   - config/gdb/libcxx
