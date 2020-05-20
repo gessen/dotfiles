@@ -211,3 +211,22 @@ gdb-tmux() {
     gdb -ex "dashboard -output $tty" "$@"
     tmux kill-pane -t "$id"
 }
+
+function ranger {
+  local IFS=$'\t\n'
+  local tempfile="$(mktemp -t tmp.XXXXXX)"
+  local ranger_cmd=(
+    command
+    ranger
+    --cmd="map Qq chain shell echo %d > "$tempfile"; quitall"
+    --cmd="map Qs chain shell echo %d > "$tempfile"; shell tmux split-window -h"
+    --cmd="map Qv chain shell echo %d > "$tempfile"; shell tmux split-window -v"
+    --cmd="map Qw chain shell echo %d > "$tempfile"; shell tmux new-window"
+  )
+
+  ${ranger_cmd[@]} "$@"
+  if [[ -f "$tempfile" ]] && [[ "$(cat -- "$tempfile")" != "$(echo -n `pwd`)" ]]; then
+    cd -- "$(cat "$tempfile")" || return
+  fi
+  command rm -f -- "$tempfile" 2>/dev/null
+}
