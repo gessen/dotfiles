@@ -31,7 +31,6 @@ packages_common:
   - ninja
   - oh-my-zsh-git
   - openssh
-  - otf-fira-code
   - ranger
   - ripgrep
   - rsync
