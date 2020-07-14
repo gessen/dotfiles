@@ -66,6 +66,7 @@ This function should only modify configuration layer settings."
                                    "-Wno-gnu-statement-expression"
                                    "-Wno-unused-macros"
                                    "-Wno-weak-vtables"
+                                   "-Wno-ctad-maybe-unsupported"
                                    "-Wno-error"]
                        :excludeArgs ["-fconserve-stack"
                                      "-fmacro-prefix-map"

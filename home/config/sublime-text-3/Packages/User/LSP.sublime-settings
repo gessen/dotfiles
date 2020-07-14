@@ -57,6 +57,7 @@
 						"-Wno-gnu-statement-expression",
 						"-Wno-unused-macros",
 						"-Wno-weak-vtables",
+						"-Wno-ctad-maybe-unsupported",
 						"-Wno-error"
 					],
 					"excludeArgs": [
