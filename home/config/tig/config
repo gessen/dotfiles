@@ -108,3 +108,6 @@ set line-graphics		= utf-8	# Enum: ascii, default, utf-8
 
 bind main	C	?git cherry-pick --no-commit %(commit)
 bind main	M	?git merge --ff-only %(commit)
+
+bind diff	H	!sh -c "tig \"$(git rev-parse --show-toplevel)/%(file)\""
+bind status	H	!sh -c "tig \"$(git rev-parse --show-toplevel)/%(file)\""
