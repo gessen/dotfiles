@@ -3,6 +3,9 @@ aur_src: '{{ home_dir }}/.dotfiles/aur'
 aur_dst: '{{ home_dir }}/Workspace/aur'
 
 packages_common:
+  - aspell
+  - aspell-en
+  - aspell-pl
   - bash-language-server
   - bat
   - bear
