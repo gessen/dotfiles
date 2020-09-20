@@ -17,8 +17,6 @@ dotfiles:
   - config/sublime-text-3/Packages/User
   - config/tig/config
   - config/tmux/tmux.conf
-  - config/variety/ui.conf
-  - config/variety/variety.conf
   - config/vlc/vlcrc
   - config/yay/config.json
   - config/profile
