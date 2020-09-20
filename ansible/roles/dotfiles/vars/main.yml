@@ -24,5 +24,4 @@ dotfiles:
   - config/profile
   - gdbinit.d/init
   - ssh/config
-  - spacemacs
   - zshrc
