@@ -9,6 +9,7 @@ dotfiles:
   - config/git/config
   - config/git/ignore
   - config/htop/htoprc
+  - config/keepassxc/keepassxc.ini
   - config/kitty/kitty.conf
   - config/mpv/input.conf
   - config/mpv/mpv.conf
