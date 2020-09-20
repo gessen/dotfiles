@@ -45,7 +45,6 @@ packages_common:
   - tmux
   - tree
   - ttf-nerd-fonts-symbols
-  - variety
   - yapf
   - vscodium-bin
   - xclip
