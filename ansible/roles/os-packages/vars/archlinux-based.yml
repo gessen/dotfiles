@@ -30,6 +30,7 @@ packages_common:
   - lld
   - lldb
   - lsd
+  - mpv
   - ncdu
   - ninja
   - oh-my-zsh-git
