@@ -81,5 +81,4 @@ packages_common_yay:
   - discord
   - dropbox
   - gcovr
-  - p4v
   - zsh-theme-powerlevel10k

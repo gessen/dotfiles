@@ -10,9 +10,30 @@
 [diff]
 	mnemonicprefix = true
 	algorithm = patience
-	guitool = p4merge
-	tool = p4merge
 	submodule = log
+	tool = ediffclient
+	guitool = ediffclient-g
+[difftool "ediffclient"]
+	cmd = emacsclient --tty --eval \"(ediff-files \\\"$LOCAL\\\" \\\"$REMOTE\\\")\"
+	prompt = false
+[difftool "ediffclient-g"]
+	cmd = emacsclient --create-frame --eval \"(ediff-files \\\"$LOCAL\\\" \\\"$REMOTE\\\")\"
+	prompt = false
+[merge]
+	tool = emergeclient
+	guitool = emergeclient-g
+[mergetool "emergeclient"]
+	cmd = emacsclient --tty --eval \"\
+(if (file-readable-p \\\"$BASE\\\") \
+    (ediff-merge-files-with-ancestor \\\"$LOCAL\\\" \\\"$REMOTE\\\" \\\"$BASE\\\" nil \\\"$MERGED\\\") \
+  (ediff-merge-files \\\"$LOCAL\\\" \\\"$REMOTE\\\" nil \\\"$MERGED\\\"))\"
+	prompt = false
+[mergetool "emergeclient-g"]
+	cmd = emacsclient --create-frame --eval \"\
+(if (file-readable-p \\\"$BASE\\\") \
+    (ediff-merge-files-with-ancestor \\\"$LOCAL\\\" \\\"$REMOTE\\\" \\\"$BASE\\\" nil \\\"$MERGED\\\") \
+  (ediff-merge-files \\\"$LOCAL\\\" \\\"$REMOTE\\\" nil \\\"$MERGED\\\"))\"
+	prompt = false
 [rebase]
 	autostash = true
 	autosquash = true
@@ -31,8 +52,6 @@
 	rebase = true
 [push]
 	followtags = true
-[merge]
-	tool = p4merge
 [credential]
 	helper = cache --timeout 3600
 [color]

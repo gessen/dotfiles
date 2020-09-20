@@ -118,8 +118,10 @@ alias la='ll --all'
 alias ec='emacsclient --tty'
 alias ecg='emacsclient --create-frame'
 
-alias gdg='git difftool --tool=p4merge --find-renames'
-alias gmg='git mergetool --tool=p4merge'
+alias gdt='git difftool'
+alias gmt='git mergetool'
+alias gdtg='git difftool --gui'
+alias gmtg='git mergetool --gui'
 
 # Use bat
 alias cat='bat'
