@@ -17,7 +17,7 @@ packages_common:
   - colordiff
   - diff-so-fancy
   - doxygen
-  - emacs-git
+  - emacs-native-comp-git
   - fasd
   - fd
   - fzf
