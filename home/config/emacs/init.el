@@ -3219,6 +3219,9 @@ list of additional parameters sent with this request."
   ;; Do not wait such long time (10s) before deciding a server timed out.
   (setq lsp-response-timeout 5)
 
+  ;; Ignore watching files in the workspace if the server has requested that.
+  (setq lsp-enable-file-watchers nil)
+
   ;; Enable experimental semantic highlighting support.
   (setq lsp-enable-semantic-highlighting t)
 
