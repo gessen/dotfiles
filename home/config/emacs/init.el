@@ -4554,6 +4554,9 @@ Goto^^              Actions^^         Other^^
   :functions transient-bind-q-to-quit
   :config
 
+  ;; Show all possible options in transient windows.
+  (setq transient-default-level 7)
+
   ;; Do not litter `user-emacs-directory' with transient files.
   (setq transient-levels-file (expand-file-name "transient/levels.el"
                                                 my-cache-dir)
