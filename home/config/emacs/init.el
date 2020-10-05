@@ -3859,6 +3859,7 @@ differently than it should."
   (defhook! my--sh-mode-setup ()
     sh-mode-hook
     "Set custom settings for `sh-mode'."
+    (setq sh-basic-offset 2)
     ;; Add `company-shell' and `company-shell-env backend.
     (make-local-variable 'company-backends)
     (push 'company-shell-env (car company-backends))
