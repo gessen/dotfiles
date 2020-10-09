@@ -3766,8 +3766,8 @@ differently than it should."
     cmake-mode-hook
     "Set custom settings for `cmake-mode'."
     ;; Add `company-cmake' backend.
-    (make-local-variable 'company-backends)
-    (push 'company-cmake (car company-backends))
+    (setq-local company-backends
+                (list (cons 'company-cmake (copy-tree (car company-backends)))))
     ;; It's highly annoying with CMake.
     (electric-indent-mode -1)))
 
@@ -3864,9 +3864,10 @@ differently than it should."
     "Set custom settings for `sh-mode'."
     (setq sh-basic-offset 2)
     ;; Add `company-shell' and `company-shell-env backend.
-    (make-local-variable 'company-backends)
-    (push 'company-shell-env (car company-backends))
-    (push 'company-shell (car company-backends))
+    (setq-local company-backends
+                (list (cons 'company-shell
+                            (cons 'company-shell-env
+                                  (copy-tree (car company-backends))))))
     ;; Enable syntax checking and spellchecking in comments.
     (flycheck-mode +1)
     (flyspell-prog-mode))
