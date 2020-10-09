@@ -3216,6 +3216,9 @@ list of additional parameters sent with this request."
   ;; Do not auto-execute single action, let us see what that action is.
   (setq lsp-auto-execute-action nil)
 
+  ;; Let me configure completion provider (`company-capf') by myself.
+  (setq lsp-completion-provider :none)
+
   ;; Do not wait such long time (10s) before deciding a server timed out.
   (setq lsp-response-timeout 5)
 
