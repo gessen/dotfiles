@@ -13,7 +13,7 @@
         "command": "ccls.call",
         "args": {
             "callee": false,
-            "levels": 3
+            "levels": 1
         }
     },
     {
