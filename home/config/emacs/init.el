@@ -1924,6 +1924,9 @@ possibly new window."
   ;; Set the column limit with the same limit as `fill-column'.
   (setq column-enforce-column fill-column)
 
+  ;; Mark `column-enforce-column' as safe variable.
+  (put 'column-enforce-column 'safe-local-variable #'integerp)
+
   :hook (prog-mode-hook . column-enforce-mode)
 
   :blackout t)
