@@ -2840,11 +2840,13 @@ Spell Commands^^            Add To Dictionary^^               Other^^
     "tA" #'global-company-mode)
 
   :bind (("M-\\" . #'company-complete)
+         ("C-\\" . #'company-begin-backend)
          (:map company-active-map
                ;; Remap `company-filter-candidates' to something that can be run
                ;; in tty.
                ("C-M-s" . nil)
-               ("C-f"   . #'company-filter-candidates)))
+               ("C-f"   . #'company-filter-candidates)
+               ("M-b"   . #'company-other-backend)))
 
   :config
 
