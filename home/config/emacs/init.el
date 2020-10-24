@@ -2866,11 +2866,10 @@ Spell Commands^^            Add To Dictionary^^               Other^^
 
   ;; Values for `company-backends' used everywhere. Each major-mode should
   ;; modify this list to suit its needs.
-  (setq company-backends '((company-capf
-                            company-dabbrev-code
-                            company-keywords
-                            company-files
-                            company-dabbrev)))
+  (setq company-backends '(company-capf
+                           company-files
+                           (company-dabbrev-code company-keywords)
+                           company-dabbrev))
 
   ;; Don't display metadata in the echo area as this conflicts with ElDoc.
   (setq company-frontends '(company-pseudo-tooltip-unless-just-one-frontend
@@ -3370,6 +3369,10 @@ that because `bb-mode' inherits from `fundamental-mode'."
   (defhook! my--cc-mode-setup ()
     c-mode-common-hook
     "Set custom settings for C/C++ mode."
+    (setq-local company-backends '((company-capf :separate company-keywords)
+                                   company-files
+                                   (company-dabbrev-code company-keywords)
+                                   company-dabbrev))
     ;; Customise `electric-case' for C/C++ modes.
     (with-eval-after-load 'electric-case
       (setq-local electric-case-max-iteration 2)
@@ -3770,9 +3773,11 @@ differently than it should."
   (defhook! my--cmake-mode-setup ()
     cmake-mode-hook
     "Set custom settings for `cmake-mode'."
-    ;; Add `company-cmake' backend.
-    (setq-local company-backends
-                (list (cons 'company-cmake (copy-tree (car company-backends)))))
+    (setq-local company-backends '(company-files
+                                   (company-cmake
+                                    :separate
+                                    company-dabbrev-code)
+                                   company-dabbrev))
     ;; It's highly annoying with CMake.
     (electric-indent-mode -1)))
 
@@ -3869,10 +3874,13 @@ differently than it should."
     "Set custom settings for `sh-mode'."
     (setq sh-basic-offset 2)
     ;; Add `company-shell' and `company-shell-env backend.
-    (setq-local company-backends
-                (list (cons 'company-shell
-                            (cons 'company-shell-env
-                                  (copy-tree (car company-backends))))))
+    (setq-local company-backends '((company-shell
+                                    company-shell-env
+                                    company-capf
+                                    company-files)
+                                   (company-dabbrev-code
+                                    company-keywords)
+                                   company-dabbrev))
     ;; Enable syntax checking and spellchecking in comments.
     (flycheck-mode +1)
     (flyspell-prog-mode))
