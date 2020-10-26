@@ -28,7 +28,6 @@ POWERLEVEL9K_VCS_UNTRACKED_BACKGROUND='076'
 POWERLEVEL9K_VCS_UNTRACKED_FOREGROUND='black'
 POWERLEVEL9K_VCS_MODIFIED_BACKGROUND='220'
 POWERLEVEL9K_VCS_MODIFIED_FOREGROUND='black'
-#POWERLEVEL9K_VCS_GIT_HOOKS=(vcs-detect-changes git-untracked git-aheadbehind git-stash git-remotebranch git-tagname)
 POWERLEVEL9K_HIDE_BRANCH_ICON=true
 
 POWERLEVEL9K_STATUS_ERROR_BACKGROUND='red'
@@ -104,7 +103,7 @@ mkdir -p $ZSH_CACHE_DIR
 # Move completion dump to XDG cache dir
 ZSH_COMPDUMP="${ZSH_CACHE_DIR}/zcompdump-${ZSH_VERSION}"
 
-# FIXME: Use XDG directory for tmux - it's already on master
+# Use XDG directory for tmux, otherwise tmux plugin will set it to $HOME
 ZSH_TMUX_CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/tmux/tmux.conf"
 
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
