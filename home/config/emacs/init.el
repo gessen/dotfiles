@@ -3371,7 +3371,7 @@ that because `bb-mode' inherits from `fundamental-mode'."
   (defhook! my--cc-mode-setup ()
     c-mode-common-hook
     "Set custom settings for C/C++ mode."
-    (setq-local company-backends '((company-capf :separate company-keywords)
+    (setq-local company-backends '(company-capf
                                    company-files
                                    (company-dabbrev-code company-keywords)
                                    company-dabbrev))
