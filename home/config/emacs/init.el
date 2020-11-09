@@ -2426,6 +2426,8 @@ Spell Commands^^            Add To Dictionary^^               Other^^
 ;; Paredit compatibility layer.
 (use-package! smartparens
   :demand t
+  :bind (;; Use it to change paranthesis to another type.
+         "M-=" . #'sp-rewrap-sexp)
   :config
 
   (set-leader-keys!
