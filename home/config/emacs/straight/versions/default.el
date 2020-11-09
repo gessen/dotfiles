@@ -43,6 +43,7 @@
  ("emacs-which-key" . "3642c11d5ef9be3c6fb9edb8fd5ec3c370abd889")
  ("emacs-winum" . "c5455e866e8a5f7eab6a7263e2057aff5f1118b9")
  ("emacsmirror-mirror" . "048bfc66e6e8c04f995c819eb0b649d099ba6204")
+ ("embrace.el" . "dd5da196e5bcc5e6d87e1937eca0c21da4334ef2")
  ("epl" . "78ab7a85c08222cd15582a298a364774e3282ce6")
  ("esup" . "c9c95e245068d15d8e2732098af9a5d2bc8ec931")
  ("expand-region.el" . "ea6b4cbb9985ddae532bd2faf9bb00570c9f2781")

@@ -2466,6 +2466,12 @@ Spell Commands^^            Add To Dictionary^^               Other^^
 
   :blackout " Ⓟ")
 
+;; Package `embrace' modifies pairs based on `expand-region'. It's heavily
+;; inspired by `evil-surround' but instead of using `evil' and its text objects,
+;; this package relies on another package `expand-region'.
+(use-package! embrace
+  :bind ("M-+" . #'embrace-commander))
+
 ;;;; Snippet expansion
 
 ;; Feature `abbrev' provides functionality for expanding user-defined
