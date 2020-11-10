@@ -1545,6 +1545,10 @@ window instead."
     ;; Do not litter `user-emacs-directory' with settings.
     (setq mc/list-file (expand-file-name "mc-lists.el" my-data-dir))
 
+    ;; Load settings earlier as `smart-region` saves this file before actually
+    ;; loading it. This results in constantly cleaned settings.
+    (mc/load-lists)
+
     ;; Do not leave `multiple-cursors-mode' with RET.
     (unbind-key "<return>" mc/keymap)
 
