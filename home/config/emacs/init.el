@@ -2804,15 +2804,6 @@ Spell Commands^^            Add To Dictionary^^               Other^^
   ;; Reuse `xref' interface.
   (push #'dumb-jump-xref-activate xref-backend-functions))
 
-;; Package `helm-xref' is a Helm interface for `xref' results.
-(use-package! helm-xref
-  :commands helm-xref-show-xrefs-27
-  :init
-
-  ;; Use helm-xref to display `xref.el' results.
-  (setq xref-show-definitions-function #'helm-xref-show-xrefs-27
-        xref-show-xrefs-function #'helm-xref-show-xrefs-27))
-
 ;;;; Display contextual metadata
 
 ;; Feature `eldoc' provides a minor mode (enabled by default in Emacs 25) which

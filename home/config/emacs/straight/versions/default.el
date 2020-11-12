@@ -82,7 +82,6 @@
  ("helm-rg" . "ee0a3c09da0c843715344919400ab0a0190cc9dc")
  ("helm-swoop" . "2efc552591102ab8b4408ad60a3c4be991bb8e93")
  ("helm-themes" . "244121903650c2d25a233d12b378060cf8b010e7")
- ("helm-xref" . "6b4a8bd91f5eaf82f51bd31b03f6587387fe6983")
  ("helpful" . "c0662aa07266fe204f4e6d72ccaa6af089400556")
  ("highlight-indent-guides" . "a4f771418e4eed1f3f7879a43af28cf97747d41c")
  ("highlight-numbers" . "8b4744c7f46c72b1d3d599d4fb75ef8183dee307")
