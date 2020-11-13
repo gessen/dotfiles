@@ -3877,12 +3877,9 @@ differently than it should."
     "Set custom settings for `sh-mode'."
     (setq sh-basic-offset 2)
     ;; Add `company-shell' and `company-shell-env backend.
-    (setq-local company-backends '((company-shell
-                                    company-shell-env
-                                    company-capf
-                                    company-files)
-                                   (company-dabbrev-code
-                                    company-keywords)
+    (setq-local company-backends '((company-shell-env
+                                    company-capf)
+                                   company-dabbrev-code
                                    company-dabbrev))
     ;; Enable syntax checking and spellchecking in comments.
     (flycheck-mode +1)
