@@ -126,6 +126,7 @@ plugins=(
   sudo
   tig
   tmux
+  zsh-autopair
   zsh-autosuggestions
   zsh-interactive-cd
   zsh-syntax-highlighting

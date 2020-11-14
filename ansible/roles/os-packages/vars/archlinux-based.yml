@@ -82,4 +82,5 @@ packages_common_yay:
   - discord
   - dropbox
   - gcovr
+  - zsh-autopair-git
   - zsh-theme-powerlevel10k
