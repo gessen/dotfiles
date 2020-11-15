@@ -12,7 +12,7 @@
 		".svn",
 		".vscode",
 		".ccls-cache",
-		".clangd",
+		".cache",
 		".devcontainer",
 		"build",
 		"build-*"
