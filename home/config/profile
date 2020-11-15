@@ -118,6 +118,8 @@ alias la='ll --all'
 alias ec='emacsclient --tty'
 alias ecg='emacsclient --create-frame'
 
+alias gignore='git update-index --skip-worktree'
+alias gunignore='git update-index --no-skip-worktree'
 alias gdt='git difftool'
 alias gmt='git mergetool'
 alias gdtg='git difftool --gui'
