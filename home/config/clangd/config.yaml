@@ -1,0 +1,28 @@
+CompileFlags:
+  Add: [
+    -Weverything,
+    -Wno-c++98-compat,
+    -Wno-c++98-compat-pedantic,
+    -Wno-covered-switch-default,
+    -Wno-global-constructors,
+    -Wno-exit-time-destructors,
+    -Wno-documentation,
+    -Wno-padded,
+    -Wno-unneeded-member-function,
+    -Wno-unused-member-function,
+    -Wno-language-extension-token,
+    -Wno-gnu-zero-variadic-macro-arguments,
+    -Wno-gnu-statement-expression,
+    -Wno-unused-macros,
+    -Wno-weak-vtables,
+    -Wno-ctad-maybe-unsupported,
+    -Wno-error,
+    ]
+  Remove: [
+    -fconserve-stack,
+    -fmacro-prefix-map,
+    -fmerge-constants,
+    -fno-var-tracking-assignments,
+    -fstack-usage,
+    -mabi=lp64,
+    ]
