@@ -80,10 +80,7 @@ compile_commands.json
 CTestTestfile.cmake
 CMakeUserPresets.json
 
-# ccls
-.ccls-cache
-
-# clangd
+# ccls and clangd
 .cache
 
 # Build directories
