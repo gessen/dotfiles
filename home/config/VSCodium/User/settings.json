@@ -1,5 +1,6 @@
 {
     "editor.codeLens": false,
+    "editor.definitionLinkOpensInPeek": true,
     "editor.detectIndentation": true,
     "editor.fontFamily": "Source Code Pro",
     "editor.fontLigatures": true,
