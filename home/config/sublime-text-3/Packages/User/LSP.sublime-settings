@@ -40,6 +40,9 @@
 				}
 			],
 			"initializationOptions": {
+				"cache": {
+					"directory": ".cache/ccls"
+				},
 				"clang": {
 					"extraArgs": [
 						"-Weverything",

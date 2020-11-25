@@ -3686,6 +3686,7 @@ ALL when non-nil determines whether words will be pickable."
   ;; clang incompatible flags and set completion to be "smart" case.
   (setq ccls-initialization-options
         '(
+          :cache (:directory ".cache/ccls")
           :clang (
                   :extraArgs ["-Weverything"
                               "-Wno-c++98-compat"
