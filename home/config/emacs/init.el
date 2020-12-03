@@ -4120,6 +4120,9 @@ unhelpful."
   ;; Do not adapt indentation to outline node level.
   (setq org-adapt-indentation nil)
 
+  ;; Use cornered arrow instead of three dots to increase its visibility.
+  (setq org-ellipsis "⤵")
+
   ;; Require braces in order to trigger interpretations as sub/superscript. This
   ;; can be helpful in documents that need "_" frequently in plain text.
   (setq org-use-sub-superscripts '{})
