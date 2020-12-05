@@ -2,6 +2,7 @@
 dotfiles:
   - config/VSCodium/User/settings.json
   - config/VSCodium/User/keybindings.json
+  - config/bat/config
   - config/ccache/config
   - config/clangd/config.yaml
   - config/emacs/straight/versions/default.el

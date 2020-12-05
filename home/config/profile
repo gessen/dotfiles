@@ -38,9 +38,6 @@ export LESSHISTFILE="-"
 # Use less as PAGER
 export PAGER="less --squeeze-blank-lines"
 
-# By default use plain bat
-export BAT_STYLE="plain"
-
 # Use bat as MANPAGER
 export MANPAGER="sh -c 'col -b | bat -l man -p'"
 
