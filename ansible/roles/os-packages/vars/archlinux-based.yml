@@ -86,4 +86,5 @@ packages_common_aur:
 
 packages_common_paru:
   - dropbox
+  - sad
   - zsh-autopair-git
