@@ -16,11 +16,13 @@ packages_common:
   - cmake
   - colordiff
   - diff-so-fancy
+  - discord
   - doxygen
   - emacs-native-comp-git
   - fasd
   - fd
   - fzf
+  - gcovr
   - gdb
   - gdb-dashboard
   - git
@@ -53,6 +55,7 @@ packages_common:
   - zsh-autosuggestions
   - zsh-completions
   - zsh-syntax-highlighting
+  - zsh-theme-powerlevel10k
 
 packages_common_asdeps:
   - atool
@@ -83,8 +86,5 @@ packages_common_aur:
   - yay-bin
 
 packages_common_paru:
-  - discord
   - dropbox
-  - gcovr
   - zsh-autopair-git
-  - zsh-theme-powerlevel10k
