@@ -17,6 +17,7 @@ dotfiles:
   - config/kitty/kitty.conf
   - config/mpv/input.conf
   - config/mpv/mpv.conf
+  - config/paru/paru.conf
   - config/ranger/commands.py
   - config/ranger/rc.conf
   - config/ripgrep/config
