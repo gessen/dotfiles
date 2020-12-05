@@ -4129,7 +4129,12 @@ unhelpful."
 
   ;; Add additional backends to export engine.
   (dolist (backend '(beamer md confluence))
-    (push backend org-export-backends)))
+    (push backend org-export-backends))
+
+  ;; Add plantuml for generating diagrams inside Org Mode.
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((plantuml . t))))
 
 ;; Feature `org-capture' allows to take notes fast in Org.
 (use-feature! org-capture
