@@ -1,6 +1,6 @@
 ---
 aur_src: '{{ home_dir }}/.dotfiles/aur'
-aur_dst: '{{ home_dir }}/Workspace/aur'
+aur_dst: '{{ home_dir }}/.cache/paru/clone'
 
 packages_common:
   - aspell
@@ -78,7 +78,11 @@ packages_common_own:
       - .SRCINFO
       - zsh-interactive-cd.install
 
-packages_common_yay:
+packages_common_aur:
+  - paru-bin
+  - yay-bin
+
+packages_common_paru:
   - discord
   - dropbox
   - gcovr

@@ -78,20 +78,20 @@
     register: makepkg_output
     changed_when: '"there is nothing to do" not in makepkg_output.stdout'
 
-  - name: Check if yay exists
+  - name: Check if paru exists
     stat:
-      path: /usr/bin/yay
-    register: yay_installed
+      path: /usr/bin/paru
+    register: paru_installed
 
-  - name: Install AUR packages with yay
-    command: 'yay -S --noconfirm --needed {{ item }}'
+  - name: Install AUR packages with paru
+    command: 'paru -S --noconfirm --needed {{ item }}'
     with_items:
-      - '{{ packages_common_yay | default([]) }}'
-      - '{{ packages_yay | default([]) }}'
+      - '{{ packages_common_paru | default([]) }}'
+      - '{{ packages_paru | default([]) }}'
     when:
-      - yay_installed.stat.executable is defined
-      - yay_installed.stat.executable
-    register: yay_output
-    changed_when: '"is up to date" not in yay_output.stdout'
+      - paru_installed.stat.executable is defined
+      - paru_installed.stat.executable
+    register: paru_output
+    changed_when: '"is up to date" not in paru_output.stdout'
 
   when: with_aur | default(False)
