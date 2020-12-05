@@ -38,6 +38,7 @@ packages_common:
   - ninja
   - oh-my-zsh-git
   - openssh
+  - plantuml
   - ranger
   - ripgrep
   - rsync
