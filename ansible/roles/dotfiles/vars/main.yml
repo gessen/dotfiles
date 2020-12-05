@@ -26,7 +26,6 @@ dotfiles:
   - config/sublime-text-3/Packages/User
   - config/tig/config
   - config/tmux/tmux.conf
-  - config/yay/config.json
   - config/profile
   - gdbinit.d/init
   - ssh/config

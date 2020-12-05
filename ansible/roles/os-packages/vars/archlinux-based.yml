@@ -83,7 +83,6 @@ packages_common_own:
 
 packages_common_aur:
   - paru-bin
-  - yay-bin
 
 packages_common_paru:
   - dropbox
