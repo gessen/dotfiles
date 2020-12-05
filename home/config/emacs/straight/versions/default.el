@@ -102,6 +102,7 @@
  ("lsp-ui" . "c39ae3713f95a2d86e11fd1f77e89a671d08d18a")
  ("macrostep" . "424e3734a1ee526a1bd7b5c3cd1d3ef19d184267")
  ("magit" . "9ef75c1098a525a0c817a164516e67c8a13cfca7")
+ ("magit-delta" . "b8526f890415374822514e488341d2b706d6bc2f")
  ("magit-todos" . "a0e5d1f3c7dfcb4f18c1b0d57f1746a4872df5c6")
  ("markdown-mode" . "fa9fa20e3236006c2cf278209356f60cc4175120")
  ("markdown-toc" . "9565eeaa1d26bc0ab83eb65bd30470888f724044")
