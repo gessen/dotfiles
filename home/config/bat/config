@@ -1,0 +1,3 @@
+# Disable all available components - line numbers, file headers, grid borders
+# and Git modifications.
+--style=plain
