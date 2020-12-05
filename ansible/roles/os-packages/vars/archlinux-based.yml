@@ -15,7 +15,6 @@ packages_common:
   - clang
   - cmake
   - colordiff
-  - diff-so-fancy
   - discord
   - doxygen
   - emacs-native-comp-git
@@ -26,6 +25,7 @@ packages_common:
   - gdb
   - gdb-dashboard
   - git
+  - git-delta-git
   - glances
   - htop
   - keepassxc
