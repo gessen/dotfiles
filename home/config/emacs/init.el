@@ -4557,6 +4557,23 @@ Goto^^              Actions^^         Other^^
     (dolist (buf '("^magit.*"))
       (push buf golden-ratio-exclude-buffer-regexp))))
 
+;; Package 'magit-delta' integrates Delta (https://github.com/dandavison/delta)
+;; with Magit, so that diffs in Magit are displayed with color highlighting
+;; provided by Delta.
+(use-package! magit-delta
+  :after magit
+  :init
+
+  ;; Change default delta args to use magit feature in order to disable line
+  ;; numbers which cannot fundamentally be used with Magit.
+  (setq magit-delta-delta-args '("--features=magit"
+                                 "--24-bit-color=always"
+                                 "--color-only"))
+
+  (magit-delta-mode +1)
+
+  :blackout t)
+
 ;; Package `magit-todos' displays keyword entries from source code comments and
 ;; Org files in the Magit status buffer. Activating an item jumps to it in its
 ;; file.
