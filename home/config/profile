@@ -118,6 +118,8 @@ alias ecg='emacsclient --create-frame'
 
 alias gignore='git update-index --skip-worktree'
 alias gunignore='git update-index --no-skip-worktree'
+alias gd2='GIT_PAGER="delta --side-by-side" git diff'
+alias gdca2='GIT_PAGER="delta --side-by-side" git diff --cached'
 alias gdn='DELTA_NAVIGATE=1 git diff'
 alias gdcan='DELTA_NAVIGATE=1 git diff --cached'
 alias gdt='git difftool'
