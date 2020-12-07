@@ -462,13 +462,14 @@ BINDINGS is a series of KEY DEF pair."
 ;; `yank-pop'.
 (setq save-interprogram-paste-before-kill t)
 
-;; Package `xclip' allows Emacs to copy to and paste from the GUI clipboard when
-;; running in text terminal. It can use external command-line tools for that,
-;; which you may need to install in order for the package to work.
-(use-package! xclip
+;; Package `clipetty' allows Emacs to send ANSI "Operating System Command"
+;; (OSC) 52 escape sequences, to manipulate the Operating System's Clipboard
+;; from an Emacs TTY frame.
+(use-package! clipetty
   :if (not (display-graphic-p))
   :init
-  (xclip-mode +1))
+
+  (global-clipetty-mode +1))
 
 ;;;; Mouse integration
 
