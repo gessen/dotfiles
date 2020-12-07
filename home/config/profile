@@ -72,6 +72,7 @@ export FZF_DEFAULT_COMMAND="fd \
 export FZF_DEFAULT_OPTS=" \
 --height=60% \
 --bind alt-p:preview-up,alt-n:preview-down \
+--bind ctrl-a:select-all,ctrl-d:deselect-all,ctrl-t:toggle-all \
 "
 
 # Use fd for CTRL-T
