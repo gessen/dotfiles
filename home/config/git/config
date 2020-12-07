@@ -15,7 +15,7 @@
 	tool = ediffclient
 	guitool = ediffclient-g
 [delta]
-	features = side-by-side line-numbers decorations
+	features = line-numbers decorations
 	minus-style = syntax "#4f0000"
 	minus-emph-style = syntax bold "#c81010"
 	plus-style = syntax "#004f00"
