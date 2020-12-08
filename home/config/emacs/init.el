@@ -1029,13 +1029,6 @@ window instead."
 
   (global-fasd-mode +1))
 
-;; Package `helm-fd' is a Helm interface for fd command.
-(use-package! helm-fd
-  :after helm
-  :init
-
-  (set-leader-keys! "fF" #'helm-fd))
-
 ;; Package `projectile' keeps track of a "project" list, which is automatically
 ;; added to as you visit Git repositories, Node.js projects, etc. It then
 ;; provides commands for quickly navigating between and within these projects.
