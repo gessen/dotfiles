@@ -22,6 +22,8 @@
 		"ss01"
 	],
 	"font_size": 13,
+	"gravity_highlight_color_orange": true,
+	"gravity_selected_tab_bold": true,
 	"hot_exit": false,
 	"ignored_packages":
 	[
