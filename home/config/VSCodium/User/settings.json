@@ -14,6 +14,50 @@
     "editor.renderControlCharacters": false,
     "editor.renderWhitespace": "all",
     "editor.selectionClipboard": false,
+    "editor.semanticTokenColorCustomizations": {
+        "rules": {
+            "class": {
+                "foreground": "#d533bb",
+                "fontStyle": ""
+            },
+            "enum": {
+                "foreground": "#e1afc3",
+                "fontStyle": "underline"
+            },
+            "enumConstant": {
+                "foreground": "#587d87",
+                "fontStyle": "italic"
+            },
+            "function": {
+                "foreground": "#e5b124",
+                "fontStyle": ""
+            },
+            "macro": {
+                "foreground": "#e79528",
+                "fontStyle": ""
+            },
+            "method": {
+                "foreground": "#57c2cc",
+                "fontStyle": "italic"
+            },
+            "namespace": {
+                "foreground": "#429921",
+                "fontStyle": ""
+            },
+            "parameter": {
+                "foreground": "#368896",
+                "fontStyle": ""
+            },
+            "type":{
+                "foreground": "#a04360",
+                "fontStyle": ""
+            },
+            "variable": {
+                "foreground": "#7ca6b7",
+                "fontStyle": ""
+            }
+        }
+    },
     "editor.snippetSuggestions": "top",
     "editor.tabSize": 2,
     "[c]": {
