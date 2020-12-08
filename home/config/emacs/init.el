@@ -4908,11 +4908,11 @@ possibly new window."
 ;; Package `monokai-theme' is a fruity color theme for Emacs.
 (use-package! monokai-theme)
 
-;; Package `modus-operandi-theme' is accessible light theme (WCAG AAA).
-(use-package! modus-operandi-theme)
-
-;; Package `modus-vivendi-theme' is accessible dark theme (WCAG AAA).
-(use-package! modus-vivendi-theme)
+;; Package `modus-themes' is a pack of themes that conform with the highest
+;; standard for color-contrast accessibility between background and foreground
+;; values (WCAG AAA).
+(use-package! modus-themes
+  :bind ("<f9>" . modus-themes-toggle))
 
 ;; Load default theme.
 (load-theme 'darkokai t)
