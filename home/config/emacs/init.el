@@ -161,9 +161,6 @@ frame is created."
   ;; Disable checks for package modifications to save up time during startup
   (setq straight-check-for-modifications nil)
 
-  ;; Clone packages repositories shallowly
-  (setq straight-vc-git-default-clone-depth 1)
-
   ;; Clear out recipe overrides (in case of re-init).
   (setq straight-recipe-overrides nil))
 
