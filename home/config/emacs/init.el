@@ -1379,6 +1379,60 @@ window instead."
   (clipboard-yank)
   (deactivate-mark))
 
+(defun duplicate-line (&optional n)
+  "Duplicate current line.
+With argument N, make N copies. With negative N, comment out
+original line and use the absolute value."
+  (let ((text (thing-at-point 'line))
+        (pos (- (point) (line-beginning-position))))
+    (save-excursion
+      ;; Go to beginning of next line, or make a new one when at the end of the
+      ;; buffer
+      (end-of-line)
+      (when (< 0 (forward-line 1))
+        (newline))
+      (dotimes (i (abs (or n 1 )))
+        (insert text)))
+    ;; Comment line with negative argument
+    (when (> 0 n)
+      (comment-region (line-beginning-position) (line-end-position)))
+    (forward-line 1)
+    ;; Go the the same position as in the original line
+    (forward-char pos)))
+
+(defun duplicate-region (&optional n)
+  "Duplicate active region.
+With argument N, make N copies."
+  (let* ((pos (point))
+         (start (region-beginning))
+         (end (region-end))
+         (len (- end start))
+         (text (buffer-substring start end)))
+    ;; Swap point and mark to get same behaviour or text insertion
+    (when (< pos end)
+      (exchange-point-and-mark))
+    (dotimes (i (abs (or n 1)))
+      (insert text))
+    ;; Enable temporary transient mark
+    (setq deactivate-mark nil)
+    (push-mark)
+    (backward-char len)
+    (setq transient-mark-mode (cons 'only t))
+    ;; Swap point and mark again to restore their proper position at the end
+    (unless (< pos end)
+      (exchange-point-and-mark))))
+
+(defun duplicate-line-or-region (&optional n)
+  "Duplicate current line, or region if active.
+With argument N, make N copies. With negative N, comment out
+original line and use the absolute value."
+  (interactive "p")
+  (if mark-active
+      (duplicate-region n)
+    (duplicate-line n)))
+
+(bind-key "M-c" #'duplicate-line-or-region)
+
 (set-leader-keys!
   "bi" #'clone-indirect-buffer
   "bI" #'clone-indirect-buffer-other-window
@@ -1410,11 +1464,6 @@ window instead."
          ("M-<up>"    . #'drag-stuff-up)
          ("M-<right>" . #'drag-stuff-right)
          ("M-<left>"  . #'drag-stuff-left)))
-
-;; Package `duplicate-thing' allows to either duplicate a current line or a
-;; selection when it is active.
-(use-package! duplicate-thing
-  :bind ("M-c" . #'duplicate-thing))
 
 ;; Package `easy-kill' provides commands `easy-kill' and `easy-mark' to let
 ;; users kill or mark things easily. `easy-kill' aims to be a drop-in
