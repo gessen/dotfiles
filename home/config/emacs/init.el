@@ -4178,6 +4178,13 @@ unhelpful."
   ;; can be helpful in documents that need "_" frequently in plain text.
   (setq org-export-with-sub-superscripts '{}))
 
+;; Package `org-sticky-header' displays in the header-line the Org heading for
+;; the node that's at the top of the window.  This way, if the heading for the
+;; text at the top of the window is beyond the top of the window, you don't
+;; forget which heading the text belongs to.
+(use-package! org-sticky-header
+  :hook (org-mode-hook . org-sticky-header-mode))
+
 ;; Package `org-superstar' prettifies headings and plain lists in `org-mode'.
 ;; It's a direct descendant of `org-bullets’.
 (use-package! org-superstar
