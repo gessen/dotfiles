@@ -493,6 +493,19 @@ BINDINGS is a series of KEY DEF pair."
 
 ;;;; Miscellaneous
 
+(defun my--command-error-function (data context signal)
+  "Ignore some errors.
+Ignore the `buffer-read-only', `beginning-of-buffer',
+`end-of-buffer' SIGNALs; pass the rest to the default handler.
+For details on DATA, CONTEXT, and signal, see
+`command-error-function'."
+  (when (not (memq (car data) '(buffer-read-only
+                                beginning-of-buffer
+                                end-of-buffer)))
+    (command-error-default-function data context signal)))
+
+(setq command-error-function #'my--command-error-function)
+
 ;; Simple 'y' or 'n' is enough
 (fset 'yes-or-no-p 'y-or-n-p)
 
