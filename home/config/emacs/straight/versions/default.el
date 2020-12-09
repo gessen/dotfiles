@@ -26,7 +26,6 @@
  ("doom-modeline" . "5623f161f194372382433076e7bba9c63af93ced")
  ("drag-stuff.el" . "6d06d846cd37c052d79acd0f372c13006aa7e7c8")
  ("dumb-jump" . "b81573184c97fbc6181d0a4fe408caa23c0d621b")
- ("duplicate-thing" . "9d8fd05e3e5caa35d3f2a0c0032c92f0c0908e21")
  ("easy-kill" . "2a6309d98aa6b71df6bbbcdf15cab3187c521a6b")
  ("easy-kill-extras.el" . "b8ce8350cc86e0229f195082557970cd51def960")
  ("el-get" . "6138ce5b0a9df779e33ef42eadc4c15a5cf65f39")
