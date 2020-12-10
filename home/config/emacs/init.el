@@ -4216,9 +4216,6 @@ unhelpful."
   (set-leader-keys-for-major-mode! 'org-mode "c" #'org-capture)
   (set-leader-keys! "oc" #'org-capture)
 
-  :bind (;; Add the global keybinding for accessing Org Capture that are
-         ;; recommended in the Org manual.
-         ("C-c c" . #'org-capture))
   :config
 
   ;; Default target for storing notes, used as a fall back file for templates
