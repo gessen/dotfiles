@@ -650,9 +650,9 @@ window instead."
     ibuffer-hook
     "Group buffers by projects."
     (ibuffer-projectile-set-filter-groups)
-      (ibuffer-projectile-set-filter-groups)
-      (unless (eq ibuffer-sorting-mode 'alphabetic)
-        (ibuffer-do-sort-by-alphabetic))))
+    (ibuffer-projectile-set-filter-groups)
+    (unless (eq ibuffer-sorting-mode 'alphabetic)
+      (ibuffer-do-sort-by-alphabetic))))
 
 ;; Feature `windmove' provides keybindings S-left, S-right, S-up, and S-down to
 ;; move between windows. This is much more convenient and efficient than using
@@ -4253,8 +4253,8 @@ unhelpful."
   ;; Add a hook to automatically encrypt entries before a file is saved to disk.
   (org-crypt-use-before-save-magic))
 
-; Package `org-plus-contrib' contains add-ons to Org-mode. These contributions
-; are not part of GNU Emacs or of the official Org-mode package.
+;; Package `org-plus-contrib' contains add-ons to Org-mode. These contributions
+;; are not part of GNU Emacs or of the official Org-mode package.
 (use-package! org-plus-contrib)
 
 ;; Feature `org-tempo' reimplements completions of structure template before
