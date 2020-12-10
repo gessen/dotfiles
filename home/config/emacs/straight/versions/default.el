@@ -4,6 +4,7 @@
  ("auto-yasnippet" . "db9e0dd4335b2202cd5dac95bbbc87a1032d9bbe")
  ("avy" . "bbf1e7339eba06784dfe86643bb0fbddf5bb0342")
  ("bb-mode" . "1a91452ab4617d1620d0844e90e6bde40ef73e74")
+ ("beacon" . "bde78180c678b233c94321394f46a81dc6dce1da")
  ("beginend" . "f6590a4d12894adfe5905266b4d2660002f444dc")
  ("blackout" . "d99ab1aad84e4bd2bd4a499877764c213cce50ff")
  ("browse-at-remote" . "6aecae4b5d202e582425fc8aa2c9c2b6a4779f25")
