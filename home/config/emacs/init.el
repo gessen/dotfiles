@@ -2915,8 +2915,9 @@ Spell Commands^^            Add To Dictionary^^               Other^^
     "ta" #'company-mode
     "tA" #'global-company-mode)
 
-  :bind (("M-\\" . #'company-complete)
-         ("C-\\" . #'company-begin-backend)
+  :bind ((:map company-mode-map
+               ("M-\\" . #'company-complete)
+               ("C-\\" . #'company-begin-backend))
          (:map company-active-map
                ;; Remap `company-filter-candidates' to something that can be run
                ;; in tty.
@@ -3080,8 +3081,9 @@ menu to disappear and then come back after `company-idle-delay'."
 
   :hook ((flycheck-error-list-mode-hook . hide-mode-line-mode))
 
-  :bind (("M-n" . #'flycheck-next-error)
-         ("M-p" . #'flycheck-previous-error))
+  :bind (:map flycheck-mode-map
+              ("M-N" . #'flycheck-next-error)
+              ("M-P" . #'flycheck-previous-error))
 
   :config
 
@@ -5106,11 +5108,11 @@ possibly new window."
   ;; tab bar have an uniform appearance
   (centaur-tabs-headline-match)
 
-
-  :bind (("C-<prior>" . #'centaur-tabs-backward)
-         ("C-<next>"  . #'centaur-tabs-forward)
-         ("C-<home>"  . #'centaur-tabs-backward-group)
-         ("C-<end>"   . #'centaur-tabs-forward-group)))
+  :bind (:map centaur-tabs-mode-map
+              ("C-<prior>" . #'centaur-tabs-backward)
+              ("C-<next>"  . #'centaur-tabs-forward)
+              ("C-<home>"  . #'centaur-tabs-backward-group)
+              ("C-<end>"   . #'centaur-tabs-forward-group)))
 
 ;;; Closing
 
