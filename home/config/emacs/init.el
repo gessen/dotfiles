@@ -4592,7 +4592,7 @@ Goto^^              Actions^^         Other^^
   :init
 
   ;; Disable default keybindings.
-  (setq magit-file-mode-map (make-sparse-keymap))
+  (setq magit-define-global-key-bindings nil)
 
   (set-leader-keys!
     "gb" #'magit-blame
