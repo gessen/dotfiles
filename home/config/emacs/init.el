@@ -4185,6 +4185,16 @@ unhelpful."
     "Set custom settings for `org-mode'."
     (turn-on-auto-fill))
 
+  :bind (:map org-mode-map
+              ("M-p" . #'org-metaup)
+              ("M-n" . #'org-metadown)
+              ("M-P" . #'org-shiftmetaup)
+              ("M-N" . #'org-shiftmetadown)
+              ("M-[" . #'org-backward-element)
+              ("M-]" . #'org-forward-element)
+              ("M-{" . #'org-metaleft)
+              ("M-}" . #'org-metaright))
+
   :config
 
   ;; Default directory for Org to look in in certain rare situation.
