@@ -1404,7 +1404,7 @@ original line and use the absolute value."
       (end-of-line)
       (when (< 0 (forward-line 1))
         (newline))
-      (dotimes (i (abs (or n 1 )))
+      (dotimes (_i (abs (or n 1 )))
         (insert text)))
     ;; Comment line with negative argument
     (when (> 0 n)
@@ -1424,7 +1424,7 @@ With argument N, make N copies."
     ;; Swap point and mark to get same behaviour or text insertion
     (when (< pos end)
       (exchange-point-and-mark))
-    (dotimes (i (abs (or n 1)))
+    (dotimes (_i (abs (or n 1)))
       (insert text))
     ;; Enable temporary transient mark
     (setq deactivate-mark nil)
@@ -3296,9 +3296,6 @@ list of additional parameters sent with this request."
   ;; Do not auto-execute single action, let us see what that action is.
   (setq lsp-auto-execute-action nil)
 
-  ;; Let me configure completion provider (`company-capf') by myself.
-  (setq lsp-completion-provider :none)
-
   ;; Do not wait such long time (10s) before deciding a server timed out.
   (setq lsp-response-timeout 5)
 
@@ -3321,6 +3318,13 @@ list of additional parameters sent with this request."
   ;; default is too low (4k) considering that the some of the language server
   ;; responses are in 800k - 3M range.
   (setq read-process-output-max (* 1024 1024))
+
+  ;; Feature `lsp-completion' configures completion-related functionality.
+  (use-feature! lsp-completion
+    :init
+
+    ;; Let me configure completion provider (`company-capf') by myself.
+    (setq lsp-completion-provider :none))
 
   ;; Feature `lsp-clangd' brings implementation of clangd client for Emacs.
   (use-feature! lsp-clangd
