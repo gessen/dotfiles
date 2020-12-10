@@ -4206,6 +4206,9 @@ unhelpful."
   ;; can be helpful in documents that need "_" frequently in plain text.
   (setq org-use-sub-superscripts '{})
 
+  ;; Make `mwim' behaving like it should in Org.
+  (setq org-special-ctrl-a/e t)
+
   ;; Add additional backends to export engine.
   (dolist (backend '(beamer md confluence))
     (push backend org-export-backends))
