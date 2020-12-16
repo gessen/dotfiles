@@ -78,7 +78,7 @@
 				"completion": {
 					"caseSensitivity": 1,
 					"detailedLabel": true,
-					"duplicateOptional": true,
+					"duplicateOptional": false,
 					"include": {
 						"maxPathSize": 30
 					}

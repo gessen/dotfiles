@@ -3794,7 +3794,7 @@ ALL when non-nil determines whether words will be pickable."
           :completion (
                        :caseSensitivity 1
                        :detailedLabel t
-                       :duplicateOptional t
+                       :duplicateOptional :json-false
                        :include (:maxPathSize 30))
           :index (
                   :blacklist [".*CMakeFiles.*"]
