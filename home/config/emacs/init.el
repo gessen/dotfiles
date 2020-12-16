@@ -4253,6 +4253,17 @@ unhelpful."
   ;; Add a hook to automatically encrypt entries before a file is saved to disk.
   (org-crypt-use-before-save-magic))
 
+;; Feature `org-src' contains the code dealing with source code examples in Org
+;; mode.
+(use-feature! org-src
+  :after org
+  :demand t
+  :config
+
+  ;; Preserve leading whitespace characters in source code blocks on export, and
+  ;; when switching between the Org buffer and the language mode edit buffer.
+  (setq org-src-preserve-indentation t))
+
 ;; Package `org-plus-contrib' contains add-ons to Org-mode. These contributions
 ;; are not part of GNU Emacs or of the official Org-mode package.
 (use-package! org-plus-contrib)
