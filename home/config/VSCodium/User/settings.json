@@ -119,7 +119,7 @@
     "search.smartCase": true,
     "search.useIgnoreFiles": false,
     "debug.inlineValues": true,
-    "extensions.showRecommendationsOnlyOnDemand": true,
+    "extensions.ignoreRecommendations": true,
     "problems.decorations.enabled": false,
     "telemetry.enableTelemetry": false,
     "gitlens.advanced.messages": {
