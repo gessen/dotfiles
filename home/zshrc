@@ -30,6 +30,14 @@ POWERLEVEL9K_DIR_SHORTENED_FOREGROUND='248'
 # Display anchor directory segments in bold.
 POWERLEVEL9K_DIR_ANCHOR_BOLD=true
 
+# Don't shorten directories that contain any of these entries.
+anchors=(
+  .git
+  .svn
+)
+POWERLEVEL9K_SHORTEN_FOLDER_MARKER="(${(j:|:)anchors})"
+unset -v anchors
+
 # Colors of writable segment.
 POWERLEVEL9K_DIR_WRITABLE_FORBIDDEN_BACKGROUND='red'
 POWERLEVEL9K_DIR_WRITABLE_FORBIDDEN_FOREGROUND='white'
