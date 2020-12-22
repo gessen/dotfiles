@@ -7,47 +7,70 @@
 # Path to your oh-my-zsh installation.
 export ZSH=/usr/share/oh-my-zsh
 
-POWERLEVEL9K_MODE='nerdfont-complete'
-
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 ZSH_THEME="powerlevel10k"
 
-POWERLEVEL9K_DIR_HOME_BACKGROUND='blue'
-POWERLEVEL9K_DIR_HOME_FOREGROUND='white'
-POWERLEVEL9K_DIR_HOME_SUBFOLDER_BACKGROUND='blue'
-POWERLEVEL9K_DIR_HOME_SUBFOLDER_FOREGROUND='white'
-POWERLEVEL9K_DIR_DEFAULT_BACKGROUND='blue'
-POWERLEVEL9K_DIR_DEFAULT_FOREGROUND='white'
-POWERLEVEL9K_SHORTEN_STRATEGY='truncate_to_unique'
+# Defines character set used by powerlevel10k.
+POWERLEVEL9K_MODE='nerdfont-complete'
 
+# Default colors of dir segment.
+POWERLEVEL9K_DIR_BACKGROUND=blue
+POWERLEVEL9K_DIR_FOREGROUND=white
+
+# If directory is too long, shorten some of its segments to the shortest
+# possible unique prefix. The shortened directory can be tab-completed to the
+# original.
+POWERLEVEL9K_SHORTEN_STRATEGY=truncate_to_unique
+
+# Colors of writable segment.
 POWERLEVEL9K_DIR_WRITABLE_FORBIDDEN_BACKGROUND='red'
-POWERLEVEL9K_DIR_WRITABLE_FORBIDDEN_FOREGROUND='015'
+POWERLEVEL9K_DIR_WRITABLE_FORBIDDEN_FOREGROUND='white'
 
+# Colors of vcs segment that depends on its state.
 POWERLEVEL9K_VCS_CLEAN_BACKGROUND='076'
 POWERLEVEL9K_VCS_CLEAN_FOREGROUND='black'
 POWERLEVEL9K_VCS_UNTRACKED_BACKGROUND='076'
 POWERLEVEL9K_VCS_UNTRACKED_FOREGROUND='black'
 POWERLEVEL9K_VCS_MODIFIED_BACKGROUND='220'
 POWERLEVEL9K_VCS_MODIFIED_FOREGROUND='black'
+
+# Don't show standard Powerline branch icon.
 POWERLEVEL9K_HIDE_BRANCH_ICON=true
 
-POWERLEVEL9K_STATUS_ERROR_BACKGROUND='red'
-POWERLEVEL9K_STATUS_ERROR_FOREGROUND='226'
-POWERLEVEL9K_STATUS_OK_BACKGROUND='black'
-POWERLEVEL9K_STATUS_OK_FOREGROUND='green'
+# Don't show status on success.
 POWERLEVEL9K_STATUS_OK=false
 
-POWERLEVEL9K_BACKGROUND_JOBS_FOREGROUND='cyan'
-POWERLEVEL9K_BACKGROUND_JOBS_BACKGROUND='black'
+# Colors of error status.
+POWERLEVEL9K_STATUS_ERROR_BACKGROUND='red'
+POWERLEVEL9K_STATUS_ERROR_FOREGROUND='226'
 
+# Colors of background jobs.
+POWERLEVEL9K_BACKGROUND_JOBS_BACKGROUND='black'
+POWERLEVEL9K_BACKGROUND_JOBS_FOREGROUND='cyan'
+
+# Colors of execution time.
 POWERLEVEL9K_COMMAND_EXECUTION_TIME_BACKGROUND='245'
 POWERLEVEL9K_COMMAND_EXECUTION_TIME_FOREGROUND='black'
+
+# Show duration of the last command if it takes at least this many seconds.
 POWERLEVEL9K_COMMAND_EXECUTION_TIME_THRESHOLD=2
 
-POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(root_indicator dir dir_writable vcs)
-POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status background_jobs command_execution_time)
+# The list of segments shown on the left.
+POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
+  root_indicator
+  dir
+  dir_writable
+  vcs
+)
+
+# The list of segments shown on the right.
+POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(
+  status
+  background_jobs
+  command_execution_time
+)
 
 # Set list of themes to load
 # Setting this variable when ZSH_THEME=random
