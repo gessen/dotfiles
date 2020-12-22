@@ -39,6 +39,9 @@ POWERLEVEL9K_VCS_MODIFIED_FOREGROUND='black'
 # Don't show standard Powerline branch icon.
 POWERLEVEL9K_HIDE_BRANCH_ICON=true
 
+# Show status of repositories of these types.
+POWERLEVEL9K_VCS_BACKENDS=(git)
+
 # Enable counters for staged, unstaged, etc.
 POWERLEVEL9K_VCS_STAGED_MAX_NUM=-1
 POWERLEVEL9K_VCS_UNSTAGED_MAX_NUM=-1
