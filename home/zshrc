@@ -193,6 +193,15 @@ function git_main_branch() {
   echo master
 }
 
+# The following function is used internally by fzf widgets. History widget,
+# bound to CTRL-R, duplicates the inserted entry but only inside tmux and when
+# powerlevel10k theme is used. The original function returns either fzf-tmux or
+# fzf but we've already aliased fzf to fzf-tmux so the following should not
+# break anything.
+__fzfcmd() {
+  echo fzf
+}
+
 # ZSH configuration
 
 # Treat the '!' character specially during expansion.
