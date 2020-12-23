@@ -202,7 +202,7 @@ egp() {
   if [[ "$#" == 0 ]]; then return 1; fi
   files=($(rg --max-count=1 --files-with-matches --no-messages "$@" \
     | fzf --select-1 --exit-0 --multi \
-      --preview="rg --pretty --context=10 '"$@"' {}"))
+      --preview="rg --pretty --context=10 $* {}"))
 
   [[ -n "${files}" ]] && eval "${EDITOR}" "${files[@]}"
 }
