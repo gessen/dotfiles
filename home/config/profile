@@ -207,6 +207,20 @@ egp() {
   [[ -n "${files}" ]] && eval "${EDITOR}" "${files[@]}"
 }
 
+# Create new tmux session or switch to existing one. Works from within tmux too.
+tm() {
+  [[ -n "${TMUX}" ]] && change="switch-client" || change="attach-session"
+  if [[ -n "$1" ]]; then
+    tmux "${change}" -t "$1" 2> /dev/null \
+      || (tmux new-session -d -s "$1" && tmux "${change}" -t "$1")
+    return
+  fi
+  local session
+  session="$(tmux list-sessions -F "#{session_name}" 2> /dev/null \
+    | fzf --select-1 --exit-0)" \
+    && tmux "${change}" -t "${session}"
+}
+
 # Open gdb within 2 tmux panes
 gdb-tmux() {
     local id="$(tmux split-pane -hPF "#D" "tail -f /dev/null")"
