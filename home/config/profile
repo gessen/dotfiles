@@ -174,7 +174,7 @@ e() {
 }
 
 # Open the selected file with EDITOR with fzf
-fec() {
+fe() {
   local file
   IFS=$'\n' file="$(fzf --query="$1" --select-1 --exit-0)"
   [[ -n "${file}" ]] && eval "${EDITOR}" "${file}"
