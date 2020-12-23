@@ -140,7 +140,7 @@ alias tia='tig --all'
 
 # mkdir + cd
 mkcd() {
-  mkdir -p "$1" && cd "$1"
+  mkdir -p "$1" && cd "$1" || return
 }
 
 # Normal z when used with arguments but displays an fzf prompt when used without
@@ -168,9 +168,7 @@ e() {
   file="$(fasd -Rfl "$1" \
     | fzf --select-1 --exit-0 --no-sort --no-multi)"
 
-  if [[ -n "${file}" ]]; then
-     eval "${EDITOR}" "${file}"
-  fi
+  [[ -n "${file}" ]] && eval "${EDITOR}" "${file}"
 }
 
 # Open the selected files with EDITOR with fzf
@@ -185,15 +183,12 @@ eg() {
   local file
   local line
   local column
-
   read -r file line column <<< \
     "$(rg --no-heading --column --line-number --pretty "$@" \
-    | fzf --ansi --select-1 --exit-0 \
-    | awk -F: '{print $1, $2, $3}')"
+      | fzf --ansi --select-1 --exit-0 \
+      | awk -F: '{print $1, $2, $3}')"
 
-  if [[ -n "${file}" ]]; then
-     eval "${EDITOR}" +${line}:${column} "${file}"
-  fi
+  [[ -n "${file}" ]] && eval "${EDITOR}" +"${line}":"${column}" "${file}"
 }
 
 # Fuzzy grep open with preview via ripgrep
@@ -223,28 +218,32 @@ tm() {
 
 # Open gdb within 2 tmux panes
 gdb-tmux() {
-    local id="$(tmux split-pane -hPF "#D" "tail -f /dev/null")"
-    tmux last-pane
-    local tty="$(tmux display-message -p -t "$id" '#{pane_tty}')"
-    gdb -ex "dashboard -output $tty" "$@"
-    tmux kill-pane -t "$id"
+  local id
+  local tty
+  id="$(tmux split-pane -hPF "#D" "tail -f /dev/null")"
+  tmux last-pane
+  tty="$(tmux display-message -p -t "${id}" '#{pane_tty}')"
+  gdb -ex "dashboard -output ${tty}" "$@"
+  tmux kill-pane -t "${id}"
 }
 
-function ranger {
+ranger() {
+  local tempfile
   local IFS=$'\t\n'
-  local tempfile="$(mktemp -t tmp.XXXXXX)"
+  tempfile="$(mktemp -t tmp.XXXXXX)"
   local ranger_cmd=(
     command
     ranger
-    --cmd="map Qq chain shell echo %d > "$tempfile"; quitall"
-    --cmd="map Qs chain shell echo %d > "$tempfile"; shell tmux split-window -h"
-    --cmd="map Qv chain shell echo %d > "$tempfile"; shell tmux split-window -v"
-    --cmd="map Qw chain shell echo %d > "$tempfile"; shell tmux new-window"
+    --cmd="map Qq chain shell echo %d > ${tempfile}; quitall"
+    --cmd="map Qs chain shell echo %d > ${tempfile}; shell tmux split-window -h"
+    --cmd="map Qv chain shell echo %d > ${tempfile}; shell tmux split-window -v"
+    --cmd="map Qw chain shell echo %d > ${tempfile}; shell tmux new-window"
   )
 
-  ${ranger_cmd[@]} "$@"
-  if [[ -f "$tempfile" ]] && [[ "$(cat -- "$tempfile")" != "$(echo -n `pwd`)" ]]; then
-    cd -- "$(cat "$tempfile")" || return
+  "${ranger_cmd[@]}" "$@"
+  if [[ -f "${tempfile}" ]] \
+    && [[ "$(cat -- "${tempfile}")" != "$(echo -n "$(pwd)")" ]]; then
+    cd -- "$(cat "${tempfile}")" || return
   fi
-  command rm -f -- "$tempfile" 2>/dev/null
+  command rm -f -- "${tempfile}" 2> /dev/null
 }
