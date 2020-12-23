@@ -173,11 +173,11 @@ e() {
   fi
 }
 
-# Open the selected file with EDITOR with fzf
+# Open the selected files with EDITOR with fzf
 fe() {
-  local file
-  IFS=$'\n' file="$(fzf --query="$1" --select-1 --exit-0)"
-  [[ -n "${file}" ]] && eval "${EDITOR}" "${file}"
+  local -a files
+  IFS=$'\n' files=($(fzf --query="$1" --select-1 --exit-0 --multi))
+  [[ -n "${files}" ]] && eval "${EDITOR}" "${files[@]}"
 }
 
 # Fuzzy grep open via ripgrep
