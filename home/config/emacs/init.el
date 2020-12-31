@@ -4242,8 +4242,8 @@ unhelpful."
 
 ;; Feature `org-crypt' brings simple integration of GnuPG into Org.
 (use-feature! org-crypt
-  :after org
   :demand t
+  :after org
   :config
 
   ;; Prevent already encrypted text from being encrypted again.
@@ -4255,8 +4255,8 @@ unhelpful."
 ;; Feature `org-src' contains the code dealing with source code examples in Org
 ;; mode.
 (use-feature! org-src
-  :after org
   :demand t
+  :after org
   :config
 
   ;; Preserve leading whitespace characters in source code blocks on export, and
@@ -4271,8 +4271,8 @@ unhelpful."
 ;; point. For example, strings like "<e" at the beginning of the line will be
 ;; expanded to an example block.
 (use-feature! org-tempo
-  :after org
-  :demand t)
+  :demand t
+  :after org)
 
 ;; Feature `ox' implements a generic export engine for Org, built on its
 ;; syntactical parser - Org Elements.
