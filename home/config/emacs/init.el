@@ -1228,6 +1228,9 @@ window instead."
 ;; Rebind `quoted-insert' as C-q will be used by `kill-buffer'
 (bind-key "C-z" #'quoted-insert)
 
+;; Use M-DEL to remove word in terminal like in GUI
+(bind-key "<M-delete>" #'backward-kill-word)
+
 (set-leader-keys!
   "t C-f" #'auto-fill-mode
   "tt"    #'toggle-truncate-lines
