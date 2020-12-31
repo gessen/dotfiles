@@ -3081,8 +3081,8 @@ menu to disappear and then come back after `company-idle-delay'."
   :hook ((flycheck-error-list-mode-hook . hide-mode-line-mode))
 
   :bind (:map flycheck-mode-map
-              ("M-N" . #'flycheck-next-error)
-              ("M-P" . #'flycheck-previous-error))
+              ([remap next-error]     . #'flycheck-next-error)
+              ([remap previous-error] . #'flycheck-previous-error))
 
   :config
 
