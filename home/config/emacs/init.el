@@ -287,24 +287,20 @@ MODE is the mode in which this prefix command should be added.
 PREFIX is a string describing a key sequence. NAME is a string
 used as the prefix command."
   (declare (indent defun))
-  (let ((full-prefix (concat my-leader-key " " prefix))
-        (major-mode-prefix (concat my-major-mode-leader-key
-                                   " " (substring prefix 1)))
-        (is-major-mode-prefix (string-prefix-p "m" prefix)))
-    (let ((prefix-name (cons name name)))
-      (which-key-add-major-mode-key-based-replacements
-        mode full-prefix prefix-name)
-      (when is-major-mode-prefix
-        (which-key-add-major-mode-key-based-replacements
-          mode major-mode-prefix prefix-name)))))
+  (let* ((is-major-mode (string-prefix-p "m" prefix))
+         (is-minor-mode (not is-major-mode))
+         (map (intern (format "my-%s-map" mode))))
+    (when (my--init-leader-mode-map mode map is-minor-mode)
+      (which-key-add-keymap-based-replacements
+        (symbol-value map)
+        (if is-major-mode (substring prefix 1) prefix ) name))))
 
 (defun declare-prefix! (prefix name)
   "Declares a `which-key' PREFIX.
 PREFIX is a string describing a key sequence. NAME is a string
 used as the prefix command."
   (declare (indent defun))
-  (let ((full-prefix (concat my-leader-key " " prefix)))
-    (which-key-add-key-based-replacements full-prefix (cons name name))))
+  (which-key-add-keymap-based-replacements my-leader-key-map prefix name))
 
 (defun my--init-leader-mode-map (mode map &optional minor)
   "Initialise MAP prefix if it doesn't exist yet.
@@ -324,29 +320,32 @@ argument should be non nil."
               :keys ,leaders))
           (boundp prefix)))))
 
+(defun set-leader-keys-for-mode! (mode is-minor-mode key def &rest bindings)
+  "Add a series of BINDINGS to `my-mode-map'.
+MODE should be a quoted symbol corresponding to a valid minor
+mode. IS-MINOR-MODE denotes whether the MODE is minor. BINDINGS
+is a series of KEY DEF pair."
+  (declare (indent defun))
+  (let ((map (intern (format "my-%s-map" mode))))
+    (when (my--init-leader-mode-map mode map is-minor-mode)
+      (while key
+        (bind-key key def (symbol-value map))
+        (setq key (pop bindings)
+              def (pop bindings))))))
+
 (defun set-leader-keys-for-minor-mode! (mode key def &rest bindings)
   "Add a series of BINDINGS to `my-mode-map'.
 MODE should be a quoted symbol corresponding to a valid minor
 mode. BINDINGS is a series of KEY DEF pair."
   (declare (indent defun))
-  (let ((map (intern (format "my-%s-map" mode))))
-    (when (my--init-leader-mode-map mode map t)
-      (while key
-        (bind-key key def (symbol-value map))
-        (setq key (pop bindings)
-              def (pop bindings))))))
+  (apply #'set-leader-keys-for-mode! mode t key def bindings))
 
 (defun set-leader-keys-for-major-mode! (mode key def &rest bindings)
   "Add a series of BINDINGS to `my-mode-map'.
 MODE should be a quoted symbol corresponding to a valid major
 mode. BINDINGS is a series of KEY DEF pair."
   (declare (indent defun))
-  (let ((map (intern (format "my-%s-map" mode))))
-    (when (my--init-leader-mode-map mode map)
-      (while key
-        (bind-key key def (symbol-value map))
-        (setq key (pop bindings)
-              def (pop bindings))))))
+  (apply #'set-leader-keys-for-mode! mode nil key def bindings))
 
 (defun set-leader-keys! (key def &rest bindings)
   "Add a series of BINDINGS to `my-leader-key-map'.
