@@ -894,8 +894,8 @@ window instead."
   "fed" #'find-user-emacs-directory
   "fi"  #'insert-file
   "fl"  #'find-file-literally
+  "fm"  #'rename-current-buffer-file
   "fo"  #'open-in-external-app
-  "fR"  #'rename-current-buffer-file
   "fs"  #'save-buffer
   "fS"  #'save-some-buffers
   "Ff"  #'find-file-other-frame
