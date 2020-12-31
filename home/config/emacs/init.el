@@ -3097,7 +3097,10 @@ menu to disappear and then come back after `company-idle-delay'."
 (use-package! helm-flycheck
   :init
 
-  (set-leader-keys! "ee" #'helm-flycheck))
+  (set-leader-keys! "ee" #'helm-flycheck)
+
+  :bind (("M-g e"   . #'helm-flycheck)
+         ("M-g M-e" . #'helm-flycheck)))
 
 (defun my--flycheck-popup-mode ()
   "Activate one of the Flycheck popups modes.
