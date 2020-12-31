@@ -3067,8 +3067,7 @@ menu to disappear and then come back after `company-idle-delay'."
     "eb" #'flycheck-buffer
     "ec" #'flycheck-compile
     "eC" #'flycheck-clear
-    "ee" #'flycheck-explain-error-at-point
-    "eH" #'display-local-help
+    "eh" #'display-local-help
     "el" #'flycheck-list-errors
     "en" #'flycheck-next-error
     "ep" #'flycheck-previous-error
@@ -3098,7 +3097,7 @@ menu to disappear and then come back after `company-idle-delay'."
 (use-package! helm-flycheck
   :init
 
-  (set-leader-keys! "eh" #'helm-flycheck))
+  (set-leader-keys! "ee" #'helm-flycheck))
 
 (defun my--flycheck-popup-mode ()
   "Activate one of the Flycheck popups modes.
