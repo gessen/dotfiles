@@ -42,7 +42,7 @@
  ("emacs-memoize" . "51b075935ca7070f62fae1d69fe0ff7d8fa56fdd")
  ("emacs-monokai-pro-theme" . "d1bc669200bf5753cf1963e5e65269e0d60648d5")
  ("emacs-monokai-theme" . "f342b6afc31f929be0626eca2d696ee9fab78011")
- ("emacs-which-key" . "3642c11d5ef9be3c6fb9edb8fd5ec3c370abd889")
+ ("emacs-which-key" . "428aedfce0157920814fbb2ae5d00b4aea89df88")
  ("emacs-winum" . "c5455e866e8a5f7eab6a7263e2057aff5f1118b9")
  ("emacsmirror-mirror" . "048bfc66e6e8c04f995c819eb0b649d099ba6204")
  ("embrace.el" . "dd5da196e5bcc5e6d87e1937eca0c21da4334ef2")
