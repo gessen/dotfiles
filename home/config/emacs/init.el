@@ -1783,9 +1783,6 @@ possibly new window."
         (switch-to-buffer-other-window (current-buffer))
       (switch-to-buffer (current-buffer)))))
 
-;; Shorten keybinding of `goto-line' to a single "M-g".
-(bind-key "M-g" #'goto-line)
-
 (set-leader-keys!
   "bm" #'switch-to-messages-buffer
   "bn" #'new-empty-buffer)
