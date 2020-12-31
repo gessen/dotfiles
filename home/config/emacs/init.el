@@ -482,7 +482,7 @@ BINDINGS is a series of KEY DEF pair."
 
 ;;;; Encryption
 
-;;; Feature `epg-config' is a basic configuration for EasyPG Emacs library.
+;; Feature `epg-config' is a basic configuration for EasyPG Emacs library.
 (use-feature! epg-config
   :config
 
@@ -1642,7 +1642,7 @@ original line and use the absolute value."
     "rx" #'clear-rectangle
     "ry" #'yank-rectangle))
 
-;;; Folding
+;;;; Folding
 
 ;; Package `origami' is a text folding minor mode for Emacs. With this minor
 ;; mode enabled, you can collapse and expand regions of text. The actual buffer
