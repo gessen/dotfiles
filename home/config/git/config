@@ -25,6 +25,7 @@
 	file-style = bold yellow ul
 	file-decoration-style = none
 	commit-decoration-style = bold yellow box ul
+	hunk-header-style = file line-number syntax
 	hunk-header-decoration-style = cyan box ul
 [delta "line-numbers"]
 	line-numbers-left-style = cyan
