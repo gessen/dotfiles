@@ -126,7 +126,7 @@
  ("plantuml-mode" . "5889166b6cfe94a37532ea27fc8de13be2ebfd02")
  ("popup-el" . "9d104d4bbbcb37bbc9d9ce762e74d41174683f86")
  ("posframe" . "922e4d239f7a083213d856de67a9686a091b1e27")
- ("powerline" . "edbb464eef680efc9d408730288c716cd4cac404")
+ ("powerline" . "b293abf83c0a2b2988af19dd0ef0426c3b1d1501")
  ("projectile" . "bbcf781d3fddb8e00d0dc10eb68bc2528fb409b3")
  ("rainbow-delimiters" . "5125f4e47604ad36c3eb4706310fcafac729ca8c")
  ("ranger.el" . "d7c18370981c9e585bc0fb78f7e55033457ca643")
