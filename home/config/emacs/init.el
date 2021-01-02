@@ -5141,12 +5141,14 @@ possibly new window."
 
 ;;; Closing
 
-;; Occasionally prune the build cache and directory for `straight.el'. This will
-;; prevent it from growing too large
+;; Prune the build cache for straight.el - this will prevent it from growing too
+;; large.
+(straight-prune-build-cache)
+
+;; Occasionally, prune the build directory as well.
 (unless (bound-and-true-p my--currently-profiling-p)
   (when (= 0 (random 20))
-    (straight-prune-build)
-    (straight-prune-build)))
+    (straight-prune-build-directory)))
 
 ;; Restore default values after startup.
 (dolist (handler file-name-handler-alist)
