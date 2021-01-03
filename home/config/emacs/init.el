@@ -2775,12 +2775,8 @@ Spell Commands^^            Add To Dictionary^^               Other^^
     (let ((display-buffer-alist
            (list '("*.*Helm.*Help.**")
                  '("*.*helm.**"
-                   (display-buffer-in-side-window)
-                   (inhibit-same-window . t)
-                   (side . bottom)
-                   (window-width . 0.6)
-                   (window-height . 0.4)))))
-      (helm-display-buffer-in-own-frame buffer)))
+                   (display-buffer-in-side-window)))))
+      (helm-default-display-buffer buffer)))
 
   (set-leader-keys!
     "at" #'helm-top
