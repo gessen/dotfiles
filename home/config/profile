@@ -130,6 +130,9 @@ alias gmtg='git mergetool --gui'
 # Use bat
 alias cat='bat'
 
+# Use original code with vscodium
+alias code='vscodium'
+
 alias fu='sudo !!'
 
 # Use fzf-tmux
