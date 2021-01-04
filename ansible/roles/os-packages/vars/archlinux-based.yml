@@ -63,6 +63,7 @@ packages_common_asdeps:
   - graphviz
   - highlight
   - llvm
+  - perl-term-readkey
   - python-pygments
 
 packages_common_own:
