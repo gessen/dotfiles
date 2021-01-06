@@ -154,6 +154,7 @@
  ("vterm-toggle" . "7f762d216fc7311bac4182f650e0207574c29357")
  ("with-editor" . "6735180e73e787b79535c245b162249b70dbf841")
  ("ws-butler" . "52321b99be69aa1b661da7743c4421a30d8b6bcb")
+ ("xref" . "aaa823a31befded016aa5370c4a22545e480911a")
  ("xterm-color" . "1a4012854c69a5cdaeb5a73d2ad705011892fca3")
  ("yaml-mode" . "68fecb5f0dec712a10c8655df6881392a4613617")
  ("yasnippet" . "5cbdbf0d2015540c59ed8ee0fcf4788effdf75b6")
