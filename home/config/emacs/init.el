@@ -2870,7 +2870,7 @@ Spell Commands^^            Add To Dictionary^^               Other^^
   :init
 
   ;; Reuse `xref' interface.
-  (push #'dumb-jump-xref-activate xref-backend-functions))
+  (add-hook #'xref-backend-functions #'dumb-jump-xref-activate))
 
 ;;;; Display contextual metadata
 
