@@ -39,6 +39,11 @@
 ;; Make sure not to load an out-of-date init.elc file.
 (setq load-prefer-newer t)
 
+;; Ignore X resources, its settings would be redundant with the other settings
+;; in this file and can conflict with later config, particularly where the
+;; cursor colour is concerned.
+(advice-add #'x-apply-session-resources :override #'ignore)
+
 ;; Local Variables:
 ;; no-byte-compile: t
 ;; End:
