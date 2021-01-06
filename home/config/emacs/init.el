@@ -2848,18 +2848,6 @@ Spell Commands^^            Add To Dictionary^^               Other^^
 ;;; IDE features
 ;;;; Definition location
 
-;; Feature `xref' provides a somewhat generic infrastructure for cross
-;; referencing commands, in particular "find-definition". Some part of the
-;; functionality must be implemented in a language dependent way and that's done
-;; by defining an xref backend.
-
-(use-feature! xref
-  :init
-
-  (set-leader-keys!
-    "F." #'xref-find-definitions-other-frame
-    "w." #'xref-find-definitions-other-window))
-
 ;; Package `dumb-jump' provides a mechanism to jump to the definitions of
 ;; functions, variables, etc. in a variety of programming languages. The
 ;; advantage of `dumb-jump' is that it doesn't try to be clever, so it "just
@@ -2876,6 +2864,17 @@ Spell Commands^^            Add To Dictionary^^               Other^^
 
   ;; Don't waste time on searching for other grep-like tools.
   (setq dumb-jump-prefer-searcher 'rg))
+
+;; Package `xref' provides a somewhat generic infrastructure for cross
+;; referencing commands, in particular "find-definition". Some part of the
+;; functionality must be implemented in a language dependent way and that's done
+;; by defining an xref backend.
+(use-package! xref
+  :init
+
+  (set-leader-keys!
+    "F." #'xref-find-definitions-other-frame
+    "w." #'xref-find-definitions-other-window))
 
 ;;;; Display contextual metadata
 
