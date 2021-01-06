@@ -1078,6 +1078,9 @@ window instead."
   ;; Sort files by recently active buffers first, then recently opened files.
   (setq projectile-sort-order 'recently-active)
 
+  ;; Use git-grep underhood `projectile-grep' when possible.
+  (setq projectile-use-git-grep t)
+
   ;; Do not litter `user-emacs-directory' with projectile persistent files.
   (setq projectile-cache-file (expand-file-name "projectile.el" my-cache-dir)
         projectile-known-projects-file (expand-file-name
