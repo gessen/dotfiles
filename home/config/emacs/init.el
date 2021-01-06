@@ -2880,7 +2880,10 @@ Spell Commands^^            Add To Dictionary^^               Other^^
 
   ;; Prompt if no identifier is at point. This allows `dumb-jump' to use
   ;; `xref-find-references.
-  (setq xref-prompt-for-identifier nil))
+  (setq xref-prompt-for-identifier nil)
+
+  ;; Use ripgrep for regexp search inside files.
+  (setq xref-search-program 'ripgrep))
 
 ;;;; Display contextual metadata
 
