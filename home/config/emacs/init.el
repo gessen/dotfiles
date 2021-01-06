@@ -2874,7 +2874,13 @@ Spell Commands^^            Add To Dictionary^^               Other^^
 
   (set-leader-keys!
     "F." #'xref-find-definitions-other-frame
-    "w." #'xref-find-definitions-other-window))
+    "w." #'xref-find-definitions-other-window)
+
+  :config
+
+  ;; Prompt if no identifier is at point. This allows `dumb-jump' to use
+  ;; `xref-find-references.
+  (setq xref-prompt-for-identifier nil))
 
 ;;;; Display contextual metadata
 
