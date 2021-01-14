@@ -1833,11 +1833,7 @@ possibly new window."
 ;; before or after scrolling. The lines it scrolls is scren_height * 0.618.
 (use-package! golden-ratio-scroll-screen
   :bind (([remap scroll-down-command] . #'golden-ratio-scroll-screen-down)
-         ([remap scroll-up-command]   . #'golden-ratio-scroll-screen-up))
-
-  :config
-
-  (setq golden-ratio-scroll-highlight-flag nil))
+         ([remap scroll-up-command]   . #'golden-ratio-scroll-screen-up)))
 
 ;; Package `avy' can move point to any position in Emacs – even in a different
 ;; window – using very few keystrokes. For this, you look at the position where
@@ -1974,22 +1970,6 @@ possibly new window."
     "htL" #'global-hl-line-mode)
 
   (global-hl-line-mode +1))
-
-;; Package `beacon' shines on top of your cursor whenever the window scrolls so
-;; you know where it is.
-(use-package! beacon
-  :demand t
-  :config
-
-  ;; Blink beacon when Emacs gains focus
-  (setq beacon-blink-when-focused t)
-
-  ;; Change beacon color to DeepSkyBlue.
-  (setq beacon-color "#00bfff")
-
-  (beacon-mode +1)
-
-  :blackout t)
 
 ;; Package `column-enforce-mode' highlights text that extends beyond a column
 ;; limit set by various modes.
