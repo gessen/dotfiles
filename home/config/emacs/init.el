@@ -4103,8 +4103,7 @@ unhelpful."
     :around #'elisp--company-doc-buffer
     "Cause `company' to use Helpful to show Elisp documentation."
     (cl-letf (((symbol-function #'describe-function) #'helpful-function)
-              ((symbol-function #'describe-variable) #'helpful-variable)
-              ((symbol-function #'help-buffer) #'current-buffer))
+              ((symbol-function #'describe-variable) #'helpful-variable))
       (apply func args)))
 
   (defadvice! my--fill-elisp-docstrings-correctly (&rest _)
