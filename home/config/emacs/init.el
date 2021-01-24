@@ -267,8 +267,8 @@ NAME and ARGS are as in `use-package'."
                                    ("p" "projects")
                                    ("P" "packages")
                                    ("q" "quit")
-                                   ("r" "rectangles")
-                                   ("R" "registers/rings/resume")
+                                   ("r" "registers/rings")
+                                   ("R" "rectangles")
                                    ("s" "search")
                                    ("S" "spellcheck")
                                    ("t" "toggle")
@@ -1636,17 +1636,17 @@ original line and use the absolute value."
   :init
 
   (set-leader-keys!
-    "rc" #'delete-whitespace-rectangle
-    "rd" #'delete-rectangle
-    "re" #'rectangle-exchange-point-and-mark
-    "ri" #'copy-rectangle-to-register
-    "rk" #'kill-rectangle
-    "rm" #'rectangle-mark-mode
-    "rN" #'rectangle-number-lines
-    "ro" #'open-rectangle
-    "rs" #'string-rectangle
-    "rx" #'clear-rectangle
-    "ry" #'yank-rectangle))
+    "Rc" #'delete-whitespace-rectangle
+    "Rd" #'delete-rectangle
+    "Re" #'rectangle-exchange-point-and-mark
+    "Ri" #'copy-rectangle-to-register
+    "Rk" #'kill-rectangle
+    "Rm" #'rectangle-mark-mode
+    "RN" #'rectangle-number-lines
+    "Ro" #'open-rectangle
+    "Rs" #'string-rectangle
+    "Rx" #'clear-rectangle
+    "Ry" #'yank-rectangle))
 
 ;;;; Folding
 
@@ -2769,10 +2769,10 @@ Spell Commands^^            Add To Dictionary^^               Other^^
     "fL" #'helm-locate
     "fr" #'helm-recentf
     "hi" #'helm-info-at-point
-    "Rl" #'helm-resume
-    "Rm" #'helm-all-mark-rings
-    "Rr" #'helm-register
-    "Ry" #'helm-show-kill-ring)
+    "rl" #'helm-resume
+    "rm" #'helm-all-mark-rings
+    "rr" #'helm-register
+    "ry" #'helm-show-kill-ring)
 
   ;; Setup helm everywhere
   :bind (("M-x"     . #'helm-M-x)
