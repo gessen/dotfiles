@@ -5075,6 +5075,14 @@ possibly new window."
 
 ;;;; Tabs
 
+;; Package `powerline' is a library for customizing the mode-line that is based
+;; on the Vim Powerline. A collection of predefined themes comes with the
+;; package.
+(use-package! powerline
+  ;; This package has issues with native compilation. Since Emacs forcibly
+  ;; compiles each elc file we have to inhibit byte compilation.
+  :straight (:no-byte-compile t))
+
 ;; Package `centaur-tabs' is an Emacs plugin aiming to become an aesthetic,
 ;; modern looking tabs plugin. This package offers tabs with a wide range of
 ;; customization options, both aesthetical and functional, implementing them
