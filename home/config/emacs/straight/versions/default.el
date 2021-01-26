@@ -106,7 +106,7 @@
  ("magit-todos" . "a0e5d1f3c7dfcb4f18c1b0d57f1746a4872df5c6")
  ("markdown-mode" . "fa9fa20e3236006c2cf278209356f60cc4175120")
  ("markdown-toc" . "9565eeaa1d26bc0ab83eb65bd30470888f724044")
- ("melpa" . "1bc0d2314ef383ce6e67688a218debc772cb7725")
+ ("melpa" . "8bec8e696afde1b89502f312efc0054ca59502a6")
  ("minions" . "36d39bd25ae58d1359d17f99142520339bea5974")
  ("modus-themes" . "ab3b4558dedd92c463c5871f00a486ea1c99c441")
  ("monokai-emacs" . "4281fc13dadef98942c8d43024de024f2392fec5")
