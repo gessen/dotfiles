@@ -1095,6 +1095,7 @@ window instead."
   ;; Register CMake project type.
   (projectile-register-project-type
    'cmake '("CMakeLists.txt")
+   :project-file "CMakeLists.txt"
    :compilation-dir "build"
    :configure (string-join '("cmake"
                              ".."
