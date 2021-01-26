@@ -126,7 +126,7 @@
  ("popup-el" . "9d104d4bbbcb37bbc9d9ce762e74d41174683f86")
  ("posframe" . "922e4d239f7a083213d856de67a9686a091b1e27")
  ("powerline" . "b293abf83c0a2b2988af19dd0ef0426c3b1d1501")
- ("projectile" . "bbcf781d3fddb8e00d0dc10eb68bc2528fb409b3")
+ ("projectile" . "18f694931f0afe8b33e34731914e8bae81107b55")
  ("rainbow-delimiters" . "5125f4e47604ad36c3eb4706310fcafac729ca8c")
  ("ranger.el" . "d7c18370981c9e585bc0fb78f7e55033457ca643")
  ("restart-emacs" . "9aa90d3df9e08bc420e1c9845ee3ff568e911bd9")
