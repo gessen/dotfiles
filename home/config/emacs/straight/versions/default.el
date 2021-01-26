@@ -108,7 +108,7 @@
  ("markdown-toc" . "9565eeaa1d26bc0ab83eb65bd30470888f724044")
  ("melpa" . "8bec8e696afde1b89502f312efc0054ca59502a6")
  ("minions" . "36d39bd25ae58d1359d17f99142520339bea5974")
- ("modus-themes" . "ab3b4558dedd92c463c5871f00a486ea1c99c441")
+ ("modus-themes" . "97fa6679b3b578b9a7faccd6e4d166254862f7bd")
  ("monokai-emacs" . "4281fc13dadef98942c8d43024de024f2392fec5")
  ("multiple-cursors.el" . "b880554d04b8f61165afba7d4de19ac9e39bb7ab")
  ("mwim.el" . "b4f3edb4c0fb8f8b71cecbf8095c2c25a8ffbf85")
