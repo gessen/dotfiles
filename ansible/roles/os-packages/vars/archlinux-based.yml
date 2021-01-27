@@ -55,7 +55,6 @@ packages_common:
   - xclip
   - zsh-autosuggestions
   - zsh-completions
-  - zsh-syntax-highlighting
   - zsh-theme-powerlevel10k
 
 packages_common_asdeps:
@@ -90,3 +89,4 @@ packages_common_paru:
   - dropbox
   - sad
   - zsh-autopair-git
+  - zsh-fast-syntax-highlighting
