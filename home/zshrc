@@ -167,6 +167,7 @@ plugins=(
   dirhistory
   extract
   fasd
+  fast-syntax-highlighting
   fzf
   fzf-git
   fzf-kill
@@ -180,7 +181,6 @@ plugins=(
   zsh-autopair
   zsh-autosuggestions
   zsh-interactive-cd
-  zsh-syntax-highlighting
 )
 
 autoload -U +X bashcompinit && bashcompinit
