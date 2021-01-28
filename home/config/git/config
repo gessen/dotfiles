@@ -1,6 +1,3 @@
-[user]
-	name = Jacek Swierk
-	email = jacek.swierk@gmail.com
 [core]
 	pager = delta
 [commit]
@@ -98,3 +95,5 @@
 	untracked = red
 [alias]
 	fixup = !GIT_SEQUENCE_EDITOR=true git rebase -i
+[include]
+	path = config.local
