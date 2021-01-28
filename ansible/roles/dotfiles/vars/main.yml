@@ -12,6 +12,7 @@ dotfiles:
   - config/gdb/libcxx
   - config/git/attributes
   - config/git/config
+  - config/git/config.local
   - config/git/ignore
   - config/htop/htoprc
   - config/keepassxc/keepassxc.ini
