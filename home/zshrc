@@ -27,6 +27,13 @@ POWERLEVEL9K_SHORTEN_STRATEGY=truncate_to_unique
 # Color of the shortened directory entries.
 POWERLEVEL9K_DIR_SHORTENED_FOREGROUND='248'
 
+# Shorten directory if it's longer than this even if there is space for it. The
+# value can be either absolute (e.g., '80') or a percentage of terminal width
+# (e.g, '50%'). If empty, directory will be shortened only when prompt doesn't
+# fit or when other parameters demand it. If set to 0, directory will always be
+# shortened to its minimum length.
+POWERLEVEL9K_DIR_MAX_LENGTH=50%
+
 # Display anchor directory segments in bold.
 POWERLEVEL9K_DIR_ANCHOR_BOLD=true
 
@@ -96,6 +103,27 @@ POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(
   background_jobs
   command_execution_time
 )
+
+# Add an empty line before each prompt.
+POWERLEVEL9K_PROMPT_ADD_NEWLINE=true
+
+# Position prompt on a newline.
+POWERLEVEL9K_PROMPT_ON_NEWLINE=true
+
+# Filler between left and right prompt on the first prompt line.
+POWERLEVEL9K_MULTILINE_FIRST_PROMPT_GAP_CHAR='·'
+
+# The color of the filler.
+POWERLEVEL9K_MULTILINE_FIRST_PROMPT_GAP_FOREGROUND='244'
+
+# Transient prompt works similarly to the builtin transient_rprompt option - it
+# trims down prompt when accepting a command line. Supported values:
+#   - off:      Don't change prompt when accepting a command line.
+#   - always:   Trim down prompt when accepting a command line.
+#   - same-dir: Trim down prompt when accepting a command line unless this is
+#               the first command typed after changing current working
+#               directory.
+POWERLEVEL9K_TRANSIENT_PROMPT=same-dir
 
 # Set list of themes to load
 # Setting this variable when ZSH_THEME=random
