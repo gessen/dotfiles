@@ -116,6 +116,8 @@ alias la='ll --all'
 alias ec='emacsclient --tty'
 alias ecg='emacsclient --create-frame'
 
+alias gsm='git switch $(git_main_branch)'
+alias gsd='git switch develop'
 alias gignore='git update-index --skip-worktree'
 alias gunignore='git update-index --no-skip-worktree'
 alias gd2='GIT_PAGER="delta --side-by-side" git diff'
