@@ -6,7 +6,8 @@
 			"command": [
 				"clangd",
 				"-log=info",
-				"--completion-style=detailed"
+				"--completion-style=detailed",
+				"--header-insertion=never"
 			],
 			"enabled": true
 		},
