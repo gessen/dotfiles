@@ -3326,10 +3326,12 @@ list of additional parameters sent with this request."
   (use-feature! lsp-clangd
     :config
 
-    ;; Set some basic logging for debugging purpose and change completion style
-    ;; to be more detailed.
-    (setq lsp-clients-clangd-args
-          (list "-log=info" "--completion-style=detailed"))))
+    ;; Set some basic logging for debugging purpose, change completion style to
+    ;; be more detailed and remove automatic header insertion.
+    (setq lsp-clients-clangd-args (list
+                                   "-log=info"
+                                   "--completion-style=detailed"
+                                   "--header-insertion=never"))))
 
 ;; Package `lsp-ui' provides a pretty UI for showing diagnostic messages from
 ;; LSP in the buffer using overlays. It's configured automatically by

@@ -196,7 +196,8 @@
     ],
     "clangd.arguments": [
         "-log=info",
-        "--completion-style=detailed"
+        "--completion-style=detailed",
+        "--header-insertion=never"
     ],
     "clangd.semanticHighlighting": true,
     "bashIde.path": "/usr/bin/bash-language-server",
