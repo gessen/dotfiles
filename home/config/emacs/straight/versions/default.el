@@ -88,6 +88,7 @@
  ("magit" . "9e9f7cb3d260bd14e15307831a2820112c9a77ac")
  ("magit-delta" . "b8526f890415374822514e488341d2b706d6bc2f")
  ("magit-todos" . "a0e5d1f3c7dfcb4f18c1b0d57f1746a4872df5c6")
+ ("marginalia" . "7df0e53ab99e22c631cd860aea38b5e96b065914")
  ("markdown-mode" . "fa9fa20e3236006c2cf278209356f60cc4175120")
  ("markdown-toc" . "9565eeaa1d26bc0ab83eb65bd30470888f724044")
  ("melpa" . "8bec8e696afde1b89502f312efc0054ca59502a6")
