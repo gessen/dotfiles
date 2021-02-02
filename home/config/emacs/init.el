@@ -2591,6 +2591,23 @@ Spell Commands^^            Add To Dictionary^^               Other^^
 
   (savehist-mode +1))
 
+;; Package `embark' provides a sort of right-click contextual menu for Emacs,
+;; accessed through the `embark-act' command (which you should bind to a
+;; convenient key), offering you relevant actions to use on a target determined
+;; by the context.
+(use-package! embark
+  :bind ("M-s a" . #'embark-act)
+
+  :config
+
+  (defun my-embark-action-indicator (map _target)
+    "Use `which-key' like a key menu prompt."
+    (which-key--show-keymap "Embark" map nil nil 'no-paging)
+    #'which-key--hide-popup-ignore-command)
+
+  (setq embark-action-indicator #'my-embark-action-indicator)
+  (setq embark-become-indicator #'my-embark-action-indicator))
+
 ;; Package `marginalia' enriches existing commands with completion annotations
 ;; by adding marginalia to the minibuffer completions. Marginalia are marks or
 ;; annotations placed at the margin of the page of a book or in this case
