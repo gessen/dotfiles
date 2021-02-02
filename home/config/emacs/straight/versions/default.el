@@ -115,6 +115,7 @@
  ("ranger.el" . "d7c18370981c9e585bc0fb78f7e55033457ca643")
  ("restart-emacs" . "9aa90d3df9e08bc420e1c9845ee3ff568e911bd9")
  ("s.el" . "43ba8b563bee3426cead0e6d4ddc09398e1a349d")
+ ("selectrum" . "8fd18284a7e2a9d02031d541de719d7134ba7588")
  ("shrink-path.el" . "c14882c8599aec79a6e8ef2d06454254bb3e1e41")
  ("smart-region" . "5a8017fd8e8dc3483865951c4942cab3f96f69f6")
  ("smartparens" . "555626a43f9bb1985aa9a0eb675f2b88b29702c8")

@@ -1082,6 +1082,8 @@ window instead."
   ;; argument on `projectile-switch-project'.
   (setq projectile-switch-project-action 'projectile-commander)
 
+  ;; Use Selectrum via `completing-read'.
+  (setq projectile-completion-system 'default)
 
   ;; Sort files by recently active buffers first, then recently opened files.
   (setq projectile-sort-order 'recently-active)
@@ -2588,6 +2590,32 @@ Spell Commands^^            Add To Dictionary^^               Other^^
   (setq savehist-file (expand-file-name "savehist.el" my-cache-dir))
 
   (savehist-mode +1))
+
+;; Package `selectrum' is an incremental completion and narrowing framework.
+;; Like Ivy and Helm, which it improves on, Selectrum provides a user interface
+;; for choosing from a list of options by typing a query to narrow the list, and
+;; then selecting one of the remaining candidates. This offers a significant
+;; improvement over the default Emacs interface for candidate selection.
+(use-package! selectrum
+  :init
+
+  ;; This doesn't actually load Selectrum.
+  (selectrum-mode +1)
+
+  :bind (:map selectrum-minibuffer-map
+              ("<prior>"    . #'selectrum-previous-page)
+              ("<next> "    . #'selectrum-next-page)
+              ;; Use <backtab> to go up with `find-file'.
+              ("<backtab>"  . #'backward-kill-sexp)
+              ("S-TAB"      . #'backward-kill-sexp))
+
+  :config
+
+  ;; Extend highlighting of the current candidate until the margin.
+  (setq selectrum-extend-current-candidate-highlight t)
+
+  ;; Don't show anything when displaying count information before the prompt.
+  (setq selectrum-count-style nil))
 
 ;;; IDE features
 ;;;; Definition location
@@ -4354,6 +4382,10 @@ Goto^^              Actions^^         Other^^
   ;; that we need to save our buffers if we want Magit to see them.
   (setq magit-save-repository-buffers nil)
 
+  ;; Without explicitly setting this, the candidates won't be sorted with
+  ;; Prescient.
+  (setq magit-completing-read-function #'selectrum-completing-read)
+
   (transient-append-suffix
     'magit-rebase "-d"
     '("-D" "Use current timestamp for author date" "--ignore-date"))
@@ -4614,6 +4646,10 @@ possibly new window."
 ;; as we already have superior handling of that from Smartparens.
 (setq blink-matching-paren nil)
 
+;; Don't suggest shorter ways to type commands in M-x, since they don't apply
+;; when using Selectrum.
+(setq suggest-key-bindings 0)
+
 ;; Decrease the frequency of UI updates when Emacs is idle.
 (setq idle-update-delay 1)
 
@@ -4678,7 +4714,29 @@ possibly new window."
 ;;;; Theme
 
 ;; Package `darkokai-theme' is a darker variant on Monokai.
-(use-package! darkokai-theme)
+(use-package! darkokai-theme
+  :config
+
+  ;; Configure selectrum faces.
+  (let ((custom--inhibit-theme-enable nil))
+    (darkokai-with-color-vars
+      (custom-theme-set-faces
+       'darkokai
+       `(selectrum-current-candidate
+         ((,class (:background ,darkokai-highlight-line
+                               :inherit bold
+                               :underline nil))
+          (,terminal-class (:background ,terminal-darkokai-highlight-line
+                                        :inherit bold
+                                        :underline nil))))
+       `(selectrum-primary-highlight
+         ((,class (:foreground ,darkokai-green))
+          (,terminal-class (:foreground ,terminal-darkokai-green))))
+       `(selectrum-secondary-highlight
+         ((,class (:foreground ,darkokai-orange
+                               :underline t))
+          (,terminal-class (:foreground ,terminal-darkokai-orange
+                                        :underline t))))))))
 
 ;; Package `monokai-alt-theme' is theme with a dark background. Based on Sublime
 ;; Monokai theme.
