@@ -2591,6 +2591,45 @@ Spell Commands^^            Add To Dictionary^^               Other^^
 
   (savehist-mode +1))
 
+;; Package `orderless' provides an orderless completion style that divides the
+;; pattern into components (space-separated by default), and matches candidates
+;; that match all of the components in any order.
+(use-package! orderless
+  :demand t
+  :config
+
+  (defhook! my--orderless-setup ()
+    selectrum-prescient-mode-hook
+    "Override prescient's filtering and highlighting for selectrum."
+    ;; Use `orderless' instead of `prescient' for filtering and highlighting but
+    ;; leave sorting alone.
+    (setq selectrum-refine-candidates-function #'orderless-filter)
+    (setq selectrum-highlight-candidates-function
+          #'orderless-highlight-matches))
+
+  ;; Rely on `orderless' solely for completions.
+  (setq completion-styles '(orderless))
+  (setq completion-category-defaults nil)
+
+  ;; Change initialism to strict initialism and add prefixes (partial completion
+  ;; from Emacs).
+  (setq orderless-matching-styles '(orderless-regexp
+                                    orderless-strict-initialism
+                                    orderless-prefixes))
+
+  (defun orderless-flex-if-twiddle (pattern _index _total)
+    "Return `orderless-flex' if pattern starts/ends with \"~\"."
+    (cond ((string-suffix-p "~" pattern)
+           `(orderless-flex . ,(substring pattern 0 -1)))
+          ((string-prefix-p "~" pattern)
+           `(orderless-flex . ,(substring pattern 1)))))
+
+  ;; Enable fuzzy matching when the pattern starts or ends with "~".
+  (setq orderless-style-dispatchers '(orderless-flex-if-twiddle))
+
+  ;; Extend separator from space to spaces.
+  (setq orderless-component-separator "[ ]+"))
+
 ;; Package `prescient' is a library for intelligent sorting and filtering in
 ;; various contexts.
 (use-package! prescient
@@ -2638,6 +2677,15 @@ Spell Commands^^            Add To Dictionary^^               Other^^
 (use-package! selectrum-prescient
   :demand t
   :after selectrum
+  :bind (:map selectrum-prescient-toggle-map
+              ;; Unbind these keys as prescient is only used for sorting.
+              ("a" . nil)
+              ("f" . nil)
+              ("i" . nil)
+              ("l" . nil)
+              ("p" . nil)
+              ("r" . nil))
+
   :config
 
   (selectrum-prescient-mode +1))
