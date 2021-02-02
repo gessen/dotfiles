@@ -422,6 +422,8 @@ BINDINGS is a series of KEY DEF pair."
 (use-package! hydra
   :demand t)
 
+(set-leader-keys! "?" #'describe-bindings)
+
 ;;; Configure ~/.emacs.d paths
 
 (require 'xdg)
@@ -892,6 +894,7 @@ window instead."
   "fD"  #'delete-current-buffer-file
   "fei" #'find-user-init-file
   "fed" #'find-user-emacs-directory
+  "ff"  #'find-file
   "fi"  #'insert-file
   "fl"  #'find-file-literally
   "fm"  #'rename-current-buffer-file
@@ -1056,12 +1059,19 @@ window instead."
     "p&" #'projectile-run-async-shell-command-in-root
     "p%" #'projectile-replace-regexp
     "pa" #'projectile-toggle-between-implementation-and-test
+    "pb" #'projectile-switch-to-buffer
     "pc" #'projectile-compile-project
     "pC" #'projectile-configure-project
+    "pd" #'projectile-find-dir
     "pD" #'projectile-dired
     "pe" #'projectile-edit-dir-locals
+    "pf" #'projectile-find-file
+    "pF" #'projectile-find-file-in-known-projects
+    "pg" #'projectile-grep
     "pI" #'projectile-invalidate-cache
     "pk" #'projectile-kill-buffers
+    "pp" #'projectile-switch-project
+    "pr" #'projectile-recentf
     "pR" #'projectile-replace
     "pt" #'projectile-test-project)
 
@@ -1072,8 +1082,6 @@ window instead."
   ;; argument on `projectile-switch-project'.
   (setq projectile-switch-project-action 'projectile-commander)
 
-  ;; Use Helm instead of default Ido.
-  (setq projectile-completion-system 'helm)
 
   ;; Sort files by recently active buffers first, then recently opened files.
   (setq projectile-sort-order 'recently-active)
@@ -1108,34 +1116,6 @@ window instead."
   (projectile-mode +1)
 
   :blackout t)
-
-;; Package `helm-projectile' brings Helm integration for Projectile.
-(use-package! helm-projectile
-  :commands (helm-projectile
-             helm-projectile-switch-to-buffer
-             helm-projectile-find-dir
-             helm-projectile-find-file
-             helm-projectile-find-file-in-known-projects
-             helm-projectile-recentf
-             helm-projectile-switch-project)
-
-  :init
-
-  (set-leader-keys!
-    "pb" #'helm-projectile-switch-to-buffer
-    "pd" #'helm-projectile-find-dir
-    "pf" #'helm-projectile-find-file
-    "pF" #'helm-projectile-find-file-in-known-projects
-    "pg" #'helm-projectile-rg
-    "pG" #'helm-projectile-grep
-    "ph" #'helm-projectile
-    "pp" #'helm-projectile-switch-project
-    "pr" #'helm-projectile-recentf)
-
-  :config
-
-  ;; Current version of `helm' requires explicitly `tramp'.
-  (require 'tramp))
 
 ;; Package `sudo-edit' allows to open files as another user, by default "root".
 (use-package! sudo-edit
@@ -2155,86 +2135,6 @@ will not refresh `column-number-mode."
     (push "--hidden" args)
     (push "--no-config" args)))
 
-;; Package `helm-rg' search massive codebases extremely fast, using ripgrep
-;; and helm. Inspired by helm-ag and f3.
-(use-package! helm-rg
-  :commands (helm-rg--set-dir
-             helm-rg--set-extra-args
-             helm-rg--file-forward
-             helm-rg--file-backward
-             helm-rg--bounce
-             helm-rg--bounce-dump
-             helm-rg--bounce-dump-current-file
-             helm-rg--bounce-refresh
-             helm-rg--bounce-refresh-current-file
-             helm-rg--visit-current-file-for-bounce
-             helm-rg--expand-match-context
-             helm-rg--spread-match-context)
-  :init
-
-  (set-leader-keys! "/" #'helm-rg)
-
-  :bind ((:map helm-rg-map
-               ("M-b"     . nil)
-               ("M-d"     . nil)
-               ("M-m"     . nil)
-               ("C-c d"   . #'helm-rg--set-dir)
-               ("C-c m"   . #'helm-rg--set-extra-args)
-               ("M-N"     . #'helm-rg--file-forward)
-               ("M-P"     . #'helm-rg--file-backward)
-               ("C-c C-e" . #'helm-rg--bounce))
-         (:map helm-rg--bounce-mode-map
-               ("C-x C-r" . nil)
-               ("C-x C-s" . nil)
-               ("C-c C-s" . nil)
-               ("C-c C-c" . #'helm-rg--bounce-dump)
-               ("C-c c"   . #'helm-rg--bounce-dump-current-file)
-               ("C-c C-r" . #'helm-rg--bounce-refresh)
-               ("C-c r"   . #'helm-rg--bounce-refresh-current-file)
-               ("C-c f"   . #'helm-rg--visit-current-file-for-bounce)
-               ("C-c e"   . #'helm-rg--expand-match-context)
-               ("C-c C-e" . #'helm-rg--spread-match-context)
-               ("C-c C-k" . #'kill-this-buffer)))
-
-  :config
-
-  ;; Open visited buffer in another window.
-  (setq helm-rg-display-buffer-normal-method #'pop-to-buffer))
-
-;; Package `helm-swoop' lists the all lines to another buffer. At the same time,
-;; the original buffer's cursor is jumping line to line according to moving up
-;; and down the list.
-(use-package! helm-swoop
-  :after helm
-  :commands (helm-multi-swoop-all-from-helm-swoop
-             helm-multi-swoop-current-mode-from-helm-swoop)
-  :init
-
-  (set-leader-keys!
-    "ss"    #'helm-swoop
-    "sS"    #'helm-multi-swoop
-    "s C-s" #'helm-multi-swoop-all)
-
-  :bind ((:map helm-swoop-map
-               ;; Emulate `isearch'.
-               ("C-r" . #'helm-previous-line)
-               ("C-s" . #'helm-next-line)
-               ;; Enter `helm-multi-swoop' either from all buffers or from
-               ;; buffers sharing the current buffer's mode.
-               ("M-k" . #'helm-multi-swoop-all-from-helm-swoop)
-               ("M-K" . #'helm-multi-swoop-current-mode-from-helm-swoop))
-         (:map helm-multi-swoop-map
-               ;; Emulate `isearch'.
-               ("C-r" . #'helm-previous-line)
-               ("C-s" . #'helm-next-line)))
-  :config
-
-  ;; Use fuzzy matching functions as well as exact matches.
-  (setq helm-swoop-use-fuzzy-match t)
-
-  ;; Do not sacrifices text colouring over slight boost in invoke speed.
-  (setq helm-swoop-speed-or-color t))
-
 ;; Package `visual-regexp' provides an alternate version of `query-replace'
 ;; which highlights matches and replacements as you type.
 (use-package! visual-regexp
@@ -2383,14 +2283,6 @@ Spell Commands^^            Add To Dictionary^^               Other^^
     "Sc" #'flyspell-correct-wrapper
     "Ss" #'flyspell-correct-at-point
     "S." #'hydra-flyspell/body))
-
-;; Package `flyspell-correct-helm' provides helm interface for
-;; `flyspell-correct' package.
-(use-package! flyspell-correct-helm
-  :commands (flyspell-correct-helm)
-  :init
-
-  (setq flyspell-correct-interface #'flyspell-correct-helm))
 
 ;;;; Miscellaneous
 
@@ -2607,31 +2499,6 @@ Spell Commands^^            Add To Dictionary^^               Other^^
   ;; Save auto snippets in persistent location outside `user-emacs-directory'.
   (setq aya-persist-snippets-dir (expand-file-name "snippets" my-data-dir)))
 
-;; Package `helm-c-yasnippet' brings Helm source for `yasnippet'.
-(use-package! helm-c-yasnippet
-  :init
-
-  (defun helm-yas ()
-    "Enable `yasnippet' and run `helm-yas-complete'."
-    (interactive)
-    (unless yas-global-mode
-      (yas-global-mode +1))
-    (yas-minor-mode +1)
-    (require 'helm-c-yasnippet)
-    (call-interactively #'helm-yas-complete))
-
-  (set-leader-keys! "is" #'helm-yas)
-
-  :config
-
-  ;; Helm display candidate(snippet name) includes key, e.g:
-  ;; [for] for (...) { ... }
-  (setq helm-yas-display-key-on-candidate t)
-
-  ;; Helm pattern space match anyword greedy, e.g regexp: "if else" is replaced
-  ;; with "if.*else"
-  (setq helm-yas-space-match-any-greedy t))
-
 ;; Package `yasnippet' allows the expansion of user-defined abbreviations into
 ;; fillable templates. The only reason we have it here is because it gets pulled
 ;; in by LSP, and we need to unbreak some stuff.
@@ -2693,9 +2560,6 @@ Spell Commands^^            Add To Dictionary^^               Other^^
 ;; Do not consider case significant in completion
 (setq completion-ignore-case t)
 
-;; Add fuzzy completion
-(add-to-list 'completion-styles 'flex t)
-
 ;; Allow doing a command that requires candidate-selection when you are already
 ;; in the middle of candidate-selection.
 (setq enable-recursive-minibuffers t)
@@ -2724,117 +2588,6 @@ Spell Commands^^            Add To Dictionary^^               Other^^
   (setq savehist-file (expand-file-name "savehist.el" my-cache-dir))
 
   (savehist-mode +1))
-
-;; Package `ace-jump-helm-line' allows to ace-jump to a candidate in Helm
-;; window.
-(use-package! ace-jump-helm-line
-  :after helm
-  :bind (:map helm-map
-              ("M-'" . #'ace-jump-helm-line)))
-
-;; Package `helm' is an Emacs framework for incremental completions and
-;; narrowing selections. It helps to rapidly complete file names, buffer names,
-;; or any other Emacs interactions requiring selecting an item from a list of
-;; possible choices.
-(use-package! helm
-  :functions child-of-class-p
-  :defer 0.5
-  :commands (helm-autoresize-mode
-             helm-display-buffer-in-own-frame
-             helm-execute-persistent-action
-             helm-find-files-up-one-level
-             helm-make-source
-             helm-next-line
-             helm-previous-line
-             helm-resume
-             helm-select-action)
-  :init
-
-  (defadvice! my--helm-make-source
-      (func &rest args)
-    :around #'helm-make-source
-    "Activate fuzzy matching for all sources in helm session."
-    (let ((source-type (cadr args))
-          (props (cddr args)))
-      ;; Fuzzy matching is not supported in async sources.
-      (unless (child-of-class-p source-type 'helm-source-async)
-        (plist-put props :fuzzy-match t)))
-    (apply func args))
-
-  (defun my--helm-display-function (buffer &optional _)
-    "Display the Helm window."
-    (let ((display-buffer-alist
-           (list '("*.*Helm.*Help.**")
-                 '("*.*helm.**"
-                   (display-buffer-in-side-window)))))
-      (helm-default-display-buffer buffer)))
-
-  (set-leader-keys!
-    "at" #'helm-top
-    "bb" #'helm-mini
-    "fb" #'helm-filtered-bookmarks
-    "ff" #'helm-find-files
-    "fL" #'helm-locate
-    "fr" #'helm-recentf
-    "hi" #'helm-info-at-point
-    "rl" #'helm-resume
-    "rm" #'helm-all-mark-rings
-    "rr" #'helm-register
-    "ry" #'helm-show-kill-ring)
-
-  ;; Setup helm everywhere
-  :bind (("M-x"     . #'helm-M-x)
-         ("C-x b"   . #'helm-buffers-list)
-         ("C-x C-f" . #'helm-find-files)
-         ("M-y"     . #'helm-show-kill-ring)
-
-         ;; Swap Helm's default TAB action with C-z
-         (:map helm-map
-               ("<tab>" . #'helm-execute-persistent-action)
-               ("TAB"   . #'helm-execute-persistent-action)
-               ("C-z"   . #'helm-select-action))
-
-         ;; Use <backtab> to go up
-         (:map helm-find-files-map
-               ("<backtab>" . #'helm-find-files-up-one-level)
-               ("S-TAB"     . #'helm-find-files-up-one-level))
-
-         ;; Display Helm's history
-         (:map minibuffer-local-map
-               ("C-r" . #'helm-minibuffer-history)))
-
-  :config
-
-  ;; Make Helm use two windows in one frame
-  (setq helm-always-two-windows t)
-
-  ;; Customise how `helm-buffer' is displayed
-  (setq helm-display-function #'my--helm-display-function)
-
-  ;; Increase the `helm-buffer' width when displaying it in own frame
-  (setq helm-display-buffer-width 100)
-
-  ;; Hide header line
-  (setq helm-display-header-line nil)
-
-  ;; Force split inside selected window
-  (setq helm-split-window-inside-p t)
-
-  ;; Toggle generic helm completion
-  (helm-mode +1)
-
-  ;; Auto resize helm window
-  (helm-autoresize-mode +1)
-
-  :blackout t)
-
-;; Package `helm-icons' plugs icons into `helm' standard functions.
-(use-package! helm-icons
-  :init
-
-  (after-display-graphic-init!
-    (with-eval-after-load 'helm
-      (helm-icons-enable))))
 
 ;;; IDE features
 ;;;; Definition location
@@ -3036,12 +2789,6 @@ menu to disappear and then come back after `company-idle-delay'."
 
   :blackout t)
 
-;; Package `helm-company' is Helm interface for `company-mode'.
-(use-package! helm-company
-  :after company
-  :bind (:map company-active-map
-              ("M-l" . #'helm-company)))
-
 ;;;; Syntax checking and code linting
 
 ;; Package `flycheck' provides a framework for in-buffer error and warning
@@ -3093,14 +2840,9 @@ menu to disappear and then come back after `company-idle-delay'."
 
   :blackout " ⓢ")
 
-;; Package `helm-flycheck' show Flycheck errors with Helm.
-(use-package! helm-flycheck
   :init
 
-  (set-leader-keys! "ee" #'helm-flycheck)
 
-  :bind (("M-g e"   . #'helm-flycheck)
-         ("M-g M-e" . #'helm-flycheck)))
 
 (defun my--flycheck-popup-mode ()
   "Activate one of the Flycheck popups modes.
@@ -3390,20 +3132,6 @@ list of additional parameters sent with this request."
 
   ;; Show the peek view even if there is only 1 cross reference.
   (setq lsp-ui-peek-always-show t))
-
-;; Package `helm-lsp' provides alternative of the build-in lsp-mode
-;; `xref-appropos' which provides as you type completion.
-(use-package! helm-lsp
-  :demand t
-  :after lsp-ui
-  :bind (:map lsp-ui-mode-map
-              ([remap xref-find-apropos] . #'helm-lsp-workspace-symbol))
-
-  :config
-
-  (set-leader-keys-for-minor-mode! 'lsp-mode
-    "gs" #'helm-lsp-workspace-symbol
-    "Gs" #'helm-lsp-workspace-symbol))
 
 ;; Package `lsp-treemacs' brings integration between `lsp-mode' and `treemacs'
 ;; and implementation of treeview controls using Treemacs as a tree renderer.
@@ -3867,15 +3595,6 @@ differently than it should."
     ;; It's highly annoying with CMake.
     (electric-indent-mode -1)))
 
-;; Package `helm-ctest' allows to run CTest from within Emacs using a Helm
-;; interface.
-(use-package! helm-ctest
-  :init
-
-  (dolist (mode '(c-mode c++-mode))
-    (declare-prefix-for-mode! mode "mp" "project")
-    (set-leader-keys-for-major-mode! mode "pt" #'helm-ctest)))
-
 ;;;; Markdown
 
 ;; Package `markdown-mode' provides a major mode for Markdown-formatted text.
@@ -4063,11 +3782,6 @@ Otherwise, it will try to find a TAGS file using etags, which is
 unhelpful."
     (add-hook #'xref-backend-functions #'elisp--xref-backend nil 'local))
 
-  (defhook! my--help-setup ()
-    helm-mode-hook
-    "Delay setting `describe-mode' bind as it conflicts with Helm."
-    (set-leader-keys! "hm" #'describe-mode))
-
   (set-leader-keys!
     "hb" #'describe-bindings
     "hF" #'describe-face
@@ -4075,19 +3789,8 @@ unhelpful."
     "hP" #'describe-personal-keybindings
     "ht" #'describe-theme)
 
-  ;; For some reason Helm needs this list defined for `describe-keymap to work.
-  (defvar keymap-name-history '())
-
   ;; Always select help window for viewing.
   (setq help-window-select 't))
-
-;; Package `helm-descbinds' is a replacement of `describe-bindings' for Helm.
-(use-package! helm-descbinds
-  :init
-
-  (set-leader-keys! "?" #'helm-descbinds)
-
-  :hook (helm-mode-hook . helm-descbinds-mode))
 
 ;; Package `helpful' provides a complete replacement for the built-in
 ;; Emacs help facility which provides much more contextual information
@@ -4606,19 +4309,6 @@ Goto^^              Actions^^         Other^^
   ;; Number of chars from the full sha1 hash to use for abbreviation.
   (setq git-timemachine-abbreviation-length 8))
 
-;; Package `helm-git-grep' brings Helm interface for git grep.
-(use-package! helm-git-grep
-  :init
-
-  (set-leader-keys!
-    "g/" #'helm-git-grep
-    "g*" #'helm-git-grep-at-point))
-
-;; Package `helm-ls-git' lists all git files via Helm interface.
-(use-package! helm-ls-git
-  :init
-
-  (set-leader-keys! "gf" #'helm-ls-git-ls))
 
 ;; Package `magit' provides a full graphical interface for Git within Emacs.
 (use-package! magit
@@ -4698,13 +4388,11 @@ Goto^^              Actions^^         Other^^
 ;; Org files in the Magit status buffer. Activating an item jumps to it in its
 ;; file.
 (use-package! magit-todos
-  :commands helm-magit-todos
   :init
 
   (declare-prefix! "gT" "todos")
 
   (set-leader-keys!
-    "gT/" #'helm-magit-todos
     "gTT" #'magit-todos-list
     "gTm" #'magit-todos-mode))
 
@@ -4816,28 +4504,6 @@ possibly new window."
   ;; Automatically scroll the Compilation buffer as output appears,
   ;; but stop at the first error.
   (setq compilation-scroll-output 'first-error))
-
-;; Package `helm-make' allows to select a Makefile target with Helm interface.
-(use-package! helm-make
-  :init
-
-  (set-leader-keys!
-    "cc" #'helm-make-projectile
-    "cm" #'helm-make)
-
-  :config
-
-  ;; Silent make about changing directories.
-  (setq helm-make-executable "make -s")
-
-  ;; Specify a build directory for an out-of-source build.
-  (setq helm-make-build-dir (projectile-compilation-dir))
-
-  ;; Name compilation buffer based on make target.
-  (setq helm-make-named-buffer t)
-
-  ;; Automatically retrieve available number of processing units.
-  (setq helm-make-nproc 0))
 
 ;;;; Emacs profiling
 
@@ -5033,12 +4699,6 @@ possibly new window."
 
 ;; Load default theme.
 (load-theme 'darkokai t)
-
-;; Package `helm-themes' allows to select theme with Helm interface.
-(use-package! helm-themes
-  :init
-
-  (set-leader-keys! "tT" #'helm-themes))
 
 ;;;; Modeline
 
