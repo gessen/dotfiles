@@ -1977,15 +1977,22 @@ possibly new window."
 (use-package! column-enforce-mode
   :init
 
+  (defadvice! my--set-fill-column (arg)
+    :after
+    #'set-fill-column
+    "Refresh `column-enforce-mode' after changing `fill-column'
+via `set-fill-column'. Changing `fill-column' via other means
+will not refresh `column-number-mode."
+    (when column-enforce-mode
+      (column-enforce-mode -1)
+      (column-enforce-mode +1)))
+
   (set-leader-keys!
     "t8" #'column-enforce-mode
     "t*" #'global-column-enforce-mode)
 
   ;; Set the column limit with the same limit as `fill-column'.
-  (setq column-enforce-column fill-column)
-
-  ;; Mark `column-enforce-column' as safe variable.
-  (put 'column-enforce-column 'safe-local-variable #'integerp)
+  (setq column-enforce-column nil)
 
   :hook (prog-mode-hook . column-enforce-mode)
 
