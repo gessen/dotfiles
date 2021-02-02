@@ -2161,6 +2161,17 @@ will not refresh `column-number-mode."
     (let ((vr/engine 'emacs-plain))
       (call-interactively #'vr/query-replace))))
 
+;; Package `wgrep' allows you to edit a grep buffer and apply those changes to
+;; the file buffer interactively.
+(use-package! wgrep
+  :demand t
+  :bind (:map grep-mode-map
+              ("C-c C-e" . #'wgrep-change-to-wgrep-mode))
+  :config
+
+  ;; Auto-save buffers after finishing editing.
+  (setq wgrep-auto-save-buffer t))
+
 ;;;; Spellchecking
 
 (defun spellchecking-mode ()
