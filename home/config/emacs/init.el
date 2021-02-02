@@ -2591,6 +2591,22 @@ Spell Commands^^            Add To Dictionary^^               Other^^
 
   (savehist-mode +1))
 
+;; Package `prescient' is a library for intelligent sorting and filtering in
+;; various contexts.
+(use-package! prescient
+  :config
+
+  ;; Remember usage statistics across Emacs sessions.
+  (prescient-persist-mode +1)
+
+  ;; The default setting seem a little too low.
+  (setq prescient-history-length 1000)
+
+  ;; Do not litter `user-emacs-directory' with persistent prescient file.
+  (setq prescient-save-file (expand-file-name
+                             "prescient-save.el"
+                             my-cache-dir)))
+
 ;; Package `selectrum' is an incremental completion and narrowing framework.
 ;; Like Ivy and Helm, which it improves on, Selectrum provides a user interface
 ;; for choosing from a list of options by typing a query to narrow the list, and
@@ -2616,6 +2632,15 @@ Spell Commands^^            Add To Dictionary^^               Other^^
 
   ;; Don't show anything when displaying count information before the prompt.
   (setq selectrum-count-style nil))
+
+;; Package `selectrum-prescient' provides intelligent sorting and filtering for
+;; candidates in Selectrum menus.
+(use-package! selectrum-prescient
+  :demand t
+  :after selectrum
+  :config
+
+  (selectrum-prescient-mode +1))
 
 ;;; IDE features
 ;;;; Definition location
@@ -2793,6 +2818,17 @@ menu to disappear and then come back after `company-idle-delay'."
   (global-company-mode +1)
 
   :blackout " Ⓐ")
+
+;; Package `company-prescient' provides intelligent sorting for candidates in
+;; Company completions. Note that it does not change the filtering behavior of
+;; Company.
+(use-package! company-prescient
+  :demand t
+  :after company
+  :config
+
+  ;; Use `prescient' for Company menus.
+  (company-prescient-mode +1))
 
 (use-package! company-posframe
   :commands (company-posframe-quickhelp-scroll-down

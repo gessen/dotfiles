@@ -110,6 +110,7 @@
  ("popup-el" . "9d104d4bbbcb37bbc9d9ce762e74d41174683f86")
  ("posframe" . "922e4d239f7a083213d856de67a9686a091b1e27")
  ("powerline" . "b293abf83c0a2b2988af19dd0ef0426c3b1d1501")
+ ("prescient.el" . "42adc802d3ba6c747bed7ea1f6e3ffbbdfc7192d")
  ("projectile" . "18f694931f0afe8b33e34731914e8bae81107b55")
  ("rainbow-delimiters" . "5125f4e47604ad36c3eb4706310fcafac729ca8c")
  ("ranger.el" . "d7c18370981c9e585bc0fb78f7e55033457ca643")
