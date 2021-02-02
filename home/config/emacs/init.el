@@ -2591,6 +2591,28 @@ Spell Commands^^            Add To Dictionary^^               Other^^
 
   (savehist-mode +1))
 
+;; Package `marginalia' enriches existing commands with completion annotations
+;; by adding marginalia to the minibuffer completions. Marginalia are marks or
+;; annotations placed at the margin of the page of a book or in this case
+;; helpful colorful annotations placed at the margin of the minibuffer for
+;; completion candidates. Marginalia can only add annotations to be displayed
+;; with the completion candidates. It cannot modify the appearance of the
+;; candidates themselves, which are shown as supplied by the original commands.
+;; The annotations are added based on the completion category. For example,
+;; `find-file' reports the file category and `M-x' reports the command category.
+(use-package! marginalia
+  :init
+
+  ;; Prefer richer, more heavy, annotations over the lighter default variant.
+  (setq marginalia-annotators '(marginalia-annotators-heavy
+                                marginalia-annotators-light
+                                nil))
+
+  (marginalia-mode +1)
+
+  :bind (:map minibuffer-local-map
+              ("M-A" . marginalia-cycle)))
+
 ;; Package `orderless' provides an orderless completion style that divides the
 ;; pattern into components (space-separated by default), and matches candidates
 ;; that match all of the components in any order.
