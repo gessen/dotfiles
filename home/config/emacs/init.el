@@ -2598,6 +2598,12 @@ Spell Commands^^            Add To Dictionary^^               Other^^
              consult-keep-lines)
   :init
 
+  (defun consult-git-ls (&optional dir)
+    "Search for regexp with git-ls-files in DIR."
+    (interactive)
+    (let ((consult-find-command '("git" "ls-files" "--full-path" "--")))
+      (call-interactively #'consult-find)))
+
   (set-leader-keys!
     "/"  #'consult-ripgrep
     "am" #'consult-man'
@@ -2611,6 +2617,7 @@ Spell Commands^^            Add To Dictionary^^               Other^^
     "fO" #'consult-file-externally
     "fr" #'consult-recent-file
     "g/" #'consult-git-grep
+    "gf" #'consult-git-ls
     "ji" #'consult-imenu
     "km" #'consult-kmacro
     "rl" #'consult-register-load
