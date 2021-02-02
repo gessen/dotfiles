@@ -598,7 +598,6 @@ window instead."
 (set-leader-keys!
   "bd" #'kill-this-buffer
   "bx" #'kill-buffer-and-window
-  "Fb" #'switch-to-buffer-other-frame
   "FB" #'display-buffer-other-frame
   "w0" #'delete-window
   "w1" #'split-window-single
@@ -1917,11 +1916,6 @@ possibly new window."
 
   (set-leader-keys! "jc" #'goto-last-change))
 
-;; Package `goto-line-preview' temporarily peaks at a line when executing
-;; `goto-line` command.
-(use-package! goto-line-preview
-  :bind ([remap goto-line] . #'goto-line-preview))
-
 ;; Package `mwim' stands for "Move Where I Mean".  It provides commands to
 ;; switch between various positions on the current line (particularly, to move
 ;; to the beginning/end of code, line or comment).
@@ -2591,6 +2585,76 @@ Spell Commands^^            Add To Dictionary^^               Other^^
 
   (savehist-mode +1))
 
+;; Package `consult' implements a set of commands which use `completing-read' to
+;; select from a list of candidates. Most provided commands follow the naming
+;; scheme `consult-<thing>'. Some commands are drop-in replacements for existing
+;; functions, e.g., `consult-apropos' or the enhanced buffer switcher
+;; `consult-buffer.' Other commands provide additional functionality, e.g.,
+;; `consult-line', to search for a line. Many commands support candidate
+;; preview. If a candidate is selected in the completion view, the buffer shows
+;; the candidate immediately.
+(use-package! consult
+  :commands (consult-focus-lines
+             consult-keep-lines)
+  :init
+
+  (set-leader-keys!
+    "/"  #'consult-ripgrep
+    "am" #'consult-man'
+    "bb" #'consult-buffer
+    "bB" #'consult-buffer-other-window
+    "bf" #'consult-focus-lines
+    "bk" #'consult-keep-lines
+    "Fb" #'consult-buffer-other-frame
+    "fb" #'consult-bookmark
+    "fF" #'consult-find
+    "fO" #'consult-file-externally
+    "fr" #'consult-recent-file
+    "g/" #'consult-git-grep
+    "ji" #'consult-imenu
+    "km" #'consult-kmacro
+    "rl" #'consult-register-load
+    "rr" #'consult-register
+    "rs" #'consult-register-store
+    "ry" #'consult-yank
+    "ss" #'consult-line
+    "sS" #'consult-multi-occur
+    "tT" #'consult-theme)
+
+  :bind (([remap goto-line] . #'consult-goto-line)
+         ("M-g c"           . #'consult-error)
+         ("M-g M-c"         . #'consult-error)
+         ("M-g i"           . #'consult-imenu)
+         ("M-g M-i"         . #'consult-imenu)
+         ("M-g k"           . #'consult-global-mark)
+         ("M-g M-k"         . #'consult-global-mark)
+         ("M-g m"           . #'consult-mark)
+         ("M-g M-m"         . #'consult-mark)
+         ("M-g o"           . #'consult-outline)
+         ("M-g M-o"         . #'consult-outline)
+         ([remap yank-pop]  . #'consult-yank)
+         ("M-s l"           . #'consult-line)
+         ("M-s m"           . #'consult-multi-occur))
+
+  :config
+
+  ;; Use fd instead of find.
+  (setq consult-find-command "fd --color=never --full-path ARG OPTS")
+
+  ;; Configure the register formatting. This improves the register preview
+  ;; for `consult-register', `consult-register-load', `consult-register-store'
+  ;; and the Emacs built-ins.
+  (setq register-preview-delay 0)
+  (setq register-preview-function #'consult-register-format)
+
+  ;; Tweak the register preview window. This adds stripes, sorting and hides the
+  ;; mode line of the window.
+  (advice-add #'register-preview :override #'consult-register-window)
+
+  ;; Configure a function which returns the project root directory
+  (with-eval-after-load 'projectile
+    (setq consult-project-root-function #'projectile-project-root)))
+
 ;; Package `embark' provides a sort of right-click contextual menu for Emacs,
 ;; accessed through the `embark-act' command (which you should bind to a
 ;; convenient key), offering you relevant actions to use on a target determined
@@ -2607,6 +2671,11 @@ Spell Commands^^            Add To Dictionary^^               Other^^
 
   (setq embark-action-indicator #'my-embark-action-indicator)
   (setq embark-become-indicator #'my-embark-action-indicator))
+
+;; Package `embark-consult' provides integration between Embark and Consult.
+(use-package! embark-consult
+  :demand t
+  :after (embark consult))
 
 ;; Package `marginalia' enriches existing commands with completion annotations
 ;; by adding marginalia to the minibuffer completions. Marginalia are marks or
@@ -2778,16 +2847,6 @@ Spell Commands^^            Add To Dictionary^^               Other^^
   :hook (eval-expression-minibuffer-setup-hook . eldoc-mode)
 
   :blackout t)
-
-;; Feature `imenu' presents a framework for mode-specific buffer indexes. A
-;; buffer index is an alist of names and buffer positions. For instance all
-;; functions in a C-file and their positions. A mode-specific function is called
-;; to generate the index. It is then presented to the user, who can choose from
-;; this index.
-(use-feature! imenu
-  :init
-
-  (set-leader-keys! "ji" #'imenu))
 
 ;;;; Autocompletion
 
@@ -2991,9 +3050,15 @@ menu to disappear and then come back after `company-idle-delay'."
 
   :blackout " ⓢ")
 
+;; Package `consult-flycheck' shows Flycheck errors, warnings, notifications
+;; within consult buffer with live preview.
+(use-package! consult-flycheck
   :init
 
+  (set-leader-keys! "ee" #'consult-flycheck)
 
+  :bind (("M-g e"   . #'consult-flycheck)
+         ("M-g M-e" . #'consult-flycheck)))
 
 (defun my--flycheck-popup-mode ()
   "Activate one of the Flycheck popups modes.
