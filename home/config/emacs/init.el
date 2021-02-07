@@ -152,6 +152,10 @@ frame is created."
 ;; packages upstream.
 (setq ad-redefinition-action 'accept)
 
+;; Temporary fix as Emacs try to natively compile autoloads.
+(require 'comp)
+(setq comp-deferred-compilation-deny-list '("\\(?:[^z-a]*-autoloads\\.el$\\)"))
+
 ;;;; straight.el
 
 (eval-and-compile
@@ -4172,12 +4176,13 @@ unhelpful."
 ;;; Applications
 ;;;; Organisation
 
-;; Package `org' provides too many features to describe in any reasonable amount
-;; of space. It is built fundamentally on `outline-mode', and adds TODO states,
-;; deadlines, properties, priorities, etc. to headings. Then it provides tools
-;; for interacting with this data, including an agenda view, a time clocker,
-;; etc.
-(use-package! org
+;; Package `org-plus-contrib' provides too many features to describe in any
+;; reasonable amount of space. It is built fundamentally on `outline-mode', and
+;; adds TODO states, deadlines, properties, priorities, etc. to headings. Then
+;; it provides tools for interacting with this data, including an agenda view, a
+;; time clocker, etc. This package contains add-ons to Org-mode. These
+;; contributions are not part of GNU Emacs or of the official Org-mode package.
+(use-package! org-plus-contrib
   ;; We use straight mirror as the official repo does not allow to fetch a
   ;; shallow repo with a frozen git hash.
   :straight (:host github :repo "emacs-straight/org-mode" :local-repo "org")
@@ -4266,10 +4271,6 @@ unhelpful."
   ;; Preserve leading whitespace characters in source code blocks on export, and
   ;; when switching between the Org buffer and the language mode edit buffer.
   (setq org-src-preserve-indentation t))
-
-;; Package `org-plus-contrib' contains add-ons to Org-mode. These contributions
-;; are not part of GNU Emacs or of the official Org-mode package.
-(use-package! org-plus-contrib)
 
 ;; Feature `org-tempo' reimplements completions of structure template before
 ;; point. For example, strings like "<e" at the beginning of the line will be
@@ -4742,6 +4743,7 @@ Goto^^              Actions^^         Other^^
 ;; Package `vterm-toggle' provides a command which toggles between the `vterm'
 ;; buffer and whatever buffer you are editing.
 (use-package! vterm-toggle
+  :straight (:build (:not native-compile))
   :bind (("<f2>"    . #'vterm-toggle)
          (:map vterm-mode-map
                ("<f2>"    . #'vterm-toggle)
@@ -5079,7 +5081,7 @@ possibly new window."
 (use-package! powerline
   ;; This package has issues with native compilation. Since Emacs forcibly
   ;; compiles each elc file we have to inhibit byte compilation.
-  :straight (:no-byte-compile t))
+  :straight (:build (:not compile)))
 
 ;; Package `centaur-tabs' is an Emacs plugin aiming to become an aesthetic,
 ;; modern looking tabs plugin. This package offers tabs with a wide range of

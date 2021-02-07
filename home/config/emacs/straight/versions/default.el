@@ -126,7 +126,7 @@
  ("smartparens" . "555626a43f9bb1985aa9a0eb675f2b88b29702c8")
  ("spinner" . "2daa167bec1c7566d662d48613a94453536b524a")
  ("ssh-config-mode-el" . "8fda737131fef2e55c4965a938cf907acbf03372")
- ("straight.el" . "1a7453a8d7fcfb62c40c1bfa13389c461817b623")
+ ("straight.el" . "ac4df5c689557f5434d6fc9f713e907e7b37a6bd")
  ("string-inflection" . "1937db7513db570606ea8798916180b7dd75d3b1")
  ("sudo-edit" . "0e2c32b5e5242d30f8780cbe8e1b1649476cac4d")
  ("symbol-overlay" . "4528aa0e625cde12ab15ef953421b68289f342af")
