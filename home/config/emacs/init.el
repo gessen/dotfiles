@@ -4239,6 +4239,13 @@ unhelpful."
   ;; Org buffers.
   (setq org-confirm-babel-evaluate nil))
 
+;; Feature `ob-plantuml' provides Org-Babel support for evaluating plantuml
+;; scripts.
+(use-feature! ob-plantuml
+  :config
+
+  (setq org-plantuml-jar-path "/usr/share/java/plantuml/plantuml.jar"))
+
 ;; Feature `org-capture' allows to take notes fast in Org.
 (use-feature! org-capture
   :init
