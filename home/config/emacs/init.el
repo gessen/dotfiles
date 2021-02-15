@@ -4231,6 +4231,14 @@ unhelpful."
    'org-babel-load-languages
    '((plantuml . t))))
 
+;; Feature `ob' allows to work with code blocks in Org buffers.
+(use-feature! ob
+  :config
+
+  ;; Do not require confirmation before interactively evaluating code blocks in
+  ;; Org buffers.
+  (setq org-confirm-babel-evaluate nil))
+
 ;; Feature `org-capture' allows to take notes fast in Org.
 (use-feature! org-capture
   :init
