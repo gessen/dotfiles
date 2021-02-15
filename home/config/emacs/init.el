@@ -4305,6 +4305,18 @@ unhelpful."
   ;; can be helpful in documents that need "_" frequently in plain text.
   (setq org-export-with-sub-superscripts '{}))
 
+;; Package `ox-reveal' implements a reveal.js Presentation Back-End for Org
+;; Export Engine
+(use-package! ox-reveal
+  :demand t
+  :after ox
+  :config
+
+  (push 'reveal org-export-backends))
+
+;; Package `htmlize' converts the buffer text and the associated decorations to HTML.
+(use-package! htmlize)
+
 ;; Package `org-sticky-header' displays in the header-line the Org heading for
 ;; the node that's at the top of the window.  This way, if the heading for the
 ;; text at the top of the window is beyond the top of the window, you don't
