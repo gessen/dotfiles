@@ -4188,6 +4188,11 @@ unhelpful."
     "Set custom settings for `org-mode'."
     (turn-on-auto-fill))
 
+  (set-leader-keys-for-major-mode! 'org-mode
+    "l"   #'org-store-link
+    "C-l" #'org-insert-link)
+  (set-leader-keys! "ol" #'org-store-link)
+
   :bind (:map org-mode-map
               ("M-p" . #'org-metaup)
               ("M-n" . #'org-metadown)
