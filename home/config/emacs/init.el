@@ -467,7 +467,15 @@ BINDINGS is a series of KEY DEF pair."
   :if (not (display-graphic-p))
   :init
 
-  (global-clipetty-mode +1))
+  (global-clipetty-mode +1)
+
+  :config
+
+  ;; Change screen regexp to consider only "screen" as running under screen as
+  ;; tmux uses screen-256color and if `clipetty' considers it screen the
+  ;; clipboard functionality will not work when emacs runs as client inside
+  ;; tmux.
+  (setq clipetty-screen-regexp "^screen$"))
 
 ;;;; Mouse integration
 
