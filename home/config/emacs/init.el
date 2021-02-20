@@ -263,6 +263,7 @@ NAME and ARGS are as in `use-package'."
                                    ("k" "macros")
                                    ("l" "fold")
                                    ("m" "major mode")
+                                   ("M-m" "major mode")
                                    ("o" "org")
                                    ("p" "projects")
                                    ("P" "packages")
@@ -310,7 +311,8 @@ argument should be non nil."
   (let* ((prefix (intern (format "%s-prefix" map)))
          (leader-key1 my-major-mode-leader-key)
          (leader-key2 (concat my-leader-key " m"))
-         (leaders (list leader-key1 leader-key2)))
+         (leader-key3 (concat my-leader-key " M-m"))
+         (leaders (list leader-key1 leader-key2 leader-key3)))
     (or (boundp prefix)
         (progn
           (eval
