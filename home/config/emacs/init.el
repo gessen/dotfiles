@@ -4198,9 +4198,15 @@ unhelpful."
     "Set custom settings for `org-mode'."
     (turn-on-auto-fill))
 
+  (declare-prefix-for-mode! 'org-mode "mt" "toggle")
+
   (set-leader-keys-for-major-mode! 'org-mode
     "l"   #'org-store-link
-    "C-l" #'org-insert-link)
+    "C-l" #'org-insert-link
+
+    ;; Toggle
+    "ti" #'org-toggle-inline-images
+    "tl" #'org-toggle-link-display)
   (set-leader-keys! "ol" #'org-store-link)
 
   :bind (:map org-mode-map
