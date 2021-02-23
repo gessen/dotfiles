@@ -1077,9 +1077,11 @@ window instead."
     "pf" #'projectile-find-file
     "pF" #'projectile-find-file-in-known-projects
     "pg" #'projectile-grep
+    "pi" #'projectile-install-project
     "pI" #'projectile-invalidate-cache
     "pk" #'projectile-kill-buffers
     "pp" #'projectile-switch-project
+    "pP" #'projectile-package-project
     "pr" #'projectile-recentf
     "pR" #'projectile-replace
     "pt" #'projectile-test-project)
