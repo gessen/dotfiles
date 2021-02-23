@@ -3276,9 +3276,11 @@ list of additional parameters sent with this request."
             ("mg"  "peek")
             ("mgh" "hierarchy")
             ("mgm" "members")
+            ("mgR" "references")
             ("mG"  "goto")
             ("mGh" "hierarchy")
             ("mGm" "members")
+            ("mGR" "references")
             ("mh"  "help")
             ("mr"  "refactor")
             ("ms"  "session")
@@ -3441,13 +3443,15 @@ list of additional parameters sent with this request."
   :config
 
   (set-leader-keys-for-minor-mode! 'lsp-mode
-    "gE" #'lsp-treemacs-errors-list
-    "gR" #'lsp-treemacs-references
-    "gS" #'lsp-treemacs-symbols
-    "Ge" #'lsp-treemacs-errors-list
-    "GR" #'lsp-treemacs-references
-    "GS" #'lsp-treemacs-symbols
-    "tt" #'lsp-treemacs-sync-mode))
+    "gE"  #'lsp-treemacs-errors-list
+    "gRR" #'lsp-treemacs-references
+    "gS"  #'lsp-treemacs-symbols
+
+    "Ge"  #'lsp-treemacs-errors-list
+    "GRR" #'lsp-treemacs-references
+    "GS"  #'lsp-treemacs-symbols
+
+    "tt"  #'lsp-treemacs-sync-mode))
 
 ;;; Language support
 ;;;; BitBake
@@ -3649,6 +3653,21 @@ that because `bb-mode' inherits from `fundamental-mode'."
               ("p" . #'ccls-tree-prev-line))
   :config
 
+  (lsp-define-extension! "ccls" "find-references-read" (_)
+    "textDocument/references"
+    "Find read references of the type at point."
+    `(:role 8))
+
+  (lsp-define-extension! "ccls" "find-references-write" (_)
+    "textDocument/references"
+    "Find write references of the type at point."
+    `(:role 16))
+
+  (lsp-define-extension! "ccls" "find-references-address" (_)
+    "textDocument/references"
+    "Find address references of the type at point."
+    `(:role 128))
+
   (lsp-define-extension! "ccls" "find-base" (levels)
     "$ccls/inheritance"
     "Find base types of the type at point.
@@ -3774,6 +3793,9 @@ ALL when non-nil determines whether words will be pickable."
     "gmt" #'ccls-ui-peek-find-member-types
     "gk"  #'ccls-avy-goto-symbol
     "gK"  #'ccls-avy-goto-word
+    "gR&" #'ccls-ui-peek-find-references-address
+    "gRr" #'ccls-ui-peek-find-references-read
+    "gRw" #'ccls-ui-peek-find-references-write
 
     ;; Goto
     "Gb"  #'ccls-find-base
@@ -3789,7 +3811,10 @@ ALL when non-nil determines whether words will be pickable."
     "Gmf" #'ccls-find-member-funcs
     "Gmt" #'ccls-find-member-types
     "Gk"  #'ccls-avy-goto-symbol
-    "GK"  #'ccls-avy-goto-word)
+    "GK"  #'ccls-avy-goto-word
+    "gR&" #'ccls-find-references-address
+    "gRr" #'ccls-find-references-read
+    "gRw" #'ccls-find-references-write)
 
   ;; Set some basic logging for debugging purpose.
   (setq ccls-args (list "-log-file=/tmp/ccls.log" "-v=1"))
