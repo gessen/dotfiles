@@ -1116,13 +1116,14 @@ window instead."
    'cmake '("CMakeLists.txt")
    :project-file "CMakeLists.txt"
    :compilation-dir "build"
-   :configure (string-join '("cmake"
-                             ".."
-                             "-DCMAKE_BUILD_TYPE=Debug"
+   :configure (string-join '("cmake %s -B%s -GNinja"
                              "-DCMAKE_INSTALL_PREFIX=/usr"
                              "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON") " ")
-   :compile "cmake --build . -- -j$(nproc)"
-   :test "cmake --build . -- -j$(nproc) && ctest --output-on-failure")
+   :compile "cmake --build ."
+   :test "cmake --build . && ctest --output-on-failure"
+   :install "cmake --build . --target install"
+   :package "cmake --build . --target package")
+
 
   (projectile-mode +1)
 
