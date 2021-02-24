@@ -1,5 +1,6 @@
 ---
 vscode_extensions:
+  - asabil.meson
   - ccls-project.ccls
   - CoenraadS.bracket-pair-colorizer
   - eamodio.gitlens

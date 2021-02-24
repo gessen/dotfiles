@@ -147,6 +147,8 @@
     "python.pythonPath": "/usr/bin/python2",
     "git.confirmSync": false,
     "cmake.configureOnOpen": false,
+    "mesonbuild.buildFolder": "build",
+    "mesonbuild.configureOnOpen": false,
     "ccls.cache.directory": ".cache/ccls",
     "ccls.clang.excludeArgs": [
         "-fconserve-stack",
