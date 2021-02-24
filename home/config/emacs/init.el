@@ -2644,6 +2644,17 @@ point. "
     (interactive)
     (consult-line (thing-at-point 'symbol)))
 
+  (defvar-local consult-toggle-preview-orig nil)
+
+  (defun consult-toggle-preview ()
+    "Enable or disable preview within `consult' session."
+    (interactive)
+    (if consult-toggle-preview-orig
+        (setq consult--preview-function consult-toggle-preview-orig
+              consult-toggle-preview-orig nil)
+      (setq consult-toggle-preview-orig consult--preview-function
+            consult--preview-function #'ignore)))
+
   (with-eval-after-load 'xref
     (defun consult--xref-candidates (xrefs)
       "Return candidate list from XREFS."
@@ -2720,6 +2731,9 @@ for the description of the FETCHER and ALIST arguments."
     "ss" #'consult-line
     "sS" #'consult-multi-occur
     "tT" #'consult-theme)
+
+  (with-eval-after-load 'selectrum
+    (bind-key "M-P" #'consult-toggle-preview selectrum-minibuffer-map))
 
   :bind (([remap goto-line] . #'consult-goto-line)
          ("M-g c"           . #'consult-error)
