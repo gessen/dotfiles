@@ -95,6 +95,7 @@
  ("markdown-mode" . "fa9fa20e3236006c2cf278209356f60cc4175120")
  ("markdown-toc" . "9565eeaa1d26bc0ab83eb65bd30470888f724044")
  ("melpa" . "8bec8e696afde1b89502f312efc0054ca59502a6")
+ ("meson-mode" . "d995dafa388ec03c0113cd1ac46403c20ad18ab0")
  ("minions" . "36d39bd25ae58d1359d17f99142520339bea5974")
  ("modus-themes" . "97fa6679b3b578b9a7faccd6e4d166254862f7bd")
  ("monokai-emacs" . "4281fc13dadef98942c8d43024de024f2392fec5")
