@@ -1126,6 +1126,16 @@ window instead."
    :install "cmake --build . --target install"
    :package "cmake --build . --target package")
 
+  ;; Register meson project type.
+  (projectile-register-project-type
+   'meson '("meson.build")
+   :project-file "meson.build"
+   :compilation-dir "build"
+   :configure "meson %s --prefix=/usr"
+   :compile "meson compile"
+   :test "meson test"
+   :install "meson install"
+   :package "meson dist")
 
   (projectile-mode +1)
 
@@ -3952,6 +3962,25 @@ differently than it should."
 (use-package! grip-mode
   :bind (:map markdown-mode-command-map
               ("g" . #'grip-mode)))
+
+;;;; Meson
+
+;; Package `meson-mode' is a major mode for Meson build system files.  Syntax
+;; highlighting works reliably.  Indentation works too, but there are probably
+;; cases, where it breaks.  Simple completion is supported via
+;; `completion-at-point'.
+(use-package! meson-mode
+  :init
+
+  (defhook! my--meson-mode-setup ()
+    meson-mode-hook
+    "Set custom settings for `meson-mode'."
+    (setq-local company-backends '(company-files
+                                   (company-capf
+                                    :separate
+                                    company-dabbrev-code)
+                                   company-dabbrev))
+    (company-mode +1)))
 
 ;;;; PlantUML
 
