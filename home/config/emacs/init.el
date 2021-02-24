@@ -2638,6 +2638,12 @@ Spell Commands^^            Add To Dictionary^^               Other^^
     (let ((consult-find-command '("git" "ls-files" "--full-path" "--")))
       (call-interactively #'consult-find)))
 
+  (defun consult-line-symbol-at-point ()
+    "Search for a matching line starting search with symbol at
+point. "
+    (interactive)
+    (consult-line (thing-at-point 'symbol)))
+
   (with-eval-after-load 'xref
     (defun consult--xref-candidates (xrefs)
       "Return candidate list from XREFS."
@@ -2728,6 +2734,7 @@ for the description of the FETCHER and ALIST arguments."
          ("M-g M-o"         . #'consult-outline)
          ([remap yank-pop]  . #'consult-yank)
          ("M-s l"           . #'consult-line)
+         ("M-s ;"           . #'consult-line-symbol-at-point)
          ("M-s m"           . #'consult-multi-occur))
 
   :config
