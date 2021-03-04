@@ -3341,6 +3341,9 @@ list of additional parameters sent with this request."
     "fr" #'lsp-workspace-folders-remove
     "fs" #'lsp-workspace-folders-open
 
+    ;; Peek
+    "gt" #'lsp-find-type-definition
+
     ;; Goto
     "Gd" #'lsp-find-declaration
     "Gg" #'lsp-find-definition
