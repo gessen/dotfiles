@@ -17,6 +17,7 @@ dotfiles:
   - config/htop/htoprc
   - config/keepassxc/keepassxc.ini
   - config/kitty/kitty.conf
+  - config/lsd/config.yaml
   - config/mpv/input.conf
   - config/mpv/mpv.conf
   - config/paru/paru.conf
