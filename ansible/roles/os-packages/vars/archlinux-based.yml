@@ -53,7 +53,6 @@ packages_common:
   - ttf-hack
   - ttf-nerd-fonts-symbols
   - yapf
-  - vscodium-bin
   - xclip
   - zsh-autosuggestions
   - zsh-completions
@@ -90,5 +89,7 @@ packages_common_aur:
 packages_common_paru:
   - dropbox
   - sad
+  - vscodium-bin
+  - vscodium-bin-marketplace
   - zsh-autopair-git
   - zsh-fast-syntax-highlighting
