@@ -4,7 +4,7 @@
   with_first_found:
       - files:
           - "vars/{{ ansible_os_family | lower }}-based.yml"
-        errors: ignore
+        skip: true
   loop_control:
     loop_var: var_file
 
@@ -13,7 +13,7 @@
   with_first_found:
       - files:
           - "tasks/{{ ansible_os_family | lower }}-based.yml"
-        errors: ignore
+        skip: true
   loop_control:
     loop_var: task_file
 
@@ -23,7 +23,6 @@
       - files:
           - "vars/{{ ansible_distribution | lower }}.yml"
           - "vars/{{ ansible_os_family | lower }}.yml"
-        errors: ignore
         skip: true
   loop_control:
     loop_var: var_file
@@ -34,7 +33,6 @@
       - files:
           - "tasks/{{ ansible_distribution | lower }}.yml"
           - "tasks/{{ ansible_os_family | lower }}.yml"
-        errors: ignore
         skip: true
   loop_control:
     loop_var: task_file
