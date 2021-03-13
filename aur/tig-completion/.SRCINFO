@@ -1,0 +1,16 @@
+pkgbase = tig-completion
+	pkgdesc = Zsh completion for tig
+	pkgver = 2.5.3
+	pkgrel = 1
+	url = https://jonas.github.io/tig
+	arch = x86_64
+	license = GPL
+	depends = tig
+	depends = zsh
+	source = https://github.com/jonas/tig/releases/download/tig-2.5.3/tig-2.5.3.tar.gz
+	source = completion.patch
+	md5sums = ceec1ec9a93fd70de81a613c1b368631
+	md5sums = c41d74acf6287b1edecc368f64914173
+
+pkgname = tig-completion
+
