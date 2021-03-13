@@ -110,7 +110,7 @@ alias du='du --max-depth=1 --human-readable'
 # Use lsd instead
 alias ls='lsd'
 alias ll='ls --long'
-alias la='ll --all'
+alias la='ll --almost-all'
 
 # Emacs
 alias ec='emacsclient --tty'
