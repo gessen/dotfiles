@@ -1,0 +1,6 @@
+date: relative
+icons:
+  separator: "  "
+indicators: true
+sorting:
+  dir-grouping: first

@@ -108,7 +108,7 @@ export VSCODE_EXTENSIONS="${XDG_DATA_HOME}/code/extensions"
 alias du='du --max-depth=1 --human-readable'
 
 # Use lsd instead
-alias ls='lsd --classify --group-dirs=first --date=relative'
+alias ls='lsd'
 alias ll='ls --long'
 alias la='ll --all'
 
