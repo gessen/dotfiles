@@ -50,6 +50,7 @@ packages_common:
   - tig
   - tmux
   - tree
+  - ttf-hack
   - ttf-nerd-fonts-symbols
   - yapf
   - vscodium-bin
