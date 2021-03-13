@@ -200,7 +200,6 @@ plugins=(
   fzf-git
   fzf-kill
   git
-  gitfast
   rsync
   sublime
   sudo
@@ -214,7 +213,6 @@ plugins=(
 autoload -U +X bashcompinit && bashcompinit
 
 source $ZSH/oh-my-zsh.sh
-source /usr/share/bash-completion/completions/tig
 
 # Make master as a default branch
 function git_main_branch() {

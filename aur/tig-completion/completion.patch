@@ -1,0 +1,11 @@
+--- contrib/tig-completion.zsh	2021-03-07 11:29:24.000000000 +0100
++++ contrib/tig-completion.zsh.new	2021-03-13 22:20:38.139143945 +0100
+@@ -21,7 +21,7 @@
+ 
+   compdef _git tig
+ 
+-  e=$(dirname ${funcsourcetrace[1]%:*})/tig-completion.bash
++  e=/usr/share/bash-completion/completions/tig
+   if [ -f $e ]; then
+     # Temporarily override __git_complete so the bash script doesn't complain
+     local old="$functions[__git_complete]"
