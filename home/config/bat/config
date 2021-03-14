@@ -1,7 +1,3 @@
 # Disable all available components - line numbers, file headers, grid borders
 # and Git modifications.
 --style=plain
-
-# This will enable automatic wrapping of long lines which bat>0.17.0 disables
-# when --pager is unset.
---pager="less --squeeze-blank-lines"
