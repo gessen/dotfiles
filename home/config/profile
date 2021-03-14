@@ -30,13 +30,11 @@ LESS="--no-init $LESS"
 LESS="--hilite-unread $LESS"
 LESS="--window=-4 $LESS"
 LESS="--shift 5 $LESS"
+LESS="--squeeze-blank-lines $LESS"
 export LESS
 
 # Do not save less search history in ~/.lesshst
 export LESSHISTFILE="-"
-
-# Use less as PAGER
-export PAGER="less --squeeze-blank-lines"
 
 # Use bat as MANPAGER
 export MANPAGER="sh -c 'col -b | bat -l man -p'"
