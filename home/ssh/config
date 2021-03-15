@@ -8,3 +8,4 @@ Include gerrit-config
 Include krling-config
 Include asmr-config
 Include mars-config
+Include github-config

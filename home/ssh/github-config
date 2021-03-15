@@ -1,0 +1,6 @@
+Host github.com
+    HostName ssh.github.com
+    ProxyCommand gitproxy %h %p
+    Port 443
+    ServerAliveInterval 20
+    User git

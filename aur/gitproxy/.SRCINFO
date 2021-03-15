@@ -1,0 +1,13 @@
+pkgbase = gitproxy
+	pkgdesc = Wrapper over socat to use git behind a proxy
+	pkgver = 2.0.0
+	pkgrel = 1
+	install = gitproxy.install
+	arch = x86_64
+	license = MIT
+	depends = socat
+	source = gitproxy
+	sha256sums = 16c19ab5145960c4dc3a7f1d2c8a6fa81973fedef8ffa364fae2dfbcd899dff2
+
+pkgname = gitproxy
+

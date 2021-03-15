@@ -33,6 +33,7 @@ dotfiles:
   - ssh/asmr-config
   - ssh/config
   - ssh/gerrit-config
+  - ssh/github-config
   - ssh/krling-config
   - ssh/mars-config
   - zshrc
