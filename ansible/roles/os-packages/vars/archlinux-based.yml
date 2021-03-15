@@ -27,6 +27,7 @@ packages_common:
   - git
   - git-delta-git
   - git-lfs
+  - git-review
   - glances
   - htop
   - keepassxc

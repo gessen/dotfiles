@@ -93,3 +93,6 @@ CMakeUserPresets.json
 *.tmproj
 *.tmproject
 tmtags
+
+# git-review
+.gitreview
