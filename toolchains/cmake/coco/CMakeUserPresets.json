@@ -1,0 +1,54 @@
+{
+  "version": 1,
+  "configurePresets": [
+    {
+      "name": "default",
+      "hidden": true,
+      "binaryDir": "${sourceDir}/build$env{BINARY_DIR_SUFFIX}",
+      "generator": "Ninja",
+      "cacheVariables": {
+        "CMAKE_TOOLCHAIN_FILE": "$env{OE_CMAKE_TOOLCHAIN_FILE}",
+        "CMAKE_INSTALL_PREFIX": "/usr",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+        "BUILD_SHARED_LIBS": "ON",
+        "BUILD_TESTING": "OFF",
+        "PRODUCT_GENERATION": "$env{PRODUCT_GENERATION}",
+        "PLATFORM": "$env{MACHINE}",
+        "CURRENT_VERSION_COCO": "20.8.0",
+        "HEADERS_PRECOMPILATION": "OFF"
+      }
+    },
+    {
+      "name": "tests-base",
+      "hidden": true,
+      "cacheVariables": {
+        "BUILD_TESTING": "ON"
+      }
+    },
+    {
+      "name": "default-gcc",
+      "inherits": ["default"]
+    },
+    {
+      "name": "default-clang",
+      "inherits": ["default"],
+      "environment": {
+        "CXXFLAGS": "-Wno-unused-command-line-argument -Wno-mismatched-tags -Wno-error $penv{CXXFLAGS}"
+      }
+    },
+    {
+      "name": "tests-gcc",
+      "inherits": ["tests-base", "default"],
+      "environment": {
+        "CXXFLAGS": "--coverage -Wno-class-memaccess -Wno-maybe-uninitialized -Wno-catch-value -Wno-ignored-qualifiers $penv{CXXFLAGS}"
+      }
+    },
+    {
+      "name": "tests-clang",
+      "inherits": ["tests-base", "default"],
+      "environment": {
+        "CXXFLAGS": "--coverage -Wno-unused-command-line-argument -Wno-mismatched-tags -Wno-error $penv{CXXFLAGS}"
+      }
+    }
+  ]
+}

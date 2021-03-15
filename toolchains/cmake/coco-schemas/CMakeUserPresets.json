@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "configurePresets": [
+    {
+      "name": "default",
+      "binaryDir": "${sourceDir}/build$env{BINARY_DIR_SUFFIX}",
+      "generator": "Ninja",
+      "cacheVariables": {
+        "CMAKE_TOOLCHAIN_FILE": "$env{OE_CMAKE_TOOLCHAIN_FILE}",
+        "CMAKE_INSTALL_PREFIX": "/usr",
+        "CMAKE_INSTALL_INCLUDEDIR": "include",
+        "CMAKE_INSTALL_SYSCONFDIR": "/etc"
+      },
+      "warnings": {
+        "deprecated": false
+      }
+    }
+  ]
+}

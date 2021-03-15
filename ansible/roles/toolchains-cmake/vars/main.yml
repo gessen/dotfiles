@@ -1,0 +1,47 @@
+---
+cmake_projects:
+  - name: coco
+    files:
+      - .clang-tidy
+      - AddCoverage.cmake
+      - CMakeUserPresets.json
+
+  - name: coco-aafia
+    files:
+      - .clang-tidy
+      - AddCoverage.cmake
+      - CMakeUserPresets.json
+
+  - name: coco-schemas
+    files:
+      - CMakeUserPresets.json
+
+  - name: draco-platform-made
+    files:
+      - .clang-tidy
+      - CMakeUserPresets.json
+
+  - name: draco-platform-mars
+    files:
+      - .clang-tidy
+      - CMakeUserPresets.json
+
+  - name: rocal-asmr
+    files:
+      - .clang-tidy
+      - CMakeUserPresets.json
+
+  - name: rocal-core
+    files:
+      - .clang-tidy
+      - CMakeUserPresets.json
+
+  - name: swman
+    files:
+      - .clang-tidy
+      - CMakeUserPresets.json
+
+  - name: timcal-dfe-rf7
+    files:
+      - .clang-tidy
+      - CMakeUserPresets.json

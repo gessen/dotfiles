@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "configurePresets": [
+    {
+      "name": "default",
+      "binaryDir": "${sourceDir}/build$env{BINARY_DIR_SUFFIX}",
+      "generator": "Ninja",
+      "cacheVariables": {
+        "CMAKE_TOOLCHAIN_FILE": "$env{OE_CMAKE_TOOLCHAIN_FILE}",
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo",
+        "CMAKE_INSTALL_PREFIX": "/usr",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+        "BUILD_SHARED_LIBS": "ON",
+        "BUILD_TESTING": "OFF",
+        "PLATFORM": "$env{MACHINE}",
+        "SWMAN_VERSION": "2.0.0"
+      }
+    },
+    {
+      "name": "host",
+      "inherits": "default",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "BUILD_SHARED_LIBS": "OFF",
+        "BUILD_TESTING": "ON",
+        "SWMAN_ENABLE_COVERAGE": "ON",
+        "SWMAN_TESTS_LOG_STDOUT": "ON"
+      }
+    }
+  ]
+}

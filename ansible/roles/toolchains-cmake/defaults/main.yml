@@ -1,0 +1,3 @@
+---
+toolchains_cmake_src: '{{ home_dir }}/.dotfiles/toolchains/cmake'
+toolchains_cmake_dst: '{{ home_dir }}/Workspace'

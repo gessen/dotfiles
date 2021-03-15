@@ -80,6 +80,9 @@ compile_commands.json
 CTestTestfile.cmake
 CMakeUserPresets.json
 
+# Extra CMake files
+/AddCoverage.cmake
+
 # ccls and clangd
 .cache
 
@@ -96,3 +99,6 @@ tmtags
 
 # git-review
 .gitreview
+
+# clang-tidy
+.clang-tidy

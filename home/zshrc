@@ -364,6 +364,56 @@ toolchain_environment_alias_binder() {
   alias rf-${toolchain}-${suffix}="source ${env_file}"
 }
 
+toolchain_environment_function_binder() {
+  local compiler="$1"
+  local project=$2
+  local toolchain=$3
+
+  local project_args=("${(@s|:|)project}")
+  local repo="$(readlink -f ~/Workspace/${project_args[1]})"
+  local prefix="${project_args[2]:-${project_args[1]}}"
+  local compiler_presets="${project_args[3]:-0}"
+
+  if [[ ! -d "${repo}" ]]; then
+    return
+  fi
+
+  local toolchain_args=("${(@s|:|)toolchain}")
+  local toolchain_name="${toolchain_args[1]}"
+  local toolchain_alias="${toolchain_args[2]:-${toolchain_name}}"
+  local toolchain_suffix="${toolchain_args[3]}"
+
+  if ! alias "rf-${toolchain_name}-${compiler}" 2>&1 >/dev/null; then
+    return
+  fi
+
+  local preset="default"
+  if [[ "${compiler_presets}" = "1" ]]; then
+    preset="${preset}-${compiler}"
+  fi
+
+  if [[ "${toolchain_alias}" = *"host"* ]]; then
+    preset="${preset/default/tests}"
+  fi
+
+  local suffix="${toolchain_suffix}-${compiler}"
+
+  local function_body="${prefix}-${toolchain_alias}-${compiler}() { \
+    cd ${repo} \
+    && rm -rf {build,build${suffix}} \
+    && rm -rf .cache/{ccls,clangd} \
+    && mkdir -p .cache/{ccls,clangd}${suffix} \
+    && ln -sfn ccls${suffix} .cache/ccls \
+    && ln -sfn clangd${suffix} .cache/clangd \
+    && rf-${toolchain_name}-${compiler} \
+    && BINARY_DIR_SUFFIX=${suffix} /usr/bin/cmake --preset=${preset} \
+    && ln -sfn build${suffix} build \
+    && ln -sfn build/compile_commands.json compile_commands.json \
+  }"
+
+  eval "${function_body}"
+}
+
 toolchain_environment_binder() {
   local compilers=(
     gcc
@@ -375,8 +425,68 @@ toolchain_environment_binder() {
     unset
   )
 
+  local projects=(
+    coco::1
+    coco-aafia:coco:1
+    coco-schemas::
+    draco-platform-made:draco:
+    draco-platform-mars:draco:
+    rocal-asmr:rocal:
+    rocal-core::
+    swman::
+    timcal-dfe-rf7:timcal:
+  )
+
+  local coco_toolchains=(
+    asmr::-asmr
+    asmr-host2:host:-host
+    rf7-mars:mars:-mars
+  )
+
+  local coco_aafia_toolchains=(
+    aafia::
+  )
+
+  local coco_schemas_toolchains=(
+    asmr::
+    asmr-host2:host:
+    rf7-mars:mars:
+  )
+
+  local draco_platform_made_toolchains=(
+    scorpio-made:scorpio:
+  )
+
+  local draco_platform_mars_toolchains=(
+    rf7-mars:mars:
+    rf7-mars-host:mars-host:-host
+  )
+
+  local rocal_asmr_toolchains=(
+    asmr::
+    asmr-host::-host
+  )
+
+  local rocal_core_toolchains=(
+    asmr::-asmr
+    asmr-host::-host-asmr
+  )
+
+  local swman_toolchains=(
+    asmr::-asmr
+    asmr-host::-host-asmr
+  )
+
+  local timcal_dfe_rf7_toolchains=(
+    rf7-mars:mars:
+    rf7-mars-host:host:-host
+  )
+
   local toolchain_path
   local suffix
+  local compiler
+  local project
+  local project_toolchain
 
   for toolchain_path in ~/Workspace/toolchains/*/; do
     for suffix in ${suffixes}; do
@@ -384,9 +494,22 @@ toolchain_environment_binder() {
     done
   done
 
+  for project in ${projects}; do
+    local project_args=("${(@s|:|)project}")
+    eval local project_toolchains="(\${${project_args[1]//-/_}_toolchains})"
+    for project_toolchain in ${project_toolchains}; do
+      for compiler in ${compilers}; do
+        toolchain_environment_function_binder \
+          "${compiler}" \
+          "${project}" \
+          "${project_toolchain}"
+      done
+    done
+  done
 }
 
 toolchain_environment_binder
 
 unset -f toolchain_environment_binder
 unset -f toolchain_environment_alias_binder
+unset -f toolchain_environment_function_binder
