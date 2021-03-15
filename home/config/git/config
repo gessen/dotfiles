@@ -8,7 +8,7 @@
 [diff]
 	mnemonicprefix = true
 	algorithm = patience
-	colormoved = dimmed-zebra
+	colormoved = dimmed_zebra
 	submodule = log
 	tool = ediffclient
 	guitool = ediffclient-g
