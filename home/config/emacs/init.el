@@ -1352,7 +1352,7 @@ window instead."
 (setq-default fill-column 120)
 
 ;; Distance between tab stops in columns (not the size of an indentation step)
-(setq-default tab-width 2)
+(setq-default tab-width 4)
 
 ;; Don't use tabs for indentation, use only spaces. Otherwise, whenever the
 ;; indent level does not equal the tab width (e.g. in Emacs Lisp code, the
@@ -3567,7 +3567,7 @@ that because `bb-mode' inherits from `fundamental-mode'."
   ;; Indentation for CC Mode
   (defconst my-cc-style
     '((c-recognize-knr-p . nil)
-      (c-basic-offset . 2)
+      (c-basic-offset . 4)
       (c-tab-always-indent . t)
       (c-comment-only-line-offset . 0)
       (comment-column . 40)
@@ -4029,6 +4029,7 @@ differently than it should."
   (defhook! my-plantuml-setup ()
     plantuml-mode-hook
     "Set custom settings for `plantuml-mode'."
+    (setq-local tab-width 2)
     ;; Enable custom `completion-at-point'.
     (add-hook 'completion-at-point-functions #'plantuml-completion-at-point
               nil 'local)
