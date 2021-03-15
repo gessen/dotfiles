@@ -60,6 +60,7 @@
  ("flyspell-correct" . "dea1290a371c540dde7b8d0eef7a12d92f7a0b83")
  ("frog-jump-buffer" . "1eb289c9b2a4bbebb3065076750f54216ac9c718")
  ("frog-menu" . "c93ef3b6e568ea9d46b35f0dc5f17b0fde80e268")
+ ("gerrit.el" . "13cd8be45e3ec500edd4e0bf9a93338cd5c0e3a6")
  ("git-gutter" . "2c3242116a42dbbe30fc0844d1ec3c41074cdaba")
  ("git-messenger" . "2d64e62e33be9f881ebb019afc183caac9c62eda")
  ("git-modes" . "55468314a5f6b77d2c96be62c7005ac94545e217")

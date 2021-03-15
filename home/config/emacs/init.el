@@ -4628,6 +4628,18 @@ unhelpful."
     (format "%s/+/%s" (s-replace ".com/" ".com/plugins/gitiles/" repo-url)
             commithash)))
 
+;; Package `gerrit' provides an Emacs interface for uploading changes,
+;; downloading changes, creating a dashboard and creating buffers that contain
+;; details about gerrit topics an gerrit changes.
+(use-package! gerrit
+  :config
+
+  ;; Set gerrite1 as gerrit host.
+  (setq gerrit-host "gerrite1.ext.net.nokia.com")
+
+  ;; Prefer REST API instead of using git-review.
+  (setq gerrit-use-gitreview-interface nil))
+
 ;; Package `git-commit' assists the user in writing good Git commit messages.
 ;; While Git allows for the message to be provided on the command line, it is
 ;; preferable to tell Git to create the commit without actually passing it a
