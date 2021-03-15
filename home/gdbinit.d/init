@@ -8,6 +8,11 @@ skip -gfi /usr/include/c++/*/*/*
 skip -gfi /usr/include/c++/*/*
 skip -gfi /usr/include/c++/*
 
+skip -gfi ~/Workspace/toolchain-*/sysroot-target/usr/include/c++/**/*
+skip -gfi ~/Workspace/toolchain-*/sysroot-target/usr/include/c++/*/*/*
+skip -gfi ~/Workspace/toolchain-*/sysroot-target/usr/include/c++/*/*
+skip -gfi ~/Workspace/toolchain-*/sysroot-target/usr/include/c++/*
+
 set history save on
 set history size 100000
 set history filename ~/.gdb_history
