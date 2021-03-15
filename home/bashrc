@@ -254,3 +254,8 @@ if command -v fasd 1>/dev/null 2>&1; then
   source "$fasd_cache"
   unset fasd_cache
 fi
+
+# Run pyenv init setup after reading profile
+if command -v pyenv 1>/dev/null 2>&1; then
+  eval "$(pyenv init -)"
+fi

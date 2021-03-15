@@ -93,6 +93,9 @@ export GTK2_RC_FILES="${XDG_CONFIG_HOME}/gtk-2.0/gtkrc"
 # Include the current load to the ninja status
 export NINJA_STATUS="[%s/%f/%t] (j%r/%e) "
 
+# Conform to XDG with pyenv
+export PYENV_ROOT="${XDG_DATA_HOME}/pyenv"
+
 # Use persistent configuration file for ripgrep
 export RIPGREP_CONFIG_PATH="${XDG_CONFIG_HOME}/ripgrep/config"
 

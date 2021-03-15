@@ -42,6 +42,7 @@ packages_common:
   - oh-my-zsh-git
   - openssh
   - plantuml
+  - pyenv
   - ranger
   - ripgrep
   - rsync
