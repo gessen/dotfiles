@@ -5250,7 +5250,7 @@ possibly new window."
   ;; Draw the underline at the same place as the descent line.
   (setq x-underline-at-descent-line t)
 
-  (centaur-tabs-change-fonts "Hack" 100)
+  (centaur-tabs-change-fonts "Hack" 107)
   (centaur-tabs-mode +1)
 
   ;; Group tabs by `projectile' project.
