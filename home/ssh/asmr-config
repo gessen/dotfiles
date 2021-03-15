@@ -1,0 +1,35 @@
+Host asmr02
+    Hostname P03-dev-002.p03.ska-lab.nsn-rdnet.net
+    User garage
+
+Host asmr03
+    Hostname P03-dev-003.p03.ska-lab.nsn-rdnet.net
+    User garage
+
+Host asmr10
+    Hostname P03-dev-010.p03.ska-lab.nsn-rdnet.net
+    User garage
+
+Host asmr19
+    Hostname P03-dev-019.p03.ska-lab.nsn-rdnet.net
+    User garage
+
+Host asmr38
+    Hostname P03-dev-038.p03.ska-lab.nsn-rdnet.net
+    User garage
+
+Host asmr43
+    Hostname P03-dev-043.p03.ska-lab.nsn-rdnet.net
+    User garage
+
+Host asmr58
+    Hostname P03-dev-058.p03.ska-lab.nsn-rdnet.net
+    User garage
+
+Host asmr61
+    Hostname P03-dev-061.p03.ska-lab.nsn-rdnet.net
+    User garage
+
+Host asmr78
+    Hostname P03-dev-078.p03.ska-lab.nsn-rdnet.net
+    User garage

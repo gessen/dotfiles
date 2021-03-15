@@ -3,3 +3,8 @@ Host *
     ControlMaster auto
     ControlPath ~/.ssh/master-%r@%h:%p
     ControlPersist 600
+
+Include gerrit-config
+Include krling-config
+Include asmr-config
+Include mars-config

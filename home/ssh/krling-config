@@ -1,0 +1,9 @@
+Host kr3 krling03
+    HostName krling03.emea.nsn-net.net
+    ForwardX11 yes
+    ForwardX11Trusted yes
+
+Host kr4 krling04
+    HostName krling04.emea.nsn-net.net
+    ForwardX11 yes
+    ForwardX11Trusted yes

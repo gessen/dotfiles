@@ -30,5 +30,9 @@ dotfiles:
   - config/tmux/tmux.conf
   - config/profile
   - gdbinit.d/init
+  - ssh/asmr-config
   - ssh/config
+  - ssh/gerrit-config
+  - ssh/krling-config
+  - ssh/mars-config
   - zshrc
