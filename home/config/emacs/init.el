@@ -492,6 +492,14 @@ BINDINGS is a series of KEY DEF pair."
   ;; Enable basic mouse support (click and drag).
   (xterm-mouse-mode t))
 
+;; Feature 'mwheel' enables the use of the mouse wheel (or scroll wheel) in
+;; Emacs.
+(use-feature! mwheel
+  :demand t
+  :config
+
+  (mwheel-install))
+
 ;;;; Encryption
 
 ;; Feature `epg-config' is a basic configuration for EasyPG Emacs library.
@@ -3543,11 +3551,7 @@ that because `bb-mode' inherits from `fundamental-mode'."
                        ((member 'font-lock-type-face props) 'snake)
                        (t nil))))))
     ;; Launch `lsp-mode'
-    (lsp-deferred)
-    ;; For a UI feedback on headerline of the document symbols at point, current
-    ;; file or project name show a breadcrumb on top of window.
-    ;; Run with timer as `ccls' seems to disable it at the start.
-    (run-with-timer 1 nil #'lsp-headerline-breadcrumb-mode))
+    (lsp-deferred))
 
   (dolist (mode '(c-mode c++-mode))
     (declare-prefix-for-mode! mode "mg" "peek")
@@ -3854,7 +3858,8 @@ ALL when non-nil determines whether words will be pickable."
     "gRw" #'ccls-find-references-write)
 
   ;; Set some basic logging for debugging purpose.
-  (setq ccls-args (list "-log-file=/tmp/ccls.log" "-v=1"))
+  (setq ccls-args
+        (list (concat "-log-file=/tmp/" (user-login-name) "/ccls.log") "-v=1"))
 
   ;; Change initialisation options to include almost all warnings. Disable some
   ;; clang incompatible flags and set completion to be "smart" case.
@@ -4063,8 +4068,7 @@ differently than it should."
     "Set custom settings for `sh-mode'."
     (setq sh-basic-offset 2)
     ;; Add `company-shell' and `company-shell-env backend.
-    (setq-local company-backends '((company-shell-env
-                                    company-capf)
+    (setq-local company-backends '(company-shell-env
                                    company-dabbrev-code
                                    company-dabbrev))
     ;; Enable syntax checking and spellchecking in comments.
@@ -5359,14 +5363,6 @@ possibly new window."
   (minions-mode +1))
 
 ;;;; Tabs
-
-;; Package `powerline' is a library for customizing the mode-line that is based
-;; on the Vim Powerline. A collection of predefined themes comes with the
-;; package.
-(use-package! powerline
-  ;; This package has issues with native compilation. Since Emacs forcibly
-  ;; compiles each elc file we have to inhibit byte compilation.
-  :straight (:no-byte-compile t))
 
 ;; Package `centaur-tabs' is an Emacs plugin aiming to become an aesthetic,
 ;; modern looking tabs plugin. This package offers tabs with a wide range of
