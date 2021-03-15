@@ -69,6 +69,7 @@
 	rebase = true
 [push]
 	followtags = true
+	gpgsign = if-asked
 [credential]
 	helper = cache --timeout 3600
 [color]
