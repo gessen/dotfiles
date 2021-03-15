@@ -1,0 +1,3 @@
+---
+toolchains_env_src: '{{ home_dir }}/.dotfiles/toolchains/env'
+toolchains_env_dst: '{{ home_dir }}/Workspace/toolchains'

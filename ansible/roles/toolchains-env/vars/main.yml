@@ -1,0 +1,20 @@
+---
+toolchains:
+  - aafia
+  - asmr
+  - asmr-host
+  - asmr-host2
+  - rf7-mars
+  - rf7-mars-host
+  - rf7-thor
+  - scorpio-made
+  - scorpio-stratix
+
+compilers:
+  - gcc
+  - clang
+
+helpers:
+  - environment-unset
+  - toolchain-gcc.cmake
+  - toolchain-clang.cmake

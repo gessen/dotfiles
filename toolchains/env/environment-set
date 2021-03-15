@@ -1,0 +1,216 @@
+#!/bin/sh
+
+if [ -n "${BASH_SOURCE}" ]; then
+  THIS_SCRIPT=${BASH_SOURCE}
+  THIS_DIR="$(cd "$(dirname "${BASH_SOURCE}")" && pwd)"
+elif [ -n "${ZSH_NAME}" ]; then
+  THIS_SCRIPT=$0
+  THIS_DIR="$(cd "$(dirname "$0")" && pwd)"
+else
+  echo "Error: Unsupported shell"
+  return 1
+fi
+
+if [ -z "${ZSH_NAME}" ] && [ "$0" = "${THIS_SCRIPT}" ]; then
+  echo "Error: This script needs to be sourced. Please run as '. ${THIS_SCRIPT}'" >&2
+  exit 1
+fi
+
+export TOOLCHAIN="$(basename ${THIS_DIR})"
+export TOOLCHAIN_SYSROOT_NATIVE="${THIS_DIR}/sysroot-native"
+export TOOLCHAIN_SYSROOT_TARGET="${THIS_DIR}/sysroot-target"
+
+case "${TOOLCHAIN}" in
+  aafia)
+    export PRODUCT_GENERATION="mmimo"
+    export MACHINE="nahka"
+    TARGET_PREFIX="arm-poky-linux-gnueabi"
+    GCC_VERSION=5.2.0
+    ;;
+  asmr*)
+    export PRODUCT_GENERATION="5gw5"
+    TARGET_PREFIX="aarch64-poky-linux"
+    GCC_VERSION=8.2.0
+    case "${TOOLCHAIN}" in
+      asmr)
+        export MACHINE="5g-jabco-w5-x21"
+        ;;
+      asmr-host)
+        export MACHINE="host-64"
+        TARGET_PREFIX="x86_64-poky-linux"
+        ;;
+      asmr-host2)
+        export MACHINE="host-64"
+        TARGET_PREFIX="x86_64-poky-linux"
+        ;;
+      *)
+        echo "Error: This toolchain is not supported"
+        return 1
+    esac
+    ;;
+  rf7*)
+    export PRODUCT_GENERATION="rel7"
+    TARGET_PREFIX="aarch64-poky-linux"
+    GCC_VERSION=9.2.0
+    case "${TOOLCHAIN}" in
+      rf7-mars)
+        export MACHINE="simics-mars"
+        ;;
+      rf7-mars-host)
+        export MACHINE="qemux86-64"
+        TARGET_PREFIX="x86_64-poky-linux"
+        ;;
+      rf7-thor)
+        export MACHINE="thor"
+        ;;
+      *)
+        echo "Error: This toolchain is not supported"
+        return 1
+    esac
+    ;;
+  scorpio*)
+    export PRODUCT_GENERATION="rel61-scoprio-ecpri"
+    TARGET_PREFIX="aarch64-poky-linux"
+    GCC_VERSION=7.3.0
+    case "${TOOLCHAIN}" in
+      scorpio-made)
+        export MACHINE="made"
+        ;;
+      scorpio-stratix)
+        export MACHINE="stratix10-azqp"
+        ;;
+      *)
+        echo "Error: This toolchain is not supported"
+        return 1
+    esac
+    ;;
+  *)
+    echo "Error: This toolchain is not supported"
+    return 1
+esac
+
+case "${THIS_SCRIPT}" in
+  *environment-gcc)
+    export TOOLCHAIN_COMPILER="${THIS_SCRIPT##*environment-}"
+    ;;
+  *environment-clang)
+    export TOOLCHAIN_COMPILER="${THIS_SCRIPT##*environment-}"
+    ;;
+  *)
+    echo "Error: This compiler is not supported"
+    return 1
+esac
+
+if [ "${TOOLCHAIN_COMPILER}" = "gcc" ]; then
+  export AR="${TARGET_PREFIX}-ar"
+  export AS="${TARGET_PREFIX}-as"
+  export CC="${TARGET_PREFIX}-gcc --sysroot=${TOOLCHAIN_SYSROOT_TARGET}"
+  export CPP="${TARGET_PREFIX}-gcc -E --sysroot=${TOOLCHAIN_SYSROOT_TARGET}"
+  export CXX="${TARGET_PREFIX}-g++ --sysroot=${TOOLCHAIN_SYSROOT_TARGET}"
+  export CCLD="${TARGET_PREFIX}-gcc --sysroot=${TOOLCHAIN_SYSROOT_TARGET}"
+  export LD="${TARGET_PREFIX}-ld --sysroot=${TOOLCHAIN_SYSROOT_TARGET}"
+  export NM="${TARGET_PREFIX}-nm"
+  export OBJCOPY="${TARGET_PREFIX}-objcopy"
+  export OBJDUMP="${TARGET_PREFIX}-objdump"
+  export RANLIB="${TARGET_PREFIX}-ranlib"
+  export STRINGS="${TARGET_PREFIX}-strings"
+  export STRIP="${TARGET_PREFIX}-strip"
+  export CFLAGS="-fdiagnostics-color=always"
+  export CXXFLAGS="-fdiagnostics-color=always"
+  export LDFLAGS="-fuse-ld=gold"
+elif [ "${TOOLCHAIN_COMPILER}" = "clang" ]; then
+  export AR="llvm-ar"
+  export AS="llvm-as"
+  export CC="clang --target=${TARGET_PREFIX} --sysroot=${TOOLCHAIN_SYSROOT_TARGET} --gcc-toolchain=${TOOLCHAIN_SYSROOT_TARGET}/usr"
+  export CCLD="clang --target=${TARGET_PREFIX} --sysroot=${TOOLCHAIN_SYSROOT_TARGET} --gcc-toolchain=${TOOLCHAIN_SYSROOT_TARGET}/usr"
+  export CPP="clang -E --target=${TARGET_PREFIX} --sysroot=${TOOLCHAIN_SYSROOT_TARGET} --gcc-toolchain=${TOOLCHAIN_SYSROOT_TARGET}/usr"
+  export CXX="clang++ --target=${TARGET_PREFIX} --sysroot=${TOOLCHAIN_SYSROOT_TARGET} --gcc-toolchain=${TOOLCHAIN_SYSROOT_TARGET}/usr"
+  export LD="lld"
+  export NM="llvm-nm"
+  export OBJCOPY="llvm-objcopy"
+  export OBJDUMP="llvm-objdump"
+  export RANLIB="llvm-ranlib"
+  export STRINGS="llvm-strings"
+  export STRIP="llvm-strip"
+  export CFLAGS="-fcolor-diagnostics"
+  export CXXFLAGS="-fcolor-diagnostics"
+  export LDFLAGS="-fuse-ld=lld -B${TOOLCHAIN_SYSROOT_NATIVE}/usr/bin/${TARGET_PREFIX} -Wl,-z,notext -Wl,--color-diagnostics"
+fi
+
+export CFLAGS="-pipe -ggdb3 -O0 -feliminate-unused-debug-types -fstack-protector-strong ${CFLAGS}"
+export CXXFLAGS="-pipe -ggdb3 -O0 -feliminate-unused-debug-types -fstack-protector-strong ${CXXFLAGS}"
+export LDFLAGS="${LDFLAGS} -fstack-protector-strong -Wl,--hash-style=gnu -Wl,-z,relro,-z,now"
+export CONFIGURE_FLAGS="--target=${TARGET_PREFIX} --host=${TARGET_PREFIX} --build=x86_64-linux --with-libtool-sysroot=${TOOLCHAIN_SYSROOT_TARGET}"
+export KCFLAGS="--sysroot=${TOOLCHAIN_SYSROOT_TARGET}"
+
+case "${TOOLCHAIN}" in
+  aafia)
+    export CFLAGS="-mfloat-abi=hard ${CFLAGS}"
+    export CXXFLAGS="-mfloat-abi=hard ${CXXFLAGS}"
+    export LDFLAGS="-mfloat-abi=hard ${LDFLAGS}"
+    ;;
+  *-host*)
+    export LDFLAGS="${LDFLAGS} -Wl,--disable-new-dtags"
+    export SDK_LD="${TOOLCHAIN_SYSROOT_TARGET}/lib/ld-linux-x86-64.so.2"
+    export SDKTARGETSYSROOT="${TOOLCHAIN_SYSROOT_TARGET}"
+    if [ "${TOOLCHAIN_COMPILER}" = "clang" ]; then
+      export CFLAGS="${CFLAGS} -fsanitize=address"
+      export CXXFLAGS="${CXXFLAGS} -fsanitize=address"
+      export LDFLAGS="${LDFLAGS} -fsanitize=address"
+    fi
+esac
+
+if [ -n "$ORG_PATH" ]; then
+  export PATH="$ORG_PATH"
+  unset ORG_PATH
+fi
+
+NEW_PATH="${NEW_PATH}:${TOOLCHAIN_SYSROOT_NATIVE}/usr/bin/python-native"
+NEW_PATH="${NEW_PATH}:${TOOLCHAIN_SYSROOT_NATIVE}/usr/bin/${TARGET_PREFIX}"
+NEW_PATH="${NEW_PATH}:${TOOLCHAIN_SYSROOT_NATIVE}/usr/bin"
+
+export ORG_PATH="${PATH}"
+export PATH="${NEW_PATH}:${PATH}"
+
+export PKG_CONFIG_PATH="${TOOLCHAIN_SYSROOT_TARGET}/usr/lib/pkgconfig:${TOOLCHAIN_SYSROOT_TARGET}/usr/share/pkgconfig"
+export PKG_CONFIG_SYSROOT_DIR="${TOOLCHAIN_SYSROOT_TARGET}"
+export PKG_CONFIG_SYSTEM_LIBRARY_PATH="/usr/lib"
+
+if [ "${TOOLCHAIN_COMPILER}" = "gcc" ]; then
+  export OE_CMAKE_TOOLCHAIN_FILE="${THIS_DIR}/toolchain-gcc.cmake"
+elif [ "${TOOLCHAIN_COMPILER}" = "clang" ]; then
+  export OE_CMAKE_TOOLCHAIN_FILE="${THIS_DIR}/toolchain-clang.cmake"
+fi
+alias cmake='cmake -DCMAKE_TOOLCHAIN_FILE="${OE_CMAKE_TOOLCHAIN_FILE}"'
+
+if [ ! -f "${TOOLCHAIN_SYSROOT_TARGET}/usr/lib/gcc/${TARGET_PREFIX}/${GCC_VERSION}/libgcc.a" ]; then
+  rsync -au \
+    "${TOOLCHAIN_SYSROOT_TARGET}/usr/lib/${TARGET_PREFIX}" \
+    "${TOOLCHAIN_SYSROOT_TARGET}/usr/lib/gcc/"
+fi
+
+if [ -d "${TOOLCHAIN_SYSROOT_NATIVE}/usr/lib/valgrind" ]; then
+  export VALGRIND_LIB="${TOOLCHAIN_SYSROOT_NATIVE}/usr/lib/valgrind"
+fi
+
+if [ -f "${TOOLCHAIN_SYSROOT_NATIVE}/usr/bin/cmake" ]; then
+  rm -f "${TOOLCHAIN_SYSROOT_NATIVE}/usr/bin/cmake"
+  rm -f "${TOOLCHAIN_SYSROOT_NATIVE}/usr/bin/ccmake"
+  rm -f "${TOOLCHAIN_SYSROOT_NATIVE}/usr/bin/cmake-gui"
+  rm -f "${TOOLCHAIN_SYSROOT_NATIVE}/usr/bin/cpack"
+  rm -f "${TOOLCHAIN_SYSROOT_NATIVE}/usr/bin/ctest"
+fi
+
+rm -f "${TOOLCHAIN_SYSROOT_NATIVE}/usr/bin/mkdir"
+rm -f "${TOOLCHAIN_SYSROOT_NATIVE}/usr/bin/mkfifo"
+rm -f "${TOOLCHAIN_SYSROOT_NATIVE}/usr/bin/mv"
+rm -f "${TOOLCHAIN_SYSROOT_NATIVE}/usr/bin/tput"
+
+if [ -f "${TOOLCHAIN_SYSROOT_NATIVE}/usr/bin/git" ]; then
+  rm -f "${TOOLCHAIN_SYSROOT_NATIVE}/usr/bin/git"*
+  rm -rf "${TOOLCHAIN_SYSROOT_NATIVE}/usr/libexec/git-core/"
+fi
+
+if [ -f "${TOOLCHAIN_SYSROOT_TARGET}/usr/lib/libi2c.so" ]; then
+  ln -sfn libi2c.so.2 "${TOOLCHAIN_SYSROOT_TARGET}/usr/lib/libi2c.so"
+fi
