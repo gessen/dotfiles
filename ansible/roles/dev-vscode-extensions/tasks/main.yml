@@ -1,17 +1,17 @@
 ---
 - name: Check if VSCode exists
   stat:
-    path: /usr/bin/code
+    path: /usr/bin/codium
   register: code_installed
 
 - block:
   - name: List already installed VSCode extensions
-    command: 'code --list-extensions'
+    command: 'codium --list-extensions'
     register: code_extensions
     changed_when: False
 
   - name: Install VSCode extensions
-    command: 'code --install-extension {{ item }}'
+    command: 'codium --install-extension {{ item }}'
     with_items: '{{ vscode_extensions }}'
     register: code_output
     changed_when: '"is already installed" not in code_output.stdout'
