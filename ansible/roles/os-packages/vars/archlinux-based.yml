@@ -15,7 +15,6 @@ packages_common:
   - clang
   - cmake
   - colordiff
-  - discord
   - doxygen
   - emacs-native-comp-git
   - fasd
@@ -30,13 +29,11 @@ packages_common:
   - git-review
   - glances
   - htop
-  - keepassxc
   - kitty
   - lld
   - lldb
   - lsd
   - meson
-  - mpv
   - ncdu
   - ninja
   - oh-my-zsh-git
@@ -49,7 +46,6 @@ packages_common:
   - rustup
   - shellcheck
   - shfmt
-  - signal-desktop
   - tig
   - tmux
   - tree
@@ -101,7 +97,6 @@ packages_common_aur:
   - paru-bin
 
 packages_common_paru:
-  - dropbox
   - git-completion
   - vscodium-bin
   - vscodium-bin-marketplace
