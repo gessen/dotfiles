@@ -251,6 +251,223 @@ source "${FP}/.local/share/bash-completion/bash_completion"
 source "${FP}/.local/share/fzf/shell/completion.bash"
 source "${FP}/.local/share/fzf/shell/key-bindings.bash"
 
+# Initialise yocto project with repo tool if not done yet
+function _rf-repo-init() {
+  local swline="${1:-srm7}"
+  local directory="${2:-${swline}}"
+  local release="${3}"
+  local url="ssh://gerrite1.ext.net.nokia.com:8282/RFSW/PROJECTS/projects"
+  local repo_rev="v2.12.2"
+
+  case "${swline}" in
+    5gw5)
+      mkcd "${FP}/${directory}"
+      if [ ! -f "$(pwd)/manifest.xml" ]; then
+        release="${release:-5GW5_develop}"
+        release="${release/20b/rel/5GW5_FB2011_Q_release}"
+        repo init -u "${url}" --repo-rev="${repo_rev}" -b "${release}" -m manifest.xml
+        repo sync
+      fi
+      ;;
+    5mf5)
+      mkcd "${FP}/${directory}"
+      if [ ! -f "$(pwd)/manifest.xml" ]; then
+        release="${release:-REL5.1_develop_5MF5}"
+        repo init -u "${url}" --repo-rev="${repo_rev}" -b "${release}" -m manifest.xml
+        repo sync
+      fi
+      ;;
+    erm6)
+      mkcd "${FP}/${directory}"
+      if [ ! -f "$(pwd)/manifest.xml" ]; then
+        release="${release:-ERM6_develop}"
+        repo init -u "${url}" --repo-rev="${repo_rev}" -b "${release}" -m manifest.xml
+        repo sync
+      fi
+      ;;
+    srm7)
+      mkcd "${FP}/${directory}"
+      if [ ! -f "$(pwd)/default.xml" ]; then
+        release="${release:-SRM7_develop}"
+        repo init -u "${url}" --repo-rev="${repo_rev}" -b "${release}"
+        repo sync
+      fi
+      ;;
+    *)
+      echo "error: invalid SW line name: ${swline}"
+      return 2
+  esac
+}
+
+# Set up environment for yocto projects
+function _rf-env-init() {
+  local swline="${1:-srm7}"
+  local directory="${2:-${swline}}"
+  local project="${3:-}"
+
+  case "${swline}" in
+    5gw5)
+      mkcd "${FP}/${directory}"
+      export PATH="/opt/gcc/x86_64/4.8.5a/bin:${PATH}"
+      pyenv local 2.7.16 3.6.8
+      ;;
+    5mf5)
+      mkcd "${FP}/${directory}"
+      export PATH="/opt/gcc/x86_64/4.8.5a/bin:${PATH}"
+      pyenv local 2.7.16 3.6.8
+      ;;
+    erm6)
+      mkcd "${FP}/${directory}"
+      export PATH="/opt/gcc/x86_64/4.8.5a/bin:${PATH}"
+      pyenv local 2.7.16 3.6.8
+      ;;
+    srm7)
+      mkcd "${FP}/${directory}"
+      export PATH="/opt/gcc/x86_64/9.3.0a/bin:${PATH}"
+      export LD_LIBRARY_PATH="/opt/gcc/x86_64/9.3.0a/lib:${LD_LIBRARY_PATH}"
+      export LD_LIBRARY_PATH="/opt/gcc/x86_64/9.3.0a/lib64:${LD_LIBRARY_PATH}"
+      pyenv local 2.7.16 3.6.8
+      ;;
+    *)
+      echo "error: invalid SW line name: ${swline}"
+      return 2
+  esac
+}
+
+# Source RFSW yocto helper
+function _rf-build-init() {
+  local swline="${1:-srm7}"
+  local directory="${2:-${swline}}"
+  local machine="${3}"
+  local project="${4:-}"
+
+  case "${swline}" in
+    5gw5)
+      machine="${machine:-5g-jabco-w5-x21}"
+      machine="${machine/host-64/host}"
+      machine="${machine/host/host-64}"
+      LINSEE_MIXTURE_LIST=RFSW_5G_RH7 source build.env "${machine}"
+      export LD_LIBRARY_PATH="/opt/gcc/x86_64/4.8.5a/lib:${LD_LIBRARY_PATH}"
+      export LD_LIBRARY_PATH="/opt/gcc/x86_64/4.8.5a/lib64:${LD_LIBRARY_PATH}"
+      ;;
+    5mf5)
+      machine="${machine:-nahka}"
+      LINSEE_MIXTURE_LIST=RFSW_REL5 source build.env "${machine}"
+      export LD_LIBRARY_PATH="/opt/gcc/x86_64/4.8.5a/lib:${LD_LIBRARY_PATH}"
+      export LD_LIBRARY_PATH="/opt/gcc/x86_64/4.8.5a/lib64:${LD_LIBRARY_PATH}"
+      ;;
+    erm6)
+      project=${project:-dfe}
+      case "${project}" in
+        dfe)
+          machine="${machine:-made}"
+          LINSEE_MIXTURE_LIST=RFSW_REL6 source build.env "${machine}"
+          export LD_LIBRARY_PATH="/opt/gcc/x86_64/4.8.5a/lib:${LD_LIBRARY_PATH}"
+          export LD_LIBRARY_PATH="/opt/gcc/x86_64/4.8.5a/lib64:${LD_LIBRARY_PATH}"
+          ;;
+        beamer)
+          machine="${machine:-stratix10-azqp}"
+          PROJECT="${project}" source build.env "${machine}"
+          export LD_LIBRARY_PATH="/opt/gcc/x86_64/4.8.5a/lib:${LD_LIBRARY_PATH}"
+          export LD_LIBRARY_PATH="/opt/gcc/x86_64/4.8.5a/lib64:${LD_LIBRARY_PATH}"
+          ;;
+      esac
+      ;;
+    srm7)
+      project=${project:-mars}
+      case "${project}" in
+        mars)
+          machine="${machine:-simics-mars}"
+          machine="${machine/simics-mars/simics}"
+          machine="${machine/simics/simics-mars}"
+          machine="${machine/hycon-mars/hycon}"
+          machine="${machine/hycon/hycon-mars}"
+          machine="${machine/host/qemux86-64}"
+          LINSEE_MIXTURE_LIST=RFSW_ZEUS source build.env "${machine}"
+          ;;
+        thor)
+          machine="${machine:-thor}"
+          LINSEE_MIXTURE_LIST=RFSW_ZEUS PROJECT=thor source build.env "${machine}"
+          ;;
+        *)
+          echo "error: invalid project name: ${project} for SW line: ${swline}"
+          return 2
+      esac
+      ;;
+    *)
+      echo "error: invalid SW line name: ${swline}"
+      return 2
+  esac
+}
+
+# Set up shell for yocto for different projects
+function rf() {
+  local opts="d:m:p:r:"
+  local lopts="directory:,machine:,project:,release:"
+  local parsed
+  local swline=""
+  local directory=""
+  local machine=""
+  local project=""
+  local release=""
+
+  parsed="$(getopt \
+    --options=${opts} \
+    --longoptions=${lopts} \
+    --name="${FUNCNAME}" \
+    -- $@)\
+  "
+
+  if [[ $? != 0 ]]; then
+    return 2
+  fi
+
+  eval set -- "${parsed}"
+  unset parsed
+
+  while true; do
+    case "$1" in
+      -d|--directory)
+        directory="$2"
+        shift 2
+        ;;
+      -m|--machine)
+        machine="$2"
+        shift 2
+        ;;
+      -p|--project)
+        project="$2"
+        shift 2
+        ;;
+      -r|--release)
+        release="$2"
+        shift 2
+        ;;
+      --)
+        shift
+        break
+        ;;
+      *)
+        echo "error: logic error"
+        return 2
+        ;;
+    esac
+  done
+
+  swline="${1:-srm7}"
+
+  case "${swline}" in
+    5gw5|5mf5|erm6|srm7)
+      _rf-repo-init "${swline}" "${directory}" "${release}"
+      _rf-env-init "${swline}" "${directory}" "${project}"
+      _rf-build-init "${swline}" "${directory}" "${machine}" "${project}"
+      ;;
+    *)
+      echo "error: invalid SW line name: ${swline}"
+      return 2
+  esac
+}
+
 # Improve startup time of fasd
 if command -v fasd 1>/dev/null 2>&1; then
   mkdir -p "${XDG_CACHE_HOME}/bash"
