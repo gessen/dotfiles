@@ -70,6 +70,7 @@ export FZF_DEFAULT_COMMAND="fd \
 export FZF_DEFAULT_OPTS=" \
 --height=60% \
 --bind alt-p:preview-up,alt-n:preview-down \
+--bind ctrl-v:half-page-down,alt-v:half-page-up \
 --bind alt-a:select-all,ctrl-alt-a:deselect-all,alt-t:toggle-all \
 "
 
