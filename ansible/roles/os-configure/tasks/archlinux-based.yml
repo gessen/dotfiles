@@ -33,7 +33,7 @@
 - name: Symlink nerd-fonts
   file:
     path: '/etc/fonts/conf.d/10-nerd-font-symbols.conf'
-    src: '../conf.avail/10-nerd-font-symbols.conf'
+    src: '/usr/share/fontconfig/conf.avail/10-nerd-font-symbols.conf'
     state: link
     force: yes
   become: yes
