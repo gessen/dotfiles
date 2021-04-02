@@ -4099,6 +4099,21 @@ differently than it should."
 ;; Package `company-shell'
 (use-package! company-shell)
 
+;; Package `'shfmt' provides commands and a minor mode for easily reformatting
+;; shell scripts using the external "shfmt" program.
+(use-package! shfmt
+  :init
+
+  (set-leader-keys-for-major-mode! 'sh-mode
+    "==" #'shfmt-buffer
+    "=r" #'shfmt-region)
+
+  :config
+
+  ;; Set indentation to 2 spaces, allow binary ops to start a line and follow
+  ;; redirect operators by a space.
+  (setq shfmt-arguments '("-i" "2" "-bn" "-sr" "-ci")))
+
 ;;; Configuration file formats
 
 ;; Package `gitattributes-mode' provides a major mode for .gitattributes files.
