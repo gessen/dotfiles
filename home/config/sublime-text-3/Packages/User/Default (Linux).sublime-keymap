@@ -1,62 +1,93 @@
 [
-    { "keys": ["ctrl+space"], "command": "auto_complete" },
-    { "keys": ["ctrl+space"], "command": "replace_completion_with_auto_complete",
-      "context":
-        [
-            { "key": "last_command", "operator": "equal", "operand": "insert_best_completion" },
-            { "key": "auto_complete_visible", "operator": "equal", "operand": false },
-            { "key": "setting.tab_completion", "operator": "equal", "operand": true }
-        ]
-    },
-
-    // TODO: figure out how to match multiple scopes.
-    { "keys": ["ctrl+shift+c"], "command": "clang_format",
-      "context":
-        [
-            { "key": "selector", "operator": "equal", "operand": "source.c++" }
-        ],
-    },
-
-    { "keys": ["ctrl+shift+c"], "command": "clang_format",
-      "context":
-        [
-            { "key": "selector", "operator": "equal", "operand": "source.c" }
-        ],
-    },
-
-    { "keys": ["ctrl+shift+c"], "command": "pretty_json",
-      "context":
-        [
-            { "key": "selector", "operator": "equal", "operand": "source.json" }
-        ]
-    },
-
-    { "keys": ["ctrl+shift+c"], "command": "pretty_shell",
-      "context":
-        [
-            { "key": "selector", "operator": "equal", "operand": "source.shell" }
-        ],
-    },
-
-    { "keys": ["f1"], "command": "show_overlay",
-      "args":
-        {
-            "overlay": "command_palette",
-            "text": "LSP: ",
-        }
-    },
-
-    { "keys": ["f2"], "command": "lsp_symbol_rename",
-      "context":
-        [
-            { "key": "setting.lsp_active" }
-        ]
-    },
-
-    { "keys": ["f12"], "command": "lsp_symbol_definition",
-      "context":
-        [
-            { "key": "setting.lsp_active" }
-        ]
+  {
+    "keys": ["ctrl+space"],
+    "command": "auto_complete"
+  },
+  {
+    "keys": ["ctrl+space"],
+    "command": "replace_completion_with_auto_complete",
+    "context": [
+      {
+        "key": "last_command",
+        "operator": "equal",
+        "operand": "insert_best_completion"
+      },
+      {
+        "key": "auto_complete_visible",
+        "operator": "equal",
+        "operand": false
+      },
+      {
+        "key": "setting.tab_completion",
+        "operator": "equal",
+        "operand": true
+      }
+    ]
+  },
+  {
+    "keys": ["ctrl+shift+c"],
+    "command": "clang_format",
+    "context": [
+      {
+        "key": "selector",
+        "operator": "equal",
+        "operand": "source.c++"
+      }
+    ]
+  },
+  {
+    "keys": ["ctrl+shift+c"],
+    "command": "clang_format",
+    "context": [
+      {
+        "key": "selector",
+        "operator": "equal",
+        "operand": "source.c"
+      }
+    ]
+  },
+  {
+    "keys": ["ctrl+shift+c"],
+    "command": "pretty_json",
+    "context": [
+      {
+        "key": "selector",
+        "operator": "equal",
+        "operand": "source.json"
+      }
+    ]
+  },
+  {
+    "keys": ["ctrl+shift+c"],
+    "command": "pretty_shell",
+    "context": [
+      {
+        "key": "selector",
+        "operator": "equal",
+        "operand": "source.shell"
+      }
+    ]
+  },
+  {
+    "keys": ["f1"],
+    "command": "show_overlay",
+    "args": {
+      "overlay": "command_palette",
+      "text": "LSP: "
     }
+  },
+  {
+    "keys": ["f2"],
+    "command": "lsp_symbol_rename",
+    "context": [{
+        "key": "setting.lsp_active"
+      }]
+  },
+  {
+    "keys": ["f12"],
+    "command": "lsp_symbol_definition",
+    "context": [{
+        "key": "setting.lsp_active"
+      }]
+  }
 ]

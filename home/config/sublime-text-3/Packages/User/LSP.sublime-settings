@@ -1,98 +1,89 @@
 {
-	"clients":
-	{
-		"clangd":
-		{
-			"command": [
-				"clangd",
-				"-log=info",
-				"--completion-style=detailed",
-				"--header-insertion=never"
-			],
-			"enabled": true
-		},
-		"ccls":
-		{
-			"command": [
-				"ccls",
-				"-log-file=/tmp/ccls.log",
-				"-v=1"
-			],
-			"languages": [
-				{
-					"scopes": ["source.c"],
-					"syntaxes": ["Packages/C++/C.sublime-syntax"],
-					"languageId": "c"
-				},
-				{
-					"scopes": ["source.c++"],
-					"syntaxes": ["Packages/C++/C++.sublime-syntax"],
-					"languageId": "cpp"
-				},
-				{
-					"scopes": ["source.objc"],
-					"syntaxes": ["Packages/Objective-C/Objective-C.sublime-syntax"],
-					"languageId": "objective-c"
-				},
-				{
-					"scopes": ["source.objc++"],
-					"syntaxes": ["Packages/Objective-C/Objective-C++.sublime-syntax"],
-					"languageId": "objective-cpp"
-				}
-			],
-			"initializationOptions": {
-				"cache": {
-					"directory": ".cache/ccls"
-				},
-				"clang": {
-					"extraArgs": [
-						"-Weverything",
-						"-Wno-c++98-compat",
-						"-Wno-c++98-compat-pedantic",
-						"-Wno-covered-switch-default",
-						"-Wno-global-constructors",
-						"-Wno-exit-time-destructors",
-						"-Wno-documentation",
-						"-Wno-padded",
-						"-Wno-unneeded-member-function",
-						"-Wno-unused-member-function",
-						"-Wno-language-extension-token",
-						"-Wno-gnu-zero-variadic-macro-arguments",
-						"-Wno-gnu-statement-expression",
-						"-Wno-unused-macros",
-						"-Wno-weak-vtables",
-						"-Wno-ctad-maybe-unsupported",
-						"-Wno-error"
-					],
-					"excludeArgs": [
-						"-fconserve-stack",
-						"-fmacro-prefix-map",
-						"-fmerge-constants",
-						"-fno-var-tracking-assignments",
-						"-fstack-usage",
-						"-mabi=lp64"
-					]
-				},
-				"codeLens": {
-					"localVariables": false
-				},
-				"completion": {
-					"caseSensitivity": 1,
-					"detailedLabel": true,
-					"duplicateOptional": false,
-					"include": {
-						"maxPathSize": 30
-					}
-				},
-				"index": {
-					"blacklist": [
-						".*CMakeFiles.*"
-					],
-					"maxInitializerLines": 15
-				}
-			},
-			"enabled": false
-		}
-	},
-	"log_stderr": true
+  "clients": {
+    "clangd": {
+      "command": [
+        "clangd",
+        "-log=info",
+        "--completion-style=detailed",
+        "--header-insertion=never"
+      ],
+      "enabled": true
+    },
+    "ccls": {
+      "command": ["ccls", "-log-file=/tmp/ccls.log", "-v=1"],
+      "languages": [
+        {
+          "scopes": ["source.c"],
+          "syntaxes": ["Packages/C++/C.sublime-syntax"],
+          "languageId": "c"
+        },
+        {
+          "scopes": ["source.c++"],
+          "syntaxes": ["Packages/C++/C++.sublime-syntax"],
+          "languageId": "cpp"
+        },
+        {
+          "scopes": ["source.objc"],
+          "syntaxes": ["Packages/Objective-C/Objective-C.sublime-syntax"],
+          "languageId": "objective-c"
+        },
+        {
+          "scopes": ["source.objc++"],
+          "syntaxes": ["Packages/Objective-C/Objective-C++.sublime-syntax"],
+          "languageId": "objective-cpp"
+        }
+      ],
+      "initializationOptions": {
+        "cache": {
+          "directory": ".cache/ccls"
+        },
+        "clang": {
+          "extraArgs": [
+            "-Weverything",
+            "-Wno-c++98-compat",
+            "-Wno-c++98-compat-pedantic",
+            "-Wno-covered-switch-default",
+            "-Wno-global-constructors",
+            "-Wno-exit-time-destructors",
+            "-Wno-documentation",
+            "-Wno-padded",
+            "-Wno-unneeded-member-function",
+            "-Wno-unused-member-function",
+            "-Wno-language-extension-token",
+            "-Wno-gnu-zero-variadic-macro-arguments",
+            "-Wno-gnu-statement-expression",
+            "-Wno-unused-macros",
+            "-Wno-weak-vtables",
+            "-Wno-ctad-maybe-unsupported",
+            "-Wno-error"
+          ],
+          "excludeArgs": [
+            "-fconserve-stack",
+            "-fmacro-prefix-map",
+            "-fmerge-constants",
+            "-fno-var-tracking-assignments",
+            "-fstack-usage",
+            "-mabi=lp64"
+          ]
+        },
+        "codeLens": {
+          "localVariables": false
+        },
+        "completion": {
+          "caseSensitivity": 1,
+          "detailedLabel": true,
+          "duplicateOptional": false,
+          "include": {
+            "maxPathSize": 30
+          }
+        },
+        "index": {
+          "blacklist": [".*CMakeFiles.*"],
+          "maxInitializerLines": 15
+        }
+      },
+      "enabled": false
+    }
+  },
+  "log_stderr": true
 }
