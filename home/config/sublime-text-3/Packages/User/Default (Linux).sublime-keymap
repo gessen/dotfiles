@@ -24,6 +24,13 @@
         ],
     },
 
+    { "keys": ["ctrl+shift+c"], "command": "pretty_shell",
+      "context":
+        [
+            { "key": "selector", "operator": "equal", "operand": "source.shell" }
+        ],
+    },
+
     { "keys": ["f1"], "command": "show_overlay",
       "args":
         {
