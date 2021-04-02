@@ -24,6 +24,13 @@
         ],
     },
 
+    { "keys": ["ctrl+shift+c"], "command": "pretty_json",
+      "context":
+        [
+            { "key": "selector", "operator": "equal", "operand": "source.json" }
+        ]
+    },
+
     { "keys": ["ctrl+shift+c"], "command": "pretty_shell",
       "context":
         [
