@@ -1,0 +1,8 @@
+{
+    "format_on_save": false,
+    "format_selection_only": true,
+    "indent": "2",
+    "binop": true,
+    "rediop": true,
+    "switchcase": true
+}
