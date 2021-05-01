@@ -4306,14 +4306,10 @@ unhelpful."
   (set-leader-keys! "ol" #'org-store-link)
 
   :bind (:map org-mode-map
-              ("M-p" . #'org-metaup)
-              ("M-n" . #'org-metadown)
+              ("M-p" . #'org-backward-element)
+              ("M-n" . #'org-forward-element)
               ("M-P" . #'org-shiftmetaup)
-              ("M-N" . #'org-shiftmetadown)
-              ("M-[" . #'org-backward-element)
-              ("M-]" . #'org-forward-element)
-              ("M-{" . #'org-metaleft)
-              ("M-}" . #'org-metaright))
+              ("M-N" . #'org-shiftmetadown))
 
   :config
 
