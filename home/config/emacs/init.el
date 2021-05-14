@@ -1557,7 +1557,15 @@ original line and use the absolute value."
 ;; - Else, if you move from the mark and call this command at the same column as
 ;;   mark, it adds a cursor to each line (with `mc/edit-lines').
 (use-package! smart-region
-  :bind ([remap set-mark-command] . #'smart-region))
+  :bind ([remap set-mark-command] . #'smart-region)
+
+  :config
+
+  ;; Revert the behaviour of `smart-region' that blacklists itself as
+  ;; `mc/cmds-to-run-once'.
+  (add-to-list 'mc/cmds-to-run-for-all 'smart-region)
+  (setq mc/cmds-to-run-once (delq 'smart-region mc/cmds-to-run-once))
+  (mc/save-lists))
 
 ;;;; Multiple selection
 
