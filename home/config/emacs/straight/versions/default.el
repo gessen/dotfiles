@@ -100,7 +100,7 @@
  ("minions" . "36d39bd25ae58d1359d17f99142520339bea5974")
  ("modus-themes" . "97fa6679b3b578b9a7faccd6e4d166254862f7bd")
  ("monokai-emacs" . "4281fc13dadef98942c8d43024de024f2392fec5")
- ("multiple-cursors.el" . "b880554d04b8f61165afba7d4de19ac9e39bb7ab")
+ ("multiple-cursors.el" . "616fbdd3696f99d85660ad57ebbb0c44d6c7f426")
  ("mwim.el" . "b4f3edb4c0fb8f8b71cecbf8095c2c25a8ffbf85")
  ("orderless" . "ea60844b8275f6615f2b3376971f64cfc78f3f37")
  ("org" . "86af7e0c2ffe91e301b86b998f3eda789ad8fa28")

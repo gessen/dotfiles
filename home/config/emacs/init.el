@@ -1595,6 +1595,7 @@ original line and use the absolute value."
     "vb" #'mc/edit-beginnings-of-lines
     "ve" #'mc/edit-ends-of-lines
     "vg" #'mc/vertical-align-with-space
+    "vG" #'mc/vertical-align
     "vl" #'mc/edit-lines
     "vn" #'mc/mark-next-like-this
     "vp" #'mc/mark-previous-like-this
@@ -1609,8 +1610,6 @@ original line and use the absolute value."
 
   (with-eval-after-load 'multiple-cursors-core
     ;; Load other `multiple-cursors' libraries.
-    (require 'mc-cycle-cursors)
-    (require 'mc-hide-unmatched-lines-mode)
     (require 'mc-mark-more)
 
     ;; Do not litter `user-emacs-directory' with settings.
