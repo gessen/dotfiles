@@ -1569,6 +1569,15 @@ original line and use the absolute value."
 
 ;;;; Multiple selection
 
+;; Package `ace-mc' allows you to quickly add and remove `multiple-cursors' mode
+;; cursors using `ace-jump'.
+(use-package! ace-mc
+  :init
+
+  (set-leader-keys!
+    "vj" #'ace-mc-add-multiple-cursors
+    "vJ" #'ace-mc-add-single-cursor))
+
 ;; Package `iedit' includes Emacs minor modes (iedit-mode and
 ;; iedit-rectangle-mode) based on a API library (iedit-lib) and allows you to
 ;; edit one occurrence of some text in a buffer (possibly narrowed) or region,
