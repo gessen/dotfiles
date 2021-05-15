@@ -1579,7 +1579,10 @@ original line and use the absolute value."
 
   (set-leader-keys!
     "se" #'iedit-mode
-    "sE" #'iedit-rectangle-mode))
+    "sE" #'iedit-rectangle-mode)
+
+  :bind (:map iedit-mode-keymap
+              ("M-'" . #'iedit-show/hide-context-lines)))
 
 ;; Package `multiple-cursors' implements multiple cursors for Emacs in a similar
 ;; way in other text editors.
