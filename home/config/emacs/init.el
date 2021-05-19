@@ -4201,9 +4201,11 @@ unhelpful."
 
   (set-leader-keys!
     "hb" #'describe-bindings
+    "hc" #'describe-key-briefly
     "hF" #'describe-face
+    "hm" #'describe-mode
     "hM" #'describe-keymap
-    "hP" #'describe-personal-keybindings
+    "hn" #'view-emacs-news
     "ht" #'describe-theme)
 
   ;; Always select help window for viewing.
