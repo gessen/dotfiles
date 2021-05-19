@@ -2785,6 +2785,9 @@ for the description of the FETCHER and ALIST arguments."
   ;; Use fd instead of find.
   (setq consult-find-command "fd --color=never --full-path ARG OPTS")
 
+  ;; Narrow and widen selection with "[".
+  (setq consult-narrow-key (kbd "["))
+
   ;; Configure the register formatting. This improves the register preview
   ;; for `consult-register', `consult-register-load', `consult-register-store'
   ;; and the Emacs built-ins.
