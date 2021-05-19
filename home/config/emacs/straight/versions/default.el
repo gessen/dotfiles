@@ -88,7 +88,6 @@
  ("let-alist" . "b299c78897cc307f9d5521927376fbd06a26f123")
  ("loop.el" . "e22807f83a0890dc8a904c51ee0742c34efccc6c")
  ("lsp-mode" . "77667f20fc30c20731d9b993477cf3bf637a7b33")
- ("lsp-treemacs" . "fb8d271ee386dc3d5447d1808f24b030827ec828")
  ("lsp-ui" . "71cf2228940677f480aff33b28e063499435fc1e")
  ("macrostep" . "424e3734a1ee526a1bd7b5c3cd1d3ef19d184267")
  ("magit" . "9e9f7cb3d260bd14e15307831a2820112c9a77ac")

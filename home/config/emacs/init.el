@@ -3506,22 +3506,6 @@ list of additional parameters sent with this request."
   ;; Show the peek view even if there is only 1 cross reference.
   (setq lsp-ui-peek-always-show t))
 
-;; Package `lsp-treemacs' brings integration between `lsp-mode' and `treemacs'
-;; and implementation of treeview controls using Treemacs as a tree renderer.
-(use-package! lsp-treemacs
-  :config
-
-  (set-leader-keys-for-minor-mode! 'lsp-mode
-    "gE"  #'lsp-treemacs-errors-list
-    "gRR" #'lsp-treemacs-references
-    "gS"  #'lsp-treemacs-symbols
-
-    "Ge"  #'lsp-treemacs-errors-list
-    "GRR" #'lsp-treemacs-references
-    "GS"  #'lsp-treemacs-symbols
-
-    "tt"  #'lsp-treemacs-sync-mode))
-
 ;;; Language support
 ;;;; BitBake
 
