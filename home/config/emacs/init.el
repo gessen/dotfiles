@@ -5259,6 +5259,14 @@ possibly new window."
 
   :config
 
+  (defadvice! my--centaur-tabs-hide-tab (fn &rest args)
+    :around #'centaur-tabs-hide-tab
+    "Make `centaur-tabs-hide-tab' hide additional buffers."
+    (setq arg (car args))
+    (let ((name (format "%s" arg)))
+      (or (apply fn args)
+          (string-prefix-p "*ccls" name))))
+
   ;; Change tabs style to have a bit of border between tabs.
   (setq centaur-tabs-style "alternate")
 
