@@ -4456,7 +4456,12 @@ unhelpful."
 ;; text at the top of the window is beyond the top of the window, you don't
 ;; forget which heading the text belongs to.
 (use-package! org-sticky-header
-  :hook (org-mode-hook . org-sticky-header-mode))
+  :hook (org-mode-hook . org-sticky-header-mode)
+
+  :config
+
+  ;; Show the full outline path.
+  (setq org-sticky-header-full-path 'full))
 
 ;; Package `org-superstar' prettifies headings and plain lists in `org-mode'.
 ;; It's a direct descendant of `org-bullets’.
