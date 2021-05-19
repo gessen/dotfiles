@@ -2779,6 +2779,9 @@ for the description of the FETCHER and ALIST arguments."
 
   :config
 
+  ;; Disable preview for `consult-recent-file'.
+  (setf (alist-get 'consult-recent-file consult-config) '(:preview-key nil))
+
   ;; Use fd instead of find.
   (setq consult-find-command "fd --color=never --full-path ARG OPTS")
 
