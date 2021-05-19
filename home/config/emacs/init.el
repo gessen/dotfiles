@@ -2761,14 +2761,21 @@ for the description of the FETCHER and ALIST arguments."
          ("M-g M-i"         . #'consult-imenu)
          ("M-g k"           . #'consult-global-mark)
          ("M-g M-k"         . #'consult-global-mark)
+         ("M-g l"           . #'consult-line)
+         ("M-g M-l"         . #'consult-line)
+         ("M-g ;"           . #'consult-line-symbol-at-point)
+         ("M-g M-;"         . #'consult-line-symbol-at-point)
          ("M-g m"           . #'consult-mark)
          ("M-g M-m"         . #'consult-mark)
          ("M-g o"           . #'consult-outline)
          ("M-g M-o"         . #'consult-outline)
          ([remap yank-pop]  . #'consult-yank)
          ("M-s l"           . #'consult-line)
+         ("M-s M-l"         . #'consult-line)
          ("M-s ;"           . #'consult-line-symbol-at-point)
-         ("M-s m"           . #'consult-multi-occur))
+         ("M-s M-;"         . #'consult-line-symbol-at-point)
+         ("M-s m"           . #'consult-multi-occur)
+         ("M-s M-m"         . #'consult-multi-occur))
 
   :config
 
