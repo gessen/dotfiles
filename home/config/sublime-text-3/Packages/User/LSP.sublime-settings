@@ -7,32 +7,18 @@
         "--completion-style=detailed",
         "--header-insertion=never"
       ],
+      "selector": "source.c | source.c++ | source.objc | source.objc++",
+      "auto_complete_selector": "punctuation.accessor | (meta.preprocessor.include string - punctuation.definition.string.end)",
       "enabled": true
     },
     "ccls": {
-      "command": ["ccls", "-log-file=/tmp/ccls.log", "-v=1"],
-      "languages": [
-        {
-          "scopes": ["source.c"],
-          "syntaxes": ["Packages/C++/C.sublime-syntax"],
-          "languageId": "c"
-        },
-        {
-          "scopes": ["source.c++"],
-          "syntaxes": ["Packages/C++/C++.sublime-syntax"],
-          "languageId": "cpp"
-        },
-        {
-          "scopes": ["source.objc"],
-          "syntaxes": ["Packages/Objective-C/Objective-C.sublime-syntax"],
-          "languageId": "objective-c"
-        },
-        {
-          "scopes": ["source.objc++"],
-          "syntaxes": ["Packages/Objective-C/Objective-C++.sublime-syntax"],
-          "languageId": "objective-cpp"
-        }
+      "command": [
+        "ccls",
+        "-log-file=/tmp/ccls.log",
+        "-v=1"
       ],
+      "selector": "source.c | source.c++ | source.objc | source.objc++",
+      "auto_complete_selector": "punctuation.accessor | (meta.preprocessor.include string - punctuation.definition.string.end)",
       "initializationOptions": {
         "cache": {
           "directory": ".cache/ccls"
