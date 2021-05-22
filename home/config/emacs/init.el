@@ -273,6 +273,7 @@ NAME and ARGS are as in `use-package'."
                                    ("s" "search")
                                    ("S" "spellcheck")
                                    ("t" "toggle")
+                                   ("T" "tabs")
                                    ("th" "highlight")
                                    ("u" "undo")
                                    ("v" "multiple cursors")
@@ -5251,8 +5252,15 @@ possibly new window."
   :demand t
   :init
 
-  ;; Disable default keymap.
-  (setq centaur-tabs-prefix-map (make-sparse-keymap))
+  (set-leader-keys!
+    "Td" #'centaur-tabs-open-directory-in-external-application
+    "Tf" #'centaur-tabs-extract-window-to-new-frame
+    "Tk" #'centaur-tabs-kill-other-buffers-in-current-group
+    "Tn" #'centaur-tabs-forward
+    "TN" #'centaur-tabs-forward-group
+    "To" #'centaur-tabs-open-in-external-application
+    "Tp" #'centaur-tabs-backward
+    "TP" #'centaur-tabs-backward-group)
 
   :config
 
