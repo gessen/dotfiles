@@ -129,7 +129,7 @@
  ("selectrum" . "8fd18284a7e2a9d02031d541de719d7134ba7588")
  ("shrink-path.el" . "c14882c8599aec79a6e8ef2d06454254bb3e1e41")
  ("smart-region" . "5a8017fd8e8dc3483865951c4942cab3f96f69f6")
- ("smartparens" . "555626a43f9bb1985aa9a0eb675f2b88b29702c8")
+ ("smartparens" . "25f4d6d1b732f4deabf922059d22a0a7dc04bd0a")
  ("spinner" . "2daa167bec1c7566d662d48613a94453536b524a")
  ("ssh-config-mode-el" . "8fda737131fef2e55c4965a938cf907acbf03372")
  ("straight.el" . "1a7453a8d7fcfb62c40c1bfa13389c461817b623")
