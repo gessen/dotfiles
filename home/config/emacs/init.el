@@ -3947,17 +3947,7 @@ ALL when non-nil determines whether words will be pickable."
 ;; arguments according to their use. This package is aware of all built-in CMake
 ;; functions. In addition, it allows you to add function signatures for your own
 ;; functions.
-(use-package! cmake-font-lock
-  :init
-
-  (defun my--cmake-font-lock-setup ()
-    "Activate `cmake-font-lock' first, before other `prog-mode-hook'.
-This workaround is necessary as `cmake-font-lock-activate' does its stuff a bit
-differently than it should."
-    (when (equal major-mode 'cmake-mode)
-      (cmake-font-lock-activate)))
-
-  (add-hook 'prog-mode-hook #'my--cmake-font-lock-setup -100))
+(use-package! cmake-font-lock)
 
 ;; Package `cmake-mode' provides a major mode with syntax highlighting and
 ;; indentation for CMakeLists.txt and *.cmake source files.
