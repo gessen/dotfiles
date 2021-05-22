@@ -3475,7 +3475,6 @@ a new window."
 
   (set-leader-keys-for-minor-mode! 'lsp-mode
     ;; Peek
-    "ge" #'lsp-ui-flycheck-list
     "gg" #'lsp-ui-peek-find-definitions
     "gi" #'lsp-ui-peek-find-implementation
     "gM" #'lsp-ui-imenu
@@ -3503,6 +3502,26 @@ a new window."
 
   ;; Show the peek view even if there is only 1 cross reference.
   (setq lsp-ui-peek-always-show t))
+
+;; Package `consult-lsp` provides alternative of the build-in lsp-mode
+;; `xref-appropos` which provides as you type completion.
+(use-package! consult-lsp
+  :demand t
+  :after (consult lsp-mode xref)
+  :bind (:map lsp-mode-map
+              ([remap xref-find-apropos] . #'consult-lsp-symbols))
+
+  :config
+
+  (set-leader-keys-for-minor-mode! 'lsp-mode
+    "ge"  #'consult-lsp-diagnostics
+    "gs"  #'consult-lsp-symbols
+    "Ge"  #'consult-lsp-diagnostics
+    "Gs"  #'consult-lsp-symbols)
+
+  ;; Enable preview with `C-o'.
+  (setf (alist-get 'consult-lsp-symbols consult-config)
+        `(:preview-key ,(kbd "C-o"))))
 
 ;;; Language support
 ;;;; BitBake
