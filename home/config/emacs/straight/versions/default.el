@@ -9,7 +9,7 @@
  ("beginend" . "f6590a4d12894adfe5905266b4d2660002f444dc")
  ("blackout" . "d99ab1aad84e4bd2bd4a499877764c213cce50ff")
  ("browse-at-remote" . "6aecae4b5d202e582425fc8aa2c9c2b6a4779f25")
- ("centaur-tabs" . "7e0332b138f836b9d0b6d2134310f53369598cfd")
+ ("centaur-tabs" . "9c7c936e4e1de6f4f4095d70e43c9ae738d05086")
  ("centered-cursor-mode.el" . "f376bdb882047347345d5f0e3ec3fcef63ee93ba")
  ("clipetty" . "01b39044b9b65fa4ea7d3166f8b1ffab6f740362")
  ("cmake" . "31425f88f2ff71b2b8b5e7d733878b1b35d402ad")
