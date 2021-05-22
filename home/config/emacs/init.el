@@ -2898,14 +2898,20 @@ point. "
   :after selectrum
   :bind (:map selectrum-prescient-toggle-map
               ;; Unbind these keys as prescient is only used for sorting.
+              ("'" . nil)
               ("a" . nil)
+              ("c" . nil)
               ("f" . nil)
               ("i" . nil)
               ("l" . nil)
               ("p" . nil)
+              ("P" . nil)
               ("r" . nil))
 
   :config
+
+  ;; Disable the filtering functionalities in favour of `orderless.
+  (setq selectrum-prescient-enable-filtering nil)
 
   (selectrum-prescient-mode +1))
 
@@ -5124,7 +5130,7 @@ possibly new window."
 (use-package! darkokai-theme
   :config
 
-  ;; Configure selectrum faces.
+  ;; Configure `selectrum-prescient' faces.
   (let ((custom--inhibit-theme-enable nil))
     (darkokai-with-color-vars
       (custom-theme-set-faces
@@ -5136,10 +5142,10 @@ possibly new window."
           (,terminal-class (:background ,terminal-darkokai-highlight-line
                                         :inherit bold
                                         :underline nil))))
-       `(selectrum-primary-highlight
+       `(selectrum-prescient-primary-highlight
          ((,class (:foreground ,darkokai-green))
           (,terminal-class (:foreground ,terminal-darkokai-green))))
-       `(selectrum-secondary-highlight
+       `(selectrum-prescient-secondary-highlight
          ((,class (:foreground ,darkokai-orange
                                :underline t))
           (,terminal-class (:foreground ,terminal-darkokai-orange
