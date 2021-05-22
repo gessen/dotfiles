@@ -2817,14 +2817,11 @@ point. "
   :demand t
   :config
 
-  (defhook! my--orderless-setup ()
-    selectrum-prescient-mode-hook
-    "Override prescient's filtering and highlighting for selectrum."
-    ;; Use `orderless' instead of `prescient' for filtering and highlighting but
-    ;; leave sorting alone.
-    (setq selectrum-refine-candidates-function #'orderless-filter)
-    (setq selectrum-highlight-candidates-function
-          #'orderless-highlight-matches))
+  ;; `completion-styles' filter and highlight in a single step, the approach of
+  ;; Selectrum to only highlight the actually displayed candidates is more
+  ;; efficient.
+  (setq selectrum-refine-candidates-function #'orderless-filter)
+  (setq selectrum-highlight-candidates-function #'orderless-highlight-matches)
 
   ;; Rely on `orderless' solely for completions.
   (setq completion-styles '(orderless))
