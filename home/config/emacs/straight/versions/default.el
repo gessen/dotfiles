@@ -78,7 +78,7 @@
  ("highlight-parentheses" . "891538de31524956136e1419e1206af0c8befe02")
  ("hl-todo" . "3bba4591c54951d2abab113ec5e58a6319808ca9")
  ("ht.el" . "fff8c43f0e03d5b98deb9f988522b839ce2ca253")
- ("hungry-delete" . "4a341cfa3a19185c5ecb687970e299082e1144e3")
+ ("hungry-delete" . "d919e555e5c13a2edf4570f3ceec84f0ade71657")
  ("hydra" . "112e689f75b59398d8eca79ac6562dca12b8a959")
  ("ibuffer-projectile" . "ecbe482804a217b1471593f6c7a8b3d64f3cdc47")
  ("iedit" . "77eb0a1e2e44b453e4ebf4c38409affa353f5139")
