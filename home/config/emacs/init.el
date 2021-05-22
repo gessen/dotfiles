@@ -152,12 +152,12 @@ frame is created."
 ;; packages upstream.
 (setq ad-redefinition-action 'accept)
 
+;; Define this variable for native compilation disabled Emacs.
+(setq native-comp-deferred-compilation-deny-list '())
+
 ;;;; straight.el
 
 (eval-and-compile
-  ;; Use the develop branch of straight.el
-  (setq straight-repository-branch "develop")
-
   ;; Disable checks for package modifications to save up time during startup
   (setq straight-check-for-modifications nil)
 
@@ -4303,12 +4303,13 @@ unhelpful."
 ;;; Applications
 ;;;; Organisation
 
-;; Package `org' provides too many features to describe in any reasonable amount
-;; of space. It is built fundamentally on `outline-mode', and adds TODO states,
-;; deadlines, properties, priorities, etc. to headings. Then it provides tools
-;; for interacting with this data, including an agenda view, a time clocker,
-;; etc.
-(use-package! org
+;; Package `org-plus-contrib' provides too many features to describe in any
+;; reasonable amount of space. It is built fundamentally on `outline-mode', and
+;; adds TODO states, deadlines, properties, priorities, etc. to headings. Then
+;; it provides tools for interacting with this data, including an agenda view, a
+;; time clocker, etc. This package contains add-ons to Org-mode. These
+;; contributions are not part of GNU Emacs or of the official Org-mode package.
+(use-package! org-plus-contrib
   ;; We use straight mirror as the official repo does not allow to fetch a
   ;; shallow repo with a frozen git hash.
   :straight (:host github :repo "emacs-straight/org-mode" :local-repo "org")
@@ -4419,10 +4420,6 @@ unhelpful."
   ;; Preserve leading whitespace characters in source code blocks on export, and
   ;; when switching between the Org buffer and the language mode edit buffer.
   (setq org-src-preserve-indentation t))
-
-;; Package `org-plus-contrib' contains add-ons to Org-mode. These contributions
-;; are not part of GNU Emacs or of the official Org-mode package.
-(use-package! org-plus-contrib)
 
 ;; Feature `org-tempo' reimplements completions of structure template before
 ;; point. For example, strings like "<e" at the beginning of the line will be
@@ -5268,9 +5265,8 @@ possibly new window."
 ;; on the Vim Powerline. A collection of predefined themes comes with the
 ;; package.
 (use-package! powerline
-  ;; This package has issues with native compilation. Since Emacs forcibly
-  ;; compiles each elc file we have to inhibit byte compilation.
-  :straight (:no-byte-compile t))
+  ;; This package has issues with native compilation.
+  :straight (:build (:not native-compile)))
 
 ;; Package `centaur-tabs' is an Emacs plugin aiming to become an aesthetic,
 ;; modern looking tabs plugin. This package offers tabs with a wide range of
