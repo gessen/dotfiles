@@ -1505,6 +1505,9 @@ original line and use the absolute value."
     "td" #'hungry-delete-mode
     "tD" #'global-hungry-delete-mode)
 
+  ;; Leave words separated by a single space if they would have been joined.
+  (setq hungry-delete-join-reluctantly t)
+
   ;; Do not auto-delete LF and CR.
   (setq-default hungry-delete-chars-to-skip " \t\f\v")
 
