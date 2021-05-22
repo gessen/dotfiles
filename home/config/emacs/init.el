@@ -2343,6 +2343,15 @@ Spell Commands^^            Add To Dictionary^^               Other^^
     "Ss" #'flyspell-correct-at-point
     "S." #'hydra-flyspell/body))
 
+;; Package `powerthesaurus' is an integration with powerthesaurus.org. It helps
+;; to look up a word in powerthesaurus and either replace or insert selected
+;; option in the buffer.
+(use-package! powerthesaurus
+  :init
+
+  (set-leader-keys!
+    "St" #'powerthesaurus-lookup-word-dwim))
+
 ;;;; Miscellaneous
 
 ;; Package `vlf' provides the `vlf' command, which visits part of large file
