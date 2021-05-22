@@ -2068,13 +2068,13 @@ will not refresh `column-number-mode."
   :config
 
   ;; Make parentheses a bit more visible.
-  (set-face-attribute 'hl-paren-face nil :weight 'ultrabold)
+  (set-face-attribute 'highlight-parentheses-highlight nil :weight 'ultrabold)
 
   ;; Make most inside parentheses greenish.
-  (setq hl-paren-colors '("Springgreen3"
-                          "IndianRed1"
-                          "IndianRed3"
-                          "IndianRed4"))
+  (setq highlight-parentheses-colors '("Springgreen3"
+                                       "IndianRed1"
+                                       "IndianRed3"
+                                       "IndianRed4"))
 
   :blackout t)
 

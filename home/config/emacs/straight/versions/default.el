@@ -75,7 +75,7 @@
  ("helpful" . "c0662aa07266fe204f4e6d72ccaa6af089400556")
  ("highlight-indent-guides" . "a4f771418e4eed1f3f7879a43af28cf97747d41c")
  ("highlight-numbers" . "8b4744c7f46c72b1d3d599d4fb75ef8183dee307")
- ("highlight-parentheses.el" . "f0bd58c8dadd2db703b7bfd09e911b5fda05b3df")
+ ("highlight-parentheses" . "891538de31524956136e1419e1206af0c8befe02")
  ("hl-todo" . "3bba4591c54951d2abab113ec5e58a6319808ca9")
  ("ht.el" . "fff8c43f0e03d5b98deb9f988522b839ce2ca253")
  ("hungry-delete" . "4a341cfa3a19185c5ecb687970e299082e1144e3")
