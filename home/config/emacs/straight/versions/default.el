@@ -13,7 +13,7 @@
  ("centered-cursor-mode.el" . "f376bdb882047347345d5f0e3ec3fcef63ee93ba")
  ("clipetty" . "01b39044b9b65fa4ea7d3166f8b1ffab6f740362")
  ("cmake" . "31425f88f2ff71b2b8b5e7d733878b1b35d402ad")
- ("cmake-font-lock" . "9e0fcd1ee2cf316f661f2d652368b12f83a4ec9c")
+ ("cmake-font-lock" . "5e20ed32193c2c7ebae920a6a3cd711c8c950597")
  ("column-enforce-mode" . "14a7622f2268890e33536ccd29510024d51ee96f")
  ("comment-dwim-2" . "3dfdd58495c46a37708344a57c5c52beca6b2c1c")
  ("company-mode" . "57a6554db750567917f1192463e2503787f9b883")
