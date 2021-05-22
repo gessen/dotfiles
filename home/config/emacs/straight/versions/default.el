@@ -126,7 +126,7 @@
  ("reformatter.el" . "576d339aa80f40c6053592988001bdb285c1cf21")
  ("restart-emacs" . "9aa90d3df9e08bc420e1c9845ee3ff568e911bd9")
  ("s.el" . "43ba8b563bee3426cead0e6d4ddc09398e1a349d")
- ("selectrum" . "8fd18284a7e2a9d02031d541de719d7134ba7588")
+ ("selectrum" . "bfefb8e1a350d44b56290b2c7ddc3418ec217b30")
  ("shrink-path.el" . "c14882c8599aec79a6e8ef2d06454254bb3e1e41")
  ("smart-region" . "5a8017fd8e8dc3483865951c4942cab3f96f69f6")
  ("smartparens" . "25f4d6d1b732f4deabf922059d22a0a7dc04bd0a")

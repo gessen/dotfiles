@@ -2873,17 +2873,16 @@ point. "
   ;; This doesn't actually load Selectrum.
   (selectrum-mode +1)
 
-  :bind (:map selectrum-minibuffer-map
-              ("<prior>"    . #'selectrum-previous-page)
-              ("<next> "    . #'selectrum-next-page)
-              ;; Use <backtab> to go up with `find-file'.
-              ("<backtab>"  . #'backward-kill-sexp)
-              ("S-TAB"      . #'backward-kill-sexp))
+  :bind ((:map selectrum-minibuffer-map
+               ("<prior>"    . #'selectrum-previous-page)
+               ("<next> "    . #'selectrum-next-page)
+               ;; Use <backtab> to go up with `find-file'.
+               ("<backtab>"  . #'backward-kill-sexp)
+               ("S-TAB"      . #'backward-kill-sexp))
+         (:map minibuffer-local-map
+               ("M-s"        . nil)))
 
   :config
-
-  ;; Extend highlighting of the current candidate until the margin.
-  (setq selectrum-extend-current-candidate-highlight t)
 
   ;; Don't show anything when displaying count information before the prompt.
   (setq selectrum-count-style nil))
