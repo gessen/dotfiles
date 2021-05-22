@@ -21,6 +21,7 @@
  ("company-posframe" . "c7a820a35ff132aaec53c81e05afc829de39eb68")
  ("company-shell" . "52f3bf26b74adc30a275f5f4290a1fc72a6876ff")
  ("consult" . "9903e890c9d3f1d08629c9798010266946bb004c")
+ ("consult-lsp" . "12989949cc21a1173206f688d56a1e798073a4c3")
  ("ctrlf" . "dbe83710d06bc39315f1455f6f21479f3747c0aa")
  ("darkokai" . "5820aeddfc8c869ba840cc534eba776936656a66")
  ("dash.el" . "b9286a84975874b10493f1cb4ea051c501f51273")
