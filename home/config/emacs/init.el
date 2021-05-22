@@ -4651,7 +4651,8 @@ unhelpful."
 ;; ".git/COMMIT_EDITMSG" (or another file in that directory, e.g.
 ;; ".git/MERGE_MSG" for merge commits).
 (use-package! git-commit
-  :init
+  :demand t
+  :config
 
   (defhook! my--git-commit-mode-setup ()
     git-commit-mode-hook
@@ -4660,8 +4661,6 @@ unhelpful."
                 column-enforce-column fill-column)
     (display-fill-column-indicator-mode +1)
     (column-enforce-mode +1))
-
-  :config
 
   ;; Make overlong summary with the same face as `column-enforce-mode'.
   (set-face-attribute 'git-commit-overlong-summary nil :underline t)
