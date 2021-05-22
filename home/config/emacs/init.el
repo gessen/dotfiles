@@ -3392,7 +3392,7 @@ list of additional parameters sent with this request."
   (setq lsp-enable-file-watchers nil)
 
   ;; Enable experimental semantic highlighting support.
-  (setq lsp-enable-semantic-highlighting t)
+  (setq lsp-semantic-tokens-enable t)
 
   ;; Inhibit automatic edits suggested by the language server before saving a
   ;; document.
@@ -3415,9 +3415,36 @@ list of additional parameters sent with this request."
     ;; Let me configure completion provider (`company-capf') by myself.
     (setq lsp-completion-provider :none))
 
+  ;; Feature `lsp-dired' provides integration with Dired file explorer.
+  ;; Lsp-Mode will show which files/folders contain errors/warnings/hints.
+  (use-feature! lsp-dired
+    :init
+
+    (lsp-dired-mode +1))
+
+  ;; Feature `lsp-iedit' provides features that allow starting Iedit on various
+  ;; different lsp-based, semantic units.
+  (use-feature! lsp-iedit
+    :init
+
+    (set-leader-keys-for-major-mode! 'lsp-mode
+      "re" #'lsp-iedit-highlights))
+
   ;; Feature `lsp-clangd' brings implementation of clangd client for Emacs.
   (use-feature! lsp-clangd
     :config
+
+    (defun lsp-clangd-find-other-file-other-window ()
+      "Switch between the corresponding C/C++ source and header file in
+a new window."
+      (interactive)
+      (lsp-clangd-find-other-file t))
+
+    (set-leader-keys-for-major-mode! 'lsp-mode
+      "ga" #'lsp-clangd-find-other-file
+      "gA" #'lsp-clangd-find-other-file-other-window
+      "Ga" #'lsp-clangd-find-other-file
+      "GA" #'lsp-clangd-find-other-file-other-window)
 
     ;; Set some basic logging for debugging purpose, change completion style to
     ;; be more detailed and remove automatic header insertion.
