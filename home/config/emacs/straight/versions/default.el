@@ -19,7 +19,7 @@
  ("company-mode" . "57a6554db750567917f1192463e2503787f9b883")
  ("company-posframe" . "4bfb8bccef4b64479f4147de6bf6fbd05df2a67e")
  ("company-shell" . "52f3bf26b74adc30a275f5f4290a1fc72a6876ff")
- ("consult" . "6bb3960cd6f3d109ebc12a7663c994e6f5248bf7")
+ ("consult" . "9903e890c9d3f1d08629c9798010266946bb004c")
  ("ctrlf" . "dbe83710d06bc39315f1455f6f21479f3747c0aa")
  ("darkokai" . "5820aeddfc8c869ba840cc534eba776936656a66")
  ("dash.el" . "0f238a9a466879ee96e5db0482019453718f342d")

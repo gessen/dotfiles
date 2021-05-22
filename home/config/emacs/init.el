@@ -2667,8 +2667,6 @@ Spell Commands^^            Add To Dictionary^^               Other^^
 ;; preview. If a candidate is selected in the completion view, the buffer shows
 ;; the candidate immediately.
 (use-package! consult
-  :commands (consult-focus-lines
-             consult-keep-lines)
   :init
 
   (defun consult-git-ls (&optional dir)
@@ -2694,59 +2692,6 @@ point. "
       (setq consult-toggle-preview-orig consult--preview-function
             consult--preview-function #'ignore)))
 
-  (with-eval-after-load 'xref
-    (defun consult--xref-candidates (xrefs)
-      "Return candidate list from XREFS."
-      (let* ((candidates
-              (mapcar (lambda (xref)
-                        (let ((loc (xref-item-location xref))
-                              (xref-file-name-display 'nondirectory))
-                          (list (xref-location-group loc)
-                                (xref-location-line loc)
-                                (xref-item-summary xref)
-                                xref)))
-                      xrefs))
-             (max-name (apply #'max (mapcar (lambda (x) (length (car x)))
-                                            candidates)))
-             (max-line (apply #'max (mapcar (lambda (x) (cadr x)) candidates)))
-             (fmt (format "%%%ds:%%-%dd" max-name
-                          (length (number-to-string max-line)))))
-        (mapcar (pcase-lambda (`(,name ,line ,str ,xref))
-                  (cons (concat (propertize
-                                 (format fmt name line) 'face 'consult-location)
-                                "   " str)
-                        xref))
-                candidates)))
-
-    (defun consult--xref (prompt xrefs &optional display)
-      "Select from XREFS and jump.
-PROMPT is the `completing-read' prompt.
-DISPLAY is the display action according to `xref-pop-to-location'."
-      (xref-pop-to-location
-       (consult--read
-        prompt
-        (consult--xref-candidates xrefs)
-        :preview (let ((preview (consult--preview-position)))
-                   (lambda (cand restore)
-                     (cond
-                      (restore (funcall preview cand t))
-                      (cand (funcall preview
-                                     (xref-location-marker
-                                      (xref-item-location cand)) nil)))))
-        :require-match t
-        :sort nil
-        :lookup #'consult--lookup-cdr)
-       display))
-
-    (defun consult-xref (fetcher &optional alist)
-      "Show xrefs with preview in the minibuffer.
-This function can be used for `xref-show-xrefs-function' and
-`xref-show-definitions-function'. See `xref-show-xrefs-function'
-for the description of the FETCHER and ALIST arguments."
-      (consult--xref "Go to xref: "
-                     (funcall fetcher)
-                     (cdr (assoc 'display-action alist)))))
-
   (set-leader-keys!
     "/"  #'consult-ripgrep
     "am" #'consult-man'
@@ -2766,7 +2711,7 @@ for the description of the FETCHER and ALIST arguments."
     "rl" #'consult-register-load
     "rr" #'consult-register
     "rs" #'consult-register-store
-    "ry" #'consult-yank
+    "ry" #'consult-yank-replace
     "ss" #'consult-line
     "sS" #'consult-multi-occur
     "tT" #'consult-theme)
@@ -2775,8 +2720,6 @@ for the description of the FETCHER and ALIST arguments."
     (bind-key "M-P" #'consult-toggle-preview selectrum-minibuffer-map))
 
   :bind (([remap goto-line] . #'consult-goto-line)
-         ("M-g c"           . #'consult-error)
-         ("M-g M-c"         . #'consult-error)
          ("M-g i"           . #'consult-imenu)
          ("M-g M-i"         . #'consult-imenu)
          ("M-g k"           . #'consult-global-mark)
@@ -2789,7 +2732,7 @@ for the description of the FETCHER and ALIST arguments."
          ("M-g M-m"         . #'consult-mark)
          ("M-g o"           . #'consult-outline)
          ("M-g M-o"         . #'consult-outline)
-         ([remap yank-pop]  . #'consult-yank)
+         ([remap yank-pop]  . #'consult-yank-replace)
          ("M-s l"           . #'consult-line)
          ("M-s M-l"         . #'consult-line)
          ("M-s ;"           . #'consult-line-symbol-at-point)
@@ -2999,17 +2942,22 @@ for the description of the FETCHER and ALIST arguments."
 
   :config
 
-  (with-eval-after-load 'consult
-    ;; Use `consult' completion with preview.
-    (setq xref-show-xrefs-function 'consult-xref)
-    (setq xref-show-definitions-function 'consult-xref))
-
   ;; Prompt if no identifier is at point. This allows `dumb-jump' to use
   ;; `xref-find-references.
   (setq xref-prompt-for-identifier nil)
 
   ;; Use ripgrep for regexp search inside files.
   (setq xref-search-program 'ripgrep))
+
+;; Feature `consult-xref' provides Xref integration for Consult.
+(use-feature! consult-xref
+  :demand t
+  :after (consult xref)
+  :config
+
+  ;; Use `consult' completion with preview.
+  (setq xref-show-xrefs-function #'consult-xref)
+  (setq xref-show-definitions-function #'consult-xref))
 
 ;;;; Display contextual metadata
 
@@ -4435,6 +4383,15 @@ unhelpful."
   :demand t
   :after org)
 
+;; Feature `consult-org' provides a `completing-read' interface for Org mode
+;; navigation.
+(use-feature! consult-org
+  :demand t
+  :after org
+  :bind (:map org-mode-map
+              ("M-g o"   . #'consult-org-heading)
+              ("M-g M-o" . #'consult-org-heading)))
+
 ;; Feature `ox' implements a generic export engine for Org, built on its
 ;; syntactical parser - Org Elements.
 (use-feature! ox
@@ -4978,6 +4935,14 @@ possibly new window."
   ;; Automatically scroll the Compilation buffer as output appears,
   ;; but stop at the first error.
   (setq compilation-scroll-output 'first-error))
+
+;; Feature `consult-compile' provides the command `consult-compile-error' to
+;; quickly jump to compilation errors and warnings.
+(use-feature! consult-compile
+  :demand t
+  :after compile
+  :bind (("M-g c"   . #'consult-compile-error)
+         ("M-g M-c" . #'consult-compile-error)))
 
 ;;;; Emacs profiling
 
