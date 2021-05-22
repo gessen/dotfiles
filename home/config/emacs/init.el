@@ -2155,7 +2155,13 @@ will not refresh `column-number-mode."
   :commands ctrlf-mode
   :init
 
-  (ctrlf-mode +1))
+  (ctrlf-mode +1)
+
+  :config
+
+  ;; Switch literal/regexp default keybindings to regexp/fuzzy-regexp.
+  (setq ctrlf-default-search-style 'regexp)
+  (setq ctrlf-alternate-search-style 'fuzzy-regexp))
 
 ;; Package `deadgrep' is the fast, beautiful text search with the help of
 ;; ripgrep.
