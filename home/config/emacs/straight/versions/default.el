@@ -55,7 +55,7 @@
  ("esup" . "c9c95e245068d15d8e2732098af9a5d2bc8ec931")
  ("expand-region.el" . "ea6b4cbb9985ddae532bd2faf9bb00570c9f2781")
  ("f.el" . "1814209e2ff43cf2e6d38c4cd476218915f550fb")
- ("fd-dired" . "5622041068d5fa2f299dbc8aa91fece0ba260086")
+ ("fd-dired" . "7d18938751d047eef18bfb5975195419f0d1e2d3")
  ("flycheck" . "c02cd773dded0215f9417ec04dfe8dabda63ef43")
  ("flycheck-clang-tidy" . "2ae5542960785604a2974548f89e10407e2ccfc1")
  ("flycheck-inline" . "0662c314bd819f9b46f8b2b13f0c650445b3a8c5")

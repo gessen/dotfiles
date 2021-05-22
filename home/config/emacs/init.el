@@ -4554,14 +4554,19 @@ unhelpful."
   :hook (dired-mode-hook . diredfl-mode))
 
 ;; Package `fd-dired' provides a dired-mode interface for fd's result. Same
-;; functionality as `find-dired', use fd instead. Depends on `find-dired'.
+;; functionality as `find-dired' and `find-grep-dired', use fd and rg instead.
+;; Depends on `find-dired'.
 (use-package! fd-dired
   :after dired
   :init
-  (set-leader-keys-for-major-mode! 'dired-mode "f" #'fd-dired)
+
+  (set-leader-keys-for-major-mode! 'dired-mode
+    "f" #'fd-dired
+    "g" #'fd-grep-dired)
 
   :bind (:map dired-mode-map
-              ("C-c C-f" . #'fd-dired)))
+              ("C-c C-f" . #'fd-dired)
+              ("C-c /"   . #'fd-grep-dired)))
 
 ;; Package `treemacs-icons-dired' brings Treemacs icons for Dired.
 (use-package! treemacs-icons-dired
