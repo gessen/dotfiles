@@ -3108,26 +3108,27 @@ menu to disappear and then come back after `company-idle-delay'."
   ;; Use `prescient' for Company menus.
   (company-prescient-mode +1))
 
+;; Package `company-posframe' is a Company extension which lets Company use
+;; child frame as its candidate menu.
 (use-package! company-posframe
-  :commands (company-posframe-quickhelp-scroll-down
-             company-posframe-quickhelp-scroll-up
-             company-posframe-quickhelp-toggle)
-
+  :commands (company-posframe-quickhelp-toggle)
   :init
 
   (after-display-graphic-init!
     (with-eval-after-load 'company
+      (require 'company-posframe)
       (add-hook #'company-mode-hook #'company-posframe-mode)
-      (bind-keys :map company-active-map
-                 ("M-h" . company-posframe-quickhelp-toggle)
-                 ("C-v" . company-posframe-quickhelp-scroll-down)
-                 ("M-v" . company-posframe-quickhelp-scroll-up))))
+      (bind-keys :map company-posframe-active-map
+                 ("M-h" . company-posframe-quickhelp-toggle))))
 
   :config
 
   ;; Do not display metadata (e.g. signature) of the selection below the visible
   ;; candidates.
   (setq company-posframe-show-metadata nil)
+
+  ;; Trigger popup manually with `company-posframe-quickhelp-toggle'.
+  (setq company-posframe-quickhelp-delay nil)
 
   :blackout t)
 
