@@ -1,5 +1,7 @@
 [core]
 	pager = delta
+[init]
+	defaultbranch = master
 [commit]
 	verbose = true
 [branch]
