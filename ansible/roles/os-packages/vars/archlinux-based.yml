@@ -14,12 +14,13 @@ packages_common:
   - ccls-git
   - clang
   - cmake
-  - colordiff
   - discord
+  - dos2unix
   - doxygen
   - emacs-native-comp-git
   - fasd
   - fd
+  - firefox
   - fzf
   - gcovr
   - gdb
@@ -39,8 +40,10 @@ packages_common:
   - ninja
   - oh-my-zsh-git
   - openssh
+  - pacman-contrib
   - plantuml
   - ranger
+  - reflector
   - ripgrep
   - rsync
   - rustup
@@ -93,6 +96,7 @@ packages_common_aur:
 packages_common_paru:
   - dropbox
   - git-completion
+  - include-what-you-use
   - mkinitcpio-firmware
   - shellcheck-bin
   - vscodium-bin
