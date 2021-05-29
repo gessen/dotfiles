@@ -252,6 +252,7 @@ NAME and ARGS are as in `use-package'."
                                    ("a" "applications")
                                    ("b" "buffers")
                                    ("c" "compile/comment")
+                                   ("d" "devdocs")
                                    ("D" "diff")
                                    ("e" "errors")
                                    ("g" "git")
@@ -3217,6 +3218,40 @@ function `lsp-ui-sideline-enable' is non-nil."
 ;; errors inline, directly below their location in the buffer.
 (use-package! flycheck-inline
   :hook (flycheck-mode-hook . my--flycheck-popup-mode))
+
+;;;; Online documentation
+
+;; Package `devdocs-browser' allows to browse API documentations provided by
+;; devdocs.io inside Emacs using EWW, with improved formatting, including
+;; highlighted code blocks and extra commands like "jump to other sections" or
+;; "open in default browser". You can manage (install, upgrade, uninstall, etc.)
+;; docsets and optionally download full content for offline usage.
+(use-package! devdocs-browser
+  :straight (:host github :repo "blahgeek/emacs-devdocs-browser")
+
+  :init
+
+  (declare-prefix! "do" "offline")
+  (declare-prefix! "du" "update")
+
+  (set-leader-keys!
+    "dd" #'devdocs-browser-open
+    "dD" #'devdocs-browser-open-in
+    "di" #'devdocs-browser-install-doc
+    "dr" #'devdocs-browser-uninstall-doc
+
+    "duu" #'devdocs-browser-update-docs
+    "dug" #'devdocs-browser-upgrade-doc
+    "duG" #'devdocs-browser-upgrade-all-docs)
+
+  :config
+
+  (set-leader-keys!
+    "dod" #'devdocs-browser-download-offline-data
+    "dor" #'devdocs-browser-remove-offline-data)
+
+  ;; Do not litter `user-emacs-directory' with offline data.
+  (setq devdocs-browser-cache-directory my-cache-dir))
 
 ;;;; Diff/Merge handling
 

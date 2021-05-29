@@ -40,6 +40,7 @@
  ("emacs-async" . "9a8cd0c3d5c120bfa03187c54dba6e33f6e3ca19")
  ("emacs-bind-map" . "bf4181e3a41463684adfffc6c5c305b30480e30f")
  ("emacs-ccls" . "675a5704c14a27931e835a431beea3631d92e8e6")
+ ("emacs-devdocs-browser" . "950eb9fa5fe0be59d3047fe6d547942bf0e39c2c")
  ("emacs-fasd" . "c1d92553f33ebb018135c698db1a6d7f86731a26")
  ("emacs-hide-mode-line" . "88888825b5b27b300683e662fa3be88d954b1cea")
  ("emacs-htmlize" . "49205105898ba8993b5253beec55d8bddd820a70")
