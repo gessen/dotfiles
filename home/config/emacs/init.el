@@ -252,7 +252,7 @@ NAME and ARGS are as in `use-package'."
                                    ("a" "applications")
                                    ("b" "buffers")
                                    ("c" "compile/comment")
-                                   ("d" "diff")
+                                   ("D" "diff")
                                    ("e" "errors")
                                    ("g" "git")
                                    ("f" "files")
@@ -3224,43 +3224,43 @@ function `lsp-ui-sideline-enable' is non-nil."
 (use-feature! ediff
   :init
 
-  (declare-prefix! "db"  "buffers")
-  (declare-prefix! "dd"  "directories")
-  (declare-prefix! "df"  "files")
-  (declare-prefix! "dm"  "merge")
-  (declare-prefix! "dmb" "buffers")
-  (declare-prefix! "dmd" "directories")
-  (declare-prefix! "dmf" "files")
-  (declare-prefix! "dmr" "revisions")
-  (declare-prefix! "dr"  "regions")
-  (declare-prefix! "dw"  "windows")
+  (declare-prefix! "Db"  "buffers")
+  (declare-prefix! "Dd"  "directories")
+  (declare-prefix! "Df"  "files")
+  (declare-prefix! "Dm"  "merge")
+  (declare-prefix! "Dmb" "buffers")
+  (declare-prefix! "Dmd" "directories")
+  (declare-prefix! "Dmf" "files")
+  (declare-prefix! "Dmr" "revisions")
+  (declare-prefix! "Dr"  "regions")
+  (declare-prefix! "Dw"  "windows")
 
   (set-leader-keys!
-    "db3"  #'ediff-buffers3
-    "dbb"  #'ediff-buffers
-    "dbB"  #'ediff-backup
-    "dbp"  #'ediff-patch-buffer
-    "dd3"  #'ediff-directories3
-    "ddd"  #'ediff-directories
-    "ddr"  #'ediff-directory-revisions
-    "df3"  #'ediff-files3
-    "dff"  #'ediff-files
-    "dfp"  #'ediff-patch-file
-    "dfv"  #'ediff-revision
-    "dmb3" #'ediff-merge-buffers-with-ancestor
-    "dmbb" #'ediff-merge-buffers
-    "dmd3" #'ediff-merge-directories-with-ancestor
-    "dmdd" #'ediff-merge-directories
-    "dmf3" #'ediff-merge-files-with-ancestor
-    "dmff" #'ediff-merge-files
-    "dmr3" #'ediff-merge-revisions-with-ancestor
-    "dmrr" #'ediff-merge-revisions
-    "drl"  #'ediff-regions-linewise
-    "drw"  #'ediff-regions-wordwise
-    "dwl"  #'ediff-windows-linewise
-    "dww"  #'ediff-windows-wordwise
-    "ds"   #'ediff-show-registry
-    "dh"   #'ediff-documentation)
+    "Db3"  #'ediff-buffers3
+    "Dbb"  #'ediff-buffers
+    "DbB"  #'ediff-backup
+    "Dbp"  #'ediff-patch-buffer
+    "Dd3"  #'ediff-directories3
+    "Ddd"  #'ediff-directories
+    "Ddr"  #'ediff-directory-revisions
+    "Df3"  #'ediff-files3
+    "Dff"  #'ediff-files
+    "Dfp"  #'ediff-patch-file
+    "Dfv"  #'ediff-revision
+    "Dmb3" #'ediff-merge-buffers-with-ancestor
+    "Dmbb" #'ediff-merge-buffers
+    "Dmd3" #'ediff-merge-directories-with-ancestor
+    "Dmdd" #'ediff-merge-directories
+    "Dmf3" #'ediff-merge-files-with-ancestor
+    "Dmff" #'ediff-merge-files
+    "Dmr3" #'ediff-merge-revisions-with-ancestor
+    "Dmrr" #'ediff-merge-revisions
+    "Drl"  #'ediff-regions-linewise
+    "Drw"  #'ediff-regions-wordwise
+    "Dwl"  #'ediff-windows-linewise
+    "Dww"  #'ediff-windows-wordwise
+    "Ds"   #'ediff-show-registry
+    "Dh"   #'ediff-documentation)
 
   :config
 
