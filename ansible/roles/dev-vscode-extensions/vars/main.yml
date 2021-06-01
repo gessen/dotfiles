@@ -19,6 +19,6 @@ vscode_extensions:
   - timonwong.shellcheck
   - twxs.cmake
   - vscode-icons-team.vscode-icons
-  - vscoss.vscode-ansible
   - webfreak.debug
   - xaver.clang-format
+  - zbr.vscode-ansible
