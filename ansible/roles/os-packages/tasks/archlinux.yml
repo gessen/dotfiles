@@ -17,6 +17,14 @@
   register: paru_output
   changed_when: '"there is nothing to do" not in paru_output.stdout'
 
+- name: Ignore packages from upgrade
+  lineinfile:
+    path: /etc/pacman.conf
+    line: 'IgnorePkg = {{ packages_ignore | join(" ") }}'
+    regexp: '^#?IgnorePkg'
+  become: yes
+  when: packages_ignore
+
 - name: Install AUR packages
   command: 'paru -S --noconfirm --needed {{ package }}'
   loop: '{{ packages_aur | default([], true) }}'
