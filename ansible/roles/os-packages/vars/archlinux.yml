@@ -6,7 +6,6 @@ packages:
   - aspell
   - aspell-en
   - aspell-pl
-  - bash-language-server
   - bat
   - bear
   - boost
