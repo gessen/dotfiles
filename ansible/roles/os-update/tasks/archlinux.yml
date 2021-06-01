@@ -6,7 +6,3 @@
 - name: Populate keys
   command: pacman-key --populate archlinux
   become: yes
-
-# - name: Refresh keys
-#   command: pacman-key --refresh-keys
-#   become: yes

@@ -2,15 +2,6 @@
 - hosts: localhost
   vars_files:
     - vars/config.yml
-  pre_tasks:
-    - name: 'Overwrite ansible facts for Manjaro'
-      set_fact:
-        ansible_facts: '{{ ansible_facts | default({}) | combine({"distribution": "Manjaro"}) }}'
-        ansible_distribution: 'Manjaro'
-      when:
-        - ansible_facts['os_family'] == 'Archlinux'
-        - ansible_facts['lsb'].get('id') == 'ManjaroLinux'
-      tags: always
   roles:
     - role: dotfiles
       tags: dotfiles

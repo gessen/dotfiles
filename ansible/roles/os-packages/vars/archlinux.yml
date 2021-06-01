@@ -2,7 +2,7 @@
 aur_src: '{{ home_dir }}/.dotfiles/aur'
 aur_dst: '{{ home_dir }}/.cache/paru/clone'
 
-packages_common:
+packages:
   - aspell
   - aspell-en
   - aspell-pl
@@ -60,7 +60,7 @@ packages_common:
   - zsh-completions
   - zsh-theme-powerlevel10k
 
-packages_common_asdeps:
+packages_asdeps:
   - atool
   - graphviz
   - highlight
@@ -68,7 +68,7 @@ packages_common_asdeps:
   - perl-term-readkey
   - python-pygments
 
-packages_common_own:
+packages_own:
   - name: tig-completion
     files:
       - PKGBUILD
@@ -90,10 +90,10 @@ packages_common_own:
       - .SRCINFO
       - zsh-interactive-cd.install
 
-packages_common_aur:
+packages_aur:
   - paru-bin
 
-packages_common_paru:
+packages_paru:
   - dropbox
   - git-completion
   - include-what-you-use
