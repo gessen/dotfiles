@@ -3,11 +3,11 @@ pacman_options:
   - regexp: '^#?Color'
     line: 'Color'
 
-  - regexp: '^#?TotalDownload'
-    line: 'TotalDownload'
-
   - regexp: '^#?VerbosePkgLists'
     line: 'VerbosePkgLists'
+
+  - regexp: '^#?ParallelDownloads'
+    line: 'ParallelDownloads = 5'
 
 makepkg_options:
   - regexp: '^#?MAKEFLAGS='
