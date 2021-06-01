@@ -101,3 +101,10 @@ packages_own:
       - PKGBUILD
       - .SRCINFO
       - zsh-interactive-cd.install
+
+reflector_options:
+  - regexp: '^#?[ ]*--country'
+    line: '--country Poland,Germany'
+
+services:
+  - reflector.timer

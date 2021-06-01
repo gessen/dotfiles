@@ -65,6 +65,24 @@
 
   when: packages_own is defined and packages_own
 
+- name: Configure reflector service
+  lineinfile:
+    path: /etc/xdg/reflector/reflector.conf
+    line: '{{ item.line }}'
+    regexp: '{{ item.regexp }}'
+  loop: '{{ reflector_options }}'
+  become: yes
+
+- name: Enable systemd services
+  systemd:
+    name: '{{ service }}'
+    enabled: yes
+    masked: no
+  loop: '{{ services | default([], true) }}'
+  loop_control:
+    loop_var: service
+  become: yes
+
 - name: Symlink nerd-fonts
   file:
     path: '/etc/fonts/conf.d/10-nerd-font-symbols.conf'
