@@ -1,89 +1,66 @@
 ---
-- block:
-  - name: Install pacman packages
-    command: 'pacman -S --noconfirm --needed {{ item }}'
-    with_items: '{{ packages | default([]) }}'
-    register: pacman_output
-    changed_when: '"there is nothing to do" not in pacman_output.stdout'
-    become: yes
+- name: Install packages
+  command: 'paru -S --noconfirm --needed {{ package }}'
+  loop: '{{ packages | default([], true) }}'
+  loop_control:
+    loop_var: package
+  when: packages is defined
+  register: paru_output
+  changed_when: '"there is nothing to do" not in paru_output.stdout'
 
-  - name: Install pacman packages as dependencies
-    command: 'pacman -S --noconfirm --needed --asdeps {{ item }}'
-    with_items: '{{ packages_asdeps | default([]) }}'
-    register: pacman_output
-    changed_when: '"there is nothing to do" not in pacman_output.stdout'
-    become: yes
+- name: Install packages as dependencies
+  command: 'paru -S --noconfirm --needed --asdeps {{ package }}'
+  loop: '{{ packages_asdeps | default([], true) }}'
+  loop_control:
+    loop_var: package
+  when: packages_asdeps is defined
+  register: paru_output
+  changed_when: '"there is nothing to do" not in paru_output.stdout'
 
-  - name: Symlink nerd-fonts
-    file:
-      path: '/etc/fonts/conf.d/10-nerd-font-symbols.conf'
-      src: '/usr/share/fontconfig/conf.avail/10-nerd-font-symbols.conf'
-      state: link
-      force: yes
-    become: yes
-
-  when: with_pacman | default(False)
+- name: Install AUR packages
+  command: 'paru -S --noconfirm --needed {{ package }}'
+  loop: '{{ packages_aur | default([], true) }}'
+  loop_control:
+    loop_var: package
+  when: packages_aur is defined
+  register: paru_output
+  changed_when: '"is up to date" not in paru_output.stdout'
 
 - block:
   - name: Create folders for own recipes
     file:
-      path: '{{ aur_dst }}/{{ item.name }}'
+      path: '{{ aur_dst }}/{{ package.name }}'
       state: directory
-    with_items: '{{ packages_own | default([]) }}'
+    loop: '{{ packages_own | default([], true) }}'
+    loop_control:
+      loop_var: package
 
   - name: Symlink own recipes
     file:
-      path: '{{ aur_dst }}/{{ item[0].name }}/{{ item[1] }}'
-      src: '{{ aur_src }}/{{ item[0].name }}/{{ item[1] }}'
+      path: '{{ aur_dst }}/{{ package.0.name }}/{{ package.1 }}'
+      src: '{{ aur_src }}/{{ package.0.name }}/{{ package.1 }}'
       state: link
       force: yes
-    with_subelements:
-      - '{{ packages_own | default([]) }}'
-      - files
+    loop: '{{ packages_own | subelements("files", skip_missing=True) }}'
+    loop_control:
+      loop_var: package
 
   - name: Install own packages
     command: 'makepkg -si --noconfirm --needed'
     args:
-      chdir: '{{ aur_dst }}/{{ item.name }}'
-    with_items: '{{ packages_own | default([]) }}'
+      chdir: '{{ aur_dst }}/{{ package.name }}'
+    loop: '{{ packages_own | default([], true) }}'
+    loop_control:
+      loop_var: package
     register: makepkg_output
     changed_when: '"there is nothing to do" not in makepkg_output.stdout'
 
-  - name: Create folders for AUR recipes
-    file:
-      path: '{{ aur_dst }}'
-      state: directory
-    with_items: '{{ packages_aur | default([]) }}'
+  when: packages_own is defined and packages_own
 
-  - name: Clone AUR recipes
-    git:
-      repo: 'https://aur.archlinux.org/{{ item }}'
-      dest: '{{ aur_dst }}/{{ item }}'
-      clone: yes
-      force: yes
-      depth: 1
-    with_items: '{{ packages_aur | default([]) }}'
-
-  - name: Install AUR packages
-    command: 'makepkg -si --noconfirm --needed'
-    args:
-      chdir: '{{ aur_dst }}/{{ item }}'
-    with_items: '{{ packages_aur | default([]) }}'
-    register: makepkg_output
-    changed_when: '"there is nothing to do" not in makepkg_output.stdout'
-
-  - name: Check if paru exists
-    stat:
-      path: /usr/bin/paru
-    register: paru_installed
-
-  - name: Install AUR packages with paru
-    command: 'paru -S --noconfirm --needed {{ item }}'
-    with_items: '{{ packages_paru | default([]) }}'
-    when:
-      - paru_installed.stat.executable is defined
-      - paru_installed.stat.executable
-    register: paru_output
-    changed_when: '"is up to date" not in paru_output.stdout'
-
-  when: with_aur | default(False)
+- name: Symlink nerd-fonts
+  file:
+    path: '/etc/fonts/conf.d/10-nerd-font-symbols.conf'
+    src: '/usr/share/fontconfig/conf.avail/10-nerd-font-symbols.conf'
+    state: link
+    force: yes
+  become: yes

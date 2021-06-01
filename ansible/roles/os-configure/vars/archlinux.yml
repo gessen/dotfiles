@@ -27,3 +27,5 @@ makepkg_options:
 
   - regexp: '^#?PKGEXT='
     line: PKGEXT='.pkg.tar'
+
+paru: paru-bin

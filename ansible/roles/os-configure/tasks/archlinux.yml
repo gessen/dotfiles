@@ -29,3 +29,28 @@
     state: latest
     update_cache: yes
   become: yes
+
+- name: Install ccache
+  command: 'pacman -S --noconfirm --needed ccache'
+  register: paru_output
+  changed_when: '"there is nothing to do" not in paru_output.stdout'
+  become: yes
+
+- name: Create folders for paru
+  file:
+    path: '{{ home_dir }}/.cache/paru/clone/{{ paru }}'
+    state: directory
+
+- name: Clone paru recipe
+  git:
+    repo: 'https://aur.archlinux.org/{{ paru }}'
+    dest: '{{ home_dir }}/.cache/paru/clone/{{ paru }}'
+    clone: yes
+    force: yes
+
+- name: Install paru package
+  command: 'makepkg -si --noconfirm --needed'
+  args:
+    chdir: '{{ home_dir }}/.cache/paru/clone/{{ paru }}'
+  register: makepkg_output
+  changed_when: '"there is nothing to do" not in makepkg_output.stdout'
