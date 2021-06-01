@@ -107,4 +107,5 @@ reflector_options:
     line: '--country Poland,Germany'
 
 services:
+  - paccache.timer
   - reflector.timer
