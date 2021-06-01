@@ -10,7 +10,6 @@ packages:
   - bat
   - bear
   - boost
-  - ccache
   - ccls-git
   - clang
   - cmake
@@ -68,6 +67,17 @@ packages_asdeps:
   - perl-term-readkey
   - python-pygments
 
+packages_aur:
+  - dropbox
+  - git-completion
+  - include-what-you-use
+  - mkinitcpio-firmware
+  - shellcheck-bin
+  - vscodium-bin
+  - vscodium-bin-marketplace
+  - zsh-autopair-git
+  - zsh-fast-syntax-highlighting
+
 packages_own:
   - name: tig-completion
     files:
@@ -89,17 +99,3 @@ packages_own:
       - PKGBUILD
       - .SRCINFO
       - zsh-interactive-cd.install
-
-packages_aur:
-  - paru-bin
-
-packages_paru:
-  - dropbox
-  - git-completion
-  - include-what-you-use
-  - mkinitcpio-firmware
-  - shellcheck-bin
-  - vscodium-bin
-  - vscodium-bin-marketplace
-  - zsh-autopair-git
-  - zsh-fast-syntax-highlighting
