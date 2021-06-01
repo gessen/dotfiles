@@ -2,18 +2,14 @@
 - block:
   - name: Install pacman packages
     command: 'pacman -S --noconfirm --needed {{ item }}'
-    with_items:
-      - '{{ packages_common | default([]) }}'
-      - '{{ packages | default([]) }}'
+    with_items: '{{ packages | default([]) }}'
     register: pacman_output
     changed_when: '"there is nothing to do" not in pacman_output.stdout'
     become: yes
 
   - name: Install pacman packages as dependencies
     command: 'pacman -S --noconfirm --needed --asdeps {{ item }}'
-    with_items:
-      - '{{ packages_common_asdeps | default([]) }}'
-      - '{{ packages_asdeps | default([]) }}'
+    with_items: '{{ packages_asdeps | default([]) }}'
     register: pacman_output
     changed_when: '"there is nothing to do" not in pacman_output.stdout'
     become: yes
@@ -25,9 +21,7 @@
     file:
       path: '{{ aur_dst }}/{{ item.name }}'
       state: directory
-    with_items:
-      - '{{ packages_common_own | default([]) }}'
-      - '{{ packages_own | default([]) }}'
+    with_items: '{{ packages_own | default([]) }}'
 
   - name: Symlink own recipes
     file:
@@ -36,16 +30,14 @@
       state: link
       force: yes
     with_subelements:
-      - '{{ packages_common_own | default([]) + packages_own | default([]) }}'
+      - '{{ packages_own | default([]) }}'
       - files
 
   - name: Install own packages
     command: 'makepkg -si --noconfirm --needed'
     args:
       chdir: '{{ aur_dst }}/{{ item.name }}'
-    with_items:
-      - '{{ packages_common_own | default([]) }}'
-      - '{{ packages_own | default([]) }}'
+    with_items: '{{ packages_own | default([]) }}'
     register: makepkg_output
     changed_when: '"there is nothing to do" not in makepkg_output.stdout'
 
@@ -53,9 +45,7 @@
     file:
       path: '{{ aur_dst }}'
       state: directory
-    with_items:
-      - '{{ packages_common_aur | default([]) }}'
-      - '{{ packages_aur | default([]) }}'
+    with_items: '{{ packages_aur | default([]) }}'
 
   - name: Clone AUR recipes
     git:
@@ -64,17 +54,13 @@
       clone: yes
       force: yes
       depth: 1
-    with_items:
-      - '{{ packages_common_aur | default([]) }}'
-      - '{{ packages_aur | default([]) }}'
+    with_items: '{{ packages_aur | default([]) }}'
 
   - name: Install AUR packages
     command: 'makepkg -si --noconfirm --needed'
     args:
       chdir: '{{ aur_dst }}/{{ item }}'
-    with_items:
-      - '{{ packages_common_aur | default([]) }}'
-      - '{{ packages_aur | default([]) }}'
+    with_items: '{{ packages_aur | default([]) }}'
     register: makepkg_output
     changed_when: '"there is nothing to do" not in makepkg_output.stdout'
 
@@ -85,9 +71,7 @@
 
   - name: Install AUR packages with paru
     command: 'paru -S --noconfirm --needed {{ item }}'
-    with_items:
-      - '{{ packages_common_paru | default([]) }}'
-      - '{{ packages_paru | default([]) }}'
+    with_items: '{{ packages_paru | default([]) }}'
     when:
       - paru_installed.stat.executable is defined
       - paru_installed.stat.executable
