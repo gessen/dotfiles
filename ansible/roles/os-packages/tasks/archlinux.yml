@@ -14,6 +14,14 @@
     changed_when: '"there is nothing to do" not in pacman_output.stdout'
     become: yes
 
+  - name: Symlink nerd-fonts
+    file:
+      path: '/etc/fonts/conf.d/10-nerd-font-symbols.conf'
+      src: '/usr/share/fontconfig/conf.avail/10-nerd-font-symbols.conf'
+      state: link
+      force: yes
+    become: yes
+
   when: with_pacman | default(False)
 
 - block:
