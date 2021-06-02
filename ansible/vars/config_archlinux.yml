@@ -1,0 +1,3 @@
+---
+aur_src: '{{ dotfiles_dir }}/aur'
+aur_dst: '{{ home_dir }}/.cache/paru/clone'
