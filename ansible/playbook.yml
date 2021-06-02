@@ -2,6 +2,7 @@
 - hosts: localhost
   vars_files:
     - vars/config.yml
+    - vars/config_{{ ansible_distribution | lower }}.yml
   roles:
     - role: dotfiles
       tags: dotfiles

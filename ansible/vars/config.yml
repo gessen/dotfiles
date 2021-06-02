@@ -1,5 +1,10 @@
 ---
 home_dir: '{{ ansible_env.HOME }}'
+dotfiles_dir: '{{ home_dir }}/.dotfiles'
+
+dotfiles_src: '{{ dotfiles_dir }}/home'
+dotfiles_dst: '{{ home_dir }}'
+
 with_packages: True
 with_sublime_text: True
 with_vscode_extensions: True
