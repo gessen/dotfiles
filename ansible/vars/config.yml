@@ -4,6 +4,7 @@ dotfiles_dir: '{{ home_dir }}/.dotfiles'
 
 dotfiles_src: '{{ dotfiles_dir }}/home'
 dotfiles_dst: '{{ home_dir }}'
+dotfiles_distro_src: '{{ dotfiles_src }}/{{ ansible_os_family | lower }}'
 
 with_packages: True
 with_sublime_text: True
