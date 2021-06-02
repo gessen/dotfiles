@@ -1,7 +1,5 @@
 ---
-dotfiles_src: '{{ home_dir }}/.dotfiles/home/{{ ansible_os_family | lower }}'
-
-dotfiles:
+dotfiles_distro:
   - config/oh-my-zsh/plugins/fast-syntax-highlighting
   - config/oh-my-zsh/plugins/fzf-git
   - config/oh-my-zsh/plugins/fzf-kill
