@@ -28,7 +28,9 @@ dotfiles:
   - config/sublime-text-3/Packages/User
   - config/tig/config
   - config/tmux/tmux.conf
-  - config/profile
+  - config/shprofile
+  - config/shrc
   - gdbinit.d/init
   - ssh/config
+  - zprofile
   - zshrc

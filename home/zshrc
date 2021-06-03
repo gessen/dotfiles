@@ -173,17 +173,17 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 # HIST_STAMPS="mm/dd/yyyy"
 
 # Would you like to use another custom folder than $ZSH/custom?
-ZSH_CUSTOM="${XDG_CONFIG_HOME:-$HOME/.config}/oh-my-zsh"
+ZSH_CUSTOM="${XDG_CONFIG_HOME}/oh-my-zsh"
 
 # Move cache to XDG cache dir
-ZSH_CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/zsh"
+ZSH_CACHE_DIR="${XDG_CACHE_HOME}/zsh"
 mkdir -p $ZSH_CACHE_DIR
 
 # Move completion dump to XDG cache dir
 ZSH_COMPDUMP="${ZSH_CACHE_DIR}/zcompdump-${ZSH_VERSION}"
 
 # Use XDG directory for tmux, otherwise tmux plugin will set it to $HOME
-ZSH_TMUX_CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/tmux/tmux.conf"
+ZSH_TMUX_CONFIG="${XDG_CONFIG_HOME}/tmux/tmux.conf"
 
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
@@ -292,7 +292,7 @@ ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=60'
 ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=40
 
 # User configuration
-source "${XDG_CONFIG_HOME:-$HOME/.config}/profile"
+. "${XDG_CONFIG_HOME}/shrc"
 
 # Use ALT-{A/E} for the same effect as CTRL-{A/E}
 bindkey '^[a' beginning-of-line
