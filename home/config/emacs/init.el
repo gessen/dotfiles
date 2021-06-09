@@ -3227,8 +3227,6 @@ function `lsp-ui-sideline-enable' is non-nil."
 ;; "open in default browser". You can manage (install, upgrade, uninstall, etc.)
 ;; docsets and optionally download full content for offline usage.
 (use-package! devdocs-browser
-  :straight (:host github :repo "blahgeek/emacs-devdocs-browser")
-
   :init
 
   (declare-prefix! "do" "offline")
