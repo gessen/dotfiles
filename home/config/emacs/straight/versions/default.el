@@ -101,7 +101,7 @@
  ("marginalia" . "445d2832a2f06484ad28d9b55676c52d63cd0a46")
  ("markdown-mode" . "9977753eebe3f5cca7ab85b18a7c719fdb0b7654")
  ("markdown-toc" . "86a4a2b092b0f23b9edb3ee0ab7da483b7f10a5b")
- ("melpa" . "d5c27f29f3ab4633e6a1d69b3a82e47ba216bf39")
+ ("melpa" . "6c13d0ea72261c4835b5f1983a1f3ee1e066f743")
  ("meson-mode" . "69fdb63b59ec7d1acd427cb7de7219c18af46f40")
  ("minions" . "4a81446e13f5bfb514e593d0e1c5253a60113301")
  ("modus-themes" . "268ee4806f57283e643208dcfe1ec6d8211f28e9")
