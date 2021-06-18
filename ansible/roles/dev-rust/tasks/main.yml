@@ -5,14 +5,14 @@
   register: rustup_installed
 
 - block:
-  - name: Install {{ toolchain }} toolchain
-    command: 'rustup install {{ toolchain }}'
+  - name: Install {{ rust_toolchain }} toolchain
+    command: 'rustup install {{ rust_toolchain }}'
 
-  - name: Set {{ toolchain }} toolchain
-    command: 'rustup default {{ toolchain }}'
+  - name: Set {{ rust_toolchain }} toolchain
+    command: 'rustup default {{ rust_toolchain }}'
 
   - name: Install rustup components
     command: 'rustup component add {{ item }}'
-    with_items: '{{ components }}'
+    with_items: '{{ rust_components }}'
 
   when: rustup_installed.stat.executable is defined and rustup_installed.stat.executable
