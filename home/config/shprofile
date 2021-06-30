@@ -47,6 +47,12 @@ export CMAKE_EXPORT_COMPILE_COMMANDS=ON
 export CMAKE_C_COMPILER_LAUNCHER="CCACHE_CPP2=yes;CCACHE_HASHDIR=yes;ccache"
 export CMAKE_CXX_COMPILER_LAUNCHER="CCACHE_CPP2=yes;CCACHE_HASHDIR=yes;ccache"
 
+# Output should be logged for failed tests
+export CTEST_OUTPUT_ON_FAILURE=ON
+
+# Report CTest progress by repeatedly updating the same line
+export CTEST_PROGRESS_OUTPUT=ON
+
 # Conform to XDG with fasd cache
 export _FASD_DATA="${XDG_CACHE_HOME}/fasd"
 
