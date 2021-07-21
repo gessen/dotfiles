@@ -4609,6 +4609,17 @@ unhelpful."
   :bind (:map dired-mode-map
               ("C-c C-c" . #'wdired-change-to-wdired-mode)))
 
+;; Package `dired-subtree' defines function `dired-subtree-insert' which inserts
+;; the subdirectory directly below its line in the original listing, and indents
+;; the listing of subdirectory to resemble a tree-like structure. The tree
+;; display is somewhat more intuitive than the default "flat" subdirectory
+;; manipulation provided by `dired-maybe-insert-subdir'.
+(use-package! dired-subtree
+  :after dired
+  :bind (:map dired-mode-map
+              ([remap dired-maybe-insert-subdir] . #'dired-subtree-toggle)
+              ("I"                               . #'dired-subtree-cycle)))
+
 ;; Package `diredfl' provides extra font lock rules for a more colourful
 ;; `dired'.
 (use-package! diredfl
