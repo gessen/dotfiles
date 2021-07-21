@@ -4346,13 +4346,12 @@ unhelpful."
 ;;; Applications
 ;;;; Organisation
 
-;; Package `org-plus-contrib' provides too many features to describe in any
-;; reasonable amount of space. It is built fundamentally on `outline-mode', and
-;; adds TODO states, deadlines, properties, priorities, etc. to headings. Then
-;; it provides tools for interacting with this data, including an agenda view, a
-;; time clocker, etc. This package contains add-ons to Org-mode. These
-;; contributions are not part of GNU Emacs or of the official Org-mode package.
-(use-package! org-plus-contrib
+;; Package `org' provides too many features to describe in any reasonable amount
+;; of space. It is built fundamentally on `outline-mode', and adds TODO states,
+;; deadlines, properties, priorities, etc. to headings. Then it provides tools
+;; for interacting with this data, including an agenda view, a time clocker,
+;; etc.
+(use-package! org
   ;; We use straight mirror as the official repo does not allow to fetch a
   ;; shallow repo with a frozen git hash.
   :straight (:host github :repo "emacs-straight/org-mode" :local-repo "org")
@@ -4412,6 +4411,10 @@ unhelpful."
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((plantuml . t))))
+
+;; Package `org-contrib' contains add-ons to Org-mode. These contributions are
+;; not part of GNU Emacs or of the official Org-mode package.
+(use-package! org-contrib)
 
 ;; Feature `ob' allows to work with code blocks in Org buffers.
 (use-feature! ob
