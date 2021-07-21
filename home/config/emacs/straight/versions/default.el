@@ -27,6 +27,7 @@
  ("dash.el" . "b9286a84975874b10493f1cb4ea051c501f51273")
  ("deadgrep" . "83e7812cda2673884b3d4d218757c7489f817fbb")
  ("default-text-scale" . "bfc0987c37e93742255d3b23d86c17096fda8e7e")
+ ("dired-hacks" . "7c0ef09d57a80068a11edc74c3568e5ead5cc15a")
  ("diredfl" . "4ca32658aebaf2335f0368a0fd08f52eb1aee960")
  ("doom-modeline" . "e70da0942707c44f939fe316d922f358b8165ed3")
  ("drag-stuff.el" . "6d06d846cd37c052d79acd0f372c13006aa7e7c8")
