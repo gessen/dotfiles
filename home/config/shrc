@@ -24,7 +24,7 @@ alias ecg='emacsclient --create-frame --no-wait'
 alias mg='ec --eval "(magit-status)"'
 alias mgg='ecg --eval "(magit-status)"'
 
-alias gsm='git switch $(git_main_branch)'
+alias gsm='git switch master'
 alias gsd='git switch develop'
 alias gignore='git update-index --skip-worktree'
 alias gunignore='git update-index --no-skip-worktree'
