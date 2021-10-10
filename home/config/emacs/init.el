@@ -701,7 +701,9 @@ window instead."
                                "*Ibuffer*"
                                "*esh command on file*"))
 
-  (winner-mode +1))
+  ;; For some reason `winner-mode' must be delayed, otherwise launching
+  ;; emacsclient in GUI may work strangely.
+  (after-display-graphic-init! (winner-mode +1)))
 
 ;; Package `ace-window' provides a function, `ace-window' which is meant to
 ;; replace `other-window' by assigning each window a short, unique label. When
