@@ -20,7 +20,7 @@ alias l='la'
 
 # Emacs
 alias ec='emacsclient --tty'
-alias ecg='emacsclient --create-frame'
+alias ecg='emacsclient --create-frame --no-wait'
 alias mg='ec --eval "(magit-status)"'
 alias mgg='ecg --eval "(magit-status)"'
 
