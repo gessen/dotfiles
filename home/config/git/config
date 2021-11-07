@@ -8,7 +8,7 @@
 	autosetuprebase = always
 [diff]
 	mnemonicprefix = true
-	algorithm = patience
+	algorithm = histogram
 	colormoved = dimmed-zebra
 	submodule = log
 	tool = ediffclient
