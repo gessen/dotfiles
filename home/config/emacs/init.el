@@ -1122,9 +1122,8 @@ window instead."
    'cmake '("CMakeLists.txt")
    :project-file "CMakeLists.txt"
    :compilation-dir "build"
-   :configure (string-join '("cmake %s -B%s -GNinja"
-                             "-DCMAKE_INSTALL_PREFIX=/usr"
-                             "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON") " ")
+   :configure (string-join '("cmake %s -B%s"
+                             "-DCMAKE_INSTALL_PREFIX=/usr") " ")
    :compile "cmake --build ."
    :test "cmake --build . && ctest --output-on-failure"
    :install "cmake --build . --target install"
