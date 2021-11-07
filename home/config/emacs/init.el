@@ -1193,7 +1193,12 @@ window instead."
 
   (with-eval-after-load 'ace-window
     ;; Let `ace-window' consider treemacs as normal window.
-    (setq aw-ignored-buffers (delq 'treemacs-mode aw-ignored-buffers))))
+    (setq aw-ignored-buffers (delq 'treemacs-mode aw-ignored-buffers)))
+
+  (with-eval-after-load 'projectile
+    ;; Force loading `treemacs-projectile' package if `treemacs' wasn't loaded
+    ;; by it via `treemacs-projectile' function.
+    (require 'treemacs-projectile)))
 
 ;; Package `treemacs-projectile' brings Projectile integration for Treemacs.
 (use-package! treemacs-projectile
