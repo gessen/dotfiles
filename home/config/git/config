@@ -9,7 +9,7 @@
 [diff]
 	mnemonicprefix = true
 	algorithm = histogram
-	colormoved = dimmed-zebra
+	colormoved = default
 	submodule = log
 	tool = ediffclient
 	guitool = ediffclient-g
