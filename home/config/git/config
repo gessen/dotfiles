@@ -38,6 +38,7 @@
 	cmd = emacsclient --create-frame --eval \"(ediff-files \\\"$LOCAL\\\" \\\"$REMOTE\\\")\"
 	prompt = false
 [merge]
+	conflictstyle = diff3
 	tool = emergeclient
 	guitool = emergeclient-g
 [mergetool "emergeclient"]
