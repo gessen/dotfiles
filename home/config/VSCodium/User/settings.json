@@ -60,12 +60,6 @@
     },
     "editor.snippetSuggestions": "top",
     "editor.tabSize": 2,
-    "[c]": {
-        "editor.defaultFormatter": "xaver.clang-format"
-    },
-    "[cpp]": {
-        "editor.defaultFormatter": "xaver.clang-format"
-    },
     "workbench.colorTheme": "Monokai",
     "workbench.iconTheme": "vscode-icons",
     "workbench.list.keyboardNavigation": "filter",
@@ -222,7 +216,6 @@
         "twxs.cmake",
         "vector-of-bool.cmake-tools",
         "webfreak.debug",
-        "xaver.clang-format"
     ],
     "remote.containers.defaultExtensions": [
         "ccls-project.ccls",
@@ -233,6 +226,5 @@
         "twxs.cmake",
         "vector-of-bool.cmake-tools",
         "webfreak.debug",
-        "xaver.clang-format"
     ]
 }
