@@ -9,7 +9,7 @@
       ],
       "selector": "source.c | source.c++ | source.objc | source.objc++",
       "auto_complete_selector": "punctuation.accessor | (meta.preprocessor.include string - punctuation.definition.string.end)",
-      "enabled": true
+      "enabled": true,
     },
     "ccls": {
       "command": [
@@ -21,7 +21,7 @@
       "auto_complete_selector": "punctuation.accessor | (meta.preprocessor.include string - punctuation.definition.string.end)",
       "initializationOptions": {
         "cache": {
-          "directory": ".cache/ccls"
+          "directory": ".cache/ccls",
         },
         "clang": {
           "extraArgs": [
@@ -50,26 +50,26 @@
             "-fno-var-tracking-assignments",
             "-fstack-usage",
             "-mabi=lp64"
-          ]
+          ],
         },
         "codeLens": {
-          "localVariables": false
+          "localVariables": false,
         },
         "completion": {
           "caseSensitivity": 1,
           "detailedLabel": true,
           "duplicateOptional": false,
           "include": {
-            "maxPathSize": 30
-          }
+            "maxPathSize": 30,
+          },
         },
         "index": {
           "blacklist": [".*CMakeFiles.*"],
-          "maxInitializerLines": 15
-        }
+          "maxInitializerLines": 15,
+        },
       },
-      "enabled": false
-    }
+      "enabled": false,
+    },
   },
-  "log_stderr": true
+  "log_stderr": true,
 }
