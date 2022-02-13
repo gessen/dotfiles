@@ -6,7 +6,6 @@
 	"installed_packages":
 	[
 		"Bitbake Syntax",
-		"Clang Format",
 		"CMakeEditor",
 		"FileIcons",
 		"LSP",
