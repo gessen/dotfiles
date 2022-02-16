@@ -1,0 +1,13 @@
+- block:
+  - name: Create folder for kittens
+    file:
+      path: '{{ kittens_dir }}'
+      state: directory
+
+  - name: Clone kittens repositories
+    git:
+      repo: '{{ item.url }}'
+      dest: '{{ kittens_dir }}/{{ item.name }}'
+      clone: yes
+      update: yes
+    loop: '{{ kittens }}'

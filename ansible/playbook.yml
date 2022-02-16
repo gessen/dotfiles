@@ -24,6 +24,10 @@
       tags: [os, os-shell]
       when: with_packages | default(False)
 
+    - role: os-kitty
+      tags: [os, os-kitty]
+      when: with_packages | default(False)
+
     - role: dev-sublime-text
       tags: [dev, dev-sublime-text]
       when: with_sublime_text | default(False)
