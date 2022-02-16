@@ -1,0 +1,5 @@
+kittens_dir: '{{ home_dir }}/.config/kitty/'
+
+kittens:
+  - name: kitty_search
+    url: https://github.com/trygveaa/kitty-kitten-search
