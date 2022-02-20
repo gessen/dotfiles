@@ -888,7 +888,7 @@ window instead."
       (start-process "" nil "xdg-open" filepath))))
 
 ;; Follow symlinks when opening files. This has the concrete impact, for
-;; instance, that when you edit real-init.el with M-m f e r and then later do
+;; instance, that when you edit real init.el with M-m f e i and then later do
 ;; C-x C-f, you will be in the repository instead of your home directory.
 (setq find-file-visit-truename t)
 
@@ -2455,12 +2455,12 @@ Spell Commands^^            Add To Dictionary^^               Other^^
 ;;;; Automatic delimiter pairing
 
 ;; Package `smartparens' provides an API for manipulating paired delimiters of
-;; many different types, as well as interactive commands and keybindings for
+;; many different types, as well as interactive commands and key bindings for
 ;; operating on paired delimiters at the s-expression level. It provides a
 ;; Paredit compatibility layer.
 (use-package! smartparens
   :demand t
-  :bind (;; Use it to change paranthesis to another type.
+  :bind (;; Use it to change parenthesis to another type.
          "M-=" . #'sp-rewrap-sexp)
   :config
 
@@ -4844,7 +4844,6 @@ Goto^^              Actions^^         Other^^
   ;; Number of chars from the full sha1 hash to use for abbreviation.
   (setq git-timemachine-abbreviation-length 8))
 
-
 ;; Package `magit' provides a full graphical interface for Git within Emacs.
 (use-package! magit
   :defer 2
@@ -5258,14 +5257,14 @@ possibly new window."
 (use-package! monokai-alt-theme)
 
 ;; Package `monokai-pro-theme' is a simple theme based on the Monokai Pro
-;; Sublime color schemes.
+;; Sublime colour schemes.
 (use-package! monokai-pro-theme)
 
-;; Package `monokai-theme' is a fruity color theme for Emacs.
+;; Package `monokai-theme' is a fruity colour theme for Emacs.
 (use-package! monokai-theme)
 
 ;; Package `modus-themes' is a pack of themes that conform with the highest
-;; standard for color-contrast accessibility between background and foreground
+;; standard for colour-contrast accessibility between background and foreground
 ;; values (WCAG AAA).
 (use-package! modus-themes
   :bind ("<f9>" . modus-themes-toggle))
@@ -5285,7 +5284,7 @@ possibly new window."
   ;; mode in GUI.
   (setq doom-modeline-icon t)
 
-  ;; Disaply minor modes in modeline, with `minions-mode' they won't be visible
+  ;; Display minor modes in modeline, with `minions-mode' they won't be visible
   ;; anyway but could be quickly looked at by disabling `minions-mode'.
   (setq doom-modeline-minor-modes t)
 
