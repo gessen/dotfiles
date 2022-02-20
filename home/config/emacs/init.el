@@ -485,12 +485,6 @@ BINDINGS is a series of KEY DEF pair."
 
 ;;;; Mouse integration
 
-;; Scrolling is way too fast. Decreasing the number of lines we scroll per mouse
-;; event improves the situation. Normally, holding shift allows this slower
-;; scrolling. Instead, we make it so that holding shift accelerates the
-;; scrolling.
-(setq mouse-wheel-scroll-amount '(3 ((shift) . 6) ((control))))
-
 ;; Mouse integration works out of the box in windowed mode but not terminal mode
 (unless (display-graphic-p)
   ;; Enable basic mouse support (click and drag).
