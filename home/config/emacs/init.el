@@ -3613,19 +3613,6 @@ that because `bb-mode' inherits from `fundamental-mode'."
                                    company-files
                                    (company-dabbrev-code company-keywords)
                                    company-dabbrev))
-    ;; Customise `electric-case' for C/C++ modes.
-    (with-eval-after-load 'electric-case
-      (setq-local electric-case-max-iteration 2)
-      (setq-local electric-case-criteria
-                  (lambda (b e)
-                    (let ((props (electric-case--possible-properties b e)))
-                      (cond
-                       ((member 'font-lock-variable-name-face props)
-                        (if (member '(cpp-macro) (c-guess-basic-syntax))
-                            'usnake 'snake))
-                       ((member 'font-lock-function-name-face props) 'snake)
-                       ((member 'font-lock-type-face props) 'snake)
-                       (t nil))))))
     ;; Launch `lsp-mode'
     (lsp-deferred)
     ;; For a UI feedback on headerline of the document symbols at point, current
@@ -3984,22 +3971,6 @@ ALL when non-nil determines whether words will be pickable."
 
   ;; Use default rainbow semantic highlight theme.
   (ccls-use-default-rainbow-sem-highlight))
-
-;; Package `electric-case' allows to insert camelCase, snake_case words without
-;; pressing Shift key.
-(use-package! electric-case
-  :functions electric-case--possible-properties
-  :commands electric-case-mode
-  :init
-
-  (set-leader-keys! "tE" #'electric-case-mode)
-
-  :config
-
-  ;; Remove special face for pending changes.
-  (setq electric-case-pending-overlay nil)
-
-  :blackout " Ⓔ")
 
 ;; Package `flycheck-clang-tidy' adds a Flycheck syntax checker for C/C++ based
 ;; on clang-tidy.

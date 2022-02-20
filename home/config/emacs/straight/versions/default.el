@@ -35,7 +35,6 @@
  ("easy-kill" . "2a6309d98aa6b71df6bbbcdf15cab3187c521a6b")
  ("easy-kill-extras.el" . "b8ce8350cc86e0229f195082557970cd51def960")
  ("el-get" . "d76ac84ae9670de7bf7725b362cafe86688771f9")
- ("electric-case" . "bac64e772107e3dc721a9819f63b9ebdc28a81f7")
  ("elisp-lint" . "a4de033c260389c0d483f93e715fd3395c6e4145")
  ("elisp-refs" . "b3634a4567c655a1cda51b217629849cba0ac6a7")
  ("emacs-async" . "9a8cd0c3d5c120bfa03187c54dba6e33f6e3ca19")
