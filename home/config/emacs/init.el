@@ -5170,7 +5170,7 @@ possibly new window."
 ;;;; Font
 
 ;; Set default font.
-(face-spec-set 'default '((t :family "Hack" :height 125)))
+(face-spec-set 'default '((t :family "Hack" :height 135)))
 
 ;; Package `default-text-scale' provides commands for increasing or decreasing
 ;; the default font size in all GUI Emacs frames - it is like an Emacs-wide
