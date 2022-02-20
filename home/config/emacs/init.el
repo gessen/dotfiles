@@ -2012,6 +2012,7 @@ possibly new window."
     "Refresh `column-enforce-mode' after changing `fill-column'
 via `set-fill-column'. Changing `fill-column' via other means
 will not refresh `column-number-mode."
+    (require 'column-enforce-mode)
     (when column-enforce-mode
       (column-enforce-mode -1)
       (column-enforce-mode +1)))
