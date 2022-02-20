@@ -2510,7 +2510,14 @@ Spell Commands^^            Add To Dictionary^^               Other^^
 ;; inspired by `evil-surround' but instead of using `evil' and its text objects,
 ;; this package relies on another package `expand-region'.
 (use-package! embrace
-  :bind ("M-+" . #'embrace-commander))
+  :bind ("M-+" . #'embrace-commander)
+  :config
+
+  (defun embrace-buffer-p ()
+    "Check whether the visible buffer is a part of `embrace'."
+    (and (get-buffer "*embrace-help*")
+         (get-buffer-window "*embrace-help*" 'visible)))
+  (push 'embrace-buffer-p golden-ratio-inhibit-functions))
 
 ;;;; Snippet expansion
 
