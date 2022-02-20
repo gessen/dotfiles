@@ -773,9 +773,6 @@ window instead."
                  windmove-down))
     (push cmd golden-ratio-extra-commands))
 
-  (dolist (buf '("^\\*[hH]elm.*"))
-    (push buf golden-ratio-exclude-buffer-regexp))
-
   (defun which-key-buffer-p ()
     "Check whether the visible buffer is a part of `which-key'."
     (and (get-buffer " *which-key*")
