@@ -1997,7 +1997,7 @@ possibly new window."
 
   (set-leader-keys!
     "thl" #'hl-line-mode
-    "htL" #'global-hl-line-mode)
+    "thL" #'global-hl-line-mode)
 
   (global-hl-line-mode +1))
 
