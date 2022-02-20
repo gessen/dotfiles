@@ -1780,6 +1780,9 @@ Close^^           Open^^            Toggle^^         Goto^^         Other^^
   ;; Display timestamps in undo-tree visualisation.
   (setq undo-tree-visualizer-timestamps t)
 
+  ;; Display a diff in undo-tree visualisation.
+  (setq undo-tree-visualizer-diff t)
+
   ;; Keep `user-emacs-directory' clean.
   (let ((autosave-dir (expand-file-name "undo-tree/site/" my-cache-dir))
         (tramp-autosave-dir (expand-file-name "undo-tree/dist/" my-cache-dir)))
