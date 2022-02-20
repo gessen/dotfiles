@@ -4116,8 +4116,6 @@ ALL when non-nil determines whether words will be pickable."
     (flyspell-prog-mode))
 
   (declare-prefix-for-mode! 'sh-mode "mi" "insert")
-  (declare-prefix-for-mode! 'sh-mode "mg" "goto")
-
   (set-leader-keys-for-major-mode! 'sh-mode
     "\\" #'sh-backslash-region
     "ic" #'sh-case
