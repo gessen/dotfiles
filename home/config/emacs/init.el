@@ -676,7 +676,6 @@ window instead."
   :init
 
   (windmove-default-keybindings)
-  (windmove-display-default-keybindings)
   (windmove-delete-default-keybindings))
 
 ;; Feature `winner' provides an undo/redo stack for window configurations, with
@@ -4384,9 +4383,7 @@ unhelpful."
 
   :bind (:map org-mode-map
               ("M-p" . #'org-backward-element)
-              ("M-n" . #'org-forward-element)
-              ("M-P" . #'org-shiftmetaup)
-              ("M-N" . #'org-shiftmetadown))
+              ("M-n" . #'org-forward-element))
 
   :config
 
