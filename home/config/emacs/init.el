@@ -479,7 +479,9 @@ BINDINGS is a series of KEY DEF pair."
   ;; tmux uses screen-256color and if `clipetty' considers it screen the
   ;; clipboard functionality will not work when emacs runs as client inside
   ;; tmux.
-  (setq clipetty-screen-regexp "^screen$"))
+  (setq clipetty-screen-regexp "^screen$")
+
+  :blackout t)
 
 ;;;; Mouse integration
 
