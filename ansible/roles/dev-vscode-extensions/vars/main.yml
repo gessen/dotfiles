@@ -3,7 +3,6 @@ vscode_extensions:
   - asabil.meson
   - ccls-project.ccls
   - eamodio.gitlens
-  - EugenWiens.bitbake
   - foxundermoon.shell-format
   - llvm-vs-code-extensions.vscode-clangd
   - ms-azuretools.vscode-docker
