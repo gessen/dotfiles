@@ -5,7 +5,6 @@
 	],
 	"installed_packages":
 	[
-		"Bitbake Syntax",
 		"CMakeEditor",
 		"FileIcons",
 		"LSP",
