@@ -3576,31 +3576,6 @@ a new window."
         `(:preview-key ,(kbd "C-o"))))
 
 ;;; Language support
-;;;; BitBake
-
-;; Package `bb-mode' is a major mode for editing bitbake recipe files in Emacs.
-;; It does basic syntax highlighting and handles comments.
-(use-package! bb-mode
-  :straight (:host github :repo "mferland/bb-mode")
-
-  :mode ("\\.bb\\'" "\\.bbappend\\'" "\\.bbclass\\'" "\\.conf\\'" "\\.inc\\'")
-
-  :init
-
-  (defhook! my--bb-mode-setup ()
-    bb-mode-hook
-    "Set custom settings for BitBake mode.
-Turn on all minor modes that are enabled in `prog-mode'. We do
-that because `bb-mode' inherits from `fundamental-mode'."
-    (display-line-numbers-mode +1)
-    (display-fill-column-indicator-mode +1)
-    (ws-butler-mode +1)
-    (column-enforce-mode +1)
-    (highlight-indent-guides-mode +1)
-    (highlight-numbers-mode +1)
-    (highlight-parentheses-mode +1)
-    (rainbow-delimiters-mode +1)))
-
 ;;;; C, C++
 
 ;; Feature `cc-mode' provides major modes for C, C++.
