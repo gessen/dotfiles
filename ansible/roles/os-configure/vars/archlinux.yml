@@ -9,23 +9,4 @@ pacman_options:
   - regexp: '^#?ParallelDownloads'
     line: 'ParallelDownloads = 5'
 
-makepkg_options:
-  - regexp: '^#?CFLAGS='
-    line: 'CFLAGS="-march=native -O2 -pipe -fno-plt -fexceptions \'
-
-  - regexp: '^#?MAKEFLAGS='
-    line: 'MAKEFLAGS="-j$(nproc)"'
-
-  - regexp: '^#?BUILDENV='
-    line: 'BUILDENV=(!distcc color ccache !check !sign)'
-
-  - regexp: '^#?COMPRESSXZ='
-    line: 'COMPRESSXZ=(xz -c -z --threads=0 -)'
-
-  - regexp: '^#?COMPRESSZST='
-    line: 'COMPRESSZST=(zstd -c -z -q -T0 -)'
-
-  - regexp: '^#?PKGEXT='
-    line: PKGEXT='.pkg.tar'
-
 paru: paru-bin

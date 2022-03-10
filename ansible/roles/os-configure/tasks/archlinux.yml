@@ -7,14 +7,6 @@
   with_items: '{{ pacman_options }}'
   become: yes
 
-- name: Configure makepkg
-  lineinfile:
-    path: /etc/makepkg.conf
-    line: '{{ item.line }}'
-    regexp: '{{ item.regexp }}'
-  with_items: '{{ makepkg_options }}'
-  become: yes
-
 - name: Add archlinuxcn repository to pacman
   ini_file:
     path: /etc/pacman.conf
