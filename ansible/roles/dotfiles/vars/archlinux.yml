@@ -8,4 +8,5 @@ dotfiles_distro:
   - config/oh-my-zsh/plugins/zsh-autosuggestions
   - config/oh-my-zsh/plugins/zsh-interactive-cd
   - config/oh-my-zsh/themes/powerlevel10k.zsh-theme
+  - config/pacman/makepkg.conf
   - gdbinit
