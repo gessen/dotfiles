@@ -4603,6 +4603,9 @@ unhelpful."
 
   :init
 
+  ;; Remove `C-p' key binding that switches from `dired-mode' to `deer-mode'.
+  (remove-hook 'dired-mode-hook 'ranger-set-dired-key)
+
   ;; We define it to satisfy byte-compiler - this does not work with :defines
   ;; as it has to be defined as nil
   (defvar ranger-was-ranger nil)
