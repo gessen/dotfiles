@@ -2033,7 +2033,6 @@ will not refresh `column-number-mode."
 
   (set-leader-keys! "thi" #'highlight-indent-guides-mode)
 
-  :hook (prog-mode-hook . highlight-indent-guides-mode)
   :config
 
   ;; Use normal '|' character to display guides.
