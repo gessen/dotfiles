@@ -2463,7 +2463,9 @@ Spell Commands^^            Add To Dictionary^^               Other^^
     "js" #'sp-split-sexp
     "jn" #'sp-newline
     "tp" #'smartparens-mode
-    "tP" #'smartparens-global-mode)
+    "tP" #'smartparens-global-mode
+    "tq" #'smartparens-strict-mode
+    "tQ" #'smartparens-global-strict-mode)
 
   ;; Load the default pair definitions for Smartparens.
   (require 'smartparens-config)
