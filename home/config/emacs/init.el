@@ -1530,10 +1530,9 @@ original line and use the absolute value."
 ;; Package `easy-kill-extras' contains extra functions for `easy-kill' and
 ;; `easy-mark'.
 (use-package! easy-kill-extras
-  :commands (easy-mark-word easy-mark-sexp)
+  :commands (easy-mark-word)
 
-  :bind (([remap mark-word] . #'easy-mark-word)
-         ([remap mark-sexp] . #'easy-mark-sexp)))
+  :bind ([remap mark-word] . #'easy-mark-word))
 
 ;; Package `expand-region' increases the selected region by semantic units. Just
 ;; keep pressing the key until it selects what you want.
