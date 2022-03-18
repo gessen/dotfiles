@@ -3511,14 +3511,7 @@ a new window."
   :bind ((:map lsp-ui-mode-map
                ;; Remap `xref' to use `lsp-ui-peek' feature.
                ([remap xref-find-definitions] . #'lsp-ui-peek-find-definitions)
-               ([remap xref-find-references] . #'lsp-ui-peek-find-references))
-         (:map lsp-ui-flycheck-list-mode-map
-               ("n"     . #'next-line)
-               ("p"     . #'previous-line)
-               ;; Add support for tty.
-               ("RET"   . #'lsp-ui-flycheck-list--view)
-               ("M-RET" . #'lsp-ui-flycheck-list--visit)
-               ("o"     . #'lsp-ui-flycheck-list--visit)))
+               ([remap xref-find-references] . #'lsp-ui-peek-find-references)))
 
   :config
 
