@@ -4830,6 +4830,9 @@ Goto^^              Actions^^         Other^^
   ;; Prescient.
   (setq magit-completing-read-function #'selectrum-completing-read)
 
+  ;; Use absolute dates when showing logs.
+  (setq magit-log-margin '(t "%d-%m-%Y %H:%M " magit-log-margin-width t 18))
+
   (transient-append-suffix
     'magit-rebase "-d"
     '("-D" "Use current timestamp for author date" "--ignore-date"))
