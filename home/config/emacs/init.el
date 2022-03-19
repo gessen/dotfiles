@@ -4852,11 +4852,13 @@ Goto^^              Actions^^         Other^^
   :after magit
   :init
 
-  ;; Change default delta args to use magit feature in order to disable line
-  ;; numbers which cannot fundamentally be used with Magit.
-  (setq magit-delta-delta-args '("--features=magit"
-                                 "--24-bit-color=always"
-                                 "--color-only"))
+  (defadvice! my--magit-delta-patch-args (args)
+    :filter-return #'magit-delta--make-delta-args
+    "Pick proper background and foreground colors based on the
+current theme. This will also disable line numbers and decorations."
+    (push (if (eq (frame-parameter nil 'background-mode) 'dark)
+              "--features=colors-dark"
+            "--features=colors-light") args))
 
   (magit-delta-mode +1)
 

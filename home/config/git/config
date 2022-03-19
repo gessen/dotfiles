@@ -14,12 +14,13 @@
 	tool = ediffclient
 	guitool = ediffclient-g
 [delta]
-	features = line-numbers decorations
+	features = colors-dark decorations line-numbers
+	word-diff-regex = "\\S+"
+[delta "colors-dark"]
 	minus-style = syntax "#4f0000"
 	minus-emph-style = syntax bold "#c81010"
 	plus-style = syntax "#004f00"
 	plus-emph-style = syntax bold "#008000"
-	word-diff-regex = "\\S+"
 [delta "decorations"]
 	file-style = bold yellow ul
 	file-decoration-style = none
