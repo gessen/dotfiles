@@ -1054,9 +1054,7 @@ window instead."
 ;; provides commands for quickly navigating between and within these projects.
 (use-package! projectile
   :defer 1
-  :commands (projectile-compilation-dir
-             projectile-invalidate-cache
-             projectile-register-project-type)
+  :commands (projectile-register-project-type)
   :init
 
   (set-leader-keys!
@@ -1147,8 +1145,7 @@ window instead."
 ;; quick navigation and exploration, while also possessing basic file management
 ;; utilities.
 (use-package! treemacs
-  :commands (treemacs-git-mode
-             treemacs-tag-follow-mode)
+  :commands (treemacs-git-mode)
   :init
 
   ;; Always find and focus the current file after calling `treemacs-init' or
@@ -1530,8 +1527,6 @@ original line and use the absolute value."
 ;; Package `easy-kill-extras' contains extra functions for `easy-kill' and
 ;; `easy-mark'.
 (use-package! easy-kill-extras
-  :commands (easy-mark-word)
-
   :bind ([remap mark-word] . #'easy-mark-word))
 
 ;; Package `expand-region' increases the selected region by semantic units. Just
