@@ -4543,6 +4543,8 @@ unhelpful."
     "jD" #'dired-jump-other-window
     "wO" #'dired-other-window)
 
+  :hook (dired-mode-hook . dired-hide-details-mode)
+
   :bind (:map dired-mode-map
               ;; This binding is way nicer than ^.
               ("J"   . #'dired-up-directory)
