@@ -3229,12 +3229,23 @@ function `lsp-ui-sideline-enable' is non-nil."
   :config
 
   (set-face-attribute 'flycheck-posframe-warning-face nil :inherit 'warning)
-  (set-face-attribute 'flycheck-posframe-error-face nil :inherit 'error))
+  (set-face-attribute 'flycheck-posframe-error-face nil :inherit 'error)
+
+  (with-eval-after-load 'company
+    ;; Inhibit displaying popups if Company is active.
+    (add-hook 'flycheck-posframe-inhibit-functions #'company--active-p)))
 
 ;; Package `flycheck-inline' provides an error display function to show Flycheck
 ;; errors inline, directly below their location in the buffer.
 (use-package! flycheck-inline
-  :hook (flycheck-mode-hook . my--flycheck-popup-mode))
+  :hook (flycheck-mode-hook . my--flycheck-popup-mode)
+  :config
+
+  (with-eval-after-load 'company
+    (defadvice! my--flycheck-inline-inhibit-with-company (&rest _)
+      :before-while #'flycheck-inline-display-phantom
+      "Inhibit displaying Flycheck error messages when Company is active."
+      (not (bound-and-true-p company-backend)))))
 
 ;;;; Online documentation
 
