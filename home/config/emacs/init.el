@@ -3860,9 +3860,10 @@ ALL when non-nil determines whether words will be pickable."
                  (setq point1 (point))
                  (setq line l1)
                  (push `((,point0 . ,point1) . ,w) candidates)))
+      (require 'avy)
       (avy-with avy-document-symbol
-        (avy-process candidates
-                     (avy--style-fn avy-style)))))
+                (avy-process candidates
+                             (avy--style-fn avy-style)))))
 
   (defun ccls-avy-goto-symbol ()
     "Go to symbol with `avy' help."
