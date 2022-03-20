@@ -4553,7 +4553,8 @@ unhelpful."
   ;;   - append indicator (one of */=>@|) to entries
   ;;   - print sizes like 1K 234M 2G etc
   ;;   - group directories before files
-  (setq dired-listing-switches "-alvFh --group-directories-first")
+  (setq dired-listing-switches
+        "-alvFh --group-directories-first --time-style=long-iso")
 
   ;; Try to guess a default target directory. This means: if there is a `dired'
   ;; buffer displayed in some window, use its current directory, instead of this
