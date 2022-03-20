@@ -4600,7 +4600,7 @@ unhelpful."
 (use-feature! wdired
   :after dired
   :bind (:map dired-mode-map
-              ("C-c C-c" . #'wdired-change-to-wdired-mode)))
+              ("C-c C-e" . #'wdired-change-to-wdired-mode))
 
   :config
 
