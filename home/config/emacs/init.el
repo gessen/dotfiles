@@ -4536,7 +4536,11 @@ unhelpful."
   (set-leader-keys!
     "ad" #'dired
     "aD" #'dired-other-window
+    "fj" #'dired-jump
+    "fJ" #'dired-jump-other-window
     "FO" #'dired-other-frame
+    "jd" #'dired-jump
+    "jD" #'dired-jump-other-window
     "wO" #'dired-other-window)
 
   :bind (:map dired-mode-map
@@ -4574,17 +4578,12 @@ unhelpful."
   :commands (dired-jump dired-jump-other-window)
 
   :init
-  ;; Bindings for jumping to the current directory in `dired'.
-  (set-leader-keys!
-    "fj" #'dired-jump
-    "fJ" #'dired-jump-other-window
-    "jd" #'dired-jump
-    "jD" #'dired-jump-other-window)
 
   ;; Remap find-file{-other-window} to dired-x-find-file{-other-window}
   (setq dired-x-hands-off-my-keys nil)
 
   :config
+
   ;; Prevent annoying "Omitted N lines" messages when auto-reverting.
   (setq dired-omit-verbose nil)
 
