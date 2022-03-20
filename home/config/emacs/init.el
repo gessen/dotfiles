@@ -2155,7 +2155,11 @@ will not refresh `column-number-mode."
 
   (set-leader-keys!
     "so" #'symbol-overlay
-    "sO" #'symbol-overlay-remove-all))
+    "sO" #'symbol-overlay-remove-all)
+
+  (with-eval-after-load 'embark
+    (bind-key "y" #'symbol-overlay embark-identifier-map)
+    (bind-key "u" #'symbol-overlay-put embark-identifier-map)))
 
 ;;;; Find and replace
 
