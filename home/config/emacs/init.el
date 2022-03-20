@@ -3191,6 +3191,10 @@ menu to disappear and then come back after `company-idle-delay'."
   ;; Decrease the delay before displaying errors at point.
   (setq flycheck-display-errors-delay 0.25)
 
+  ;; Display error messages only if there is no error list visible.
+  (setq flycheck-display-errors-function
+    #'flycheck-display-error-messages-unless-error-list)
+
   ;; For the above functionality, check syntax in a buffer that you switched to
   ;; only briefly. This allows "refreshing" the syntax check state for several
   ;; buffers quickly after e.g. changing a config file.
@@ -3231,6 +3235,10 @@ function `lsp-ui-sideline-enable' is non-nil."
   (set-face-attribute 'flycheck-posframe-warning-face nil :inherit 'warning)
   (set-face-attribute 'flycheck-posframe-error-face nil :inherit 'error)
 
+  ;; Inhibit display popups if Flycheck error list is visible.
+  (add-hook 'flycheck-posframe-inhibit-functions
+    (lambda () (flycheck-get-error-list-window 'current-frame)))
+
   (with-eval-after-load 'company
     ;; Inhibit displaying popups if Company is active.
     (add-hook 'flycheck-posframe-inhibit-functions #'company--active-p)))
@@ -3240,6 +3248,11 @@ function `lsp-ui-sideline-enable' is non-nil."
 (use-package! flycheck-inline
   :hook (flycheck-mode-hook . my--flycheck-popup-mode)
   :config
+
+  (defadvice! my--flycheck-inline-inhibit-with-errors-list (&rest _)
+    :before-while #'flycheck-inline-display-phantom
+    "Inhibit displaying Flycheck error messages when error list is visible."
+    (not (flycheck-get-error-list-window 'current-frame)))
 
   (with-eval-after-load 'company
     (defadvice! my--flycheck-inline-inhibit-with-company (&rest _)
