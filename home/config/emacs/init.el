@@ -4569,6 +4569,8 @@ unhelpful."
 
 ;; Feature `dired-x' provides extra `dired' functionality.
 (use-feature! dired-x
+  :demand t
+  :after dired
   :commands (dired-jump dired-jump-other-window)
 
   :init
@@ -4587,7 +4589,11 @@ unhelpful."
   (setq dired-omit-verbose nil)
 
   ;; Do not bind C-x C-j to dired-jump
-  (setq dired-bind-jump nil))
+  (setq dired-bind-jump nil)
+
+  ;; Open common video extensions with `shell-command' by default.
+  (setq dired-guess-shell-alist-user
+        '(("\\.\\(mp4\\|webm\\|mkv\\)" (open-in-external-app)))))
 
 ;; Feature `wdired' allows to rename files editing their names in `dired'
 ;; buffers.
