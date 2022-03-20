@@ -521,6 +521,13 @@ For details on DATA, CONTEXT, and signal, see
 ;; Prevent Custom from modifying this file.
 (setq custom-file (expand-file-name "custom.el" my-cache-dir))
 
+;; Feature `request' provides a layer for URL requests.
+(use-feature! request
+  :config
+
+  ;; Do not litter `user-emacs-directory' with cache files.
+  (setq request-storage-directory (expand-file-name "request" my-cache-dir)))
+
 ;;; Windows management
 
 (defun maximize-buffer ()
