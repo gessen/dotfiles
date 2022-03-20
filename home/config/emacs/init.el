@@ -4926,12 +4926,7 @@ Goto^^              Actions^^         Other^^
 
   (transient-append-suffix
     'magit-fetch "-t"
-    '("-u" "Unshallow" "--unshallow"))
-
-  :config
-  (with-eval-after-load 'golden-ratio
-    (dolist (buf '("^magit.*"))
-      (push buf golden-ratio-exclude-buffer-regexp))))
+    '("-u" "Unshallow" "--unshallow")))
 
 ;; Package 'magit-delta' integrates Delta (https://github.com/dandavison/delta)
 ;; with Magit, so that diffs in Magit are displayed with color highlighting
