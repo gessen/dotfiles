@@ -3483,6 +3483,10 @@ list of additional parameters sent with this request."
   ;; document.
   (setq lsp-before-save-edits nil)
 
+  ;; Disable features that have great potential to be slow.
+  (setq lsp-enable-folding nil
+        lsp-enable-text-document-color nil)
+
   ;; Reduce unexpected modifications to code
   (setq lsp-enable-on-type-formatting nil)
 
