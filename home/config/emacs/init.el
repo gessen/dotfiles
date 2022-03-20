@@ -3483,6 +3483,9 @@ list of additional parameters sent with this request."
   ;; document.
   (setq lsp-before-save-edits nil)
 
+  ;; Reduce unexpected modifications to code
+  (setq lsp-enable-on-type-formatting nil)
+
   ;; List of the clients to be automatically required when launching `lsp'.
   ;; Default list is rather large which leads to requiring a lot of unnecessary
   ;; files.
