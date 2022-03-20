@@ -3555,7 +3555,8 @@ a new window."
   :bind ((:map lsp-ui-mode-map
                ;; Remap `xref' to use `lsp-ui-peek' feature.
                ([remap xref-find-definitions] . #'lsp-ui-peek-find-definitions)
-               ([remap xref-find-references] . #'lsp-ui-peek-find-references)))
+               ([remap xref-find-references]  . #'lsp-ui-peek-find-references)
+               ("C-c z"                       . #'lsp-ui-doc-focus-frame)))
 
   :config
 
