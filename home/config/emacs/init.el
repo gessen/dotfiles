@@ -4602,6 +4602,12 @@ unhelpful."
   :bind (:map dired-mode-map
               ("C-c C-c" . #'wdired-change-to-wdired-mode)))
 
+  :config
+
+  ;; Make permission bits editable.
+  (setq wdired-allow-to-change-permissions t))
+
+
 ;; Package `dired-subtree' defines function `dired-subtree-insert' which inserts
 ;; the subdirectory directly below its line in the original listing, and indents
 ;; the listing of subdirectory to resemble a tree-like structure. The tree
