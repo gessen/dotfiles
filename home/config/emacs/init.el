@@ -46,7 +46,7 @@ DOCSTRING and BODY are as in `defun'."
        ,(let ((article (if (string-match-p "^:[aeiou]" (symbol-name where))
                            "an"
                          "a")))
-          (format "%s\n\nThis is %s `%S' advice for `%S'."
+          (format "%s\n\nThis is %s `%S' advice for\n`%S'."
                   docstring article where
                   (if (and (listp place)
                            (memq (car place) ''function))
