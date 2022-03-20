@@ -3512,7 +3512,7 @@ list of additional parameters sent with this request."
   (use-feature! lsp-iedit
     :init
 
-    (set-leader-keys-for-major-mode! 'lsp-mode
+    (set-leader-keys-for-minor-mode! 'lsp-mode
       "re" #'lsp-iedit-highlights))
 
   ;; Feature `lsp-clangd' brings implementation of clangd client for Emacs.
@@ -3525,11 +3525,12 @@ a new window."
       (interactive)
       (lsp-clangd-find-other-file t))
 
-    (set-leader-keys-for-major-mode! 'lsp-mode
-      "ga" #'lsp-clangd-find-other-file
-      "gA" #'lsp-clangd-find-other-file-other-window
-      "Ga" #'lsp-clangd-find-other-file
-      "GA" #'lsp-clangd-find-other-file-other-window)
+    (dolist (mode '(c-mode c++-mode))
+      (set-leader-keys-for-major-mode! mode
+        "ga" #'lsp-clangd-find-other-file
+        "gA" #'lsp-clangd-find-other-file-other-window
+        "Ga" #'lsp-clangd-find-other-file
+        "GA" #'lsp-clangd-find-other-file-other-window))
 
     ;; Set some basic logging for debugging purpose, change completion style to
     ;; be more detailed and remove automatic header insertion.
@@ -3885,47 +3886,48 @@ ALL when non-nil determines whether words will be pickable."
     (interactive)
     (ccls-inheritance-hierarchy t))
 
-  (set-leader-keys-for-minor-mode! 'lsp-mode
-    ;; Code actions
-    "ap"  #'ccls-preprocess-file
+  (dolist (mode '(c-mode c++-mode))
+    (set-leader-keys-for-major-mode! mode
+      ;; Code actions
+      "ap"  #'ccls-preprocess-file
 
-    ;; Peek
-    "gb"  #'ccls-ui-peek-find-base
-    "gc"  #'ccls-ui-peek-find-callers
-    "gC"  #'ccls-ui-peek-find-callees
-    "gd"  #'ccls-ui-peek-find-derived
-    "ghi" #'ccls-inheritance-hierarchy
-    "ghI" #'ccls-inheritance-hierarchy-inv
-    "ghc" #'ccls-call-hierarchy
-    "ghC" #'ccls-call-hierarchy-inv
-    "ghm" #'ccls-member-hierarchy
-    "gmm" #'ccls-ui-peek-find-member-vars
-    "gmf" #'ccls-ui-peek-find-member-funcs
-    "gmt" #'ccls-ui-peek-find-member-types
-    "gk"  #'ccls-avy-goto-symbol
-    "gK"  #'ccls-avy-goto-word
-    "gR&" #'ccls-ui-peek-find-references-address
-    "gRr" #'ccls-ui-peek-find-references-read
-    "gRw" #'ccls-ui-peek-find-references-write
+      ;; Peek
+      "gb"  #'ccls-ui-peek-find-base
+      "gc"  #'ccls-ui-peek-find-callers
+      "gC"  #'ccls-ui-peek-find-callees
+      "gd"  #'ccls-ui-peek-find-derived
+      "ghi" #'ccls-inheritance-hierarchy
+      "ghI" #'ccls-inheritance-hierarchy-inv
+      "ghc" #'ccls-call-hierarchy
+      "ghC" #'ccls-call-hierarchy-inv
+      "ghm" #'ccls-member-hierarchy
+      "gmm" #'ccls-ui-peek-find-member-vars
+      "gmf" #'ccls-ui-peek-find-member-funcs
+      "gmt" #'ccls-ui-peek-find-member-types
+      "gk"  #'ccls-avy-goto-symbol
+      "gK"  #'ccls-avy-goto-word
+      "gR&" #'ccls-ui-peek-find-references-address
+      "gRr" #'ccls-ui-peek-find-references-read
+      "gRw" #'ccls-ui-peek-find-references-write
 
-    ;; Goto
-    "Gb"  #'ccls-find-base
-    "Gc"  #'ccls-find-callers
-    "GC"  #'ccls-find-callees
-    "Gd"  #'ccls-find-derived
-    "Ghi" #'ccls-inheritance-hierarchy
-    "GhI" #'ccls-inheritance-hierarchy-inv
-    "Ghc" #'ccls-call-hierarchy
-    "GhC" #'ccls-call-hierarchy-inv
-    "Ghm" #'ccls-member-hierarchy
-    "Gmm" #'ccls-find-member-vars
-    "Gmf" #'ccls-find-member-funcs
-    "Gmt" #'ccls-find-member-types
-    "Gk"  #'ccls-avy-goto-symbol
-    "GK"  #'ccls-avy-goto-word
-    "gR&" #'ccls-find-references-address
-    "gRr" #'ccls-find-references-read
-    "gRw" #'ccls-find-references-write)
+      ;; Goto
+      "Gb"  #'ccls-find-base
+      "Gc"  #'ccls-find-callers
+      "GC"  #'ccls-find-callees
+      "Gd"  #'ccls-find-derived
+      "Ghi" #'ccls-inheritance-hierarchy
+      "GhI" #'ccls-inheritance-hierarchy-inv
+      "Ghc" #'ccls-call-hierarchy
+      "GhC" #'ccls-call-hierarchy-inv
+      "Ghm" #'ccls-member-hierarchy
+      "Gmm" #'ccls-find-member-vars
+      "Gmf" #'ccls-find-member-funcs
+      "Gmt" #'ccls-find-member-types
+      "Gk"  #'ccls-avy-goto-symbol
+      "GK"  #'ccls-avy-goto-word
+      "gR&" #'ccls-find-references-address
+      "gRr" #'ccls-find-references-read
+      "gRw" #'ccls-find-references-write))
 
   ;; Set some basic logging for debugging purpose.
   (setq ccls-args (list "-log-file=/tmp/ccls.log" "-v=1"))
