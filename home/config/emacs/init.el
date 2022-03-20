@@ -5396,6 +5396,7 @@ possibly new window."
 ;; Local Variables:
 ;; checkdoc-symbol-words: ("top-level")
 ;; byte-compile-warnings: (not make-local noruntime)
+;; no-native-compile: t
 ;; indent-tabs-mode: nil
 ;; outline-regexp: ";;;+ "
 ;; sentence-end-double-space: nil
