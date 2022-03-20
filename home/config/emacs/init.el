@@ -1148,8 +1148,7 @@ window instead."
   :commands (treemacs-git-mode)
   :init
 
-  ;; Always find and focus the current file after calling `treemacs-init' or
-  ;; `treemacs-projectle-init'.
+  ;; Always find and focus the current file after Treemacs is first initialised.
   (setq treemacs-follow-after-init t)
 
   ;; Treemacs will use the `no-other-window' parameter, in practice means that
@@ -1171,8 +1170,8 @@ window instead."
 
   :config
 
-  ;; Focus not only the file of the current buffer but also the tag at point.
-  (treemacs-tag-follow-mode +1)
+  ;; Focus currently selected file.
+  (treemacs-follow-mode +1)
 
   ;; Check files' git status and highlight them accordingly. The simple variant
   ;; will start a git status process whose output is parsed in elisp. This
