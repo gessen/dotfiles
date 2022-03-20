@@ -2898,13 +2898,15 @@ point. "
   (selectrum-mode +1)
 
   :bind ((:map selectrum-minibuffer-map
-               ("<prior>"    . #'selectrum-previous-page)
-               ("<next> "    . #'selectrum-next-page)
+               ("<prior>"   . #'selectrum-previous-page)
+               ("<next> "   . #'selectrum-next-page)
+               ("M-j"       . #'selectrum-quick-select)
+               ("M-m"       . nil)
                ;; Use <backtab> to go up with `find-file'.
-               ("<backtab>"  . #'backward-kill-sexp)
-               ("S-TAB"      . #'backward-kill-sexp))
+               ("<backtab>" . #'selectrum-backward-kill-sexp)
+               ("S-TAB"     . #'selectrum-backward-kill-sexp))
          (:map minibuffer-local-map
-               ("M-s"        . nil)))
+               ("M-s"       . nil)))
 
   :config
 
