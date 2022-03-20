@@ -4604,8 +4604,7 @@ unhelpful."
 (use-package! dired-subtree
   :after dired
   :bind (:map dired-mode-map
-              ([remap dired-maybe-insert-subdir] . #'dired-subtree-toggle)
-              ("I"                               . #'dired-subtree-cycle)))
+              ("TAB" . #'dired-subtree-toggle)))
 
 ;; Package `diredfl' provides extra font lock rules for a more colourful
 ;; `dired'.
