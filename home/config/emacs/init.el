@@ -1337,7 +1337,10 @@ window instead."
     "xp" #'string-inflection-camelcase
     "xs" #'string-inflection-underscore
     "xu" #'string-inflection-upcase
-    "xx" #'hydra-string-inflection/body))
+    "xx" #'hydra-string-inflection/body)
+
+  (with-eval-after-load 'embark
+    (bind-key "x" #'hydra-string-inflection/body embark-identifier-map)))
 
 ;; Package `ws-butler' unobtrusively remove trailing whitespace. What this means
 ;; is that only lines touched get trimmed. If the whitespace at end of buffer is
