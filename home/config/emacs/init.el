@@ -4262,13 +4262,14 @@ unhelpful."
 (use-feature! elisp-mode
   :config
 
-  (defadvice! my--company-doc-buffer-use-helpful
-      (func &rest args)
-    :around #'elisp--company-doc-buffer
-    "Cause `company' to use Helpful to show Elisp documentation."
-    (cl-letf (((symbol-function #'describe-function) #'helpful-function)
-              ((symbol-function #'describe-variable) #'helpful-variable))
-      (apply func args)))
+  (with-eval-after-load 'helpful
+    (defadvice! my--company-doc-buffer-use-helpful
+        (func &rest args)
+      :around #'elisp--company-doc-buffer
+      "Cause `company' to use Helpful to show Elisp documentation."
+      (cl-letf (((symbol-function #'describe-function) #'helpful-function)
+                ((symbol-function #'describe-variable) #'helpful-variable))
+        (apply func args))))
 
   (defadvice! my--fill-elisp-docstrings-correctly (&rest _)
     :before-until #'fill-context-prefix
