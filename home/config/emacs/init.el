@@ -2087,10 +2087,12 @@ will not refresh `column-number-mode."
 
   (declare-prefix! "st" "todo")
   (set-leader-keys!
-    "sti" #'hl-todo-insert
+    "it"  #'hl-todo-insert
     "stn" #'hl-todo-next
     "sto" #'hl-todo-occur
-    "stp" #'hl-todo-previous)
+    "stp" #'hl-todo-previous
+    "tht" #'hl-todo-mode
+    "thT" #'global-hl-todo-mode)
 
   (global-hl-todo-mode +1))
 
