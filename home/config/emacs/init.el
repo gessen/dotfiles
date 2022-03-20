@@ -674,10 +674,12 @@ window instead."
 ;; the default binding, C-x o, to cycle through all of them in an essentially
 ;; unpredictable order.
 (use-feature! windmove
-  :init
-
-  (windmove-default-keybindings)
-  (windmove-delete-default-keybindings))
+  ;; Avoid using `windmove-default-keybindings' as they are established in a
+  ;; minor mode map and take precedence over `minibuffer-local-map'.
+  :bind (("S-<left>"  . #'windmove-left)
+         ("S-<right>" . #'windmove-right)
+         ("S-<up>"    . #'windmove-up)
+         ("S-<down>"  . #'windmove-down)))
 
 ;; Feature `winner' provides an undo/redo stack for window configurations, with
 ;; undo and redo being C-c left and C-c right, respectively. (Actually "redo"
