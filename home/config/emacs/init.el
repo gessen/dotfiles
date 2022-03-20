@@ -3570,11 +3570,12 @@ a new window."
   ;; cursor
   (setq lsp-ui-sideline-update-mode 'line)
 
-  ;; Display doc in the top-right corner instead of at point.
-  (setq lsp-ui-doc-position 'top)
-
   ;; Decrease the maximum width of doc frame by 33%.
   (setq lsp-ui-doc-max-width 100)
+
+  ;; Setting this to nil will make Lsp Ui windows not disappear on mouse
+  ;; movement
+  (setq lsp-ui-doc-show-with-mouse nil)
 
   ;; Always fontify chunks of code when peeking.
   (setq lsp-ui-peek-fontify 'always)
