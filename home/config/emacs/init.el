@@ -3181,8 +3181,20 @@ menu to disappear and then come back after `company-idle-delay'."
 
   :config
 
+  ;; Rerunning checks on every newline is a bit excessive.
+  (delq 'new-line flycheck-check-syntax-automatically)
+
+  ;; Increase the idle time after Flycheck will start a syntax check as 0.5s is
+  ;; a bit too naggy.
+  (setq flycheck-idle-change-delay 1.0)
+
   ;; Decrease the delay before displaying errors at point.
   (setq flycheck-display-errors-delay 0.25)
+
+  ;; For the above functionality, check syntax in a buffer that you switched to
+  ;; only briefly. This allows "refreshing" the syntax check state for several
+  ;; buffers quickly after e.g. changing a config file.
+  (setq flycheck-buffer-switch-check-intermediate-buffers t)
 
   ;; Use the load-path of the current Emacs session during syntax checking.
   (setq flycheck-emacs-lisp-load-path 'inherit)
