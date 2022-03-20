@@ -1146,7 +1146,11 @@ window instead."
 ;; Package `sudo-edit' allows to open files as another user, by default "root".
 (use-package! sudo-edit
   :init
-  (set-leader-keys! "fE" #'sudo-edit))
+
+  (set-leader-keys! "fE" #'sudo-edit)
+
+  (with-eval-after-load 'embark
+    (bind-key "s" #'sudo-edit embark-file-map)))
 
 ;; Package `treemacs' is a file and project explorer similar to NeoTree or vim’s
 ;; NerdTree, but largely inspired by the Project Explorer in Eclipse. It shows
