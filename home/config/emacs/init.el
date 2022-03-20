@@ -4533,6 +4533,31 @@ unhelpful."
              dired-create-empty-file
              dired-create-directory)
   :init
+
+  (defvar dired--limit-hist '()
+    "Minibuffer history for `dired-limit-regexp'.")
+
+  (defun dired-limit-regexp (regexp omit)
+    "Limit Dired to keep files matching REGEXP.
+
+With optional OMIT argument as a prefix (\\[universal-argument]),
+exclude files matching REGEXP.
+
+Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
+    (interactive
+     (list
+      (read-regexp
+       (concat "Files "
+               (when current-prefix-arg
+                 (propertize "NOT " 'face 'warning))
+               "matching PATTERN: ")
+       nil 'prot-dired--limit-hist)
+      current-prefix-arg))
+    (dired-mark-files-regexp regexp)
+    (unless omit (dired-toggle-marks))
+    (dired-do-kill-lines)
+    (add-to-history 'dired--limit-hist regexp))
+
   (set-leader-keys!
     "ad" #'dired
     "aD" #'dired-other-window
@@ -4552,6 +4577,7 @@ unhelpful."
               ;; Bind both creations to be nearby each others
               ("\["  . #'dired-create-empty-file)
               ("\]"  . #'dired-create-directory)
+              ("/"   . #'dired-limit-regexp)
               ("M-n" . #'dired-next-subdir)
               ("M-p" . #'dired-prev-subdir))
 
