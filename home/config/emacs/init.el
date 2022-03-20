@@ -3617,11 +3617,7 @@ a new window."
                                    (company-dabbrev-code company-keywords)
                                    company-dabbrev))
     ;; Launch `lsp-mode'
-    (lsp-deferred)
-    ;; For a UI feedback on headerline of the document symbols at point, current
-    ;; file or project name show a breadcrumb on top of window.
-    ;; Run with timer as `ccls' seems to disable it at the start.
-    (run-with-timer 1 nil #'lsp-headerline-breadcrumb-mode))
+    (lsp-deferred))
 
   (dolist (mode '(c-mode c++-mode))
     (declare-prefix-for-mode! mode "mg" "peek")
