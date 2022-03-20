@@ -4545,10 +4545,13 @@ unhelpful."
 
   :bind (:map dired-mode-map
               ;; This binding is way nicer than ^.
-              ("J"  . #'dired-up-directory)
+              ("J"   . #'dired-up-directory)
+              ("I"   . #'dired-kill-subdir)
               ;; Bind both creations to be nearby each others
-              ("\[" . #'dired-create-empty-file)
-              ("\]" . #'dired-create-directory))
+              ("\["  . #'dired-create-empty-file)
+              ("\]"  . #'dired-create-directory)
+              ("M-n" . #'dired-next-subdir)
+              ("M-p" . #'dired-prev-subdir))
 
   :config
   ;; Switches passed to ls for `dired':
@@ -4582,13 +4585,13 @@ unhelpful."
   ;; Remap find-file{-other-window} to dired-x-find-file{-other-window}
   (setq dired-x-hands-off-my-keys nil)
 
+  ;; This would bind "I" and it is used to kill subdirs.
+  (setq dired-bind-info nil)
+
   :config
 
   ;; Prevent annoying "Omitted N lines" messages when auto-reverting.
   (setq dired-omit-verbose nil)
-
-  ;; Do not bind C-x C-j to dired-jump
-  (setq dired-bind-jump nil)
 
   ;; Open common video extensions with `shell-command' by default.
   (setq dired-guess-shell-alist-user
