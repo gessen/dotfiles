@@ -71,9 +71,9 @@ jsconfig.json
 # CMake
 CMakeLists.txt.user
 CMakeCache.txt
-CMakeFiles
-CMakeScripts
-Testing
+CMakeFiles/
+CMakeScripts/
+Testing/
 cmake_install.cmake
 install_manifest.txt
 compile_commands.json
@@ -81,15 +81,15 @@ CTestTestfile.cmake
 CMakeUserPresets.json
 
 # ccls and clangd
-.cache
+.cache/
 
 # Build directories
-/**/build*
-/**/bin
-/**/obj
+/**/build*/
+/**/bin/
+/**/obj/
 
 # KDE directory preferences
 .directory
 *.tmproj
 *.tmproject
-tmtags
+tmtags/
