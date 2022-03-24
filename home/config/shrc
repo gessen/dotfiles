@@ -48,6 +48,9 @@ alias fu='sudo !!'
 # Use fzf-tmux
 alias fzf='fzf-tmux -d 40%'
 
+# Ensure that terminfo is uploaded
+alias ssh='kitty +kitten ssh'
+
 # Tig for all refs
 alias tia='tig --all'
 
