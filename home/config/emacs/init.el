@@ -3492,6 +3492,10 @@ list of additional parameters sent with this request."
   ;; Ignore watching files in the workspace if the server has requested that.
   (setq lsp-enable-file-watchers nil)
 
+  ;; Reduce the amount of doc lines shown in signature, it is possible to show
+  ;; entire documentation with `M-a' anyway.
+  (setq lsp-signature-doc-lines 1)
+
   ;; Enable experimental semantic highlighting support.
   (setq lsp-semantic-tokens-enable t)
 
