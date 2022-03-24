@@ -49,9 +49,9 @@ export CMAKE_EXPORT_COMPILE_COMMANDS=ON
 # Use Ninja by default
 export CMAKE_GENERATOR=Ninja
 
-# Use ccache by default
-export CMAKE_C_COMPILER_LAUNCHER="CCACHE_CPP2=yes;CCACHE_HASHDIR=yes;ccache"
-export CMAKE_CXX_COMPILER_LAUNCHER="CCACHE_CPP2=yes;CCACHE_HASHDIR=yes;ccache"
+# Use sccache by default
+export CMAKE_C_COMPILER_LAUNCHER="sccache"
+export CMAKE_CXX_COMPILER_LAUNCHER="sccache"
 
 # Output should be logged for failed tests
 export CTEST_OUTPUT_ON_FAILURE=ON

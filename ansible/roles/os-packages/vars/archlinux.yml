@@ -42,6 +42,7 @@ packages:
   - ripgrep
   - rsync
   - rustup
+  - sccache
   - shfmt
   - signal-desktop
   - tig
