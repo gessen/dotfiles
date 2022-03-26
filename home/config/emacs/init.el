@@ -1087,6 +1087,7 @@ window instead."
     "pP" #'projectile-package-project
     "pr" #'projectile-recentf
     "pR" #'projectile-replace
+    "ps" #'projectile-run-vterm
     "pt" #'projectile-test-project)
 
   :config
