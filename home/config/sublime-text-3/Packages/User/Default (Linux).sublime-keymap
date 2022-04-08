@@ -47,6 +47,17 @@
     ]
   },
   {
+    "keys": ["ctrl+shift+c"],
+    "command": "lsp_format_document_range",
+    "context": [
+      {
+        "key": "lsp.session_with_capability",
+        "operator": "equal",
+        "operand": "documentRangeFormattingProvider"
+      }
+    ]
+  },
+  {
     "keys": ["f1"],
     "command": "show_overlay",
     "args": {
