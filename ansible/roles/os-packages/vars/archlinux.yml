@@ -21,7 +21,7 @@ packages:
   - gdb
   - gdb-dashboard
   - git
-  - git-delta-git
+  - git-delta
   - glances
   - htop
   - keepassxc
