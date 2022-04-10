@@ -485,6 +485,11 @@ BINDINGS is a series of KEY DEF pair."
 
 ;;;; Mouse integration
 
+;; Clicking `down-mouse-3' (usually, the right mouse button) anywhere in the
+;; buffer pops up a menu whose contents depends on surrounding context near the
+;; mouse click.
+(context-menu-mode +1)
+
 ;; Mouse integration works out of the box in windowed mode but not terminal mode
 (unless (display-graphic-p)
   ;; Enable basic mouse support (click and drag).
