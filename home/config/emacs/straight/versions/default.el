@@ -31,6 +31,7 @@
  ("dash.el" . "dc61f4641779616122692e34a32ba2a158ee034c")
  ("deadgrep" . "0a3ba239c458ffc4f63a180b43d0e70b81742a3e")
  ("default-text-scale" . "bfc0987c37e93742255d3b23d86c17096fda8e7e")
+ ("dired-copy-paste" . "aefb5597e65bc1a7b771c2c82961f5a10b5f424b")
  ("dired-hacks" . "7c0ef09d57a80068a11edc74c3568e5ead5cc15a")
  ("diredfl" . "59f8e5bf5c2991aa54a471f61f14d77976db194a")
  ("doom-modeline" . "432c167def75f9be4a743d90d4593252c9283c7a")
