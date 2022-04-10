@@ -430,8 +430,6 @@ BINDINGS is a series of KEY DEF pair."
 (use-package! hydra
   :demand t)
 
-(set-leader-keys! "?" #'describe-bindings)
-
 ;;; Configure ~/.emacs.d paths
 
 (require 'xdg)
@@ -2835,17 +2833,60 @@ point. "
 ;; convenient key), offering you relevant actions to use on a target determined
 ;; by the context.
 (use-package! embark
-  :bind ("M-s a" . #'embark-act)
+  :init
+
+  (set-leader-keys!
+    "?"  '("describe keybinds" . embark-bindings)
+    "hB" #'embark-bindings)
+
+  :bind (("M-s a"   . #'embark-act)
+         ("M-s M-a" . #'embark-act)
+         ("M-s e"   . #'embark-export)
+         ("M-s M-e" . #'embark-export)
+         ("M-s s"   . #'embark-dwim)
+         ("M-s M-s" . #'embark-dwim)
+         ("C-h B"   . #'embark-bindings))
 
   :config
 
-  (defun my-embark-action-indicator (map _target)
-    "Use `which-key' like a key menu prompt."
-    (which-key--show-keymap "Embark" map nil nil 'no-paging)
-    #'which-key--hide-popup-ignore-command)
+  (defun embark-which-key-indicator ()
+    "An embark indicator that displays keymaps using which-key.
+The which-key help message will show the type and value of the
+current target followed by an ellipsis if there are further
+targets."
+    (lambda (&optional keymap targets prefix)
+      (if (null keymap)
+          (which-key--hide-popup-ignore-command)
+        (which-key--show-keymap
+         (if (eq (plist-get (car targets) :type) 'embark-become)
+             "Become"
+           (format "Act on %s '%s'%s"
+                   (plist-get (car targets) :type)
+                   (embark--truncate-target (plist-get (car targets) :target))
+                   (if (cdr targets) "…" "")))
+         (if prefix
+             (pcase (lookup-key keymap prefix 'accept-default)
+               ((and (pred keymapp) km) km)
+               (_ (key-binding prefix 'accept-default)))
+           keymap)
+         nil nil t (lambda (binding)
+                     (not (string-suffix-p "-argument" (cdr binding))))))))
 
-  (setq embark-action-indicator #'my-embark-action-indicator)
-  (setq embark-become-indicator #'my-embark-action-indicator))
+  ;; Display more compact display with the help of `which-key' for Embark
+  ;; indicators.
+  (setq embark-indicators
+        '(embark-which-key-indicator
+          embark-highlight-indicator
+          embark-isearch-highlight-indicator))
+
+  (defadvice! my--embark-hide-which-key-indicator (fn &rest args)
+    :around #'embark-completing-read-prompter
+    "Hide the which-key indicator immediately when using the
+completing-read prompter."
+    (which-key--hide-popup-ignore-command)
+    (let ((embark-indicators
+           (remq #'embark-which-key-indicator embark-indicators)))
+      (apply fn args))))
 
 ;; Package `embark-consult' provides integration between Embark and Consult.
 (use-package! embark-consult
