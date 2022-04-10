@@ -20,6 +20,7 @@
  ("company-posframe" . "df0e34f69dc8e9aaa1a6c5e88783898f4ae3f2df")
  ("company-shell" . "a77f4de75912aa87314cde92c603b831d5050246")
  ("consult" . "d30213aa209391e03b1c1011df92d91a1fc5ef32")
+ ("consult-company" . "ef1c553b4a72b23297b55708bf6f6dd1b27cc68e")
  ("consult-flycheck" . "9b40f136c017fadf6239d7602d16bf73b4ad5198")
  ("consult-lsp" . "a8eb3a062feb2715f174500d0624d3a85e000cf7")
  ("ctrlf" . "56021fd53efd775d91db2730e4ab4d5c157c513f")
