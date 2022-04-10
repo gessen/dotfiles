@@ -12,7 +12,7 @@ packages:
   - discord
   - dos2unix
   - doxygen
-  - emacs-native-comp-git
+  - emacs-nativecomp
   - fasd
   - fd
   - firefox
