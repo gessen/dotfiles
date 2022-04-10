@@ -21,7 +21,7 @@
  ("company-shell" . "52f3bf26b74adc30a275f5f4290a1fc72a6876ff")
  ("consult" . "d30213aa209391e03b1c1011df92d91a1fc5ef32")
  ("consult-flycheck" . "9b40f136c017fadf6239d7602d16bf73b4ad5198")
- ("consult-lsp" . "12989949cc21a1173206f688d56a1e798073a4c3")
+ ("consult-lsp" . "a8eb3a062feb2715f174500d0624d3a85e000cf7")
  ("ctrlf" . "dbe83710d06bc39315f1455f6f21479f3747c0aa")
  ("darkokai" . "5820aeddfc8c869ba840cc534eba776936656a66")
  ("dash.el" . "b9286a84975874b10493f1cb4ea051c501f51273")
