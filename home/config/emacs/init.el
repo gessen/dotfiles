@@ -3683,6 +3683,7 @@ a new window."
       (c-tab-always-indent . t)
       (c-comment-only-line-offset . 0)
       (comment-column . 40)
+      (c-doc-comment-style . doxygen)
       (c-indent-comments-syntactically-p . t)
       (c-indent-comment-alist . ((other . (space . 1))))
       (c-hanging-braces-alist . ((defun-open before after)
@@ -3739,9 +3740,11 @@ a new window."
                           (cpp-macro . [0])
                           (inclass . +)
                           (stream-op . c-lineup-streamop)
-                          (arglist-cont-nonempty c-lineup-gcc-asm-reg
+                          (arglist-cont-nonempty c-lineup-ternary-bodies
+                                                 c-lineup-gcc-asm-reg
                                                  c-lineup-arglist)
-                          (arglist-cont c-lineup-gcc-asm-reg 0)
+                          (arglist-cont c-lineup-gcc-asm-reg
+                                        c-lineup-ternary-bodies)
                           (comment-intro c-lineup-knr-region-comment
                                          c-lineup-comment)
                           (catch-clause . 0)
@@ -3779,7 +3782,7 @@ a new window."
                           (inline-open . +)
                           (arglist-close . +)
                           (arglist-intro . +)
-                          (statement-cont . +)
+                          (statement-cont c-lineup-ternary-bodies +)
                           (statement-case-open . 0)
                           (label . ++)
                           (substatement-label . ++)
