@@ -2864,11 +2864,6 @@ point. "
 (use-package! marginalia
   :init
 
-  ;; Prefer richer, more heavy, annotations over the lighter default variant.
-  (setq marginalia-annotators '(marginalia-annotators-heavy
-                                marginalia-annotators-light
-                                nil))
-
   (marginalia-mode +1)
 
   :bind (:map minibuffer-local-map
