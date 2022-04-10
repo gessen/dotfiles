@@ -3686,13 +3686,17 @@ a new window."
 
   (set-leader-keys-for-minor-mode! 'lsp-mode
     "ge"  #'consult-lsp-diagnostics
-    "gs"  #'consult-lsp-symbols
+    "gs"  #'consult-lsp-file-symbols
+    "gS"  #'consult-lsp-symbols
     "Ge"  #'consult-lsp-diagnostics
-    "Gs"  #'consult-lsp-symbols)
+    "Gs"  #'consult-lsp-file-symbols
+    "GS"  #'consult-lsp-symbols)
 
-  ;; Enable preview with `C-o'.
-  (setf (alist-get 'consult-lsp-symbols consult-config)
-        `(:preview-key ,(kbd "C-o"))))
+  (consult-customize
+   ;; Disable the automatic preview where the preview may be expensive due to
+   ;; file loading.
+   consult-lsp-diagnostics consult-lsp-symbols
+   :preview-key (kbd "M-.")))
 
 ;;; Language support
 ;;;; C, C++
