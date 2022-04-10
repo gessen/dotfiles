@@ -4651,7 +4651,11 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
   (setq dired-recursive-copies 'always)
 
   ;; Kill the current Dired buffer when selecting a new directory to display.
-  (setq dired-kill-when-opening-new-dired-buffer t))
+  (setq dired-kill-when-opening-new-dired-buffer t)
+
+  ;; Compress with Zstandard by default
+  (setq dired-compress-file-default-suffix ".zst"
+        dired-compress-directory-default-suffix ".tar.zst"))
 
 ;; Feature `dired-x' provides extra `dired' functionality.
 (use-feature! dired-x
