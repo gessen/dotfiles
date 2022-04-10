@@ -4791,6 +4791,18 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
   ;; Make permission bits editable.
   (setq wdired-allow-to-change-permissions t))
 
+;; Package `dired-copy-paste' enables you to cut, copy and paste files and
+;; directories in Emacs Dired.
+(use-package! dired-copy-paste
+  :straight (:host github :repo "jsilve24/dired-copy-paste")
+  :after dired
+  :commands (dired-copy-paste-do-cut
+             dired-copy-paste-do-copy
+             dired-copy-paste-do-paste)
+  :bind (:map dired-mode-map
+              ("C-c C-w" . #'dired-copy-paste-do-cut)
+              ("C-c C-c" . #'dired-copy-paste-do-copy)
+              ("C-c C-y" . #'dired-copy-paste-do-paste)))
 
 ;; Package `dired-subtree' defines function `dired-subtree-insert' which inserts
 ;; the subdirectory directly below its line in the original listing, and indents
