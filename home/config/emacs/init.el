@@ -158,6 +158,10 @@ frame is created."
 ;;;; straight.el
 
 (eval-and-compile
+  ;; Get the latest version of straight.el from the develop branch, rather than
+  ;; the default master which is updated less frequently
+  (setq straight-repository-branch "develop")
+
   ;; Disable checks for package modifications to save up time during startup
   (setq straight-check-for-modifications nil)
 
