@@ -69,7 +69,7 @@
  ("frog-menu" . "e4f404af19d8427f4540e55b1854ba569b66399e")
  ("git-gutter" . "d050abdd7f5a46c9cfbec2953d2fca90095e2857")
  ("git-messenger" . "a69b6f359bd34b77335619103c82cef07ecdbc7c")
- ("git-modes" . "7678ead3cdbb1692c9728b9730c016283ed97af1")
+ ("git-modes" . "bb71cb2226a1cf105c329f3186bfcb5bb37e2f2d")
  ("git-timemachine" . "8d675750e921a047707fcdc36d84f8439b19a907")
  ("gnu-elpa-mirror" . "b806155cfcdee67b8d5bfca610dc19f556399d55")
  ("golden-ratio-scroll-screen" . "1b6ff0e3e8822423335d3f7d88c1fcb4cf43ce42")

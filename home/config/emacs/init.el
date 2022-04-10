@@ -4220,15 +4220,9 @@ ALL when non-nil determines whether words will be pickable."
 
 ;;; Configuration file formats
 
-;; Package `gitattributes-mode' provides a major mode for .gitattributes files.
-(use-package! gitattributes-mode)
-
-;; Package `gitconfig-mode' provides a major mode for .gitconfig and
-;; .gitmodules files.
-(use-package! gitconfig-mode)
-
-;; Package `gitignore-mode' provides a major mode for .gitignore files.
-(use-package! gitignore-mode)
+;; Package `git-modes' provides a major mode for .gitattributes, .gitconfig and
+;; .gitignore files.
+(use-package! git-modes)
 
 ;; Package `json-mode' provides a major mode for JSON.
 (use-package! json-mode
