@@ -3708,6 +3708,21 @@ a new window."
    consult-lsp-diagnostics consult-lsp-symbols
    :preview-key (kbd "M-.")))
 
+
+;; Package `lsp-treemacs' brings integration between `lsp-mode' and `treemacs'
+;; and implementation of treeview controls using Treemacs as a tree renderer.
+(use-package! lsp-treemacs
+  :config
+
+  (set-leader-keys-for-minor-mode! 'lsp-mode
+    "gE" #'lsp-treemacs-errors-list
+    "gR" #'lsp-treemacs-references
+
+    "GE" #'lsp-treemacs-errors-list
+    "GR" #'lsp-treemacs-references
+
+    "tt" #'lsp-treemacs-sync-mode))
+
 ;;; Language support
 ;;;; C, C++
 
