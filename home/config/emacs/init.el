@@ -2420,6 +2420,17 @@ Spell Commands^^            Add To Dictionary^^               Other^^
     "kv"  #'kmacro-view-macro-repeat))
 
 ;;; Electricity: automatic things
+;;;; Autorepeat
+
+;; Feature `repeat' provides a convenient way to repeat the previous command.
+(use-feature! repeat
+  :init
+
+  ;; Suppress message saying that Repeat Mode was enabled.
+  (advice-add #'repeat-mode :around #'advice-silence-messages!)
+
+  (repeat-mode +1))
+
 ;;;; Autorevert
 
 ;; Feature `autorevert' allows the use of file-watchers or polling in order to
