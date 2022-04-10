@@ -2,6 +2,7 @@
  ("ace-jump-mode" . "8351e2df4fbbeb2a4003f2fb39f46d33803f3dac")
  ("ace-mc" . "6877880efd99e177e4e9116a364576def3da391b")
  ("ace-window" . "0577c426a9833ab107bab46c60d1885c611b2fb9")
+ ("all-the-icons-completion" . "286e2c064a1298be0d8d4100dc91d7a7a554d04a")
  ("all-the-icons.el" . "65c496d3d1d1298345beb9845840067bffb2ffd8")
  ("auto-yasnippet" . "db9e0dd4335b2202cd5dac95bbbc87a1032d9bbe")
  ("avy" . "ba5f035be33693d1a136a5cbeedb24327f551a92")
