@@ -93,6 +93,7 @@
  ("json-snatcher" . "b28d1c0670636da6db508d03872d96ffddbc10f2")
  ("let-alist" . "592553db5929b54db40af0df90c5add0aaca045b")
  ("lsp-mode" . "6bc8a39502321a7c663991f7de27e8515ecb7e0b")
+ ("lsp-treemacs" . "355e468b7fa9887c616a8bfe873d8e456303b67b")
  ("lsp-ui" . "96b1ecbfbf87a775f05b5f0b55253376a3bd61e7")
  ("macrostep" . "424e3734a1ee526a1bd7b5c3cd1d3ef19d184267")
  ("magit" . "0bbf31a2efd769ac2a4734358b4da08a596e9514")
