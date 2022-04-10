@@ -107,7 +107,7 @@
  ("monokai-emacs" . "c5a7978bfc2ad2aa90882e6b2583668dc7b3e1a5")
  ("multiple-cursors.el" . "616fbdd3696f99d85660ad57ebbb0c44d6c7f426")
  ("mwim.el" . "b4f3edb4c0fb8f8b71cecbf8095c2c25a8ffbf85")
- ("orderless" . "d97a91f6e12ace638e65bdccefd14d1e638a2dae")
+ ("orderless" . "8f64537f556f26492fe5ee401d8d578d7d88684b")
  ("org" . "702fefe9f60414ccbb1e4ae3810d30a610ed1da9")
  ("org-contrib" . "fc81309cf6756607a836f93049a9393c2967c4e0")
  ("org-reveal" . "826b01beb434d38e415d3001908baf5994c6d669")

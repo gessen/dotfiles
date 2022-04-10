@@ -2886,10 +2886,10 @@ point. "
   (setq completion-styles '(orderless))
   (setq completion-category-defaults nil)
 
-  ;; Change initialism to strict initialism and add prefixes (partial completion
-  ;; from Emacs).
+  ;; Change literal to initialism and add prefixes (partial completion from
+  ;; Emacs).
   (setq orderless-matching-styles '(orderless-regexp
-                                    orderless-strict-initialism
+                                    orderless-initialism
                                     orderless-prefixes))
 
   (defun orderless-flex-if-twiddle (pattern _index _total)
