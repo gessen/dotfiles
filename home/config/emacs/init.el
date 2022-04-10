@@ -2380,7 +2380,8 @@ Spell Commands^^            Add To Dictionary^^               Other^^
   :init
 
   (set-leader-keys!
-    "St" #'powerthesaurus-lookup-word-dwim))
+    "St" #'powerthesaurus-lookup-synonyms-dwim
+    "ST" #'powerthesaurus-lookup-antonyms-dwim))
 
 ;;;; Miscellaneous
 
