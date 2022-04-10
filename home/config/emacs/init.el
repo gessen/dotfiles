@@ -9,7 +9,7 @@
 ;; Produce backtrace when error occurs
 ;; (setq debug-on-error t)
 
-(defvar my-minimum-emacs-version "27.1"
+(defvar my-minimum-emacs-version "28.1"
   "This Emacs configuration does not support any Emacs version below this.")
 
 ;; Make sure we are running a modern enough Emacs, otherwise abort init
@@ -516,7 +516,7 @@ For details on DATA, CONTEXT, and signal, see
 (setq command-error-function #'my--command-error-function)
 
 ;; Simple 'y' or 'n' is enough
-(fset 'yes-or-no-p 'y-or-n-p)
+(setq use-short-answers t)
 
 ;; Prevent Custom from modifying this file.
 (setq custom-file (expand-file-name "custom.el" my-cache-dir))
@@ -1234,6 +1234,9 @@ window instead."
 ;; Add a newline automatically at the end of the file when the file is about to
 ;; be saved
 (setq require-final-newline t)
+
+;; Offer to delete any autosave file when killing a buffer.
+(setq kill-buffer-delete-auto-save-files t)
 
 ;;; Editing
 ;;;; Text formatting
@@ -2464,6 +2467,10 @@ Spell Commands^^            Add To Dictionary^^               Other^^
   :blackout (auto-revert-mode . " Ⓡ"))
 
 ;;;; Automatic delimiter pairing
+
+;; Disable showing matching parenthesis, Smartparens will enable that
+;; functionality.
+(setq show-paren-mode nil)
 
 ;; Package `smartparens' provides an API for manipulating paired delimiters of
 ;; many different types, as well as interactive commands and key bindings for
@@ -4261,7 +4268,8 @@ unhelpful."
     "hm" #'describe-mode
     "hM" #'describe-keymap
     "hn" #'view-emacs-news
-    "ht" #'describe-theme)
+    "ht" #'describe-theme
+    "hx" #'describe-command)
 
   ;; Always select help window for viewing.
   (setq help-window-select 't))
@@ -5164,6 +5172,9 @@ possibly new window."
 
 ;; Avoid loading unnecessary `default' library
 (setq inhibit-default-init t)
+
+;; Inhibit displaying instructions on how to exit the client on connection.
+(setq server-client-instructions nil)
 
 ;; Get rid of "For information about GNU Emacs..." message at startup, unless
 ;; we're in a daemon session, where it'll say "Starting Emacs daemon." instead,
