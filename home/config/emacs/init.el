@@ -3551,7 +3551,7 @@ list of additional parameters sent with this request."
   ;; entire documentation with `M-a' anyway.
   (setq lsp-signature-doc-lines 1)
 
-  ;; Enable experimental semantic highlighting support.
+  ;; Enable semantic highlighting support.
   (setq lsp-semantic-tokens-enable t)
 
   ;; Inhibit automatic edits suggested by the language server before saving a
@@ -3851,21 +3851,6 @@ a new window."
               ("p" . #'ccls-tree-prev-line))
   :config
 
-  (lsp-define-extension! "ccls" "find-references-read" (_)
-    "textDocument/references"
-    "Find read references of the type at point."
-    `(:role 8))
-
-  (lsp-define-extension! "ccls" "find-references-write" (_)
-    "textDocument/references"
-    "Find write references of the type at point."
-    `(:role 16))
-
-  (lsp-define-extension! "ccls" "find-references-address" (_)
-    "textDocument/references"
-    "Find address references of the type at point."
-    `(:role 128))
-
   (lsp-define-extension! "ccls" "find-base" (levels)
     "$ccls/inheritance"
     "Find base types of the type at point.
@@ -3977,10 +3962,8 @@ ALL when non-nil determines whether words will be pickable."
     (mapc (lambda (prefix) (apply #'declare-prefix-for-mode! mode prefix))
           '(("mgh" "hierarchy")
             ("mgm" "members")
-            ("mgR" "references")
             ("mGh" "hierarchy")
-            ("mGm" "members")
-            ("mGR" "references")))
+            ("mGm" "members")))
 
     (set-leader-keys-for-major-mode! mode
       ;; Code actions
@@ -4001,9 +3984,6 @@ ALL when non-nil determines whether words will be pickable."
       "gmt" #'ccls-ui-peek-find-member-types
       "gk"  #'ccls-avy-goto-symbol
       "gK"  #'ccls-avy-goto-word
-      "gR&" #'ccls-ui-peek-find-references-address
-      "gRr" #'ccls-ui-peek-find-references-read
-      "gRw" #'ccls-ui-peek-find-references-write
 
       ;; Goto
       "Gb"  #'ccls-find-base
@@ -4019,10 +3999,7 @@ ALL when non-nil determines whether words will be pickable."
       "Gmf" #'ccls-find-member-funcs
       "Gmt" #'ccls-find-member-types
       "Gk"  #'ccls-avy-goto-symbol
-      "GK"  #'ccls-avy-goto-word
-      "gR&" #'ccls-find-references-address
-      "gRr" #'ccls-find-references-read
-      "gRw" #'ccls-find-references-write))
+      "GK"  #'ccls-avy-goto-word))
 
   ;; Set some basic logging for debugging purpose.
   (setq ccls-args (list "-log-file=/tmp/ccls.log" "-v=1"))
