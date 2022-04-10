@@ -2743,17 +2743,6 @@ point. "
     (interactive)
     (consult-line (thing-at-point 'symbol)))
 
-  (defvar-local consult-toggle-preview-orig nil)
-
-  (defun consult-toggle-preview ()
-    "Enable or disable preview within `consult' session."
-    (interactive)
-    (if consult-toggle-preview-orig
-        (setq consult--preview-function consult-toggle-preview-orig
-              consult-toggle-preview-orig nil)
-      (setq consult-toggle-preview-orig consult--preview-function
-            consult--preview-function #'ignore)))
-
   (set-leader-keys!
     "/"  #'consult-ripgrep
     "am" #'consult-man'
@@ -2769,6 +2758,7 @@ point. "
     "g/" #'consult-git-grep
     "gf" #'consult-git-ls
     "ji" #'consult-imenu
+    "jI" #'consult-imenu-multi
     "km" #'consult-kmacro
     "rl" #'consult-register-load
     "rr" #'consult-register
@@ -2778,12 +2768,22 @@ point. "
     "sS" #'consult-multi-occur
     "tT" #'consult-theme)
 
-  (with-eval-after-load 'selectrum
-    (bind-key "M-P" #'consult-toggle-preview selectrum-minibuffer-map))
+  ;; Narrow and widen selection with "[".
+  (setq consult-narrow-key (kbd "["))
+
+  ;; Configure the register formatting. This improves the register preview
+  ;; for `consult-register', `consult-register-load', `consult-register-store'
+  ;; and the Emacs built-ins.
+  (setq register-preview-delay 0
+        register-preview-function #'consult-register-format)
+
+  ;; Tweak the register preview window. This adds stripes, sorting and hides the
+  ;; mode line of the window.
+  (advice-add #'register-preview :override #'consult-register-window)
 
   :bind (([remap goto-line] . #'consult-goto-line)
-         ("M-g i"           . #'consult-imenu)
-         ("M-g M-i"         . #'consult-imenu)
+         ("M-g i"           . #'consult-imenu-multi)
+         ("M-g M-i"         . #'consult-imenu-multi)
          ("M-g k"           . #'consult-global-mark)
          ("M-g M-k"         . #'consult-global-mark)
          ("M-g l"           . #'consult-line)
@@ -2794,6 +2794,8 @@ point. "
          ("M-g M-m"         . #'consult-mark)
          ("M-g o"           . #'consult-outline)
          ("M-g M-o"         . #'consult-outline)
+         ("M-g /"           . #'consult-line-multi)
+         ("M-g M-/"         . #'consult-line-multi)
          ([remap yank-pop]  . #'consult-yank-replace)
          ("M-s l"           . #'consult-line)
          ("M-s M-l"         . #'consult-line)
@@ -2804,29 +2806,20 @@ point. "
 
   :config
 
-  ;; Enable preview for some commands with `C-o'.
-  (dolist (cmd '(consult-bookmark consult-recent-file consult-ripgrep))
-    (setf (alist-get cmd consult-config) `(:preview-key ,(kbd "C-o"))))
-
-  ;; Use fd instead of find.
-  (setq consult-find-command "fd --color=never --full-path ARG OPTS")
-
-  ;; Narrow and widen selection with "[".
-  (setq consult-narrow-key (kbd "["))
-
-  ;; Configure the register formatting. This improves the register preview
-  ;; for `consult-register', `consult-register-load', `consult-register-store'
-  ;; and the Emacs built-ins.
-  (setq register-preview-delay 0)
-  (setq register-preview-function #'consult-register-format)
-
-  ;; Tweak the register preview window. This adds stripes, sorting and hides the
-  ;; mode line of the window.
-  (advice-add #'register-preview :override #'consult-register-window)
+  (consult-customize
+   ;; Preview themes on any key press, but delay 0.5s.
+   consult-theme :preview-key '(:debounce 0.5 any)
+   ;; Disable the automatic preview only for commands, where the preview may be
+   ;; expensive due to file loading.
+   consult-ripgrep consult-git-grep consult-grep
+   consult-bookmark consult-recent-file consult-xref
+   consult--source-bookmark consult--source-recent-file
+   consult--source-project-recent-file
+   :preview-key (kbd "M-."))
 
   ;; Configure a function which returns the project root directory
   (with-eval-after-load 'projectile
-    (setq consult-project-root-function #'projectile-project-root)))
+    (setq consult-project-function (lambda (_) (projectile-project-root)))))
 
 ;; Package `embark' provides a sort of right-click contextual menu for Emacs,
 ;; accessed through the `embark-act' command (which you should bind to a
