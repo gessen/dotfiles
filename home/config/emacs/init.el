@@ -3055,6 +3055,7 @@ point. "
   :init
 
   (set-leader-keys!
+    "ii" #'company-yasnippet
     "ta" #'company-mode
     "tA" #'global-company-mode)
 
@@ -3062,7 +3063,11 @@ point. "
                ("M-\\" . #'company-complete)
                ("C-\\" . #'company-begin-backend))
          (:map company-active-map
-               ("M-b"  . #'company-other-backend)))
+               ("M-n"  . #'company-select-next)
+               ("M-p"  . #'company-select-previous))
+         (:map company-search-map
+               ("M-n"  . #'company-select-next)
+               ("M-p"  . #'company-select-previous)))
 
   :config
 
@@ -3093,7 +3098,7 @@ point. "
 
   ;; Show quick-reference numbers in the tooltip. Select a completion with M-1
   ;; through M-0.
-  (setq company-show-numbers t)
+  (setq company-show-quick-access t)
 
   ;; Dismiss the completions menu with non-matching input.
   (setq company-require-match nil)

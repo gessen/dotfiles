@@ -16,7 +16,7 @@
  ("cmake-font-lock" . "5e20ed32193c2c7ebae920a6a3cd711c8c950597")
  ("column-enforce-mode" . "14a7622f2268890e33536ccd29510024d51ee96f")
  ("comment-dwim-2" . "3dfdd58495c46a37708344a57c5c52beca6b2c1c")
- ("company-mode" . "34862485c6b8badc98fee29596fe56723dcf6f77")
+ ("company-mode" . "1005540b1cdf176cbcf893b2fa83d2075cbbe3ca")
  ("company-posframe" . "c7a820a35ff132aaec53c81e05afc829de39eb68")
  ("company-shell" . "52f3bf26b74adc30a275f5f4290a1fc72a6876ff")
  ("consult" . "9903e890c9d3f1d08629c9798010266946bb004c")
