@@ -51,7 +51,7 @@
  ("emacs-reformatter" . "e02a9ea94287f4195edeeab3033e017a56872f5b")
  ("emacs-request" . "f3a5b4352e9f444ace2a332939abff504b573887")
  ("emacs-shfmt" . "49c9e11567874bc4c5c4b3578a6b8f6b1948c691")
- ("emacs-which-key" . "5fb30301cb3b4fca5a0e1ce8ec1ef59290b79199")
+ ("emacs-which-key" . "1217db8c6356659e67b35dedd9f5f260c06f6e99")
  ("emacs-winum" . "c5455e866e8a5f7eab6a7263e2057aff5f1118b9")
  ("emacsmirror-mirror" . "ea0e522a7c2a298a486e372eb13b21c39aa2f0ac")
  ("embark" . "2890e535f55b1f08f379fd761b263fa337a72185")

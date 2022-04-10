@@ -250,42 +250,33 @@ NAME and ARGS are as in `use-package'."
 (defconst my-major-mode-leader-key "C-M-m"
   "Major mode leader key.")
 
-(defconst my-leader-key-prefixes '(("!" "shell cmd")
-                                   ("/" "search project")
-                                   ("?" "describe keybinds")
-                                   ("a" "applications")
-                                   ("b" "buffers")
-                                   ("c" "compile/comment")
-                                   ("d" "devdocs")
-                                   ("D" "diff")
-                                   ("e" "errors")
-                                   ("g" "git")
-                                   ("f" "files")
-                                   ("F" "frames")
-                                   ("h" "help")
-                                   ("i" "insert")
-                                   ("j" "jump")
-                                   ("k" "macros")
-                                   ("l" "fold")
-                                   ("m" "major mode")
-                                   ("M-m" "major mode")
-                                   ("o" "org")
-                                   ("p" "projects")
-                                   ("P" "packages")
-                                   ("q" "quit")
-                                   ("r" "registers/rings")
-                                   ("R" "rectangles")
-                                   ("s" "search")
-                                   ("S" "spellcheck")
-                                   ("t" "toggle")
-                                   ("T" "tabs")
-                                   ("th" "highlight")
-                                   ("u" "undo")
-                                   ("v" "multiple cursors")
-                                   ("V" "expand region")
-                                   ("w" "windows")
-                                   ("x" "text")
-                                   ("z" "zoom"))
+(defconst my-leader-key-prefixes '("a" "applications"
+                                   "b" "buffers"
+                                   "c" "compile"
+                                   "d" "devdocs"
+                                   "D" "diff"
+                                   "e" "errors"
+                                   "g" "git"
+                                   "f" "files"
+                                   "F" "frames"
+                                   "h" "help"
+                                   "i" "insert"
+                                   "j" "jump"
+                                   "k" "macros"
+                                   "o" "org"
+                                   "p" "projects"
+                                   "q" "quit"
+                                   "r" "registers/rings"
+                                   "R" "rectangles"
+                                   "s" "search"
+                                   "S" "spellcheck"
+                                   "t" "toggle"
+                                   "T" "tabs"
+                                   "th" "highlight"
+                                   "u" "undo"
+                                   "v" "multiple cursors"
+                                   "w" "windows"
+                                   "x" "text")
   "List of all prefixes used with leader key.")
 
 (defun declare-prefix-for-mode! (mode prefix name)
@@ -300,14 +291,20 @@ used as the prefix command."
     (when (my--init-leader-mode-map mode map is-minor-mode)
       (which-key-add-keymap-based-replacements
         (symbol-value map)
-        (if is-major-mode (substring prefix 1) prefix ) name))))
+        (if is-major-mode (substring prefix 1) prefix) name))))
 
-(defun declare-prefix! (prefix name)
+(defun declare-prefix! (prefix name &rest more)
   "Declares a `which-key' PREFIX.
 PREFIX is a string describing a key sequence. NAME is a string
 used as the prefix command."
   (declare (indent defun))
-  (which-key-add-keymap-based-replacements my-leader-key-map prefix name))
+  (while prefix
+    (let* ((map my-leader-key-map)
+           (def (cons name (or (lookup-key map (kbd prefix))
+                               (make-sparse-keymap)))))
+      (bind-key prefix def my-leader-key-map))
+    (setq prefix (pop more)
+          name (pop more))))
 
 (defun my--init-leader-mode-map (mode map &optional minor)
   "Initialise MAP prefix if it doesn't exist yet.
@@ -390,8 +387,11 @@ BINDINGS is a series of KEY DEF pair."
   :config
 
   ;; Declare all defined prefixes used with leader key
-  (mapc (lambda (prefix) (apply #'declare-prefix! prefix))
-        my-leader-key-prefixes)
+  (apply #'declare-prefix! my-leader-key-prefixes)
+
+  ;; Replace major mode prefixes with a single common text.
+  (push '((nil . "my-.+-map-prefix") . (nil . "major mode"))
+        which-key-replacement-alist)
 
   ;; Allow a key binding to match and be modified by multiple elements in
   ;; `which-key-replacement-alist'
@@ -413,6 +413,9 @@ BINDINGS is a series of KEY DEF pair."
 
   ;; Maximum length of key description before truncating
   (setq which-key-max-description-length 32)
+
+  ;; Disable `help-char' override as we use `embark' for that.
+  (setq which-key-use-C-h-commands nil)
 
   ;; Sort by key using alphabetical order, with lowercase keys having higher
   ;; priority
@@ -1338,21 +1341,13 @@ window instead."
     ("q" nil :exit t)
     ("C-g" nil :exit t))
 
-  ;; Slightly rename `string-inflection' names.
-  (declare-prefix! "xc" "inflection-camelcase")
-  (declare-prefix! "xk" "inflection-elispcase")
-  (declare-prefix! "xp" "inflection-pascalcase")
-  (declare-prefix! "xs" "inflection-snakecase")
-  (declare-prefix! "xu" "inflection-uppercase")
-  (declare-prefix! "xx" "inflections")
-
   (set-leader-keys!
-    "xc" #'string-inflection-lower-camelcase
-    "xk" #'string-inflection-kebab-case
-    "xp" #'string-inflection-camelcase
-    "xs" #'string-inflection-underscore
-    "xu" #'string-inflection-upcase
-    "xx" #'hydra-string-inflection/body)
+    "xc" '("inflection-camelcase" . string-inflection-lower-camelcase)
+    "xk" '("inflection-kebabcase" . string-inflection-kebab-case)
+    "xp" '("inflection-pascalcase" . string-inflection-camelcase)
+    "xs" '("inflection-snakecase" . string-inflection-underscore)
+    "xu" '("inflection-uppercase" . string-inflection-upcase)
+    "xx" '("inflections" . hydra-string-inflection/body))
 
   (with-eval-after-load 'embark
     (bind-key "x" #'hydra-string-inflection/body embark-identifier-map)))
@@ -1560,7 +1555,7 @@ original line and use the absolute value."
 (use-package! expand-region
   :init
 
-  (set-leader-keys! "V" #'er/expand-region)
+  (set-leader-keys! "V" '("expand region" . er/expand-region))
 
   :config
 
@@ -1749,7 +1744,7 @@ Close^^           Open^^            Toggle^^         Goto^^         Other^^
     ("q" nil :exit t)
     ("C-g" nil :exit t))
 
-  (set-leader-keys! "l" 'hydra-origami/body)
+  (set-leader-keys! "l" '("fold" . hydra-origami/body))
 
   :hook (prog-mode-hook . origami-mode)
 
@@ -2744,7 +2739,7 @@ point. "
     (consult-line (thing-at-point 'symbol)))
 
   (set-leader-keys!
-    "/"  #'consult-ripgrep
+    "/"  '("search project" . consult-ripgrep)
     "am" #'consult-man'
     "bb" #'consult-buffer
     "bB" #'consult-buffer-other-window
@@ -2831,6 +2826,9 @@ point. "
   (set-leader-keys!
     "?"  '("describe keybinds" . embark-bindings)
     "hB" #'embark-bindings)
+
+  ;; Replace the key help with a completing-read interface.
+  (setq prefix-help-command #'embark-prefix-help-command)
 
   :bind (("M-s a"   . #'embark-act)
          ("M-s M-a" . #'embark-act)
@@ -3470,18 +3468,12 @@ list of additional parameters sent with this request."
     lsp-after-initialize-hook
     "Set custom settings after initialising LSP server."
     ;; Declare prefixes common for all LSP servers.
-    (mapc (lambda (prefix) (apply #'declare-prefix-for-mode! major-mode prefix))
+    (mapc (lambda (prefix) (apply #'declare-prefix-for-mode! 'lsp-mode prefix))
           '(("m="  "format")
             ("ma"  "code actions")
             ("mf"  "folders")
             ("mg"  "peek")
-            ("mgh" "hierarchy")
-            ("mgm" "members")
-            ("mgR" "references")
             ("mG"  "goto")
-            ("mGh" "hierarchy")
-            ("mGm" "members")
-            ("mGR" "references")
             ("mh"  "help")
             ("mr"  "refactor")
             ("ms"  "session")
@@ -3982,6 +3974,14 @@ ALL when non-nil determines whether words will be pickable."
     (ccls-inheritance-hierarchy t))
 
   (dolist (mode '(c-mode c++-mode))
+    (mapc (lambda (prefix) (apply #'declare-prefix-for-mode! mode prefix))
+          '(("mgh" "hierarchy")
+            ("mgm" "members")
+            ("mgR" "references")
+            ("mGh" "hierarchy")
+            ("mGm" "members")
+            ("mGR" "references")))
+
     (set-leader-keys-for-major-mode! mode
       ;; Code actions
       "ap"  #'ccls-preprocess-file
@@ -5108,7 +5108,7 @@ current theme. This will also disable line numbers and decorations."
 
 ;;;; External commands
 
-(set-leader-keys! "!" #'shell-command)
+(set-leader-keys! "!" '("shell cmd" . #'shell-command))
 
 ;; Feature `compile' provides a way to run a shell command from Emacs and view
 ;; the output in real time, with errors and warnings highlighted and
@@ -5341,7 +5341,7 @@ possibly new window."
     ("0" default-text-scale-reset)
     ("q" nil :exit t)
     ("C-g" nil :exit t))
-  (set-leader-keys! "z" #'hydra-zoom/body)
+  (set-leader-keys! "z" '("zoom" . hydra-zoom/body))
 
   (default-text-scale-mode +1))
 
