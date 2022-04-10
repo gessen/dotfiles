@@ -23,6 +23,7 @@
  ("consult-company" . "ef1c553b4a72b23297b55708bf6f6dd1b27cc68e")
  ("consult-flycheck" . "9b40f136c017fadf6239d7602d16bf73b4ad5198")
  ("consult-lsp" . "a8eb3a062feb2715f174500d0624d3a85e000cf7")
+ ("consult-yasnippet" . "cdb256d2c50e4f8473c6052e1009441b65b8f8ab")
  ("ctrlf" . "56021fd53efd775d91db2730e4ab4d5c157c513f")
  ("darkokai" . "5820aeddfc8c869ba840cc534eba776936656a66")
  ("dash.el" . "dc61f4641779616122692e34a32ba2a158ee034c")
