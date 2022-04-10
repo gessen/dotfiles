@@ -1042,31 +1042,40 @@ window instead."
   ;; usually are special buffers like *Compile Log*.
   (setq uniquify-ignore-buffers-re "^\\*"))
 
-;; Package `fasd' hooks into to `find-file-hook' to add all visited files and
-;; directories to `fasd'. It also allow to use `fasd' binary to prompt and fuzzy
-;; complete available candidates.
-(use-package! fasd
-  :demand t
+;; Package `consult-dir' implements commands to easily switch between "active"
+;; directories. The directory candidates are collected from user bookmarks,
+;; projectile project roots (if available), project.el project roots and recentf
+;; file locations.
+(use-package! consult-dir
+  :after selectrum
   :init
-  (declare-prefix! "fa" "fasd")
-  (set-leader-keys!
-    "fad" #'fasd-find-directory-only
-    "faf" #'fasd-find-file-only
-    "fas" #'fasd-find-file)
+
+  (defun consult-dir--fasd-dirs ()
+    "Return list of fasd dirs."
+    (split-string (shell-command-to-string "fasd -ld") "\n" t))
+
+  (defvar consult-dir--source-fasd
+    `(:name     "Fasd dirs"
+                :narrow   ?f
+                :category file
+                :face     consult-file
+                :history  file-name-history
+                :enabled  ,(lambda () (executable-find "fasd"))
+                :items    ,#'consult-dir--fasd-dirs)
+    "Fasd directory source for `consult-dir'.")
+
+  (set-leader-keys! "fd" #'consult-dir)
+
+  :bind (:map selectrum-minibuffer-map
+              ("M-l" . #'consult-dir)
+              ("M-k" . #'consult-dir-jump-file))
 
   :config
 
-  (defun fasd-find-file-only ()
-    "Use fasd to open a file."
-    (interactive)
-    (fasd-find-file -1))
+  (add-to-list 'consult-dir-sources 'consult-dir--source-fasd t)
 
-  (defun fasd-find-directory-only ()
-    "Use fasd to open a directory with dired."
-    (interactive)
-    (fasd-find-file 2))
-
-  (global-fasd-mode +1))
+  ;; Use projectile backend.
+  (setq consult-dir-project-list-function #'consult-dir-projectile-dirs))
 
 ;; Package `projectile' keeps track of a "project" list, which is automatically
 ;; added to as you visit Git repositories, Node.js projects, etc. It then
