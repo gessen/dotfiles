@@ -3220,6 +3220,16 @@ menu to disappear and then come back after `company-idle-delay'."
 
   :blackout t)
 
+;; Package `consult-company' provides a command to interactively complete a
+;; Company completion candidate through completing-read using the Consult API.
+;; This works much like the builtin `completion-at-point' command except
+;; it can accept candidates from `company-backends' making it consistent
+;; with the completion candidates you would see in the company popup.
+(use-package! consult-company
+  :after (company consult )
+  :bind (:map company-active-map
+              ("M-'" . #'consult-company)))
+
 ;;;; Syntax checking and code linting
 
 ;; Package `flycheck' provides a framework for in-buffer error and warning
