@@ -797,6 +797,40 @@ window instead."
 
   :blackout " Ⓖ")
 
+;; Package `popper' is a minor-mode to tame the flood of ephemeral windows Emacs
+;; produces, while still keeping them within arm's reach. Designate any buffer
+;; to "popup" status, and it will stay out of your way. Dismiss or summon it
+;; easily with one key. Cycle through all your "popups" or just the ones
+;; relevant to your current buffer. Useful for many things, including toggling
+;; display of REPLs, documentation, compilation or shell output, etc.
+(use-package! popper
+  :after projectile
+  :init
+
+  ;; Treat help, compilation and terminal modes as popups.
+  (setq popper-reference-buffers
+        '("\\*Messages\\*"
+          "Output\\*$"
+          help-mode
+          helpful-mode
+          compilation-mode
+          "^\\*eshell.*\\*$" eshell-mode
+          "^\\*shell.*\\*$"  shell-mode
+          "^\\*term.*\\*$"  term-mode
+          "^\\*vterm.*\\*$"  vterm-mode))
+
+  (popper-mode +1)
+  (popper-echo-mode +1)
+
+  :bind (("M-`"   . popper-toggle-latest)
+         ("C-`"   . popper-cycle)
+         ("C-M-`" . popper-toggle-type))
+
+  :config
+
+  ;; Group popups by projectile buffers.
+  (setq popper-group-function 'popper-group-by-projectile))
+
 ;; Package `winum' helps with navigating windows and frames using numbers. It is
 ;; an extended and actively maintained version of the `window-numbering'
 ;; package. This version brings, among other things, support for number sets
@@ -5150,14 +5184,6 @@ possibly new window."
           (pop-to-buffer next-error-last-buffer))
       (user-error "There is no compilation buffer")))
 
-  (defun show-hide-compilation-window ()
-    "Show/Hide the window containing the compilation buffer."
-    (interactive)
-    (when-let ((buffer next-error-last-buffer))
-      (if (get-buffer-window buffer 'visible)
-          (delete-windows-on buffer)
-        (switch-to-compilation-buffer))))
-
   (defhook! my--compile-window-colorise-buffer ()
     compilation-filter-hook
     "Colorise *compilation* buffer from `compilation-filter-start' to `point'."
@@ -5169,7 +5195,6 @@ possibly new window."
     "bc" #'switch-to-compilation-buffer
     "cb" #'switch-to-compilation-buffer
     "cC" #'compile
-    "cd" #'show-hide-compilation-window
     "ck" #'kill-compilation
     "cr" #'recompile)
 
