@@ -92,6 +92,7 @@
  ("iedit" . "27c61866b1b9b8d77629ac702e5f48e67dfe0d3b")
  ("json-mode" . "eedb4560034f795a7950fa07016bd4347c368873")
  ("json-snatcher" . "b28d1c0670636da6db508d03872d96ffddbc10f2")
+ ("keycast" . "809ce7625a8c8c7ae1ca4e4a38aa857f83c4e732")
  ("let-alist" . "592553db5929b54db40af0df90c5add0aaca045b")
  ("lsp-mode" . "6bc8a39502321a7c663991f7de27e8515ecb7e0b")
  ("lsp-treemacs" . "355e468b7fa9887c616a8bfe873d8e456303b67b")
