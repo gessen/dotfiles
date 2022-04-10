@@ -2767,6 +2767,15 @@ Spell Commands^^            Add To Dictionary^^               Other^^
 
   (savehist-mode +1))
 
+;; Package `all-the-icons-completion' adds icons to completion candidates using
+;; the built in completion metadata functions.
+(use-package! all-the-icons-completion
+  :after (marginalia all-the-icons)
+  :hook (marginalia-mode-hook . all-the-icons-completion-marginalia-setup)
+  :init
+
+  (all-the-icons-completion-mode +1))
+
 ;; Package `consult' implements a set of commands which use `completing-read' to
 ;; select from a list of candidates. Most provided commands follow the naming
 ;; scheme `consult-<thing>'. Some commands are drop-in replacements for existing
