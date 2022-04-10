@@ -46,7 +46,7 @@
  ("emacs-libvterm" . "2b1392cb2b14ec5bd0b7355197d5f353aa5d3983")
  ("emacs-monokai-pro-theme" . "d0489741a80d818713c290a1a4bdd985877228bb")
  ("emacs-monokai-theme" . "f342b6afc31f929be0626eca2d696ee9fab78011")
- ("emacs-powerthesaurus" . "93036d3b111925ebc34f747ff846cb0b8669b92e")
+ ("emacs-powerthesaurus" . "810a25056c623f304de6a72123652d9c35936718")
  ("emacs-reformatter" . "e02a9ea94287f4195edeeab3033e017a56872f5b")
  ("emacs-request" . "f3a5b4352e9f444ace2a332939abff504b573887")
  ("emacs-shfmt" . "49c9e11567874bc4c5c4b3578a6b8f6b1948c691")
