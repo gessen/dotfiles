@@ -2985,15 +2985,15 @@ completing-read prompter."
                                     orderless-initialism
                                     orderless-prefixes))
 
-  (defun orderless-flex-if-twiddle (pattern _index _total)
-    "Return `orderless-flex' if pattern starts/ends with \"~\"."
-    (cond ((string-suffix-p "~" pattern)
+  (defun orderless-flex-dispatcher (pattern _index _total)
+    "Return `orderless-flex' if pattern starts/ends with \".\"."
+    (cond ((string-suffix-p "." pattern)
            `(orderless-flex . ,(substring pattern 0 -1)))
-          ((string-prefix-p "~" pattern)
+          ((string-prefix-p "." pattern)
            `(orderless-flex . ,(substring pattern 1)))))
 
   ;; Enable fuzzy matching when the pattern starts or ends with "~".
-  (setq orderless-style-dispatchers '(orderless-flex-if-twiddle))
+  (setq orderless-style-dispatchers '(orderless-flex-dispatcher))
 
   ;; Extend separator from space to spaces.
   (setq orderless-component-separator "[ ]+"))
