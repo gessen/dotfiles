@@ -123,6 +123,7 @@
  ("pkg-info" . "76ba7415480687d05a4353b27fea2ae02b8d9d61")
  ("pkgbuild-mode" . "3cbf38c22d783ac77d5dbc69a38afa04e0aa4803")
  ("plantuml-mode" . "ea45a13707abd2a70df183f1aec6447197fc9ccc")
+ ("popper" . "6599c9b5a12b411c6cf1536bf200ae233fa24389")
  ("popup-el" . "2d288d3ee39e428c7751a41e2e88f0e3e308036a")
  ("posframe" . "c91d4d53fa479ceb604071008ce0a901770eff57")
  ("powerline" . "566c77844f053cb39fa7acdfbc143a855450f0b5")
