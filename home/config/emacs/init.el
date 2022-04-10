@@ -4648,7 +4648,10 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
   (setq dired-auto-revert-buffer t)
 
   ;; Copy directories recursively.
-  (setq dired-recursive-copies 'always))
+  (setq dired-recursive-copies 'always)
+
+  ;; Kill the current Dired buffer when selecting a new directory to display.
+  (setq dired-kill-when-opening-new-dired-buffer t))
 
 ;; Feature `dired-x' provides extra `dired' functionality.
 (use-feature! dired-x
