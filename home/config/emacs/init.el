@@ -2625,6 +2625,15 @@ Spell Commands^^            Add To Dictionary^^               Other^^
   ;; Save auto snippets in persistent location outside `user-emacs-directory'.
   (setq aya-persist-snippets-dir (expand-file-name "snippets" my-data-dir)))
 
+;; Package `consult-yasnippet' allows to interactively select a Yasnippet
+;; snippet through completing-read with in buffer previews.
+(use-package! consult-yasnippet
+  :init
+
+  (set-leader-keys!
+    "ii" #'consult-yasnippet
+    "iv" #'consult-yasnippet-visit-snippet-file))
+
 ;; Package `yasnippet' allows the expansion of user-defined abbreviations into
 ;; fillable templates. The only reason we have it here is because it gets pulled
 ;; in by LSP, and we need to unbreak some stuff.
@@ -3082,7 +3091,6 @@ completing-read prompter."
   :init
 
   (set-leader-keys!
-    "ii" #'company-yasnippet
     "ta" #'company-mode
     "tA" #'global-company-mode)
 
