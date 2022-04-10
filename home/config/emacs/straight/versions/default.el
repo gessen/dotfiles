@@ -94,7 +94,7 @@
  ("lsp-mode" . "3dc87f6111ea2439a8d974a8954dcbb683144b92")
  ("lsp-ui" . "efae00eb6a733d5271cb33e9d92c3d8c2fa98dde")
  ("macrostep" . "424e3734a1ee526a1bd7b5c3cd1d3ef19d184267")
- ("magit" . "c3bbc9b9425f3370690cabb11bd35b9040773fdc")
+ ("magit" . "0bbf31a2efd769ac2a4734358b4da08a596e9514")
  ("magit-delta" . "1164a6c3e501e944f1a6a2e91f15374a193bb8d3")
  ("magit-todos" . "78d24cf419138b543460f40509c8c1a168b52ca0")
  ("marginalia" . "445d2832a2f06484ad28d9b55676c52d63cd0a46")

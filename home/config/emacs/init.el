@@ -4824,7 +4824,11 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
                                              overlong-summary-line))
 
   ;; Column beyond which characters in the summary lines are highlighted.
-  (setq git-commit-summary-max-length 50))
+  (setq git-commit-summary-max-length 50)
+
+  ;; Use a local message ring so that every repository gets its own commit
+  ;; message ring.
+  (setq git-commit-use-local-message-ring t))
 
 ;; Package `git-gutter' is a port of Sublime Text plugin GitGutter.
 (use-package! git-gutter
@@ -4973,10 +4977,6 @@ Goto^^              Actions^^         Other^^
 
   ;; Use absolute dates when showing logs.
   (setq magit-log-margin '(t "%d-%m-%Y %H:%M " magit-log-margin-width t 18))
-
-  (transient-append-suffix
-    'magit-rebase "-d"
-    '("-D" "Use current timestamp for author date" "--ignore-date"))
 
   (transient-append-suffix
     'magit-fetch "-t"
