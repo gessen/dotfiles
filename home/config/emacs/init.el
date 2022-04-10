@@ -5482,6 +5482,54 @@ possibly new window."
 ;; where it isn't very useful otherwise.
 (use-package! hide-mode-line)
 
+;; Package `keycast' provides two modes that display the current command and its
+;; key or mouse binding, and update the displayed information once another
+;; command is invoked. `keycast-mode' displays the command and event in the
+;; mode-line and `keycast-log-mode' displays them in a dedicated frame.
+(use-package! keycast
+  :init
+
+  (set-leader-keys!
+    "tk" #'keycast-mode
+    "tK" #'keycast-log-mode)
+
+  :config
+
+  ;; Replace typing with a simple message.
+  (dolist (input '(self-insert-command
+                   org-self-insert-command))
+    (add-to-list 'keycast-substitute-alist `(,input "." "Typing...")))
+
+  ;; Don't show various mouse events.
+  (dolist (event '(mouse-event-p
+                   mouse-movement-p
+                   mwheel-scroll))
+    (add-to-list 'keycast-substitute-alist `(,event nil)))
+
+  (defadvice! my--keycast-store-embark-action-key (cmd)
+    :filter-return #'embark-keymap-prompter
+    "Store Embark action from `embark-keymap' for Keycast to use."
+    (setq keycast--this-command-keys (this-single-command-keys)
+          keycast--this-command cmd))
+
+  (defadvice! my--keycast-force-mode-line-update-embark-act (&rest _)
+    :before #'embark-act
+    "Force mode line update before `embark-act'."
+    (force-mode-line-update t))
+
+  (defadvice! my--keycast-force-mode-line-update-embark-become (&rest _)
+    :before #'embark-become
+    "Force mode line update before `embark-become'."
+    (force-mode-line-update t))
+
+  (define-minor-mode keycast-mode
+    "Show current command and its key binding in the mode line."
+    :global t
+    (if keycast-mode
+        (add-hook 'pre-command-hook 'keycast--update t)
+      (remove-hook 'pre-command-hook 'keycast--update)))
+  (add-to-list 'global-mode-string '("" keycast-mode-line)))
+
 ;; Package `minions' implements a menu that lists enabled minor-modes, as
 ;; well as commonly but not currently enabled minor-modes.  It can be used to
 ;; toggle local and global minor-modes, to access mode-specific menus, and to
