@@ -26,6 +26,7 @@ packages:
   - htop
   - keepassxc
   - kitty
+  - librsync
   - lld
   - lldb
   - lsd
