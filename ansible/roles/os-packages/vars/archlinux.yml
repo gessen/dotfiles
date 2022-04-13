@@ -70,6 +70,7 @@ packages_aur:
   - git-completion
   - include-what-you-use
   - mkinitcpio-firmware
+  - pandoc-bin
   - shellcheck-bin
   - vscodium-bin
   - vscodium-bin-marketplace
