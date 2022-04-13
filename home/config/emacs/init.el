@@ -4628,6 +4628,12 @@ unhelpful."
   ;; can be helpful in documents that need "_" frequently in plain text.
   (setq org-export-with-sub-superscripts '{}))
 
+;; Package `ox-pandoc' is another exporter for Org Mode that translates Org Mode
+;; file to various other formats via Pandoc.
+(use-package! ox-pandoc
+  :demand t
+  :after ox)
+
 ;; Package `ox-reveal' implements a reveal.js Presentation Back-End for Org
 ;; Export Engine
 (use-package! ox-reveal

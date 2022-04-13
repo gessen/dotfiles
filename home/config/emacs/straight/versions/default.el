@@ -119,6 +119,7 @@
  ("org-sticky-header" . "79136b8c54c48547ba8a07a72a9790cb8e23ecbd")
  ("org-superstar-mode" . "03be6c0a3081c46a59b108deb8479ee24a6d86c0")
  ("origami.el" . "e558710a975e8511b9386edc81cd6bdd0a5bda74")
+ ("ox-pandoc" . "b2e43b936249de2a100afb4262698105c39ce289")
  ("package-lint" . "9e8c2d1f945c032ce310d37fcf6afee25980f152")
  ("parent-mode" . "db692cf08deff2f0e973e6e86e26662b44813d1b")
  ("pcre2el" . "0b5b2a2c173aab3fd14aac6cf5e90ad3bf58fa7d")
