@@ -3039,7 +3039,8 @@ completing-read prompter."
   :config
 
   ;; Hide unused path within file path, e.g. /a/b/c//tmp would show only /tmp.
-  (setq file-name-shadow-properties '(invisible t))
+  (setq file-name-shadow-properties '(invisible t)
+        file-name-shadow-tty-properties '(invisible t))
 
   ;; Don't show anything when displaying count information before the prompt.
   (setq selectrum-count-style nil))
