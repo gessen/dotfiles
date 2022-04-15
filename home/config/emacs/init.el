@@ -3148,14 +3148,16 @@ completing-read prompter."
     "tA" #'global-company-mode)
 
   :bind ((:map company-mode-map
-               ("M-\\" . #'company-complete)
-               ("C-\\" . #'company-begin-backend))
+               ("C-;"     . #'company-complete)
+               ("M-\\"    . #'company-complete)
+               ("C-\\"    . #'company-other-backend)
+               ("C-M-\\"  . #'company-begin-backend))
          (:map company-active-map
-               ("M-n"  . #'company-select-next)
-               ("M-p"  . #'company-select-previous))
+               ("M-n"     . #'company-select-next)
+               ("M-p"     . #'company-select-previous))
          (:map company-search-map
-               ("M-n"  . #'company-select-next)
-               ("M-p"  . #'company-select-previous)))
+               ("M-n"     . #'company-select-next)
+               ("M-p"     . #'company-select-previous)))
 
   :config
 
@@ -3175,10 +3177,7 @@ completing-read prompter."
 
   ;; Values for `company-backends' used everywhere. Each major-mode should
   ;; modify this list to suit its needs.
-  (setq company-backends '(company-capf
-                           company-files
-                           (company-dabbrev-code company-keywords)
-                           company-dabbrev))
+  (setq company-backends '(company-capf))
 
   ;; Don't display metadata in the echo area as this conflicts with ElDoc.
   (setq company-frontends '(company-pseudo-tooltip-unless-just-one-frontend
@@ -3786,10 +3785,6 @@ a new window."
   (defhook! my--cc-mode-setup ()
     c-mode-common-hook
     "Set custom settings for C/C++ mode."
-    (setq-local company-backends '(company-capf
-                                   company-files
-                                   (company-dabbrev-code company-keywords)
-                                   company-dabbrev))
     ;; Launch `lsp-mode'
     (lsp-deferred))
 
@@ -4269,11 +4264,9 @@ ALL when non-nil determines whether words will be pickable."
     sh-mode-hook
     "Set custom settings for `sh-mode'."
     (setq sh-basic-offset 2)
-    ;; Add `company-shell' and `company-shell-env backend.
-    (setq-local company-backends '((company-shell-env
-                                    company-capf)
-                                   company-dabbrev-code
-                                   company-dabbrev))
+    (setq-local company-backends '((company-shell company-shell-env
+                                    company-files)
+                                   company-capf))
     ;; Enable syntax checking and spellchecking in comments.
     (flycheck-mode +1)
     (flyspell-prog-mode))
@@ -4302,7 +4295,8 @@ ALL when non-nil determines whether words will be pickable."
   (dolist (func '(sh-set-shell sh-make-vars-local))
     (advice-add func :around #'advice-silence-messages!)))
 
-;; Package `company-shell'
+;; Package `company-shell' provides Company backend to complete environment
+;; variables and binaries found on your $PATH.
 (use-package! company-shell)
 
 ;; Package `'shfmt' provides commands and a minor mode for easily reformatting
