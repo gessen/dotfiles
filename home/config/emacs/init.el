@@ -5592,13 +5592,24 @@ possibly new window."
 
   :config
 
-  (defadvice! my--centaur-tabs-hide-tab (fn &rest args)
-    :around #'centaur-tabs-hide-tab
-    "Make `centaur-tabs-hide-tab' hide additional buffers."
-    (setq arg (car args))
-    (let ((name (format "%s" arg)))
-      (or (apply fn args)
-          (string-prefix-p "*ccls" name))))
+  ;; Customise which buffers are hidden.
+  (setq centaur-tabs-excluded-prefixes '("*Async-native-compile-log"
+                                         "*Compile-Log*"
+                                         "*ccls"
+                                         "*company"
+                                         "*ediff"
+                                         "*Ediff"
+                                         "*Flycheck"
+                                         "*help"
+                                         "*Help"
+                                         "*helpful"
+                                         "*lsp"
+                                         "*LSP"
+                                         "*Mini"
+                                         "*straight"
+                                         "*temp"
+                                         "*tramp"
+                                         "*which"))
 
   ;; Change tabs style to have a bit of border between tabs.
   (setq centaur-tabs-style "alternate")
