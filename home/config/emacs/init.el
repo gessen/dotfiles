@@ -4154,6 +4154,7 @@ ALL when non-nil determines whether words will be pickable."
   (defhook! my--cmake-mode-setup ()
     cmake-mode-hook
     "Set custom settings for `cmake-mode'."
+    (require 'company)
     (setq-local company-backends '(company-files
                                    (company-cmake
                                     :separate
@@ -4202,6 +4203,7 @@ ALL when non-nil determines whether words will be pickable."
   (defhook! my--meson-mode-setup ()
     meson-mode-hook
     "Set custom settings for `meson-mode'."
+    (require 'company)
     (setq-local company-backends '(company-files
                                    (company-capf
                                     :separate
@@ -4264,6 +4266,7 @@ ALL when non-nil determines whether words will be pickable."
     sh-mode-hook
     "Set custom settings for `sh-mode'."
     (setq sh-basic-offset 2)
+    (require 'company)
     (setq-local company-backends '((company-shell company-shell-env
                                     company-files)
                                    company-capf))
