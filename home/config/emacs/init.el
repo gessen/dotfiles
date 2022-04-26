@@ -5390,7 +5390,7 @@ possibly new window."
 ;;;; Font
 
 ;; Set default font.
-(face-spec-set 'default '((t :family "Hack" :height 135)))
+(face-spec-set 'default '((t :family "Hack" :height 150)))
 
 ;; Package `default-text-scale' provides commands for increasing or decreasing
 ;; the default font size in all GUI Emacs frames - it is like an Emacs-wide
@@ -5632,7 +5632,7 @@ possibly new window."
   ;; Draw the underline at the same place as the descent line.
   (setq x-underline-at-descent-line t)
 
-  (centaur-tabs-change-fonts "Hack" 100)
+  (centaur-tabs-change-fonts "Hack" 110)
   (centaur-tabs-mode +1)
 
   ;; Group tabs by `projectile' project.
