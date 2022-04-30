@@ -70,6 +70,24 @@
       },
       "enabled": false,
     },
+    "rust-analyzer": {
+      "command": [
+        "rust-analyzer",
+        "--log-file",
+        "/tmp/rust.log",
+        "--verbose"
+      ],
+      "selector": "source.rust",
+      "initializationOptions": {
+        "checkOnSave": {
+          "command": "clippy",
+        },
+        "procMacro": {
+          "enable": true,
+        }
+      },
+      "enabled": true,
+    },
   },
   "log_stderr": true,
 }
