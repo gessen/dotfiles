@@ -500,6 +500,54 @@ BINDINGS is a series of KEY DEF pair."
   ;; Enable basic mouse support (click and drag).
   (xterm-mouse-mode t))
 
+;;;; CSI U integration
+
+;; Enable some of the keybinds that do not work in terminal mode with the help
+;; from CSI U sequences.
+(unless (display-graphic-p)
+  (defun apply-mods (c &rest modifiers)
+    "Apply modifiers to the character C.
+  MODIFIERS must be a list of symbols amongst (M C S).
+  Return an event vector."
+    (when (memq 'C modifiers)
+      (setq c (if (and (<= ?a c) ( <= c ?z))
+                  (logand c ?\x1f)
+                (logior (lsh 1 26) c))))
+    (when (memq 'M modifiers)
+      (setq c (logior (lsh 1 27) c)))
+    (when (memq 'S modifiers)
+      (setq c (logior (lsh 1 25) c)))
+    (vector c))
+    (with-eval-after-load 'xterm
+      ;; C-M-%
+      (bind-key "\x1b[37;7u" (apply-mods 37 'C 'M) xterm-function-map)
+      ;; C-'
+      (bind-key "\x1b[39;5u" (apply-mods 39 'C) xterm-function-map)
+      ;; C-M-'
+      (bind-key "\x1b[39;7u" (apply-mods 39 'C 'M) xterm-function-map)
+      ;; C-,
+      (bind-key "\x1b[44;5u" (apply-mods 44 'C) xterm-function-map)
+      ;; C-M-,
+      (bind-key "\x1b[44;7u" (apply-mods 44 'C 'M) xterm-function-map)
+      ;; C-.
+      (bind-key "\x1b[46;5u" (apply-mods 46 'C) xterm-function-map)
+      ;; C-M-.
+      (bind-key "\x1b[46;7u" (apply-mods 46 'C 'M) xterm-function-map)
+      ;; C-;
+      (bind-key "\x1b[59;5u" (apply-mods 59 'C) xterm-function-map)
+      ;; C-M-;
+      (bind-key "\x1b[59;7u" (apply-mods 59 'C 'M) xterm-function-map)
+      ;; C-=
+      (bind-key "\x1b[61;5u" (apply-mods 61 'C) xterm-function-map)
+      ;; C-M-=
+      (bind-key "\x1b[61;7u" (apply-mods 61 'C 'M) xterm-function-map)
+      ;; C-M-@
+      (bind-key "\x1b[64;7u" (apply-mods 64 'C 'M) xterm-function-map)
+      ;; C-`
+      (bind-key "\x1b[96;5u" (apply-mods 96 'C) xterm-function-map)
+      ;; C-M-`
+      (bind-key "\x1b[96;7u" (apply-mods 96 'C 'M) xterm-function-map)))
+
 ;;;; Encryption
 
 ;; Feature `epg-config' is a basic configuration for EasyPG Emacs library.
@@ -2596,7 +2644,8 @@ Spell Commands^^            Add To Dictionary^^               Other^^
 ;; inspired by `evil-surround' but instead of using `evil' and its text objects,
 ;; this package relies on another package `expand-region'.
 (use-package! embrace
-  :bind ("M-+" . #'embrace-commander)
+  :bind (("M-+" . #'embrace-commander)
+         ("C-," . #'embrace-commander))
   :config
 
   (defun embrace-buffer-p ()
