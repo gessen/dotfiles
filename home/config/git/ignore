@@ -85,7 +85,6 @@ CMakeUserPresets.json
 
 # Build directories
 /**/build*/
-/**/bin/
 /**/obj/
 
 # KDE directory preferences
