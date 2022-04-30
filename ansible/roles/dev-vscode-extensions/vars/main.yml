@@ -15,6 +15,7 @@ vscode_extensions:
   - ms-vscode.sublime-keybindings
   - ryzngard.vscode-header-source
   - shardulm94.trailing-spaces
+  - tamasfe.even-better-toml
   - timonwong.shellcheck
   - twxs.cmake
   - vscode-icons-team.vscode-icons
