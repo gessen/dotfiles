@@ -138,6 +138,8 @@
  ("rainbow-delimiters" . "a32b39bdfe6c61c322c37226d66e1b6d4f107ed0")
  ("ranger.el" . "2498519cb21dcd5791d240607a72a204d1761668")
  ("restart-emacs" . "1607da2bc657fe05ae01f7fdf26f716eafead02c")
+ ("rust-mode" . "d17be3051b22a06d7742178cd1367aed61807a66")
+ ("rustic" . "8c214efb72be9731cd7d613c07672515a0f70664")
  ("s.el" . "08661efb075d1c6b4fa812184c1e5e90c08795a9")
  ("selectrum" . "7da932eeb89f1aa8060a73ddd040f95bbb127343")
  ("shrink-path.el" . "c14882c8599aec79a6e8ef2d06454254bb3e1e41")
