@@ -3,6 +3,4 @@ rust_toolchain: stable
 
 rust_components:
   - rustfmt
-  - rls
-  - rust-analysis
   - rust-src
