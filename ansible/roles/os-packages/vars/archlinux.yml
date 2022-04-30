@@ -43,6 +43,7 @@ packages:
   - ripgrep
   - rsync
   - rustup
+  - rust-analyzer
   - sccache
   - shfmt
   - signal-desktop
