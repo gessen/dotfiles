@@ -814,6 +814,11 @@ window instead."
           help-mode
           helpful-mode
           compilation-mode
+          rustic-compilation-mode
+          rustic-cargo-clippy-mode
+          rustic-cargo-run-mode
+          rustic-cargo-test-mode
+          rustic-macro-expansion-mode
           "^\\*eshell.*\\*$" eshell-mode
           "^\\*shell.*\\*$"  shell-mode
           "^\\*term.*\\*$"  term-mode
@@ -3689,7 +3694,66 @@ a new window."
     (setq lsp-clients-clangd-args (list
                                    "-log=info"
                                    "--completion-style=detailed"
-                                   "--header-insertion=never"))))
+                                   "--header-insertion=never")))
+
+  ;; Feature `lsp-rust' brings implementation of clangd client for Emacs.
+  (use-feature! lsp-rust
+    :config
+
+    (set-leader-keys-for-major-mode! 'rustic-mode
+      ;; Code actions
+      "ae" #'lsp-rust-analyzer-expand-macro
+      "aj" #'lsp-rust-analyzer-join-lines
+
+      ;; Open
+      "od" #'lsp-rust-analyzer-open-external-docs
+
+      ;; Session
+      "sR" #'lsp-rust-analyzer-reload-workspace
+
+      ;; Toggle
+      "ti" #'lsp-rust-analyzer-inlay-hints-mode)
+
+    (with-eval-after-load 'lsp-treemacs
+      (set-leader-keys-for-major-mode! 'rustic-mode
+        "gc" #'lsp-treemacs-call-hierarchy
+        "Gc" #'lsp-treemacs-call-hierarchy))
+
+    ;; Enable proc macro support, rust-analyzer does it by default but Lsp Rust
+    ;; disables it.
+    (setq lsp-rust-analyzer-proc-macro-enable t)
+
+    ;; Show clippy hints as well as compiler errors.
+    (setq lsp-rust-analyzer-cargo-watch-command "clippy")
+
+    ;; Show inlay hints, e.g. type inference, type parameters at call site.
+    (setq lsp-rust-analyzer-server-display-inlay-hints t
+          lsp-rust-analyzer-display-parameter-hints t
+          lsp-rust-analyzer-display-chaining-hints t
+          lsp-rust-analyzer-display-closure-return-type-hints t
+          lsp-rust-analyzer-display-reborrow-hints t)
+
+    ;; Limit the maximum length of inlay hints.
+    (setq lsp-rust-analyzer-max-inlay-hint-length 25)
+
+    ;; Sideline does not work well with inlay hints
+    (setq lsp-ui-sideline-enable nil)
+
+    (define-minor-mode lsp-rust-analyzer-inlay-hints-mode
+      "Mode for displaying inlay hints (after save)."
+      :lighter nil
+      (cond
+       (lsp-rust-analyzer-inlay-hints-mode
+        (lsp-rust-analyzer-update-inlay-hints (current-buffer))
+        (add-hook 'after-save-hook
+                  #'lsp-rust-analyzer-inlay-hints-change-handler nil t))
+       (t
+        (remove-overlays (point-min) (point-max)
+                         'lsp-rust-analyzer-inlay-hint t)
+        (remove-hook 'after-save-hook
+                     #'lsp-rust-analyzer-inlay-hints-change-handler t))))
+
+    (lsp-rust-analyzer-inlay-hints-mode +1)))
 
 ;; Package `lsp-ui' provides a pretty UI for showing diagnostic messages from
 ;; LSP in the buffer using overlays. It's configured automatically by
@@ -4255,6 +4319,74 @@ ALL when non-nil determines whether words will be pickable."
                             line-end))
     :modes plantuml-mode)
   (add-to-list 'flycheck-checkers 'plantuml))
+
+;;;; Rust
+
+;; Package `rustic' implements a major-mode for editing Rust source code. It
+;; also provides additional features:
+;; - rust-analyzer configuration
+;; - flycheck integration
+;; - cargo popup
+;; - multiline error parsing
+;; - translation of ANSI control sequences through xterm-color
+;; - async org babel
+;; - custom compilation process
+;; - rustfmt errors in a rust compilation mode
+;; - automatic rust-analyzer configuration with `lsp-mode'
+(use-package! rustic
+  :init
+
+  (defhook! my--rustic-mode-setup ()
+    rustic-mode-hook
+    "Set custom settings for `rustic-mode'."
+    ;; Rust uses (by default) column limit of 100.
+    (setq-local fill-column 100
+                column-enforce-column fill-column)
+    ;; After pressing `newline' with "{|}", move the closing brace to the next
+    ;; line and indent cursor. This mimics behaviour in `c++-mode'.
+    (sp-with-modes '(rustic-mode)
+      (sp-local-pair "{" nil :post-handlers '(("||\n[i]" "RET")))))
+
+  (mapc (lambda (prefix) (apply #'declare-prefix-for-mode! 'rustic-mode prefix))
+        '(("mb" "build")
+          ("mc" "cargo")
+          ("me" "edit")
+          ("mo" "open")))
+
+  (set-leader-keys-for-major-mode! 'rustic-mode
+    ;; Format
+    "=;" #'rustic-docstring-dwim
+
+    ;; Build
+    "bb" #'rustic-cargo-build
+    "bc" #'rustic-compile
+    "bd" #'rustic-cargo-doc
+    "be" #'rustic-cargo-clean
+    "bf" #'rustic-format-buffer
+    "bF" #'rustic-cargo-fmt
+    "bk" #'rustic-cargo-check
+    "bn" #'rustic-cargo-outdated
+    "bp" #'rustic-popup
+    "br" #'rustic-cargo-run
+    "bt" #'rustic-cargo-test
+    "bT" #'rustic-cargo-current-test
+
+    ;; Cargo
+    "cb" #'rustic-cargo-bench
+    "cc" #'rustic-cargo-clean
+    "cd" #'rustic-cargo-doc
+    "cf" #'rustic-cargo-clippy-fix
+    "ci" #'rustic-cargo-init
+    "ck" #'rustic-cargo-clippy
+    "cn" #'rustic-cargo-new
+
+    ;; Edit
+    "ea" #'rustic-cargo-add
+    "er" #'rustic-cargo-rm
+    "eu" #'rustic-cargo-upgrade
+
+    ;; Jump
+    "oc" #'rustic-open-dependency-file))
 
 ;;;; Shell
 
