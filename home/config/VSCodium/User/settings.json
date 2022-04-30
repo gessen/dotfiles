@@ -198,6 +198,14 @@
         "--header-insertion=never"
     ],
     "clangd.semanticHighlighting": true,
+    "rust-analyzer.checkOnSave.command": "clippy",
+    "rust-analyzer.inlayHints.chainingHints": true,
+    "rust-analyzer.inlayHints.closureReturnTypeHints": true,
+    "rust-analyzer.inlayHints.enable": true,
+    "rust-analyzer.inlayHints.maxLength": 25,
+    "rust-analyzer.inlayHints.parameterHints": true,
+    "rust-analyzer.inlayHints.reborrowHints": true,
+    "rust-analyzer.procMacro.enable": true,
     "bashIde.path": "/usr/bin/bash-language-server",
     "shellcheck.customArgs": [
         "--shell=bash",
