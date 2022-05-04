@@ -2416,6 +2416,10 @@ SCOPE can be:
 
   :config
 
+  ;; With `flyspell-prog-mode', check only comments and docs.
+  (setq flyspell-prog-text-faces (cl-delete 'font-lock-string-face
+                                            flyspell-prog-text-faces))
+
   ;; Do not emit messages when checking words.
   (setq flyspell-issue-message-flag nil)
 
@@ -3675,6 +3679,11 @@ list of additional parameters sent with this request."
   ;; default is too low (4k) considering that the some of the language server
   ;; responses are in 800k - 3M range.
   (setq read-process-output-max (* 1024 1024))
+
+  (with-eval-after-load 'flyspell
+    ;; With `flyspell-prog-mode', check LSP comments when semantic highlighting
+    ;; is used.
+    (cl-pushnew 'lsp-face-semhl-comment flyspell-prog-text-faces))
 
   ;; Feature `lsp-completion' configures completion-related functionality.
   (use-feature! lsp-completion
