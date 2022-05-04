@@ -2419,11 +2419,6 @@ SCOPE can be:
   ;; Do not emit messages when checking words.
   (setq flyspell-issue-message-flag nil)
 
-  ;; Slightly change aspell behaviour.
-  (setq ispell-extra-args '("--sug-mode=ultra"
-                            "--lang=en_US"
-                            "--run-together"))
-
   :blackout " Ⓢ")
 
 ;; Package `flyspell-correct' provides functionality for correcting words via
