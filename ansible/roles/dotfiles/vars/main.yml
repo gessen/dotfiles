@@ -35,3 +35,6 @@ dotfiles:
   - ssh/config
   - zprofile
   - zshrc
+
+dotdirs:
+  - local/share/tig

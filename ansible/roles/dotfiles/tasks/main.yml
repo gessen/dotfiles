@@ -20,6 +20,17 @@
 
   when: dotfiles is defined
 
+- block:
+  - name: Create folders for data files
+    file:
+      path: '{{ dotfiles_dst + "/." + dotdir }}'
+      state: directory
+    loop: '{{ dotdirs | default([], true) }}'
+    loop_control:
+      loop_var: dotdir
+
+  when: dotdirs is defined
+
 - name: 'Include distribution specific variables for {{ ansible_distribution }}'
   include_vars: '{{ var_file }}'
   with_first_found:
