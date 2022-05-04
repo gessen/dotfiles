@@ -3417,16 +3417,16 @@ menu to disappear and then come back after `company-idle-delay'."
          ("M-g M-e" . #'consult-flycheck)))
 
 (defun my--flycheck-popup-mode ()
-  "Activate one of the Flycheck popups modes.
+  "Activate flycheck popup mode.
 If available and in GUI Emacs activate command
-`flycheck-posframe-mode'. Activate command `flycheck-inline-mode'
-otherwise. Do nothing if function `lsp-ui-mode' is active and
-function `lsp-ui-sideline-enable' is non-nil."
+`flycheck-posframe-mode'. Disable showing errors otherwise. Do
+nothing if function `lsp-ui-mode' is active and function
+`lsp-ui-sideline-enable' is non-nil."
   (unless (and (bound-and-true-p lsp-ui-mode)
                (bound-and-true-p lsp-ui-sideline-enable))
     (if (display-graphic-p)
         (flycheck-posframe-mode +1)
-      (flycheck-inline-mode +1))))
+      (setq-local flycheck-display-errors-function nil))))
 
 ;; Package `flycheck-posframe' displays Flycheck errors using posframe.el.
 (use-package! flycheck-posframe
@@ -3443,23 +3443,6 @@ function `lsp-ui-sideline-enable' is non-nil."
   (with-eval-after-load 'company
     ;; Inhibit displaying popups if Company is active.
     (add-hook 'flycheck-posframe-inhibit-functions #'company--active-p)))
-
-;; Package `flycheck-inline' provides an error display function to show Flycheck
-;; errors inline, directly below their location in the buffer.
-(use-package! flycheck-inline
-  :hook (flycheck-mode-hook . my--flycheck-popup-mode)
-  :config
-
-  (defadvice! my--flycheck-inline-inhibit-with-errors-list (&rest _)
-    :before-while #'flycheck-inline-display-phantom
-    "Inhibit displaying Flycheck error messages when error list is visible."
-    (not (flycheck-get-error-list-window 'current-frame)))
-
-  (with-eval-after-load 'company
-    (defadvice! my--flycheck-inline-inhibit-with-company (&rest _)
-      :before-while #'flycheck-inline-display-phantom
-      "Inhibit displaying Flycheck error messages when Company is active."
-      (not (bound-and-true-p company-backend)))))
 
 ;;;; Online documentation
 
