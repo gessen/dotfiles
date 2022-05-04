@@ -3204,8 +3204,7 @@ completing-read prompter."
   :bind ((:map company-mode-map
                ("C-;"     . #'company-complete)
                ("M-\\"    . #'company-complete)
-               ("C-\\"    . #'company-other-backend)
-               ("C-M-\\"  . #'company-begin-backend))
+               ("C-\\"    . #'company-other-backend))
          (:map company-active-map
                ("M-n"     . #'company-select-next)
                ("M-p"     . #'company-select-previous))
