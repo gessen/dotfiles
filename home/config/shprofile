@@ -33,6 +33,9 @@ export MANPAGER="sh -c 'col -b | bat -l man -p'"
 # emacsclient starts emacs in daemon mode if it can't connect to it
 export ALTERNATE_EDITOR=''
 
+# Conform (partially) to XDG with aspell
+export ASPELL_CONF="home-dir /home/jswierk/.config/aspell/; per-conf aspell.conf"
+
 # Conform to XDG with cargo
 export CARGO_HOME="${XDG_DATA_HOME}/cargo"
 
