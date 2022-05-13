@@ -1,5 +1,4 @@
 {
-    "editor.bracketPairColorization.enabled": true,
     "editor.codeLens": false,
     "editor.definitionLinkOpensInPeek": true,
     "editor.detectIndentation": true,
@@ -8,6 +7,7 @@
     "editor.fontSize": 18,
     "editor.formatOnPaste": false,
     "editor.formatOnSave": false,
+    "editor.inlayHints.enabled": "offUnlessPressed",
     "editor.guides.bracketPairs": true,
     "editor.multiCursorModifier": "ctrlCmd",
     "editor.rulers": [
@@ -16,6 +16,7 @@
     "editor.renderControlCharacters": false,
     "editor.renderWhitespace": "all",
     "editor.selectionClipboard": false,
+    "editor.semanticHighlighting.enabled": true,
     "editor.semanticTokenColorCustomizations": {
         "rules": {
             "class": {
@@ -114,19 +115,14 @@
     },
     "search.smartCase": true,
     "search.useIgnoreFiles": false,
-    "debug.inlineValues": true,
+    "debug.inlineValues": "on",
     "extensions.ignoreRecommendations": true,
     "problems.decorations.enabled": false,
-    "telemetry.enableTelemetry": false,
-    "gitlens.advanced.messages": {
-        "suppressShowKeyBindingsNotice": true
-    },
+    "telemetry.telemetryLevel": "off",
     "gitlens.codeLens.authors.enabled": false,
     "gitlens.codeLens.recentChange.enabled": false,
     "gitlens.currentLine.enabled": false,
     "gitlens.keymap": "alternate",
-    "gitlens.views.fileHistory.enabled": true,
-    "gitlens.views.lineHistory.enabled": true,
     "python.formatting.provider": "yapf",
     "python.formatting.yapfPath": "/usr/bin/yapf2",
     "python.jediEnabled": true,
@@ -197,11 +193,9 @@
         "--completion-style=detailed",
         "--header-insertion=never"
     ],
-    "clangd.semanticHighlighting": true,
     "rust-analyzer.checkOnSave.command": "clippy",
     "rust-analyzer.inlayHints.chainingHints": true,
     "rust-analyzer.inlayHints.closureReturnTypeHints": true,
-    "rust-analyzer.inlayHints.enable": true,
     "rust-analyzer.inlayHints.maxLength": 25,
     "rust-analyzer.inlayHints.parameterHints": true,
     "rust-analyzer.inlayHints.reborrowHints": true,
