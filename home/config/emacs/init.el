@@ -3231,9 +3231,9 @@ completing-read prompter."
   ;; modify this list to suit its needs.
   (setq company-backends '(company-capf))
 
-  ;; Don't display metadata in the echo area as this conflicts with ElDoc.
-  (setq company-frontends '(company-pseudo-tooltip-unless-just-one-frontend
-                            company-preview-if-just-one-frontend))
+  ;; Always show candidates in an overlay tooltip
+  (setq company-frontends '(company-pseudo-tooltip-frontend
+                            company-echo-metadata-frontend))
 
   ;; Show quick-reference numbers in the tooltip. Select a completion with M-1
   ;; through M-0.
