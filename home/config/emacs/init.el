@@ -152,6 +152,9 @@ frame is created."
 ;; packages upstream.
 (setq ad-redefinition-action 'accept)
 
+;; Inhibit popping up *Warnings* buffer when compiling natively.
+(setq native-comp-async-report-warnings-errors 'silent)
+
 ;; Define this variable for native compilation disabled Emacs.
 (setq native-comp-deferred-compilation-deny-list '())
 
