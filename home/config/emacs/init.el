@@ -3577,8 +3577,8 @@ list of additional parameters sent with this request."
           '(("m="  "format")
             ("ma"  "code actions")
             ("mf"  "folders")
-            ("mg"  "peek")
-            ("mG"  "goto")
+            ("mg"  "goto")
+            ("mG"  "peek")
             ("mh"  "help")
             ("mr"  "refactor")
             ("ms"  "session")
@@ -3605,14 +3605,15 @@ list of additional parameters sent with this request."
     "fr" #'lsp-workspace-folders-remove
     "fs" #'lsp-workspace-folders-open
 
-    ;; Peek
+    ;; Goto
+    "gd" #'lsp-find-declaration
+    "gg" #'lsp-find-definition
+    "gi" #'lsp-find-implementation
+    "gr" #'lsp-find-references
     "gt" #'lsp-find-type-definition
 
-    ;; Goto
+    ;; Peek
     "Gd" #'lsp-find-declaration
-    "Gg" #'lsp-find-definition
-    "Gi" #'lsp-find-implementation
-    "Gr" #'lsp-find-references
     "Gt" #'lsp-find-type-definition
 
     ;; Help
@@ -3806,10 +3807,10 @@ a new window."
 
   (set-leader-keys-for-minor-mode! 'lsp-mode
     ;; Peek
-    "gg" #'lsp-ui-peek-find-definitions
-    "gi" #'lsp-ui-peek-find-implementation
-    "gM" #'lsp-ui-imenu
-    "gr" #'lsp-ui-peek-find-references
+    "Gg" #'lsp-ui-peek-find-definitions
+    "Gi" #'lsp-ui-peek-find-implementation
+    "GM" #'lsp-ui-imenu
+    "Gr" #'lsp-ui-peek-find-references
 
     ;; Help
     "hg" #'lsp-ui-doc-glance
@@ -3888,8 +3889,8 @@ a new window."
     (lsp-deferred))
 
   (dolist (mode '(c-mode c++-mode))
-    (declare-prefix-for-mode! mode "mg" "peek")
-    (declare-prefix-for-mode! mode "mG" "goto")
+    (declare-prefix-for-mode! mode "mg" "goto")
+    (declare-prefix-for-mode! mode "mG" "peek")
     (set-leader-keys-for-major-mode! mode
       "ga" #'projectile-find-other-file
       "gA" #'projectile-find-other-file-other-window
@@ -4149,35 +4150,35 @@ ALL when non-nil determines whether words will be pickable."
       ;; Code actions
       "ap"  #'ccls-preprocess-file
 
-      ;; Peek
-      "gb"  #'ccls-ui-peek-find-base
-      "gc"  #'ccls-ui-peek-find-callers
-      "gC"  #'ccls-ui-peek-find-callees
-      "gd"  #'ccls-ui-peek-find-derived
+      ;; Goto
+      "gb"  #'ccls-find-base
+      "gc"  #'ccls-find-callers
+      "gC"  #'ccls-find-callees
+      "gd"  #'ccls-find-derived
       "ghi" #'ccls-inheritance-hierarchy
       "ghI" #'ccls-inheritance-hierarchy-inv
       "ghc" #'ccls-call-hierarchy
       "ghC" #'ccls-call-hierarchy-inv
       "ghm" #'ccls-member-hierarchy
-      "gmm" #'ccls-ui-peek-find-member-vars
-      "gmf" #'ccls-ui-peek-find-member-funcs
-      "gmt" #'ccls-ui-peek-find-member-types
+      "gmm" #'ccls-find-member-vars
+      "gmf" #'ccls-find-member-funcs
+      "gmt" #'ccls-find-member-types
       "gk"  #'ccls-avy-goto-symbol
       "gK"  #'ccls-avy-goto-word
 
-      ;; Goto
-      "Gb"  #'ccls-find-base
-      "Gc"  #'ccls-find-callers
-      "GC"  #'ccls-find-callees
-      "Gd"  #'ccls-find-derived
+      ;; Peek
+      "Gb"  #'ccls-ui-peek-find-base
+      "Gc"  #'ccls-ui-peek-find-callers
+      "GC"  #'ccls-ui-peek-find-callees
+      "Gd"  #'ccls-ui-peek-find-derived
       "Ghi" #'ccls-inheritance-hierarchy
       "GhI" #'ccls-inheritance-hierarchy-inv
       "Ghc" #'ccls-call-hierarchy
       "GhC" #'ccls-call-hierarchy-inv
       "Ghm" #'ccls-member-hierarchy
-      "Gmm" #'ccls-find-member-vars
-      "Gmf" #'ccls-find-member-funcs
-      "Gmt" #'ccls-find-member-types
+      "Gmm" #'ccls-ui-peek-find-member-vars
+      "Gmf" #'ccls-ui-peek-find-member-funcs
+      "Gmt" #'ccls-ui-peek-find-member-types
       "Gk"  #'ccls-avy-goto-symbol
       "GK"  #'ccls-avy-goto-word))
 
