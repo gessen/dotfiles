@@ -61,3 +61,24 @@
       loop_var: dotfile
 
   when: dotfiles_distro is defined
+
+- block:
+  - name: 'Create folders for extra config files for {{ ansible_distribution }}'
+    file:
+      path: '{{ (dotfiles_dst + "/." + dotfile.src) | dirname }}'
+      state: directory
+    loop: '{{ dotfiles_distro_extra | default([], true) }}'
+    loop_control:
+      loop_var: dotfile
+
+  - name: 'Symlink config files for {{ ansible_distribution }}'
+    file:
+      path: '{{ dotfiles_dst }}/.{{ dotfile.src }}'
+      src: '{{ dotfile.target }}'
+      state: link
+      force: yes
+    loop: '{{ dotfiles_distro_extra | default([], true) }}'
+    loop_control:
+      loop_var: dotfile
+
+  when: dotfiles_distro_extra is defined
