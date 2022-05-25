@@ -79,7 +79,6 @@ packages_aur:
   - zsh-fast-syntax-highlighting
 
 packages_ignore:
-  - emacs-native-comp-git
 
 packages_own:
   - name: tig-completion
