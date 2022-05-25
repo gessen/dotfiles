@@ -1,12 +1,32 @@
 ---
 dotfiles_distro:
-  - config/oh-my-zsh/plugins/fast-syntax-highlighting
-  - config/oh-my-zsh/plugins/fzf-git
-  - config/oh-my-zsh/plugins/fzf-kill
-  - config/oh-my-zsh/plugins/gitstatus
-  - config/oh-my-zsh/plugins/zsh-autopair/zsh-autopair.plugin.zsh
-  - config/oh-my-zsh/plugins/zsh-autosuggestions
-  - config/oh-my-zsh/plugins/zsh-interactive-cd
-  - config/oh-my-zsh/themes/powerlevel10k.zsh-theme
   - config/pacman/makepkg.conf
-  - gdbinit
+  - config/paru/paru.conf
+
+dotfiles_distro_extra:
+  - target: /usr/share/zsh/plugins/fast-syntax-highlighting
+    src: config/oh-my-zsh/plugins/fast-syntax-highlighting
+
+  - target: /usr/share/zsh/plugins/fzf-git
+    src: config/oh-my-zsh/plugins/fzf-git
+
+  - target: /usr/share/zsh/plugins/fzf-kill
+    src: config/oh-my-zsh/plugins/fzf-kill
+
+  - target: /usr/share/zsh-theme-powerlevel10k/gitstatus
+    src: config/oh-my-zsh/plugins/gitstatus
+
+  - target: /usr/share/zsh/plugins/zsh-autopair/autopair.zsh
+    src: config/oh-my-zsh/plugins/zsh-autopair/zsh-autopair.plugin.zsh
+
+  - target: /usr/share/zsh/plugins/zsh-autosuggestions
+    src: config/oh-my-zsh/plugins/zsh-autosuggestions
+
+  - target: /usr/share/zsh/plugins/zsh-interactive-cd
+    src: config/oh-my-zsh/plugins/zsh-interactive-cd
+
+  - target: /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
+    src: config/oh-my-zsh/themes/powerlevel10k.zsh-theme
+
+  - target: /usr/share/gdb-dashboard/.gdbinit
+    src: gdbinit
