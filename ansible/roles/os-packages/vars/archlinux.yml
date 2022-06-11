@@ -27,6 +27,7 @@ packages:
   - keepassxc
   - kitty
   - librsync
+  - libvterm
   - lld
   - lldb
   - lsd
