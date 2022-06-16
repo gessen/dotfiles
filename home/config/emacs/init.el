@@ -5627,10 +5627,44 @@ possibly new window."
 ;; standard for colour-contrast accessibility between background and foreground
 ;; values (WCAG AAA).
 (use-package! modus-themes
-  :bind ("<f9>" . modus-themes-toggle))
+  :bind ("<f9>" . modus-themes-toggle)
+  :config
+
+  ;; Use italic font forms in more code constructs, like comments.
+  (setq modus-themes-italic-constructs t)
+
+  ;; Use a bold typographic weight and foreground colour more prominent for text
+  ;; in command prompts, e.g. minibuffer.
+  (setq modus-themes-prompts '(bold intense))
+
+  ;; Apply a three-dimensional effect to the active mode line. The inactive mode
+  ;; lines remain two-dimensional and are toned down a bit, relative to the
+  ;; default style.
+  (setq modus-themes-mode-line '(3d))
+
+  ;; Increase the overall colouration, draw a line below matching characters and
+  ;; make a background of selection colourful instead of gray.
+  (setq modus-themes-completions
+      '((matches . (intense underline))
+        (selection . (intense accented))
+        (popup . (accented))))
+
+  ;; Amplify the colours of in-buffer warnings and errors produced by spell
+  ;; checkers, code linters and the like.
+  (setq modus-themes-lang-checkers '(intense))
+
+  ;; Amplify the colour of the current line of `hl-line-mode'.
+  (setq modus-themes-hl-line '(intense))
+
+  ;; Make matching delimiters produced by `show-paren-mode` or
+  ;; `show-smartparens-mode` much more prominent.
+  (setq modus-themes-paren-match '(bold intense underline))
+
+  ;; Apply a more colourful background to the region.
+  (setq modus-themes-region '(accented)))
 
 ;; Load default theme.
-(load-theme 'darkokai t)
+(load-theme 'modus-vivendi t)
 
 ;;;; Modeline
 
