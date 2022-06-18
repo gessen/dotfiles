@@ -17,7 +17,7 @@ POWERLEVEL9K_MODE='nerdfont-complete'
 
 # Default colors of dir segment.
 POWERLEVEL9K_DIR_BACKGROUND=blue
-POWERLEVEL9K_DIR_FOREGROUND=white
+POWERLEVEL9K_DIR_FOREGROUND=brightwhite
 
 # If directory is too long, shorten some of its segments to the shortest
 # possible unique prefix. The shortened directory can be tab-completed to the
