@@ -1137,7 +1137,7 @@ window instead."
 ;; projectile project roots (if available), project.el project roots and recentf
 ;; file locations.
 (use-package! consult-dir
-  :after selectrum
+  :after vertico
   :init
 
   (defun consult-dir--fasd-dirs ()
@@ -1156,7 +1156,7 @@ window instead."
 
   (set-leader-keys! "fd" #'consult-dir)
 
-  :bind (:map selectrum-minibuffer-map
+  :bind (:map vertico
               ("M-l" . #'consult-dir)
               ("M-k" . #'consult-dir-jump-file))
 
@@ -1206,7 +1206,7 @@ window instead."
   ;; argument on `projectile-switch-project'.
   (setq projectile-switch-project-action 'projectile-commander)
 
-  ;; Use Selectrum via `completing-read'.
+  ;; Use Vertico via `completing-read'.
   (setq projectile-completion-system 'default)
 
   ;; Sort files by recently active buffers first, then recently opened files.
@@ -3043,12 +3043,6 @@ completing-read prompter."
   :demand t
   :config
 
-  ;; `completion-styles' filter and highlight in a single step, the approach of
-  ;; Selectrum to only highlight the actually displayed candidates is more
-  ;; efficient.
-  (setq selectrum-refine-candidates-function #'orderless-filter)
-  (setq selectrum-highlight-candidates-function #'orderless-highlight-matches)
-
   ;; Rely on `orderless' solely for completions.
   (setq completion-styles '(orderless))
   (setq completion-category-defaults nil)
@@ -3075,6 +3069,7 @@ completing-read prompter."
 ;; Package `prescient' is a library for intelligent sorting and filtering in
 ;; various contexts.
 (use-package! prescient
+  :demand t
   :config
 
   ;; Remember usage statistics across Emacs sessions.
@@ -3088,25 +3083,60 @@ completing-read prompter."
                              "prescient-save.el"
                              my-cache-dir)))
 
-;; Package `selectrum' is an incremental completion and narrowing framework.
-;; Like Ivy and Helm, which it improves on, Selectrum provides a user interface
-;; for choosing from a list of options by typing a query to narrow the list, and
-;; then selecting one of the remaining candidates. This offers a significant
-;; improvement over the default Emacs interface for candidate selection.
-(use-package! selectrum
+;; Package `vertico' provides a performant and minimalistic vertical completion
+;; UI based on the default completion system. The main focus of Vertico is to
+;; provide a UI which behaves correctly under all circumstances. By reusing the
+;; built-in facilities system, Vertico achieves full compatibility with built-in
+;;  Emacs completion commands and completion tables. Vertico only provides the
+;; completion UI but aims to be highly flexible, extensible and modular.
+;; Additional enhancements are available as extensions or complementary
+;; packages.
+(use-package! vertico
+  :straight (:files (:defaults "extensions/*"))
   :init
 
-  ;; This doesn't actually load Selectrum.
-  (selectrum-mode +1)
+  (defadvice! my--vertico-add-history ()
+    :after #'vertico-insert
+    "Make `vertico-insert' add to the minibuffer history."
+    (unless (eq minibuffer-history-variable t)
+      (add-to-history minibuffer-history-variable (minibuffer-contents))))
 
-  :bind ((:map selectrum-minibuffer-map
-               ("<prior>"   . #'selectrum-previous-page)
-               ("<next> "   . #'selectrum-next-page)
-               ("M-j"       . #'selectrum-quick-select)
-               ("M-m"       . nil)
+  (defadvice! my--vertico-sort-with-prescient ()
+    :after #'vertico-insert
+    "Remember chosen candidate for `prescient'."
+    (prescient-remember (vertico--candidate)))
+
+  (defun vertico-backward-kill-sexp (&optional arg)
+    "Vertico wrapper for `backward-kill-sexp'.
+ARG is the same as for `backward-kill-sexp'."
+    (interactive "p")
+    ;; For Vertico file prompts `backward-kill-sexp' would wrongly
+    ;; include trailing (read only) spaces as part of the input.
+    (save-restriction
+      (narrow-to-region (minibuffer-prompt-end) (point-max))
+      (backward-kill-sexp arg)))
+
+  (defun vertico-restrict-to-matches ()
+    "Restrict the set of candidates to the currently visible candidates."
+    (interactive)
+    (let ((inhibit-read-only t))
+      (goto-char (point-max))
+      (insert " ")
+      (add-text-properties (minibuffer-prompt-end) (point-max)
+                           '(invisible t read-only t cursor-intangible t
+                                       rear-nonsticky t))))
+
+  (vertico-mode +1)
+
+  :bind ((:map vertico-map
+               ("<next>"    . #'vertico-scroll-up)
+               ("<prior>"   . #'vertico-scroll-down)
+               ("C-M-n"     . #'vertico-next-group)
+               ("C-M-p"     . #'vertico-previous-group)
+               ("S-SPC"     . #'vertico-restrict-to-matches)
                ;; Use <backtab> to go up with `find-file'.
-               ("<backtab>" . #'selectrum-backward-kill-sexp)
-               ("S-TAB"     . #'selectrum-backward-kill-sexp))
+               ("<backtab>" . #'vertico-backward-kill-sexp)
+               ("S-TAB"     . #'vertico-backward-kill-sexp))
          (:map minibuffer-local-map
                ("M-s"       . nil)))
 
@@ -3116,32 +3146,47 @@ completing-read prompter."
   (setq file-name-shadow-properties '(invisible t)
         file-name-shadow-tty-properties '(invisible t))
 
-  ;; Don't show anything when displaying count information before the prompt.
-  (setq selectrum-count-style nil))
+  ;; Wrap around when using `vertico-next' and `vertico-previous'.
+  (setq vertico-cycle t)
 
-;; Package `selectrum-prescient' provides intelligent sorting and filtering for
-;; candidates in Selectrum menus.
-(use-package! selectrum-prescient
-  :demand t
-  :after selectrum
-  :bind (:map selectrum-prescient-toggle-map
-              ;; Unbind these keys as prescient is only used for sorting.
-              ("'" . nil)
-              ("a" . nil)
-              ("c" . nil)
-              ("f" . nil)
-              ("i" . nil)
-              ("l" . nil)
-              ("p" . nil)
-              ("P" . nil)
-              ("r" . nil))
+  ;; Sort candidates using `prescient'.
+  (setq vertico-sort-function #'prescient-sort)
 
-  :config
+  ;; Feature `vertico-flat' enables flat, horizontal display.
+  (use-feature! vertico-flat
+    :demand t
+    :bind (:map vertico-map
+                ("M-q" . #'vertico-flat-mode)))
 
-  ;; Disable the filtering functionalities in favour of `orderless.
-  (setq selectrum-prescient-enable-filtering nil)
+  ;; Feature! vertico-mouse' adds mouse support for scrolling and candidate
+  ;; selection.
+  (use-feature! vertico-mouse
+    :demand t
+    :config
 
-  (selectrum-prescient-mode +1))
+    (vertico-mouse-mode +1))
+
+  ;; Feature `vertico-multiform' configures Vertico modes per command or
+  ;; per completion category.
+  (use-feature! vertico-multiform
+    :demand t
+    :config
+
+    ;; Configure the display per completion category.
+    (setq vertico-multiform-categories
+          '((consult-grep buffer)
+            (consult-location buffer)
+            (imenu buffer)))
+
+    (vertico-multiform-mode +1))
+
+  ;; Feature `vertico-quick' provides commands to select using Avy-style quick
+  ;; keys.
+  (use-feature! vertico-quick
+    :demand t
+    :bind (:map vertico-map
+                ("M-i" . #'vertico-quick-insert)
+                ("M-j" . #'vertico-quick-exit))))
 
 ;;; IDE features
 ;;;; Definition location
@@ -5276,10 +5321,6 @@ Goto^^              Actions^^         Other^^
   ;; that we need to save our buffers if we want Magit to see them.
   (setq magit-save-repository-buffers nil)
 
-  ;; Without explicitly setting this, the candidates won't be sorted with
-  ;; Prescient.
-  (setq magit-completing-read-function #'selectrum-completing-read)
-
   ;; Use absolute dates when showing logs.
   (setq magit-log-margin '(t "%d-%m-%Y %H:%M " magit-log-margin-width t 18))
 
@@ -5539,7 +5580,7 @@ possibly new window."
 (setq blink-matching-paren nil)
 
 ;; Don't suggest shorter ways to type commands in M-x, since they don't apply
-;; when using Selectrum.
+;; when using Vertico.
 (setq suggest-key-bindings 0)
 
 ;; Decrease the frequency of UI updates when Emacs is idle.
@@ -5606,29 +5647,7 @@ possibly new window."
 ;;;; Theme
 
 ;; Package `darkokai-theme' is a darker variant on Monokai.
-(use-package! darkokai-theme
-  :config
-
-  ;; Configure `selectrum-prescient' faces.
-  (let ((custom--inhibit-theme-enable nil))
-    (darkokai-with-color-vars
-      (custom-theme-set-faces
-       'darkokai
-       `(selectrum-current-candidate
-         ((,class (:background ,darkokai-highlight-line
-                               :inherit bold
-                               :underline nil))
-          (,terminal-class (:background ,terminal-darkokai-highlight-line
-                                        :inherit bold
-                                        :underline nil))))
-       `(selectrum-prescient-primary-highlight
-         ((,class (:foreground ,darkokai-green))
-          (,terminal-class (:foreground ,terminal-darkokai-green))))
-       `(selectrum-prescient-secondary-highlight
-         ((,class (:foreground ,darkokai-orange
-                               :underline t))
-          (,terminal-class (:foreground ,terminal-darkokai-orange
-                                        :underline t))))))))
+(use-package! darkokai-theme)
 
 ;; Package `monokai-alt-theme' is theme with a dark background. Based on Sublime
 ;; Monokai theme.
