@@ -2428,6 +2428,24 @@ SCOPE can be:
 
   :blackout " Ⓢ")
 
+;; Package `consult-flyspell' incorporates `flyspell' into `consult'. This
+;; allows to display all misspelled words in the buffer with `consult', jump to
+;; it and optionally apply a function to it.
+(use-package! consult-flyspell
+  :init
+
+  (set-leader-keys! "SS" #'consult-flyspell)
+
+  :config
+
+  ;; Call `flyspell-buffer' before, unless the prefix argument is set.
+  (setq consult-flyspell-always-check-buffer t)
+
+  ;; Apply `flyspell-correct-at-point' directly after selecting candidate and
+  ;; jump back to `consult-flyspell'.
+  (setq consult-flyspell-select-function
+        (lambda () (flyspell-correct-at-point) (consult-flyspell))))
+
 ;; Package `flyspell-correct' provides functionality for correcting words via
 ;; custom interfaces.
 (use-package! flyspell-correct
