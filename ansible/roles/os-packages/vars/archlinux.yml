@@ -9,7 +9,6 @@ packages:
   - ccls-git
   - clang
   - cmake
-  - discord
   - dos2unix
   - doxygen
   - emacs-nativecomp
@@ -26,7 +25,6 @@ packages:
   - git-review
   - glances
   - htop
-  - keepassxc
   - kitty
   - librsync
   - libvterm
@@ -34,7 +32,6 @@ packages:
   - lldb
   - lsd
   - meson
-  - mpv
   - ncdu
   - ninja
   - oh-my-zsh-git
@@ -50,7 +47,6 @@ packages:
   - rust-analyzer
   - sccache
   - shfmt
-  - signal-desktop
   - tig
   - tmux
   - tree
@@ -71,7 +67,6 @@ packages_asdeps:
   - python-pygments
 
 packages_aur:
-  - dropbox
   - git-completion
   - include-what-you-use
   - mkinitcpio-firmware
