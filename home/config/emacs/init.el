@@ -4927,6 +4927,49 @@ unhelpful."
 (use-package! toc-org
   :hook (org-mode-hook . toc-org-mode))
 
+;; Package `org-jira' provides an extension to `org-mode' for syncing issues
+;; with JIRA issue servers.
+(use-package! org-jira
+  :config
+
+  ;; Set address of the jira host to JIRA DC.
+  (setq jiralib-url "https://jiradc.ext.net.nokia.com")
+
+  (setq org-jira-default-jql "assignee = currentUser() AND resolution = Unresolved
+   AND project != 'BB LFS' ORDER BY updated DESC")
+
+  ;; Save `org-jira` files in persistent location.
+  (let ((dir (expand-file-name "org-jira" my-data-dir)))
+    (unless (file-directory-p dir)
+      (make-directory dir t))
+    (setq org-jira-working-dir dir)))
+
+;; Package `ox-jira' plugs into the regular Org Export Engine and transforms Org
+;; files to JIRA markup for pasting into JIRA tickets & comments.
+(use-package! ox-jira
+  :straight (:branch "trunk")
+  :demand t
+  :after ox
+  :config
+
+  (defadvice! my--ox-jira-src-block
+      (src-block _contents info)
+    :override #'ox-jira-src-block
+    "Properly convert language blocks."
+    (when (org-string-nw-p (org-element-property :value src-block))
+      (let* ((lang (org-element-property :language src-block))
+             (lang (pcase lang
+                     ("c++" "c++")
+                     ("sh" "bash")
+                     ("python" "python")
+                     (_ "none")))
+             (code (org-export-format-code-default src-block info))
+             (collapse (if (< (plist-get info :src-collapse-threshold)
+                              (org-count-lines code))
+                           "true" "false")))
+        (format "{code:language=%s|collapse=%s}\n%s{code}"
+                lang collapse code)))))
+
 ;;;; Filesystem management
 
 ;; Delete files to trash as an extra layer of precaution against accidentally
