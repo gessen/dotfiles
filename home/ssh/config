@@ -1,3 +1,9 @@
+Include repo-config
+Include krling-config
+Include asmr-config
+Include yoda-config
+Include local-config
+
 Host *
     Compression yes
     ControlMaster auto

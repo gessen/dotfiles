@@ -48,8 +48,8 @@ alias fu='sudo !!'
 # Use fzf-tmux
 alias fzf='fzf-tmux -d 40%'
 
-# Ensure that terminfo is uploaded
-alias ssh='kitty +kitten ssh'
+# Use terminfo that should be present on remote hosts
+alias ssh='TERM=xterm-256color ssh'
 
 # Tig for all refs
 alias tia='tig --all'

@@ -1,0 +1,73 @@
+Host mars
+    HostName 192.168.101.1
+    User root
+
+Host sim1 simics1
+    HostName KRK-SB11-31.net.krk-lab.nsn-rdnet.net
+    User ztester
+    Port 9001
+    ForwardX11 yes
+    ForwardX11Trusted yes
+
+Host sim2 simics2
+    HostName KRK-SB11-31.net.krk-lab.nsn-rdnet.net
+    User ztester
+    Port 9002
+    ForwardX11 yes
+    ForwardX11Trusted yes
+
+Host sim3 simics3
+    HostName KRK-SB11-31.net.krk-lab.nsn-rdnet.net
+    User ztester
+    Port 9003
+    ForwardX11 yes
+    ForwardX11Trusted yes
+
+Host sim4 simics4
+    HostName KRK-SB11-31.net.krk-lab.nsn-rdnet.net
+    User ztester
+    Port 9004
+    ForwardX11 yes
+    ForwardX11Trusted yes
+
+Host sim5 simics5
+    HostName KRK-SB11-31.net.krk-lab.nsn-rdnet.net
+    User ztester
+    Port 9005
+    ForwardX11 yes
+    ForwardX11Trusted yes
+
+Host sim6 simics6
+    HostName ska-zl02-03-p03.p03.ska-lab.nsn-rdnet.net
+    User ztester
+    Port 9006
+    ForwardX11 yes
+    ForwardX11Trusted yes
+
+Host sim7 simics7
+    HostName ska-zl02-03-p03.p03.ska-lab.nsn-rdnet.net
+    User ztester
+    Port 9007
+    ForwardX11 yes
+    ForwardX11Trusted yes
+
+Host sim8 simics8
+    HostName ska-zl02-03-p03.p03.ska-lab.nsn-rdnet.net
+    User ztester
+    Port 9008
+    ForwardX11 yes
+    ForwardX11Trusted yes
+
+Host sim9 simics9
+    HostName ska-zl02-03-p03.p03.ska-lab.nsn-rdnet.net
+    User ztester
+    Port 9009
+    ForwardX11 yes
+    ForwardX11Trusted yes
+
+Host sim10 simics10
+    HostName ska-zl02-03-p03.p03.ska-lab.nsn-rdnet.net
+    User ztester
+    Port 9010
+    ForwardX11 yes
+    ForwardX11Trusted yes

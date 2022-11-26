@@ -33,7 +33,12 @@ dotfiles:
   - config/shrc
   - gdbinit.d/init
   - local/share/cargo/config.toml
+  - ssh/asmr-config
   - ssh/config
+  - ssh/krling-config
+  - ssh/local-config
+  - ssh/repo-config
+  - ssh/yoda-config
   - zprofile
   - zshrc
 

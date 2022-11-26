@@ -1,0 +1,8 @@
+Host gerrit
+    Hostname gerrite1.ext.net.nokia.com
+    Port 8282
+
+Host gitlabe*.nokia.com artifactory-espoo*.nokia.com
+    HostbasedAcceptedAlgorithms +ssh-rsa
+    HostKeyAlgorithms +ssh-rsa
+    PubkeyAcceptedAlgorithms +ssh-rsa
