@@ -4,6 +4,24 @@
 # Follow symbolic links
 --follow
 
+# Don't respect ignore files (.gitignore, .ignore, etc.)
+--no-ignore
+
+# Exclude directories.
+--glob=!.git/
+--glob=!5g-jabco-w5-*/
+--glob=!5g-poco-mk4-hf/
+--glob=!simics-mars/
+--glob=!hycon-mars/
+--glob=!thor/
+--glob=!nahka/
+--glob=!made/
+--glob=!stratix10-azqp/
+--glob=!ct-made/
+--glob=!ct-zynqmp/
+--glob=!host-64/
+--glob=!qemux86-64/
+
 # Don't let ripgrep vomit really long lines to my terminal, and show a preview
 --max-columns=150
 --max-columns-preview
