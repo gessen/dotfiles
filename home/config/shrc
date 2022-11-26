@@ -57,6 +57,9 @@ alias tia='tig --all'
 # Nicer scp/rsync
 alias transfer='kitty +kitten transfer'
 
+# Go to Workspace
+alias fp='cd ${HOME}/Workspace'
+
 # mkdir + cd
 mkcd() {
   mkdir -p "$1" && cd "$1" || return
