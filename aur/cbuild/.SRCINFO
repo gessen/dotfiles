@@ -1,0 +1,14 @@
+pkgbase = cbuild
+	pkgdesc = CMake build helper
+	pkgver = 1.2.0
+	pkgrel = 1
+	arch = any
+	license = UNLICENSE
+	depends = zsh
+	depends = cmake
+	source = _cbuild
+	source = cbuild
+	sha256sums = cf95959227a8016d5f4d9af944db66a6b19baf546367c4de033bb1e08f833da1
+	sha256sums = ed419b1072d593ba8b33c61d5be348476c1f1e8a0527a0118e25ef51cb297f34
+
+pkgname = cbuild

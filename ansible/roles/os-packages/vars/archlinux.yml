@@ -84,6 +84,12 @@ packages_aur:
 packages_ignore:
 
 packages_own:
+  - name: cbuild
+    files:
+      - PKGBUILD
+      - .SRCINFO
+      - cbuild
+      - _cbuild
   - name: tig-completion
     files:
       - PKGBUILD

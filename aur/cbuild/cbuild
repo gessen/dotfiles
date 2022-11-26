@@ -1,0 +1,19 @@
+#!/bin/zsh
+
+main() {
+  local suffix="${BINARY_DIR_SUFFIX}"
+  local cmd="cmake --build build/${suffix}"
+
+  if [[ "$#" > 0 ]]; then
+    cmd="${cmd} --target $1"
+  fi
+  if [[ "$#" > 1 ]]; then
+    cmd="${cmd} -- ${@:2}"
+  fi
+  if [[ "$1" == "install" ]]; then
+    cmd="DESTDIR=${TOOLCHAIN_SYSROOT_TARGET} ${cmd}"
+  fi
+  eval $cmd
+}
+
+main "$@"

@@ -1,0 +1,10 @@
+#compdef cbuild
+
+function _cbuild {
+  (( $+functions[_cmake_targets] )) || _cmake
+  if [[ ${#words[@]} == 2 ]]; then
+    _cmake_targets "build/${BINARY_DIR_SUFFIX}"
+  fi
+}
+
+_cbuild "$@"

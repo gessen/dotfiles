@@ -1,0 +1,21 @@
+# Maintainer: Jacek Swierk <jacek dot swierk at nokia dot com>
+
+pkgname="cbuild"
+pkgver=1.2.0
+pkgrel=1
+pkgdesc="CMake build helper"
+arch=("any")
+license=("UNLICENSE")
+depends=("zsh" "cmake")
+source=("_cbuild"
+        "cbuild")
+sha256sums=("cf95959227a8016d5f4d9af944db66a6b19baf546367c4de033bb1e08f833da1"
+            "ed419b1072d593ba8b33c61d5be348476c1f1e8a0527a0118e25ef51cb297f34")
+
+package() {
+  cd "${srcdir}"
+  install -dm755 "${pkgdir}/usr/bin"
+  install -dm755 "${pkgdir}/usr/share/zsh/site-functions"
+  install -Dm755 "cbuild" "${pkgdir}/usr/bin/cbuild"
+  install -Dm644 "_cbuild" "${pkgdir}/usr/share/zsh/site-functions/_cbuild"
+}
