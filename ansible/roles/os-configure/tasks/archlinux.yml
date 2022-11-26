@@ -1,4 +1,20 @@
 ---
+- name: Create proxy environment file
+  copy:
+    content: ""
+    dest: /etc/environment1
+    force: no
+    owner: root
+  become: yes
+
+- name: Configure proxy environment
+  lineinfile:
+    path: /etc/environment1
+    line: '{{ item.line }}'
+    regexp: '{{ item.regexp }}'
+  loop: '{{ proxy_options }}'
+  become: yes
+
 - name: Configure pacman
   lineinfile:
     path: /etc/pacman.conf

@@ -1,4 +1,23 @@
 ---
+proxy_options:
+  - regexp: '^#?[ ]*export auto_proxy'
+    line: 'export auto_proxy="http://proxyconf.glb.nsn-net.net/proxy.pac"'
+
+  - regexp: '^#?[ ]*export http_proxy'
+    line: 'export http_proxy="http://10.144.1.10:8080/"'
+
+  - regexp: '^#?[ ]*export https_proxy'
+    line: 'export https_proxy="http://10.144.1.10:8080/"'
+
+  - regexp: '^#?[ ]*export ftp_proxy'
+    line: 'export ftp_proxy="http://10.144.1.10:8080/"'
+
+  - regexp: '^#?[ ]*export rsync_proxy'
+    line: 'export rsync_proxy="http://10.144.1.10:8080/"'
+
+  - regexp: '^#?[ ]*export no_proxy'
+    line: 'export no_proxy="127.0.0.1,localhost,.noklab.net,.int.net.nokia.com,.ext.net.nokia.com,.int.nokia.com,.nsn-rdnet.com,.nsn-net.net,.inside.nokiasiemensnetworks.com,.access.nokiasiemensnetworks.com,.nsn-intra.net,.inside.nsn.com,.access.nsn.com"'
+
 pacman_options:
   - regexp: '^#?Color'
     line: 'Color'
