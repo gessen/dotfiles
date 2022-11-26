@@ -35,6 +35,7 @@ dotfiles:
   - local/share/cargo/config.toml
   - ssh/asmr-config
   - ssh/config
+  - ssh/github-config
   - ssh/krling-config
   - ssh/local-config
   - ssh/repo-config

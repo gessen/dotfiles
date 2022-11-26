@@ -99,6 +99,12 @@ packages_own:
       - PKGBUILD
       - .SRCINFO
       - zsh-fzf-kill.install
+  - name: gitproxy
+    files:
+      - PKGBUILD
+      - .SRCINFO
+      - gitproxy
+      - gitproxy.install
   - name: zsh-interactive-cd-git
     files:
       - PKGBUILD

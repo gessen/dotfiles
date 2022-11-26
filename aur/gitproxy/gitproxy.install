@@ -1,0 +1,7 @@
+post_install() {
+    git config --system core.gitproxy gitproxy
+}
+
+post_remove() {
+    git config --system --unset core.gitproxy
+}

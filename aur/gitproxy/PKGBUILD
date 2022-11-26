@@ -1,0 +1,18 @@
+# Maintainer: Jacek Swierk <jacek dot swierk at nokia dot com>
+
+pkgname="gitproxy"
+pkgver=2.0.0
+pkgrel=1
+pkgdesc="Wrapper over socat to use git behind a proxy"
+arch=("x86_64")
+license=("MIT")
+depends=("socat")
+install="${pkgname}.install"
+source=("gitproxy")
+sha256sums=("16c19ab5145960c4dc3a7f1d2c8a6fa81973fedef8ffa364fae2dfbcd899dff2")
+
+package() {
+    cd "${srcdir}"
+    install -dm755 "${pkgdir}/usr/bin"
+    install -Dm755 "gitproxy" "${pkgdir}/usr/bin/gitproxy"
+}

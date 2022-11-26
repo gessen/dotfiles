@@ -2,6 +2,7 @@ Include repo-config
 Include krling-config
 Include asmr-config
 Include yoda-config
+Include github-config
 Include local-config
 
 Host *
