@@ -23,6 +23,7 @@ packages:
   - git
   - git-delta
   - git-lfs
+  - git-review
   - glances
   - htop
   - keepassxc

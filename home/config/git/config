@@ -73,10 +73,12 @@
 	rebase = true
 [push]
 	followtags = true
+	gpgsign = if-asked
 [credential]
 	helper = cache --timeout 3600
 [color]
 	ui = true
+	review = always
 [color "diff-highlight"]
 	oldnormal = red bold
 	oldhighlight = red bold 52
@@ -104,5 +106,11 @@
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
+[gitreview]
+	scheme = ssh
+	host = gerrite1.ext.net.nokia.com
+	port = 8282
+	remote = origin
+	branch = master
 [include]
 	path = config.local
