@@ -1,6 +1,8 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
+export SHELL="$(which bash)"
+
 alias ls='ls --color=auto'
 PS1='[\u@\h \W]\$ '
 
@@ -40,6 +42,8 @@ shopt -s expand_aliases
 
 # Enable history appending instead of overwriting.  #139609
 shopt -s histappend
+
+export IGNOREEOF=10
 
 alias ..='cd ..'
 alias ...='cd ../..'
@@ -242,9 +246,12 @@ alias 9='cd -9'
 # User configuration
 . "${XDG_CONFIG_HOME}/shrc"
 
+# Enable completion
+. "${FP}/.local/share/bash-completion/bash_completion"
+
 # Integrate fzf with bash
-. "/usr/share/fzf/completion.bash"
-. "/usr/share/fzf/key-bindings.bash"
+. "${FP}/.local/share/fzf/shell/completion.bash"
+. "${FP}/.local/share/fzf/shell/key-bindings.bash"
 
 # Improve startup time of fasd
 if command -v fasd 1>/dev/null 2>&1; then
@@ -261,3 +268,5 @@ fi
 if command -v pyenv 1>/dev/null 2>&1; then
   eval "$(pyenv init -)"
 fi
+
+cd "${FP}"
