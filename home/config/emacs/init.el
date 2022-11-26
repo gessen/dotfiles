@@ -1465,8 +1465,8 @@ window instead."
 
 ;;;; Indentation
 
-;; 80 columns char limit by default, beyond that wrap lines.
-(setq-default fill-column 80)
+;; 120 columns char limit by default, beyond that wrap lines.
+(setq-default fill-column 120)
 
 ;; Distance between tab stops in columns (not the size of an indentation step)
 (setq-default tab-width 2)
