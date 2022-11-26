@@ -503,6 +503,14 @@ BINDINGS is a series of KEY DEF pair."
   ;; Enable basic mouse support (click and drag).
   (xterm-mouse-mode t))
 
+;; Feature 'mwheel' enables the use of the mouse wheel (or scroll wheel) in
+;; Emacs.
+(use-feature! mwheel
+  :demand t
+  :config
+
+  (mwheel-install))
+
 ;;;; CSI U integration
 
 ;; Enable some of the keybinds that do not work in terminal mode with the help
@@ -3740,7 +3748,7 @@ list of additional parameters sent with this request."
   ;; List of the clients to be automatically required when launching `lsp'.
   ;; Default list is rather large which leads to requiring a lot of unnecessary
   ;; files.
-  (setq lsp-client-packages '(ccls))
+  (setq lsp-client-packages '(lsp-clangd))
 
   ;; Increase the amount of data which Emacs reads from the process. The Emacs
   ;; default is too low (4k) considering that the some of the language server
@@ -4273,7 +4281,8 @@ ALL when non-nil determines whether words will be pickable."
       "GK"  #'ccls-avy-goto-word))
 
   ;; Set some basic logging for debugging purpose.
-  (setq ccls-args (list "-log-file=/tmp/ccls.log" "-v=1"))
+  (setq ccls-args
+        (list (concat "-log-file=/tmp/" (user-login-name) "/ccls.log") "-v=1"))
 
   ;; Change initialisation options to include almost all warnings. Disable some
   ;; clang incompatible flags and set completion to be "smart" case.
