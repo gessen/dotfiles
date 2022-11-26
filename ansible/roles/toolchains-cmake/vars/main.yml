@@ -1,0 +1,39 @@
+---
+cmake_projects:
+  - name: coco
+    symlinks:
+      - .clang-tidy
+      - CMakeUserPresets.json
+
+  - name: coco-configs
+    symlinks:
+      - CMakeUserPresets.json
+
+  - name: coco-schemas
+    symlinks:
+      - CMakeUserPresets.json
+
+  - name: draco-platform-made
+    symlinks:
+      - .clang-tidy
+      - CMakeUserPresets.json
+
+  - name: draco-platform-mars
+    symlinks:
+      - .clang-tidy
+      - CMakeUserPresets.json
+
+  - name: rocal-asmr
+    symlinks:
+      - .clang-tidy
+      - CMakeUserPresets.json
+
+  - name: rocal-core
+    symlinks:
+      - .clang-tidy
+      - CMakeUserPresets.json
+
+  - name: rocal-mmwave
+    symlinks:
+      - .clang-tidy
+      - CMakeUserPresets.json

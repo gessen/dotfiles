@@ -43,3 +43,7 @@
     - role: toolchains-env
       tags: toolchains-env
       when: with_toolchains_env | default(False)
+
+    - role: toolchains-cmake
+      tags: toolchains-cmake
+      when: with_toolchains_cmake | default(False)

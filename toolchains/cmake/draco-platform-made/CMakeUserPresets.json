@@ -1,0 +1,24 @@
+{
+  "version": 3,
+  "configurePresets": [
+    {
+      "name": "default",
+      "binaryDir": "${sourceDir}/build/$env{BINARY_DIR_SUFFIX}",
+      "installDir": "/usr",
+      "cacheVariables": {
+        "BUILD_SHARED_LIBS": "ON",
+        "PRODUCT_GENERATION": "$env{PRODUCT_GENERATION}",
+        "CCACHE": "OFF"
+      },
+      "warnings": {
+        "dev": false
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "default",
+      "configurePreset": "default"
+    }
+  ]
+}

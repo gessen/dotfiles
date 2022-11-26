@@ -1,0 +1,40 @@
+{
+  "version": 3,
+  "configurePresets": [
+    {
+      "name": "default",
+      "binaryDir": "${sourceDir}/build/$env{BINARY_DIR_SUFFIX}",
+      "installDir": "/usr",
+      "cacheVariables": {
+        "BUILD_SHARED_LIBS": "ON",
+        "BUILD_TESTING": "OFF",
+        "PLATFORM": "$env{MACHINE}",
+        "PRODUCT_GENERATION": "$env{PRODUCT_GENERATION}",
+        "CCACHE": "OFF"
+      },
+      "warnings": {
+        "dev": false
+      }
+    },
+    {
+      "name": "tests",
+      "inherits": "default",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "BUILD_TESTING": "ON"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "default",
+      "configurePreset": "default"
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "tests",
+      "configurePreset": "tests"
+    }
+  ]
+}

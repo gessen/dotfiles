@@ -1,0 +1,26 @@
+---
+- name: Check if CMake projects exist
+  stat:
+    path: '{{ toolchains_cmake_dst + "/" + item.name }}'
+  register: st
+  loop: '{{ cmake_projects }}'
+
+- name: Symlink additional files
+  file:
+    path: '{{ toolchains_cmake_dst }}/{{ item[0].item.name }}/{{ item[1] }}'
+    src: '{{ toolchains_cmake_src }}/{{ item[0].item.name }}/{{ item[1] }}'
+    state: link
+    force: yes
+  loop: '{{ st.results | selectattr("stat.exists") | subelements("item.symlinks", { "skip_missing": true }) }}'
+  loop_control:
+    label: "{{ item[0].item.name }}/{{ item[1] }}"
+
+- name: Hardlink additional files
+  file:
+    path: '{{ toolchains_cmake_dst }}/{{ item[0].item.name }}/{{ item[1] }}'
+    src: '{{ toolchains_cmake_src }}/{{ item[0].item.name }}/{{ item[1] }}'
+    state: hard
+    force: yes
+  loop: '{{ st.results | selectattr("stat.exists") | subelements("item.hardlinks", { "skip_missing": true }) }}'
+  loop_control:
+    label: "{{ item[0].item.name }}/{{ item[1] }}"

@@ -1,0 +1,77 @@
+{
+  "version": 3,
+  "configurePresets": [
+    {
+      "name": "default-base",
+      "hidden": true,
+      "binaryDir": "${sourceDir}/build/$env{BINARY_DIR_SUFFIX}",
+      "installDir": "/usr",
+      "cacheVariables": {
+        "BUILD_SHARED_LIBS": "ON",
+        "BUILD_TESTING": "OFF",
+        "HEADERS_PRECOMPILATION": "OFF"
+      }
+    },
+    {
+      "name": "default",
+      "hidden": true,
+      "inherits": ["default-base"],
+      "cacheVariables": {
+        "PRODUCT_GENERATION": "$env{PRODUCT_GENERATION}",
+        "PLATFORM": "$env{MACHINE}",
+        "CURRENT_VERSION_COCO": "26.27.0"
+      }
+    },
+    {
+      "name": "tests-base",
+      "hidden": true,
+      "inherits": ["default-base"],
+      "cacheVariables": {
+        "BUILD_SHARED_LIBS": "OFF",
+        "BUILD_TESTING": "ON",
+        "ENABLE_COVERAGE": "ON"
+      },
+      "environment": {
+        "CXXFLAGS": "$penv{CXXFLAGS} -O2"
+      }
+    },
+    {
+      "name": "default-gcc",
+      "inherits": ["default"]
+    },
+    {
+      "name": "default-clang",
+      "inherits": ["default"],
+      "environment": {
+        "CXXFLAGS": "-Wno-unused-command-line-argument -Wno-mismatched-tags -Wno-error $penv{CXXFLAGS}"
+      }
+    },
+    {
+      "name": "tests-gcc",
+      "inherits": ["tests-base"]
+    },
+    {
+      "name": "tests-clang",
+      "inherits": ["tests-base"],
+      "environment": {
+        "CXXFLAGS": "-Wno-unused-command-line-argument -Wno-mismatched-tags -Wno-error $penv{CXXFLAGS}"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "default",
+      "configurePreset": "default-gcc"
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "tests-gcc",
+      "configurePreset": "tests-gcc"
+    },
+    {
+      "name": "tests-clang",
+      "configurePreset": "tests-clang"
+    }
+  ]
+}

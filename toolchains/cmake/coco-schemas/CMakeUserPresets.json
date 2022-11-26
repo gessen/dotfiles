@@ -1,0 +1,27 @@
+{
+  "version": 3,
+  "configurePresets": [
+    {
+      "name": "default",
+      "binaryDir": "${sourceDir}/build/$env{BINARY_DIR_SUFFIX}",
+      "installDir": "/usr",
+      "cacheVariables": {
+        "CMAKE_INSTALL_INCLUDEDIR": "include",
+        "CMAKE_INSTALL_SYSCONFDIR": "/etc"
+      },
+      "warnings": {
+        "deprecated": false
+      }
+    },
+    {
+      "name": "tests",
+      "inherits": "default"
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "default",
+      "configurePreset": "default"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "version": 3,
+  "configurePresets": [
+    {
+      "name": "default",
+      "binaryDir": "${sourceDir}/build/$env{BINARY_DIR_SUFFIX}",
+      "installDir": "/usr",
+      "cacheVariables": {
+        "CMAKE_INSTALL_SYSCONFDIR": "/etc",
+        "PRODUCT_GENERATION": "$env{PRODUCT_GENERATION}"
+      }
+    },
+    {
+      "name": "tests",
+      "inherits": "default",
+      "cacheVariables": {
+        "COFI_INSTALL_ALL_CONFIGS": "ON"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "default",
+      "configurePreset": "default"
+    }
+  ]
+}
