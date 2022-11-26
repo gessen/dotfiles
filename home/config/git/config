@@ -32,12 +32,12 @@
 	line-numbers-right-style = cyan
 	line-numbers-minus-style = 124
 	line-numbers-plus-style = 28
+[difftool]
+	prompt = false
 [difftool "ediffclient"]
 	cmd = emacsclient --tty --eval \"(ediff-files \\\"$LOCAL\\\" \\\"$REMOTE\\\")\"
-	prompt = false
 [difftool "ediffclient-g"]
 	cmd = emacsclient --create-frame --eval \"(ediff-files \\\"$LOCAL\\\" \\\"$REMOTE\\\")\"
-	prompt = false
 [merge]
 	conflictstyle = diff3
 	tool = emergeclient

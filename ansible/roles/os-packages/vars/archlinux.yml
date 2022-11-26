@@ -9,6 +9,7 @@ packages:
   - ccls-git
   - clang
   - cmake
+  - difftastic
   - discord
   - dos2unix
   - doxygen
