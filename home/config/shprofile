@@ -30,6 +30,9 @@ export LESSHISTFILE="-"
 # Use bat as MANPAGER
 export MANPAGER="sh -c 'col -b | bat -l man -p'"
 
+# New quasi-$HOME
+export FP="${HOME}/Workspace"
+
 # emacsclient starts emacs in daemon mode if it can't connect to it
 export ALTERNATE_EDITOR=''
 
@@ -116,6 +119,27 @@ export RUSTUP_HOME="${XDG_DATA_HOME}/rustup"
 
 # Conform to XDG with vode
 export VSCODE_EXTENSIONS="${XDG_DATA_HOME}/code/extensions"
+
+# Add LinSEE mixtures to be visible
+export LINSEE_MIXTURES_PATH="/home/rfscm/rf_mixtures:$LINSEE_MIXTURES_PATH"
+
+# Needed by python
+export LD_LIBRARY_PATH="${FP}/.local/lib"
+
+# Set base $PATH
+export PATH="/opt/EE_LinSEE/bin:/usr/local/bin:/usr/bin:/bin:/sbin"
+
+# Add custom binaries to $PATH
+export PATH="${FP}/.local/bin:${PATH}"
+
+# Add pyenv to $PATH
+export PATH="${PYENV_ROOT}/bin:${PATH}"
+
+# Add cargo to $PATH
+export PATH="${CARGO_HOME}/bin:${PATH}"
+
+# Relocate pkg-config to ${FP}/.local
+export PKG_CONFIG_PATH="${FP}/.local/lib/pkgconfig:${FP}/.local/share/pkgconfig"
 
 # Run pyenv init to set PATH
 if command -v pyenv 1>/dev/null 2>&1; then

@@ -1,7 +1,16 @@
+export auto_proxy="http://proxyconf.glb.nsn-net.net/proxy.pac"
+export http_proxy="http://10.144.1.10:8080/"
+export https_proxy="http://10.144.1.10:8080/"
+export ftp_proxy="http://10.144.1.10:8080/"
+export rsync_proxy="http://10.144.1.10:8080/"
+export no_proxy="127.0.0.1,localhost,.noklab.net,.int.net.nokia.com,.ext.net.nokia.com,.int.nokia.com,.nsn-rdnet.com,.nsn-net.net,.inside.nokiasiemensnetworks.com,.access.nokiasiemensnetworks.com,.nsn-intra.net,.inside.nsn.com,.access.nsn.com"
+
 if [[ -f "${XDG_CONFIG_HOME:-$HOME/.config}/shprofile" ]]; then
   . "${XDG_CONFIG_HOME:-$HOME/.config}/shprofile"
 fi
 
 if [[ -f "${HOME}/.bashrc" ]]; then
   . "${HOME}/.bashrc"
+  export SHELL="$(which zsh)"
+  [[ -f ${SHELL} ]] && exec ${SHELL} --login
 fi
