@@ -731,6 +731,28 @@ function rf() {
   _rf-build-init "${swline}" "${directory}" "${machine}" "${project}" || return
 }
 
+# Bitbake helpers
+alias bb='bitbake'
+alias bbc='bitbake -ccompile'
+alias bbcfg='bitbake -cconfigure'
+alias bbch='bitbake -ccheck'
+alias bbsa='bitbake -cstatic_analysis'
+alias bbcl='bitbake -ccleanall'
+alias bbi='bitbake -cinstall'
+alias bblsl='bitbake-layers show-layers'
+alias bblsr='bitbake-layers show-recipes'
+
+function bbe() {
+  bitbake -e "$1" > "$1".bbe
+}
+
+function bbroot() {
+  bitbake "$@" \
+    && bitbake -ccleanall coreutils-native \
+    && bitbake -ccleanall git-native \
+    && bitbake build-sysroots
+}
+
 # Improve startup time of fasd
 if command -v fasd 1>/dev/null 2>&1; then
   mkdir -p "${XDG_CACHE_HOME}/bash"
