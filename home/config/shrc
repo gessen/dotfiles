@@ -37,6 +37,9 @@ alias gmt='git mergetool'
 alias gdtg='git difftool --gui'
 alias gmtg='git mergetool --gui'
 
+# Use fd with yocto dirs ignored
+alias fd="${FZF_DEFAULT_COMMAND}"
+
 # Use bat
 alias cat='bat'
 

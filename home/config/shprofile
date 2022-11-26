@@ -71,8 +71,21 @@ export _FASD_DATA="${XDG_CACHE_HOME}/fasd"
 # Set fd as the default source for fzf
 export FZF_DEFAULT_COMMAND="fd \
 --hidden \
+--no-ignore \
 --follow \
 --exclude='.git/' \
+--exclude='5g-jabco-w5-*/' \
+--exclude='5g-poco-mk4-hf/' \
+--exclude='simics-mars/' \
+--exclude='hycon-mars/' \
+--exclude='thor/' \
+--exclude='nahka/' \
+--exclude='made/' \
+--exclude='stratix10-azqp/' \
+--exclude='ct-made/' \
+--exclude='ct-zynqmp/' \
+--exclude='host-64/' \
+--exclude='qemux86-64/' \
 "
 
 # Default fzf options
