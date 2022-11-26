@@ -1,0 +1,258 @@
+# If not running interactively, don't do anything
+[[ $- != *i* ]] && return
+
+alias ls='ls --color=auto'
+PS1='[\u@\h \W]\$ '
+
+if [[ -r "/usr/share/bash-completion/bash_completion" ]]; then
+  . "/usr/share/bash-completion/bash_completion"
+fi
+
+# Change the window title of X terminals
+case ${TERM} in
+  xterm*|rxvt*|Eterm*|aterm|kterm|gnome*|interix|konsole*)
+    PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME%%.*}: ${PWD/#$HOME/~}\007"'
+    ;;
+  screen*)
+    PROMPT_COMMAND='echo -ne "\033_${USER}@${HOSTNAME%%.*}: ${PWD/#$HOME/\~}\033\\"'
+    ;;
+esac
+
+if type -P dircolors >/dev/null ; then
+  if [[ -f ~/.dir_colors ]] ; then
+    eval $(dircolors -b ~/.dir_colors)
+  elif [[ -f /etc/DIR_COLORS ]] ; then
+    eval $(dircolors -b /etc/DIR_COLORS)
+  fi
+fi
+
+xhost +local:root > /dev/null 2>&1
+
+complete -cf sudo
+
+# Bash won't get SIGWINCH if another process is in the foreground.
+# Enable checkwinsize so that bash will check the terminal size when
+# it regains control.  #65623
+# http://cnswww.cns.cwru.edu/~chet/bash/FAQ (E11)
+shopt -s checkwinsize
+
+shopt -s expand_aliases
+
+# Enable history appending instead of overwriting.  #139609
+shopt -s histappend
+
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias .....='cd ../../../..'
+alias ......='cd ../../../../..'
+alias .......='cd ../../../../../..'
+alias ........='cd ../../../../../../..'
+alias .........='cd ../../../../../../../..'
+
+# Git aliases from oh-my-zsh
+alias g=git
+alias ga='git add'
+alias gaa='git add --all'
+alias gam='git am'
+alias gama='git am --abort'
+alias gamc='git am --continue'
+alias gams='git am --skip'
+alias gamscp='git am --show-current-patch'
+alias gap='git apply'
+alias gapa='git add --patch'
+alias gapt='git apply --3way'
+alias gau='git add --update'
+alias gav='git add --verbose'
+alias gb='git branch'
+alias gbD='git branch -D'
+alias gba='git branch -a'
+alias gbd='git branch -d'
+alias gbda='git branch --no-color --merged | command grep -vE "^(\+|\*|\s*($(git_main_branch)|development|develop|devel|dev)\s*$)" | command xargs -n 1 git branch -d'
+alias gbl='git blame -b -w'
+alias gbnm='git branch --no-merged'
+alias gbr='git branch --remote'
+alias gbs='git bisect'
+alias gbsb='git bisect bad'
+alias gbsg='git bisect good'
+alias gbsr='git bisect reset'
+alias gbss='git bisect start'
+alias gc='git commit -v'
+alias gc!='git commit -v --amend'
+alias gca='git commit -v -a'
+alias gca!='git commit -v -a --amend'
+alias gcam='git commit -a -m'
+alias gcan!='git commit -v -a --no-edit --amend'
+alias gcans!='git commit -v -a -s --no-edit --amend'
+alias gcb='git checkout -b'
+alias gcd='git checkout develop'
+alias gcf='git config --list'
+alias gcl='git clone --recurse-submodules'
+alias gclean='git clean -id'
+alias gcm='git checkout $(git_main_branch)'
+alias gcmsg='git commit -m'
+alias gcn!='git commit -v --no-edit --amend'
+alias gco='git checkout'
+alias gcount='git shortlog -sn'
+alias gcp='git cherry-pick'
+alias gcpa='git cherry-pick --abort'
+alias gcpc='git cherry-pick --continue'
+alias gcs='git commit -S'
+alias gcsm='git commit -s -m'
+alias gd='git diff'
+alias gd2='GIT_PAGER="delta --side-by-side" git diff'
+alias gdca='git diff --cached'
+alias gdca2='GIT_PAGER="delta --side-by-side" git diff --cached'
+alias gdcan='git -c delta.navigate=true diff --cached'
+alias gdct='git describe --tags $(git rev-list --tags --max-count=1)'
+alias gdcw='git diff --cached --word-diff'
+alias gdn='git -c delta.navigate=true diff'
+alias gds='git diff --staged'
+alias gdt='git difftool'
+alias gdtg='git difftool --gui'
+alias gdw='git diff --word-diff'
+alias gf='git fetch'
+alias gfa='git fetch --all --prune --jobs=10'
+alias gfg='git ls-files | grep'
+alias gfo='git fetch origin'
+alias gg='git gui citool'
+alias gga='git gui citool --amend'
+alias ggpull='git pull origin "$(git_current_branch)"'
+alias ggpush='git push origin "$(git_current_branch)"'
+alias ggsup='git branch --set-upstream-to=origin/$(git_current_branch)'
+alias ghh='git help'
+alias gignore='git update-index --skip-worktree'
+alias gignored='git ls-files -v | grep "^[[:lower:]]"'
+alias git-svn-dcommit-push='git svn dcommit && git push github $(git_main_branch):svntrunk'
+alias gk='\gitk --all --branches'
+alias gke='\gitk --all $(git log -g --pretty=%h)'
+alias gl='git pull'
+alias glg='git log --stat'
+alias glgg='git log --graph'
+alias glgga='git log --graph --decorate --all'
+alias glgm='git log --graph --max-count=10'
+alias glgp='git log --stat -p'
+alias glo='git log --oneline --decorate'
+alias glod='git log --graph --pretty='\''%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%an>%Creset'\'
+alias glods='git log --graph --pretty='\''%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%an>%Creset'\'' --date=short'
+alias glog='git log --oneline --decorate --graph'
+alias gloga='git log --oneline --decorate --graph --all'
+alias glol='git log --graph --pretty='\''%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'\'
+alias glola='git log --graph --pretty='\''%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'\'' --all'
+alias glols='git log --graph --pretty='\''%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'\'' --stat'
+alias glp=_git_log_prettily
+alias glum='git pull upstream $(git_main_branch)'
+alias gm='git merge'
+alias gma='git merge --abort'
+alias gmom='git merge origin/$(git_main_branch)'
+alias gmt='git mergetool'
+alias gmtg='git mergetool --gui'
+alias gmtvim='git mergetool --no-prompt --tool=vimdiff'
+alias gmum='git merge upstream/$(git_main_branch)'
+alias gp='git push'
+alias gpd='git push --dry-run'
+alias gpf='git push --force-with-lease'
+alias gpf!='git push --force'
+alias gpoat='git push origin --all && git push origin --tags'
+alias gpristine='git reset --hard && git clean -dffx'
+alias gpsup='git push --set-upstream origin $(git_current_branch)'
+alias gpu='git push upstream'
+alias gpv='git push -v'
+alias gr='git remote'
+alias gra='git remote add'
+alias grb='git rebase'
+alias grba='git rebase --abort'
+alias grbc='git rebase --continue'
+alias grbd='git rebase develop'
+alias grbi='git rebase -i'
+alias grbm='git rebase $(git_main_branch)'
+alias grbo='git rebase --onto'
+alias grbs='git rebase --skip'
+alias grev='git revert'
+alias grh='git reset'
+alias grhh='git reset --hard'
+alias grm='git rm'
+alias grmc='git rm --cached'
+alias grmv='git remote rename'
+alias groh='git reset origin/$(git_current_branch) --hard'
+alias grrm='git remote remove'
+alias grs='git restore'
+alias grset='git remote set-url'
+alias grss='git restore --source'
+alias grst='git restore --staged'
+alias grt='cd "$(git rev-parse --show-toplevel || echo .)"'
+alias gru='git reset --'
+alias grup='git remote update'
+alias grv='git remote -v'
+alias gsb='git status -sb'
+alias gsd='git switch develop'
+alias gsh='git show'
+alias gsi='git submodule init'
+alias gsm='git switch $(git_main_branch)'
+alias gsps='git show --pretty=short --show-signature'
+alias gsr='git svn rebase'
+alias gss='git status -s'
+alias gst='git status'
+alias gsta='git stash push'
+alias gstaa='git stash apply'
+alias gstall='git stash --all'
+alias gstc='git stash clear'
+alias gstd='git stash drop'
+alias gstl='git stash list'
+alias gstp='git stash pop'
+alias gsts='git stash show --text'
+alias gstu='gsta --include-untracked'
+alias gsu='git submodule update'
+alias gsw='git switch'
+alias gswc='git switch -c'
+alias gtl='gtl(){ git tag --sort=-v:refname -n -l "${1}*" }; noglob gtl'
+alias gts='git tag -s'
+alias gtv='git tag | sort -V'
+alias gunignore='git update-index --no-skip-worktree'
+alias gunwip='git log -n 1 | grep -q -c "\-\-wip\-\-" && git reset HEAD~1'
+alias gup='git pull --rebase'
+alias gupa='git pull --rebase --autostash'
+alias gupav='git pull --rebase --autostash -v'
+alias gupv='git pull --rebase -v'
+alias gwch='git whatchanged -p --abbrev-commit --pretty=medium'
+alias gwip='git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit --no-verify --no-gpg-sign -m "--wip-- [skip ci]"'
+
+# Simulate AUTO_PUSHD and PUSHD_TO_HOME from zsh
+pushd() {
+  if [ $# -eq 0 ]; then
+    DIR="${HOME}"
+  else
+    DIR="$1"
+  fi
+
+  builtin pushd "${DIR}" > /dev/null
+}
+
+alias cd='pushd'
+alias 1='cd -'
+alias 2='cd -2'
+alias 3='cd -3'
+alias 4='cd -4'
+alias 5='cd -5'
+alias 6='cd -6'
+alias 7='cd -7'
+alias 8='cd -8'
+alias 9='cd -9'
+
+# User configuration
+. "${XDG_CONFIG_HOME}/shrc"
+
+# Integrate fzf with bash
+. "/usr/share/fzf/completion.bash"
+. "/usr/share/fzf/key-bindings.bash"
+
+# Improve startup time of fasd
+if command -v fasd 1>/dev/null 2>&1; then
+  mkdir -p "${XDG_CACHE_HOME}/bash"
+  fasd_cache="${XDG_CACHE_HOME}/bash/fasd-init-bash"
+  if [[ "$(command -v fasd)" -nt "$fasd_cache" || ! -s "$fasd_cache" ]]; then
+    fasd --init posix-alias bash-hook bash-ccomp bash-ccomp-install >| "$fasd_cache"
+  fi
+  . "$fasd_cache"
+  unset fasd_cache
+fi

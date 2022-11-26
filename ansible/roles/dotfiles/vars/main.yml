@@ -40,6 +40,8 @@ dotfiles:
   - ssh/local-config
   - ssh/repo-config
   - ssh/yoda-config
+  - bash_profile
+  - bashrc
   - zprofile
   - zshrc
 

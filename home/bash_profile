@@ -1,0 +1,7 @@
+if [[ -f "${XDG_CONFIG_HOME:-$HOME/.config}/shprofile" ]]; then
+  . "${XDG_CONFIG_HOME:-$HOME/.config}/shprofile"
+fi
+
+if [[ -f "${HOME}/.bashrc" ]]; then
+  . "${HOME}/.bashrc"
+fi
