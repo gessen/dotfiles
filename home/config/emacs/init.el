@@ -5170,7 +5170,31 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
 
   (set-leader-keys!
     "gr" #'browse-at-remote
-    "gR" #'browse-at-remote-kill))
+    "gR" #'browse-at-remote-kill)
+
+  :config
+
+  ;; Add gerrite1 to the list of supported domains.
+  (push '("gerrite1.ext.net.nokia.com" . "gerrite1")
+        browse-at-remote-remote-type-domains)
+
+  (defun browse-at-remote--format-region-url-as-gerrite1
+      (repo-url location filename &optional linestart _lineend)
+    "Format URL for gerrite1."
+    (require 's)
+    (cond
+     (linestart (format "%s/+/refs/heads/%s/%s#%d"
+                        (s-replace ".com/" ".com/plugins/gitiles/" repo-url)
+                        location filename linestart))
+     (t (format "%s/+/refs/heads/%s/%s"
+                (s-replace ".com/" ".com/plugins/gitiles/" repo-url) location
+                filename))))
+
+  (defun browse-at-remote--format-commit-url-as-gerrite1 (repo-url commithash)
+    "Format commit URL for gerrite1."
+    (require 's)
+    (format "%s/+/%s" (s-replace ".com/" ".com/plugins/gitiles/" repo-url)
+            commithash)))
 
 ;; Package `git-commit' assists the user in writing good Git commit messages.
 ;; While Git allows for the message to be provided on the command line, it is
