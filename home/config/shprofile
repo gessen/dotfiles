@@ -96,6 +96,9 @@ export FZF_TMUX_HEIGHT=40%
 # Conform to XDG with GnuPG
 export GNUPGHOME="${XDG_DATA_HOME}/gnupg"
 
+# Always show colours
+export GTEST_COLOR=1
+
 # Conform to XDG with GTK 2
 export GTK2_RC_FILES="${XDG_CONFIG_HOME}/gtk-2.0/settings.ini"
 
