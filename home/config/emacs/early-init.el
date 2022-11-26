@@ -25,8 +25,7 @@
                             (top . 0)
                             (left . 0)
                             (user-size . t)
-                            (width . 120)
-                            (height . 60)))
+                            (fullscreen . maximized)))
 
 ;; Set initial frame to be maximized
 ; (setq initial-frame-alist '((fullscreen . maximized)))
