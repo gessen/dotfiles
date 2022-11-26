@@ -116,4 +116,4 @@
 [checkout]
 	defaultremote = rfsw-meta
 [include]
-	path = config.local
+	path = ~/.config/git/config.local
