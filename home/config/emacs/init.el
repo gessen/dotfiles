@@ -4885,6 +4885,84 @@ unhelpful."
   ;; can be helpful in documents that need "_" frequently in plain text.
   (setq org-export-with-sub-superscripts '{}))
 
+;; Feature `ox-html' implements a HTML back-end for Org generic exporter.
+(use-feature! ox-html
+  :demand t
+  :after org
+  :config
+
+  (org-export-define-derived-backend 'email 'html
+    :menu-entry
+  '(?h 1
+       ((?m "As MS Outlook compatible text" org-email-export-as-outlook))))
+
+  (defun org-email-html-head ()
+    "Create the header with CSS."
+    "<style type=\"text/css\">
+<!--/*--><![CDATA[/*><!--*/
+html {
+  font-family: Calibri,Helvetica,Sans-Serif;
+  font-size: 12.0pt;
+}
+h1,h2,h3 {
+  font-size: 130%;
+}
+h1,h2,h3,h4,h5,h6 {
+  color: #0071c5;
+}
+code {
+  font-family: Consolas,Courier,Monospace;
+  font-size: 11.0pt;
+  background-color: #f3f4f4;
+  white-space: nowrap;
+}
+blockquote {
+  color: #666666;
+  margin-left: 0em;
+  padding-left: 1em;
+  border-left: 3px solid #cccccc;
+}
+p {
+  margin-top: 0em;
+  margin-bottom: 0em;
+  /*white-space: pre;*/
+}
+i {
+  background-color: #ffff99;
+}
+pre.src {
+  font-family: Consolas,Courier,Monospace;
+  font-size: 11.0pt;
+  margin: 0px;
+  border: none;
+  padding: none;
+  background-color: #ffffff;
+}
+/*]]>*/-->
+</style>\n")
+
+  (defun org-email-export-as-outlook
+    (&optional async subtreep visible-only body-only ext-plist)
+    "Export the current org document as email.
+  Export this document as MS Outlook compatible email in HTML
+form and copy it to the clipboard."
+    (interactive)
+    (let ((org-export-preserve-breaks t)
+          (org-export-show-temporary-export-buffer nil)
+          (org-html-postamble nil)
+          (org-html-head (org-email-html-head))
+          (org-export-theme 'modus-operandi))
+      (load-theme org-export-theme t)
+      (unwind-protect
+          (let ((result (org-html-export-as-html
+                         async subtreep visible-only body-only ext-plist)))
+            (with-current-buffer "*Org HTML Export*"
+              (kill-new (buffer-string)))
+            result)
+        (disable-theme org-export-theme))))
+
+  (push 'outlook org-export-backends))
+
 ;; Package `ox-pandoc' is another exporter for Org Mode that translates Org Mode
 ;; file to various other formats via Pandoc.
 (use-package! ox-pandoc
