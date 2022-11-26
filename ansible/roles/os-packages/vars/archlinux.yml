@@ -22,6 +22,7 @@ packages:
   - gdb-dashboard
   - git
   - git-delta
+  - git-lfs
   - glances
   - htop
   - keepassxc

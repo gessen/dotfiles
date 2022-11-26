@@ -99,5 +99,10 @@
 	untracked = red
 [alias]
 	fixup = !GIT_SEQUENCE_EDITOR=true git rebase -i
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
 [include]
 	path = config.local
