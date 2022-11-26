@@ -111,7 +111,9 @@
 	scheme = ssh
 	host = gerrite1.ext.net.nokia.com
 	port = 8282
-	remote = origin
+	remote = rfsw-meta
 	branch = master
+[checkout]
+	defaultremote = rfsw-meta
 [include]
 	path = config.local
