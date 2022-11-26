@@ -60,6 +60,16 @@ alias transfer='kitty +kitten transfer'
 # Go to Workspace
 alias fp='cd ${HOME}/Workspace'
 
+# Go to project dirs
+alias aafia='cd ${FP}/yocto/5mf5'
+alias asmr='cd ${FP}/yocto/5gw5'
+alias gluon='cd ${FP}/yocto/5gh4'
+alias megatron='cd ${FP}/yocto/cta6'
+alias nahka='cd ${FP}/yocto/frm5'
+alias scorpio='cd ${FP}/yocto/erm6'
+alias scorpio-cpri='cd ${FP}/yocto/urm6'
+alias yoda='cd ${FP}/yocto/srm7'
+
 # mkdir + cd
 mkcd() {
   mkdir -p "$1" && cd "$1" || return

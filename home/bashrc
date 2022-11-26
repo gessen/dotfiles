@@ -253,6 +253,484 @@ alias 9='cd -9'
 . "${FP}/.local/share/fzf/shell/completion.bash"
 . "${FP}/.local/share/fzf/shell/key-bindings.bash"
 
+# Patch yocto project if needed
+function _rf-repo-patch() {
+  local swline="${1}"
+  local directory="${2}"
+
+  case "${swline}" in
+    5gw5)
+      pushd "${FP}/yocto/${directory}/poky"
+      patch -p1 < "${FP}/.dotfiles/toolchains/yocto/poky.patch"
+      popd
+    ;;
+  esac
+}
+
+# Initialise yocto project with repo tool if not done yet
+function _rf-repo-init() {
+  local swline="${1}"
+  local directory="${2}"
+  local branch="${3}"
+  local url="ssh://gerrite1.ext.net.nokia.com:8282/RFSW/PROJECTS/projects"
+  local repo_rev="v2.12.2"
+  local repo_init_cmd="repo init -u ${url} --repo-rev=${repo_rev} --depth=100"
+
+  case "${swline}" in
+    5gh4)
+      mkcd "${FP}/yocto/${directory}"
+      if [ ! -f "$(pwd)/manifest.xml" ]; then
+        branch="${branch:-5GH4_release}"
+        eval "${repo_init_cmd}" -b "${branch}" -m manifest.xml
+        repo sync
+      fi
+      ;;
+    5gw5)
+      mkcd "${FP}/yocto/${directory}"
+      if [ ! -f "$(pwd)/manifest.xml" ]; then
+        branch="${branch:-5GW5_release}"
+        eval "${repo_init_cmd}" -b "${branch}" -m manifest.xml
+        repo sync
+        _rf-repo-patch "${swline}" "${directory}"
+      fi
+      ;;
+    5mf5)
+      mkcd "${FP}/yocto/${directory}"
+      if [ ! -f "$(pwd)/manifest.xml" ]; then
+        branch="${branch:-REL5.1_develop_5MF5}"
+        eval "${repo_init_cmd}" -b "${branch}" -m manifest.xml
+        repo sync
+      fi
+      ;;
+    cta6)
+      mkcd "${FP}/yocto/${directory}"
+      if [ ! -f "$(pwd)/default.xml" ]; then
+        branch="${branch:-CTA6_release}"
+        eval "${repo_init_cmd}" -b "${branch}"
+        repo sync
+      fi
+      ;;
+    erm6)
+      mkcd "${FP}/yocto/${directory}"
+      if [ ! -f "$(pwd)/manifest.xml" ]; then
+        branch="${branch:-ERM6_release}"
+        eval "${repo_init_cmd}" -b "${branch}" -m manifest.xml
+        repo sync
+      fi
+      ;;
+    frm5)
+      mkcd "${FP}/yocto/${directory}"
+      if [ ! -f "$(pwd)/manifest.xml" ]; then
+        branch="${branch:-REL5.1_release}"
+        eval "${repo_init_cmd}" -b "${branch}" -m manifest.xml
+        repo sync
+      fi
+      ;;
+    lrm6)
+      mkcd "${FP}/yocto/${directory}"
+      if [ ! -f "$(pwd)/default.xml" ]; then
+        branch="${branch:-LRM6_release}"
+        eval "${repo_init_cmd}" -b "${branch}"
+        repo sync
+      fi
+      ;;
+    srm6)
+      mkcd "${FP}/yocto/${directory}"
+      if [ ! -f "$(pwd)/default.xml" ]; then
+        branch="${branch:-mMIMO_SRM6_release}"
+        eval "${repo_init_cmd}" -b "${branch}"
+        repo sync
+      fi
+      ;;
+    srm7)
+      mkcd "${FP}/yocto/${directory}"
+      if [ ! -f "$(pwd)/default.xml" ]; then
+        branch="${branch:-SRM7_release}"
+        eval "${repo_init_cmd}" -b "${branch}"
+        repo sync
+      fi
+      ;;
+    trm6)
+      mkcd "${FP}/yocto/${directory}"
+      if [ ! -f "$(pwd)/default.xml" ]; then
+        branch="${branch:-mMIMO_TRM6_release}"
+        eval "${repo_init_cmd}" -b "${branch}"
+        repo sync
+      fi
+      ;;
+    trs6)
+      mkcd "${FP}/yocto/${directory}"
+      if [ ! -f "$(pwd)/default.xml" ]; then
+        branch="${branch:-TRS6_release}"
+        eval "${repo_init_cmd}" -b "${branch}"
+        repo sync
+      fi
+      ;;
+    urm6)
+      mkcd "${FP}/yocto/${directory}"
+      if [ ! -f "$(pwd)/manifest.xml" ]; then
+        branch="${branch:-URM6_release}"
+        "${repo_init_cmd}" -b "${branch}" -m manifest.xml
+        repo sync
+      fi
+      ;;
+    *)
+      echo "error: invalid SW line name: ${swline}"
+      return 2
+  esac
+}
+
+# Set up environment for yocto projects
+function _rf-env-init() {
+  local swline="${1}"
+  local directory="${2}"
+  local project="${3:-}"
+
+  case "${swline}" in
+    5gh4)
+      mkcd "${FP}/yocto/${directory}"
+      export PATH="/opt/gcc/x86_64/4.9.0a/bin:${PATH}"
+      export PATH="/opt/git/x86_64/2.6.2/bin:${PATH}"
+      export LD_LIBRARY_PATH="/opt/gcc/x86_64/4.9.0a/lib:${LD_LIBRARY_PATH}"
+      export LD_LIBRARY_PATH="/opt/gcc/x86_64/4.9.0a/lib64:${LD_LIBRARY_PATH}"
+      pyenv local 2.7.10 3.6.8
+      ;;
+    5gw5)
+      mkcd "${FP}/yocto/${directory}"
+      export PATH="/opt/gcc/x86_64/4.8.5a/bin:${PATH}"
+      pyenv local 2.7.16 3.6.8
+      ;;
+    5mf5)
+      mkcd "${FP}/yocto/${directory}"
+      export PATH="/opt/gcc/x86_64/4.8.5a/bin:${PATH}"
+      export PATH="/opt/tar/x86_64/1.28/bin:${PATH}"
+      pyenv local 2.7.16 3.6.8
+      ;;
+    cta6)
+      mkcd "${FP}/yocto/${directory}"
+      export PATH="/opt/gcc/x86_64/9.3.0a/bin:${PATH}"
+      export LD_LIBRARY_PATH="/opt/gcc/x86_64/9.3.0a/lib:${LD_LIBRARY_PATH}"
+      export LD_LIBRARY_PATH="/opt/gcc/x86_64/9.3.0a/lib64:${LD_LIBRARY_PATH}"
+      pyenv local 2.7.16 3.6.8
+      ;;
+    erm6)
+      mkcd "${FP}/yocto/${directory}"
+      export PATH="/opt/gcc/x86_64/4.8.5a/bin:${PATH}"
+      pyenv local 2.7.16 3.6.8
+      ;;
+    frm5)
+      mkcd "${FP}/yocto/${directory}"
+      export PATH="/opt/gcc/x86_64/4.9.0a/bin:${PATH}"
+      export PATH="/opt/tar/x86_64/1.28/bin:${PATH}"
+      export PATH="/opt/git/x86_64/2.6.2/bin:${PATH}"
+      export LD_LIBRARY_PATH="/opt/gcc/x86_64/4.9.0a/lib:${LD_LIBRARY_PATH}"
+      export LD_LIBRARY_PATH="/opt/gcc/x86_64/4.9.0a/lib64:${LD_LIBRARY_PATH}"
+      pyenv local 2.7.16 3.6.8
+      ;;
+    lrm6)
+      mkcd "${FP}/yocto/${directory}"
+      export PATH="/opt/gcc/x86_64/9.3.0a/bin:${PATH}"
+      export LD_LIBRARY_PATH="/opt/gcc/x86_64/9.3.0a/lib:${LD_LIBRARY_PATH}"
+      export LD_LIBRARY_PATH="/opt/gcc/x86_64/9.3.0a/lib64:${LD_LIBRARY_PATH}"
+      pyenv local 2.7.16 3.6.8
+      ;;
+    srm6)
+      mkcd "${FP}/yocto/${directory}"
+      export PATH="/opt/gcc/x86_64/9.3.0a/bin:${PATH}"
+      export LD_LIBRARY_PATH="/opt/gcc/x86_64/9.3.0a/lib:${LD_LIBRARY_PATH}"
+      export LD_LIBRARY_PATH="/opt/gcc/x86_64/9.3.0a/lib64:${LD_LIBRARY_PATH}"
+      pyenv local 2.7.16 3.6.8
+      ;;
+    srm7)
+      mkcd "${FP}/yocto/${directory}"
+      export PATH="/opt/gcc/x86_64/9.3.0a/bin:${PATH}"
+      export LD_LIBRARY_PATH="/opt/gcc/x86_64/9.3.0a/lib:${LD_LIBRARY_PATH}"
+      export LD_LIBRARY_PATH="/opt/gcc/x86_64/9.3.0a/lib64:${LD_LIBRARY_PATH}"
+      pyenv local 2.7.16 3.6.8
+      ;;
+    trm6)
+      mkcd "${FP}/yocto/${directory}"
+      export PATH="/opt/gcc/x86_64/9.3.0a/bin:${PATH}"
+      export LD_LIBRARY_PATH="/opt/gcc/x86_64/9.3.0a/lib:${LD_LIBRARY_PATH}"
+      export LD_LIBRARY_PATH="/opt/gcc/x86_64/9.3.0a/lib64:${LD_LIBRARY_PATH}"
+      pyenv local 2.7.16 3.6.8
+      ;;
+    trs6)
+      mkcd "${FP}/yocto/${directory}"
+      export PATH="/opt/gcc/x86_64/9.3.0a/bin:${PATH}"
+      export LD_LIBRARY_PATH="/opt/gcc/x86_64/9.3.0a/lib:${LD_LIBRARY_PATH}"
+      export LD_LIBRARY_PATH="/opt/gcc/x86_64/9.3.0a/lib64:${LD_LIBRARY_PATH}"
+      pyenv local 2.7.16 3.6.8
+      ;;
+    urm6)
+      mkcd "${FP}/yocto/${directory}"
+      export PATH="/opt/gcc/x86_64/9.3.0a/bin:${PATH}"
+      export LD_LIBRARY_PATH="/opt/gcc/x86_64/9.3.0a/lib:${LD_LIBRARY_PATH}"
+      export LD_LIBRARY_PATH="/opt/gcc/x86_64/9.3.0a/lib64:${LD_LIBRARY_PATH}"
+      pyenv local 2.7.16 3.6.8
+      ;;
+    *)
+      echo "error: invalid SW line name: ${swline}"
+      return 2
+  esac
+}
+
+# Source RFSW yocto helper
+function _rf-build-init() {
+  local swline="${1}"
+  local directory="${2}"
+  local machine="${3}"
+  local project="${4:-}"
+
+  case "${swline}" in
+    5gh4)
+      machine="${machine:-5g-poco-mk4-hf}"
+      source seesetenv python=2.7.10
+      LINSEE_MIXTURE_LIST=RFSW_future XILINX_SDK_SEARCH_PATHS="${FP}/xilinx-sdk" source build.env "${machine}"
+      export LD_LIBRARY_PATH="/opt/gcc/x86_64/4.9.0a/lib:${LD_LIBRARY_PATH}"
+      export LD_LIBRARY_PATH="/opt/gcc/x86_64/4.9.0a/lib64:${LD_LIBRARY_PATH}"
+      ;;
+    5gw5)
+      machine="${machine:-5g-jabco-w5-x21}"
+      machine="${machine/host-64/host}"
+      machine="${machine/host/host-64}"
+      LINSEE_MIXTURE_LIST=RFSW_5G_RH7 source build.env "${machine}"
+      export LD_LIBRARY_PATH="/opt/gcc/x86_64/4.8.5a/lib:${LD_LIBRARY_PATH}"
+      export LD_LIBRARY_PATH="/opt/gcc/x86_64/4.8.5a/lib64:${LD_LIBRARY_PATH}"
+      ;;
+    5mf5)
+      machine="${machine:-nahka}"
+      LINSEE_MIXTURE_LIST=RFSW_REL5 source build.env "${machine}"
+      export LD_LIBRARY_PATH="/opt/gcc/x86_64/4.8.5a/lib:${LD_LIBRARY_PATH}"
+      export LD_LIBRARY_PATH="/opt/gcc/x86_64/4.8.5a/lib64:${LD_LIBRARY_PATH}"
+      ;;
+    cta6)
+      project=${project:-dfe}
+      case "${project}" in
+        dfe)
+          machine="${machine:-ct-made}"
+          machine="${machine/ct-made/made}"
+          machine="${machine/made/ct-made}"
+          machine="${machine/host-64/host}"
+          machine="${machine/host/host-64}"
+          LINSEE_MIXTURE_LIST=RFSW_ZEUS PROJECT=${project} source build.env "${machine}"
+          ;;
+        fronthaul)
+          machine="${machine:-ct-zynqmp}"
+          machine="${machine/ct-zynqmp/zynq}"
+          machine="${machine/zynq/ct-zynqmp}"
+          machine="${machine/host-64/host}"
+          machine="${machine/host/host-64}"
+          LINSEE_MIXTURE_LIST=RFSW_ZEUS PROJECT=${project} source build.env "${machine}"
+          ;;
+        *)
+          echo "error: invalid project name: ${project} for SW line: ${swline}"
+          return 2
+      esac
+      ;;
+    erm6)
+      project=${project:-dfe}
+      case "${project}" in
+        dfe)
+          machine="${machine:-made}"
+          LINSEE_MIXTURE_LIST=RFSW_REL6 source build.env "${machine}"
+          export LD_LIBRARY_PATH="/opt/gcc/x86_64/4.8.5a/lib:${LD_LIBRARY_PATH}"
+          export LD_LIBRARY_PATH="/opt/gcc/x86_64/4.8.5a/lib64:${LD_LIBRARY_PATH}"
+          ;;
+        beamer)
+          machine="${machine:-stratix10-azqp}"
+          PROJECT="${project}" source build.env "${machine}"
+          export LD_LIBRARY_PATH="/opt/gcc/x86_64/4.8.5a/lib:${LD_LIBRARY_PATH}"
+          export LD_LIBRARY_PATH="/opt/gcc/x86_64/4.8.5a/lib64:${LD_LIBRARY_PATH}"
+          ;;
+      esac
+      ;;
+    frm5)
+      machine="${machine:-nahka}"
+      machine="${machine/host-64/host}"
+      machine="${machine/host/host-64}"
+      LINSEE_MIXTURE_LIST=RFSW_REL5 source build.env "${machine}"
+      ;;
+    lrm6)
+      project=${project:-beamer_tdcpri-lte}
+      case "${project}" in
+        beamer_tdcpri-lte)
+          machine="${machine:-stratix10-aeqb}"
+          machine="${machine/host/qemux86-64}"
+          LINSEE_MIXTURE_LIST=RFSW_ZEUS PROJECT=${project} source build.env "${machine}"
+          ;;
+        dfe_tdcpri-lte)
+          machine="${machine:-made}"
+          machine="${machine/host/qemux86-64}"
+          LINSEE_MIXTURE_LIST=RFSW_ZEUS PROJECT=${project} source build.env "${machine}"
+          ;;
+        *)
+          echo "error: invalid project name: ${project} for SW line: ${swline}"
+          return 2
+      esac
+      ;;
+    srm6)
+      project=${project:-beamer_ecpri}
+      case "${project}" in
+        beamer_ecpri)
+          machine="${machine:-stratix10-aeqb}"
+          machine="${machine/host/qemux86-64}"
+          LINSEE_MIXTURE_LIST=RFSW_ZEUS PROJECT=${project} source build.env "${machine}"
+          ;;
+        dfe_ecpri)
+          machine="${machine:-made}"
+          machine="${machine/host/qemux86-64}"
+          LINSEE_MIXTURE_LIST=RFSW_ZEUS PROJECT=${project} source build.env "${machine}"
+          ;;
+        *)
+          echo "error: invalid project name: ${project} for SW line: ${swline}"
+          return 2
+      esac
+      ;;
+    srm7)
+      project=${project:-mars}
+      project=${project/beamer/thor}
+      case "${project}" in
+        mars)
+          machine="${machine:-simics-mars}"
+          machine="${machine/simics-mars/simics}"
+          machine="${machine/simics/simics-mars}"
+          machine="${machine/hycon-mars/hycon}"
+          machine="${machine/hycon/hycon-mars}"
+          machine="${machine/host/qemux86-64}"
+          LINSEE_MIXTURE_LIST=RFSW_ZEUS source build.env "${machine}"
+          ;;
+        thor)
+          machine="${machine:-thor}"
+          source seesetenv j2se=1.8.0_92
+          LINSEE_MIXTURE_LIST=RFSW_ZEUS PROJECT=${project} source build.env "${machine}"
+          ;;
+        *)
+          echo "error: invalid project name: ${project} for SW line: ${swline}"
+          return 2
+      esac
+      ;;
+    trm6)
+      project=${project:-beamer_tdcpri}
+      case "${project}" in
+        beamer_tdcpri)
+          machine="${machine:-stratix10-aeqb}"
+          machine="${machine/host/qemux86-64}"
+          LINSEE_MIXTURE_LIST=RFSW_ZEUS PROJECT=${project} source build.env "${machine}"
+          ;;
+        dfe_tdcpri)
+          machine="${machine:-made}"
+          machine="${machine/host/qemux86-64}"
+          LINSEE_MIXTURE_LIST=RFSW_ZEUS PROJECT=${project} source build.env "${machine}"
+          ;;
+        *)
+          echo "error: invalid project name: ${project} for SW line: ${swline}"
+          return 2
+      esac
+      ;;
+    trs6)
+      project=${project:-beamer_aeqh_tdcpri}
+      case "${project}" in
+        beamer_aeqh_tdcpri)
+          machine="${machine:-stratix10-aeqb}"
+          machine="${machine/host/qemux86-64}"
+          LINSEE_MIXTURE_LIST=RFSW_ZEUS PROJECT=${project} source build.env "${machine}"
+          ;;
+        dfe_split-tdcpri)
+          machine="${machine:-made}"
+          machine="${machine/host/qemux86-64}"
+          LINSEE_MIXTURE_LIST=RFSW_ZEUS PROJECT=${project} source build.env "${machine}"
+          ;;
+        *)
+          echo "error: invalid project name: ${project} for SW line: ${swline}"
+          return 2
+      esac
+      ;;
+    urm6)
+      project=${project:-dfe}
+      case "${project}" in
+        dfe|dfe-c)
+          machine="${machine:-made}"
+          LINSEE_MIXTURE_LIST=RFSW_ZEUS source build.env "${machine}"
+          ;;
+        beamer|beamer-c)
+          machine="${machine:-stratix10-azqp}"
+          LINSEE_MIXTURE_LIST=RFSW_ZEUS PROJECT="${project}" source build.env "${machine}"
+          ;;
+      esac
+      ;;
+    *)
+      echo "error: invalid SW line name: ${swline}"
+      return 2
+  esac
+}
+
+# Set up shell for yocto for different projects
+function rf() {
+  local opts="d:m:p:b:"
+  local lopts="directory:,machine:,project:,branch:"
+  local parsed
+  local swline=""
+  local directory=""
+  local machine=""
+  local project=""
+  local branch=""
+
+  parsed="$(getopt \
+    --options=${opts} \
+    --longoptions=${lopts} \
+    --name="${FUNCNAME}" \
+    -- $@)\
+  "
+
+  if [[ $? != 0 ]]; then
+    return 2
+  fi
+
+  eval set -- "${parsed}"
+  unset parsed
+
+  while true; do
+    case "$1" in
+      -d|--directory)
+        directory="$2"
+        shift 2
+        ;;
+      -m|--machine)
+        machine="$2"
+        shift 2
+        ;;
+      -p|--project)
+        project="$2"
+        shift 2
+        ;;
+      -b|--branch)
+        branch="$2"
+        shift 2
+        ;;
+      --)
+        shift
+        break
+        ;;
+      *)
+        echo "error: logic error"
+        return 2
+        ;;
+    esac
+  done
+
+  swline="${1:-srm7}"
+  if [ -n "${branch}" ]; then
+    directory="${directory:-${swline}-${branch////_}}"
+  else
+    directory="${directory:-${swline}}"
+  fi
+
+  _rf-repo-init "${swline}" "${directory}" "${branch}" || return
+  _rf-env-init "${swline}" "${directory}" "${project}" || return
+  _rf-build-init "${swline}" "${directory}" "${machine}" "${project}" || return
+}
+
 # Improve startup time of fasd
 if command -v fasd 1>/dev/null 2>&1; then
   mkdir -p "${XDG_CACHE_HOME}/bash"

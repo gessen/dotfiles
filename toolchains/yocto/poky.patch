@@ -1,0 +1,28 @@
+diff --git i/meta/classes/staging.bbclass w/meta/classes/staging.bbclass
+index 84e13ba..c9bcd74 100644
+--- i/meta/classes/staging.bbclass
++++ w/meta/classes/staging.bbclass
+@@ -198,6 +198,10 @@ def staging_populate_sysroot_dir(targetsysroot, nativesysroot, native, d):
+             if manifest.endswith("-initial.populate_sysroot"):
+                 # skip glibc-initial and libgcc-initial due to file overlap
+                 continue
++            if not native and (manifest.endswith("-native.populate_sysroot") or "nativesdk-" in manifest):
++                continue
++            if native and not (manifest.endswith("-native.populate_sysroot") or manifest.endswith("-cross.populate_sysroot") or "-cross-" in manifest):
++                continue
+             tmanifest = targetdir + "/" + os.path.basename(manifest)
+             if os.path.exists(tmanifest):
+                 continue
+diff --git i/meta/recipes-support/apr/apr-util_1.6.1.bb w/meta/recipes-support/apr/apr-util_1.6.1.bb
+index 0c90f8d..3c47014 100644
+--- i/meta/recipes-support/apr/apr-util_1.6.1.bb
++++ w/meta/recipes-support/apr/apr-util_1.6.1.bb
+@@ -38,7 +38,7 @@ do_configure_append() {
+ 	fi
+ }
+ do_configure_prepend_class-native() {
+-	mkdir ${B}/build
++	mkdir -p ${B}/build
+ 	cp ${STAGING_DATADIR_NATIVE}/apr/apr_rules.mk ${B}/build/rules.mk
+ }
+ do_configure_append_class-native() {
