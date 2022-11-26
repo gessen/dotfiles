@@ -11,7 +11,7 @@
     "editor.guides.bracketPairs": true,
     "editor.multiCursorModifier": "ctrlCmd",
     "editor.rulers": [
-        80,
+        120,
     ],
     "editor.renderControlCharacters": false,
     "editor.renderWhitespace": "all",
