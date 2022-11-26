@@ -1,0 +1,53 @@
+---
+dotfiles_desktop:
+  - config/xfce4/panel/launcher-15/kitty.desktop
+  - config/xfce4/panel/launcher-16/emacs.desktop
+  - config/xfce4/panel/launcher-17/emacsclient.desktop
+  - config/xfce4/panel/launcher-18/sublime_text.desktop
+  - config/xfce4/xfconf/xfce-perchannel-xml/keyboards.xml
+  - config/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml
+  - config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml
+  - config/xfce4/xfconf/xfce-perchannel-xml/xfwm4.xml
+  - config/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml
+  - config/xfce4/helpers.rc
+  - local/share/xfce4/helpers/custom-TerminalEmulator.desktop
+  - xprofile
+
+packages_desktop:
+  - archlinux-wallpaper
+  - lightdm
+  - lightdm-gtk-greeter
+  - materia-gtk-theme
+  - noto-fonts
+  - papirus-icon-theme
+  - xdg-utils
+  - xdg-user-dirs
+  - xfce4
+  - xorg-server
+
+packages_aur_desktop:
+  - bibata-cursor-theme-bin
+
+services_desktop:
+  - lightdm
+
+lightdm_gtk_greeter_options:
+  - section: greeter
+    option: theme-name
+    value: Materia-dark-compact
+
+  - section: greeter
+    option: icon-theme-name
+    value: Papirus
+
+  - section: greeter
+    option: font-name
+    value: Noto Sans 11
+
+  - section: greeter
+    option: background
+    value: /usr/share/backgrounds/archlinux/mountain.jpg
+
+  - section: greeter
+    option: position
+    value: 25%,center 50%,center

@@ -1,0 +1,20 @@
+---
+- block:
+  - name: Create lightdm greeter config dir
+    file:
+      path: /etc/lightdm/
+      state: directory
+    become: yes
+
+  - name: Configure lightdm greeter
+    ini_file:
+      path: /etc/lightdm/lightdm-gtk-greeter.conf
+      section: '{{ option.section }}'
+      option: '{{ option.option }}'
+      value: '{{ option.value }}'
+    loop: '{{ lightdm_gtk_greeter_options }}'
+    loop_control:
+      loop_var: option
+    become: yes
+
+  when: lightdm_gtk_greeter_options is defined and lightdm_gtk_greeter_options
