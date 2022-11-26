@@ -1,0 +1,51 @@
+---
+- name: Check if uninative sysroot exists for {{ swline.1 }}
+  stat:
+    path: '{{ toolchains_env_dst }}/{{ swline.1 }}/sysroots-uninative/relocate_sdk.py'
+  register: relocate_sdk
+
+- block:
+  - name: Create folder for uninative sysroot for {{ swline.1 }}
+    file:
+      path: '{{ toolchains_env_dst + "/" + swline.1 }}/sysroots-uninative'
+      state: directory
+
+  - name: Extract uninative sysroot for {{ swline.1 }}
+    unarchive:
+      src: '/tmp/uninatives/{{ uninative.version }}/{{ uninative.file }}'
+      dest: '{{ toolchains_env_dst }}/{{ swline.1 }}/sysroots-uninative'
+
+  when: relocate_sdk.stat.exists == false
+
+- name: Create folder for uninative sysroot symlink for {{ swline.1 }}
+  file:
+    path: '{{ yocto_path }}/{{ swline.0.name }}/{{ (toolchains | selectattr("name", "equalto", swline.1) | first).target }}/tmp'
+    state: directory
+
+- name: Symlink uninative sysroot for {{ swline.1 }}
+  file:
+    path: '{{ yocto_path }}/{{ swline.0.name }}/{{ (toolchains | selectattr("name", "equalto", swline.1) | first).target }}/tmp/sysroots-uninative'
+    src: '{{ toolchains_env_dst }}/{{ swline.1 }}/sysroots-uninative'
+    state: link
+    force: yes
+
+- name: Find the name of libc for {{ swline.1 }}
+  shell: 'ls {{ yocto_path }}/{{ swline.0.name }}/{{ (toolchains | selectattr("name", "equalto", swline.1) | first).target }}/tmp/sysroots-uninative/x86_64-linux/lib/libc-*.so'
+  register: libc_path
+
+- name: Relocate uninative sysroot for {{ swline.1 }}
+  script:
+    cmd: >
+      '{{ yocto_path }}/{{ swline.0.name }}/{{ (toolchains | selectattr("name", "equalto", swline.1) | first).target }}/tmp/sysroots-uninative/relocate_sdk.py'
+      '{{ yocto_path }}/{{ swline.0.name }}/{{ (toolchains | selectattr("name", "equalto", swline.1) | first).target }}/tmp/sysroots-uninative/x86_64-linux'
+      '{{ yocto_path }}/{{ swline.0.name }}/{{ (toolchains | selectattr("name", "equalto", swline.1) | first).target }}/tmp/sysroots-uninative/x86_64-linux/lib/ld-linux-x86-64.so.2'
+      '{{ yocto_path }}/{{ swline.0.name }}/{{ (toolchains | selectattr("name", "equalto", swline.1) | first).target }}/tmp/sysroots-uninative/x86_64-linux/lib/ld-linux-x86-64.so.2'
+      '{{ yocto_path }}/{{ swline.0.name }}/{{ (toolchains | selectattr("name", "equalto", swline.1) | first).target }}/tmp/sysroots-uninative/x86_64-linux/usr/bin/patchelf-uninative'
+      '{{ libc_path.stdout }}'
+
+- name: Symlink tmp dir in uninative sysroot for {{ swline.1 }}
+  file:
+    path: '{{ yocto_path }}/{{ swline.0.name }}/{{ (toolchains | selectattr("name", "equalto", swline.1) | first).target }}/tmp-glibc'
+    src: 'tmp'
+    state: link
+    force: yes

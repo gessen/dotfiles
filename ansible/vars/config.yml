@@ -6,7 +6,11 @@ dotfiles_src: '{{ dotfiles_dir }}/home'
 dotfiles_dst: '{{ home_dir }}'
 dotfiles_distro_src: '{{ dotfiles_src }}/{{ ansible_os_family | lower }}'
 
+toolchains_env_src: '{{ dotfiles_dir }}/toolchains/env'
+toolchains_env_dst: '{{ home_dir }}/Workspace/toolchains'
+
 with_packages: True
 with_sublime_text: True
 with_vscode_extensions: True
 with_rust: False
+with_toolchains_env: True

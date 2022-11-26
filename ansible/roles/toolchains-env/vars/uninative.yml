@@ -1,0 +1,28 @@
+---
+yocto_path: '/var/fpwork/{{ ansible_env.USER }}/yocto'
+uninative_url: http://downloads.yoctoproject.org/releases/uninative
+
+uninatives:
+  - version: 1.4
+    file: x86_64-nativesdk-libc.tar.bz2
+    swlines:
+      - name: 5gh4
+        toolchains:
+          - gluon
+
+  - version: 2.3
+    file: x86_64-nativesdk-libc.tar.bz2
+    swlines:
+      - name: 5gw5
+        toolchains:
+          - asmr
+          - asmr-host
+          - asmr-host2
+
+  - version: 2.8
+    file: x86_64-nativesdk-libc.tar.xz
+    swlines:
+      - name: srm7
+        toolchains:
+          - yoda-mars
+          - yoda-thor

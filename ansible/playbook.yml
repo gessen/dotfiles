@@ -39,3 +39,7 @@
     - role: dev-rust
       tags: [dev, dev-rust]
       when: with_rust | default(False)
+
+    - role: toolchains-env
+      tags: toolchains-env
+      when: with_toolchains_env | default(False)

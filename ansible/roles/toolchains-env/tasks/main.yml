@@ -1,0 +1,58 @@
+---
+- block:
+  - name: Create folders for toolchain sysroots and environment files
+    file:
+      path: '{{ toolchains_env_dst + "/" + toolchain.name }}'
+      state: directory
+    loop: '{{ toolchains | default([], true) }}'
+    loop_control:
+      loop_var: toolchain
+
+  - name: 'Include uninative sysroots vars'
+    include_vars: uninative.yml
+
+  - name: 'Include uninative sysroots tasks'
+    include_tasks: uninative.yml
+    loop: '{{ uninatives | default([], true) }}'
+    loop_control:
+      loop_var: uninative
+
+  - name: Symlink compiler toolchain environments files
+    file:
+      path: '{{ toolchains_env_dst }}/{{ item[0].name }}/environment-{{ item[1] }}'
+      src: '{{ toolchains_env_src }}/environment-set'
+      state: link
+      force: yes
+    with_nested:
+      - '{{ toolchains }}'
+      - '{{ compilers }}'
+
+  - name: Symlink toolchain native sysroot
+    file:
+      path: '{{ toolchains_env_dst }}/{{ item.name }}/sysroot-native'
+      src: 'sysroots/{{ item.native }}'
+      state: link
+      force: yes
+      follow: no
+    with_items: '{{ toolchains }}'
+
+  - name: Symlink toolchain target sysroot
+    file:
+      path: '{{ toolchains_env_dst }}/{{ item.name }}/sysroot-target'
+      src: 'sysroots/{{ item.target }}'
+      state: link
+      force: yes
+      follow: no
+    with_items: '{{ toolchains }}'
+
+  - name: Symlink additional toolchain environments files
+    file:
+      path: '{{ toolchains_env_dst }}/{{ item[0].name }}/{{ item[1] }}'
+      src: '{{ toolchains_env_src }}/{{ item[1] }}'
+      state: link
+      force: yes
+    with_nested:
+      - '{{ toolchains }}'
+      - '{{ helpers }}'
+
+  when: toolchains is defined

@@ -1,0 +1,49 @@
+#!/bin/sh
+
+unset PRODUCT_GENERATION
+unset MACHINE
+unset TARGET_PREFIX
+unset GCC_VERSION
+
+unset TOOLCHAIN
+unset TOOLCHAIN_SYSROOT_NATIVE
+unset TOOLCHAIN_SYSROOT_TARGET
+unset TOOLCHAIN_COMPILER
+unset TOOLCHAIN_LIBDIR
+
+unset AR
+unset AS
+unset CC
+unset CPP
+unset CXX
+unset CCLD
+unset LD
+unset NM
+unset OBJCOPY
+unset OBJDUMP
+unset RANLIB
+unset STRINGS
+unset STRIP
+
+unset CFLAGS
+unset CXXFLAGS
+unset LDFLAGS
+unset CONFIGURE_FLAGS
+unset KCFLAGS
+
+unset SDK_LD
+unset SDKTARGETSYSROOT
+
+unset PKG_CONFIG_PATH
+unset PKG_CONFIG_SYSROOT_DIR
+unset PKG_CONFIG_SYSTEM_LIBRARY_PATH
+
+unset CMAKE_TOOLCHAIN_FILE
+unset CMAKE_BUILD_TYPE
+unset VALGRIND_LIB
+
+if [[ -n "$ORG_PATH" ]]; then
+    export PATH="$ORG_PATH"
+    unset ORG_PATH
+    unset NEW_PATH
+fi

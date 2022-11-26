@@ -1,0 +1,54 @@
+---
+toolchains:
+  - name: aafia
+    native: x86_64-linux
+    target: nahka
+
+  - name: asmr
+    native: x86_64
+    target: 5g-jabco-w5-x21
+
+  - name: asmr-host
+    native: x86_64
+    target: host-64
+
+  - name: asmr-host2
+    native: x86_64
+    target: host-64
+
+  - name: gluon
+    native: x86_64-linux
+    target: 5g-poco-mk4-hf
+
+  - name: nahka-host
+    native: x86_64-linux
+    target: host-64
+
+  - name: scorpio-made
+    native: x86_64
+    target: made
+
+  - name: scorpio-stratix
+    native: x86_64
+    target: stratix10-azqp
+
+  - name: yoda-mars
+    native: x86_64
+    target: simics-mars
+
+  - name: yoda-mars-host
+    native: x86_64
+    target: qemux86-64
+
+  - name: yoda-thor
+    native: x86_64
+    target: thor
+
+compilers:
+  - gcc
+  - clang
+
+helpers:
+  - environment-unset
+  - toolchain-gcc.cmake
+  - toolchain-clang.cmake

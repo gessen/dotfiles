@@ -89,9 +89,13 @@ POWERLEVEL9K_COMMAND_EXECUTION_TIME_FOREGROUND='black'
 # Show duration of the last command if it takes at least this many seconds.
 POWERLEVEL9K_COMMAND_EXECUTION_TIME_THRESHOLD=2
 
+# Call function responsible for toolchain environment segment.
+POWERLEVEL9K_CUSTOM_TOOLCHAIN_ENVIRONMENT="toolchain_environment"
+
 # The list of segments shown on the left.
 POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
   root_indicator
+  custom_toolchain_environment
   dir
   dir_writable
   vcs
@@ -334,3 +338,57 @@ bindkey '^X^D' fasd-complete-d
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+
+toolchain_environment() {
+  if [[ -n "${TOOLCHAIN}" ]]; then
+    echo -n "\uF303 ${TOOLCHAIN} "
+  fi
+
+  if [[ -n "${TOOLCHAIN_COMPILER}" ]]; then
+    echo -n "\uF17C ${TOOLCHAIN_COMPILER}"
+  fi
+}
+
+toolchain_environment_alias_binder() {
+  local suffix="$1"
+  local toolchain_path="$2"
+  local toolchain="$(basename ${toolchain_path})"
+  local env_file="${toolchain_path}/environment-${suffix}"
+  local sysroot_native="${toolchain_path}/sysroot-native"
+  local sysroot_target="${toolchain_path}/sysroot-target"
+
+  if [[ ! -d "${sysroot_native}" || ! -d "${sysroot_target}" ]]; then
+    return
+  fi
+
+  alias rf-${toolchain}-${suffix}="source ${env_file}"
+}
+
+toolchain_environment_binder() {
+  local compilers=(
+    gcc
+    clang
+  )
+
+  local suffixes=(
+    $compilers
+    unset
+  )
+
+  local toolchain_path
+  local suffix
+
+  if [[ -d "${HOME}/Workspace/toolchains" ]]; then
+    for toolchain_path in "${HOME}/Workspace/toolchains/"*/; do
+      for suffix in ${suffixes}; do
+        toolchain_environment_alias_binder "${suffix}" "${toolchain_path%/}"
+      done
+    done
+  fi
+
+}
+
+toolchain_environment_binder
+
+unset -f toolchain_environment_binder
+unset -f toolchain_environment_alias_binder

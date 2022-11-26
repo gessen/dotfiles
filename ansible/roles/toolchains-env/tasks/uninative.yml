@@ -1,0 +1,24 @@
+---
+- name: Check if uninative tarball version '{{ uninative.version }}' is already downloaded
+  stat:
+    path: '/tmp/uninatives/{{ uninative.version }}/{{ uninative.file }}'
+  register: uninative_tarball
+
+- block:
+  - name: Create folder for uninative tarball version '{{ uninative.version }}'
+    file:
+      path: '/tmp/uninatives/{{ uninative.version }}'
+      state: directory
+
+  - name: Download uninative tarball version '{{ uninative.version }}'
+    get_url:
+      url: '{{ uninative_url }}/{{ uninative.version }}/{{ uninative.file }}'
+      dest: '/tmp/uninatives/{{ uninative.version }}'
+
+  when: uninative_tarball.stat.exists == false
+
+- name: 'Include uninative_impl sysroots tasks'
+  include_tasks: uninative_impl.yml
+  loop: '{{ uninative.swlines | default([], true) | subelements("toolchains", skip_missing=True) }}'
+  loop_control:
+    loop_var: swline
