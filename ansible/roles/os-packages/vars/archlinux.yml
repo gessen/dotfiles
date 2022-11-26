@@ -41,6 +41,7 @@ packages:
   - openssh
   - pacman-contrib
   - plantuml
+  - pyenv
   - ranger
   - reflector
   - ripgrep

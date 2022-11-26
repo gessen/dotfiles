@@ -102,6 +102,9 @@ export GTK2_RC_FILES="${XDG_CONFIG_HOME}/gtk-2.0/settings.ini"
 # Include the current load to the ninja status
 export NINJA_STATUS="[%s/%f/%t] (j%r/%e) "
 
+# Conform to XDG with pyenv
+export PYENV_ROOT="${XDG_DATA_HOME}/pyenv"
+
 # Use persistent configuration file for ripgrep
 export RIPGREP_CONFIG_PATH="${XDG_CONFIG_HOME}/ripgrep/config"
 
@@ -110,3 +113,8 @@ export RUSTUP_HOME="${XDG_DATA_HOME}/rustup"
 
 # Conform to XDG with vode
 export VSCODE_EXTENSIONS="${XDG_DATA_HOME}/code/extensions"
+
+# Run pyenv init to set PATH
+if command -v pyenv 1>/dev/null 2>&1; then
+  eval "$(pyenv init --path)"
+fi

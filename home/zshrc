@@ -339,6 +339,11 @@ bindkey '^X^D' fasd-complete-d
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+# Run pyenv init setup after reading shprofile
+if command -v pyenv 1>/dev/null 2>&1; then
+  eval "$(pyenv init -)"
+fi
+
 toolchain_environment() {
   if [[ -n "${TOOLCHAIN}" ]]; then
     echo -n "\uF303 ${TOOLCHAIN} "
