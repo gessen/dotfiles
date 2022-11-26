@@ -1,0 +1,48 @@
+---
+dotfiles_desktop:
+  - config/Kvantum/kvantum.kvconfig
+  - config/gtk-2.0/settings.ini
+  - config/gtk-3.0/settings.ini
+  - config/lxqt/globalkeyshortcuts.conf
+  - config/lxqt/lxqt-config-appearance.conf
+  - config/lxqt/lxqt.conf
+  - config/lxqt/panel.conf
+  - config/lxqt/session.conf
+  - config/openbox/rc.xml
+  - config/pcmanfm-qt/lxqt/settings.conf
+
+packages_desktop:
+  - archlinux-wallpaper
+  - kvantum-qt5
+  - kvantum-theme-materia
+  - lxqt
+  - materia-gtk-theme
+  - noto-fonts
+  - papirus-icon-theme
+  - sddm
+  - xdg-utils
+  - xdg-user-dirs
+  - xorg-server
+
+packages_aur_desktop:
+  - bibata-cursor-theme-bin
+  - sddm-sugar-candy-git
+
+packages_own_desktop:
+  - name: materia-lxqt-theme
+    files:
+      - PKGBUILD
+      - .SRCINFO
+      - materia-lxqt-theme.install
+
+services_desktop:
+  - sddm
+
+sddm_options:
+  - section: General
+    option: Numlock
+    value: 'on'
+
+  - section: Theme
+    option: Current
+    value: sugar-candy

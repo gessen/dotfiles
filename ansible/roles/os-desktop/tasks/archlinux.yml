@@ -1,0 +1,110 @@
+---
+- name: 'Include desktop environment specific variables for {{ desktop }}'
+  include_vars: '{{ var_file_desktop }}'
+  with_first_found:
+      - files:
+          - "vars/{{ ansible_distribution | lower }}/{{ desktop }}.yml"
+          - "vars/{{ ansible_os_family | lower }}/{{ desktop }}.yml"
+        skip: true
+  loop_control:
+    loop_var: var_file_desktop
+
+- name: Install desktop packages
+  command: 'paru -S --noconfirm --needed {{ package }}'
+  loop: '{{ packages_desktop | default([], true) }}'
+  loop_control:
+    loop_var: package
+  when: packages_desktop is defined
+  register: paru_output
+  changed_when: '"there is nothing to do" not in paru_output.stdout'
+
+- name: Install desktop packages as dependencies
+  command: 'paru -S --noconfirm --needed --asdeps {{ package }}'
+  loop: '{{ packages_asdeps_desktop | default([], true) }}'
+  loop_control:
+    loop_var: package
+  when: packages_asdeps_desktop is defined
+  register: paru_output
+  changed_when: '"there is nothing to do" not in paru_output.stdout'
+
+- name: Install desktop AUR packages
+  command: 'paru -S --noconfirm --needed {{ package }}'
+  loop: '{{ packages_aur_desktop | default([], true) }}'
+  loop_control:
+    loop_var: package
+  when: packages_aur_desktop is defined
+  register: paru_output
+  changed_when: '"there is nothing to do" not in paru_output.stdout'
+
+- block:
+  - name: Create folders for own desktop recipes
+    file:
+      path: '{{ aur_dst }}/{{ package.name }}'
+      state: directory
+    loop: '{{ packages_own_desktop | default([], true)  }}'
+    loop_control:
+      loop_var: package
+
+  - name: Symlink own desktop recipes
+    file:
+      path: '{{ aur_dst }}/{{ package.0.name }}/{{ package.1 }}'
+      src: '{{ aur_src }}/{{ package.0.name }}/{{ package.1 }}'
+      state: link
+      force: yes
+    loop: '{{ packages_own_desktop | default([], true) | subelements("files", skip_missing=True) }}'
+    loop_control:
+      loop_var: package
+
+  - name: Install own desktop packages
+    command: 'makepkg -si --noconfirm --needed'
+    args:
+      chdir: '{{ aur_dst }}/{{ package.name }}'
+    loop: '{{ packages_own_desktop | default([], true)  }}'
+    loop_control:
+      loop_var: package
+    register: makepkg_output
+    changed_when: '"there is nothing to do" not in makepkg_output.stdout'
+
+  when: packages_own_desktop is defined
+
+- block:
+  - name: Create folders for desktop config files
+    file:
+      path: '{{ (dotfiles_dst + "/." + dotfile) | dirname }}'
+      state: directory
+    loop: '{{ dotfiles_desktop | default([], true) }}'
+    loop_control:
+      loop_var: dotfile
+
+  - name: Symlink desktop config files
+    file:
+      path: '{{ dotfiles_dst }}/.{{ dotfile }}'
+      src: '{{ dotfiles_src }}/{{ dotfile }}'
+      state: link
+      force: yes
+    loop: '{{ dotfiles_desktop | default([], true) }}'
+    loop_control:
+      loop_var: dotfile
+
+  when: dotfiles_desktop is defined
+
+- name: Enable desktop systemd services
+  systemd:
+    name: '{{ service }}'
+    enabled: yes
+    masked: no
+  loop: '{{ services_desktop | default([], true) }}'
+  loop_control:
+    loop_var: service
+  when: services_desktop is defined
+  become: yes
+
+- name: 'Include desktop environment specific tasks for {{ desktop }}'
+  include_tasks: '{{ task_file_desktop }}'
+  with_first_found:
+      - files:
+          - "tasks/{{ ansible_distribution | lower }}/{{ desktop }}.yml"
+          - "tasks/{{ ansible_os_family | lower }}/{{ desktop }}.yml"
+        skip: true
+  loop_control:
+    loop_var: task_file_desktop

@@ -1,0 +1,13 @@
+pkgbase = materia-lxqt-theme
+	pkgdesc = LXQt theme based on Materia GTK and Materia KDE
+	pkgver = 28.721f3a6
+	pkgrel = 1
+	url = https://gitlab.com/isseigx/lxqt-materia-theme
+	install = materia-lxqt-theme.install
+	arch = any
+	depends = openbox
+	source = https://gitlab.com/isseigx/lxqt-materia-theme/-/archive/master/lxqt-materia-theme-master.tar.gz
+	sha256sums = 865cbe89d0a184bf7702752794d3d37f06af941124caf8ac34a281cd11b1f176
+
+pkgname = materia-lxqt-theme
+

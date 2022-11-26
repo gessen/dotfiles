@@ -16,6 +16,10 @@
     - role: os-upgrade
       tags: [os, os-upgrade]
 
+    - role: os-desktop
+      tags: [os, os-desktop]
+      when: with_desktop | default(False)
+
     - role: os-packages
       tags: [os, os-packages]
       when: with_packages | default(False)

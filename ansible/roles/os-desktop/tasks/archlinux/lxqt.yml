@@ -1,0 +1,42 @@
+---
+- name: Reduce systemd stop timeout
+  lineinfile:
+    path: /etc/systemd/system.conf
+    line: DefaultTimeoutStopSec=10s
+    regexp: '^#?DefaultTimeoutStopSec='
+  become: yes
+
+- block:
+  - name: Create sddm config dir
+    file:
+      path: /etc/sddm.conf.d/
+      state: directory
+    become: yes
+
+  - name: Create sddm config
+    copy:
+      src: /usr/lib/sddm/sddm.conf.d/default.conf
+      dest: /etc/sddm.conf.d/lxqt_settings.conf
+      force: no
+    become: yes
+
+  - name: Configure sddm
+    ini_file:
+      path: /etc/sddm.conf.d/lxqt_settings.conf
+      section: '{{ option.section }}'
+      option: '{{ option.option }}'
+      value: '{{ option.value }}'
+      no_extra_spaces: yes
+    loop: '{{ sddm_options }}'
+    loop_control:
+      loop_var: option
+    become: yes
+
+  when: sddm_options is defined and sddm_options
+
+- name: Mask LVM2 Monitor service
+  systemd:
+    name: lvm2-monitor
+    enabled: no
+    masked: yes
+  become: yes

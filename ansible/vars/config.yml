@@ -12,6 +12,7 @@ toolchains_env_dst: '{{ home_dir }}/Workspace/toolchains'
 toolchains_cmake_src: '{{ dotfiles_dir }}/toolchains/cmake'
 toolchains_cmake_dst: '{{ home_dir }}/Workspace'
 
+with_desktop: True
 with_packages: True
 with_sublime_text: True
 with_vscode_extensions: True

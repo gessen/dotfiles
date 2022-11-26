@@ -1,0 +1,19 @@
+# Maintainer: Jacek Swierk <jacek swierk at gmail dot com>
+
+pkgname=materia-lxqt-theme
+_pkgname=lxqt-materia-theme
+pkgver=28.721f3a6
+pkgrel=1
+pkgdesc="LXQt theme based on Materia GTK and Materia KDE"
+arch=("any")
+url="https://gitlab.com/isseigx/lxqt-materia-theme"
+depends=("openbox")
+install="${pkgname}.install"
+source=("https://gitlab.com/isseigx/${_pkgname}/-/archive/master/${_pkgname}-master.tar.gz")
+sha256sums=("865cbe89d0a184bf7702752794d3d37f06af941124caf8ac34a281cd11b1f176")
+
+package() {
+  cd ${srcdir}/${_pkgname}-master
+  install -dm 755 "${pkgdir}"/usr/share/lxqt/themes/materia
+  cp --archive --no-preserve="ownership" materia "${pkgdir}"/usr/share/lxqt/themes/
+}
