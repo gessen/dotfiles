@@ -5,7 +5,7 @@
 [[ "${TERM}" = "dumb" ]] && unsetopt zle && PS1='$ ' && return
 
 # Path to your oh-my-zsh installation.
-export ZSH=/usr/share/oh-my-zsh
+export ZSH="${FP}/.local/share/oh-my-zsh"
 
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
@@ -16,7 +16,7 @@ ZSH_THEME="powerlevel10k"
 POWERLEVEL9K_MODE='nerdfont-complete'
 
 # Default colors of dir segment.
-POWERLEVEL9K_DIR_BACKGROUND=blue
+POWERLEVEL9K_DIR_BACKGROUND='28'
 POWERLEVEL9K_DIR_FOREGROUND=brightwhite
 
 # If directory is too long, shorten some of its segments to the shortest
@@ -188,6 +188,9 @@ ZSH_COMPDUMP="${ZSH_CACHE_DIR}/zcompdump-${ZSH_VERSION}"
 
 # Use XDG directory for tmux, otherwise tmux plugin will set it to $HOME
 ZSH_TMUX_CONFIG="${XDG_CONFIG_HOME}/tmux/tmux.conf"
+
+# Relocate fzf
+FZF_BASE="${FP}/.local/share/fzf"
 
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
