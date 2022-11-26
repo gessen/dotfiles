@@ -236,9 +236,6 @@ user_pref("network.cookie.lifetimePolicy", 0);
 //
 user_pref("dom.flyweb.enabled", false);
 
-// Disables WebGL
-user_pref("webgl.disabled", true);
-
 //
 user_pref("browser.uitour.enabled", false);
 
@@ -304,9 +301,6 @@ user_pref("general.buildID.override", "20100101");
 
 // Allow pages to choose their own fonts
 user_pref("browser.display.use_document_fonts", 1);
-
-//
-user_pref("privacy.resistFingerprinting", true);
 
 // Social
 user_pref("social.remote-install.enabled", false);
