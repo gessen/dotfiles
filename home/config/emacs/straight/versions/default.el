@@ -6,6 +6,7 @@
  ("all-the-icons.el" . "65c496d3d1d1298345beb9845840067bffb2ffd8")
  ("auto-yasnippet" . "db9e0dd4335b2202cd5dac95bbbc87a1032d9bbe")
  ("avy" . "ba5f035be33693d1a136a5cbeedb24327f551a92")
+ ("bb-mode" . "4a3d19f32b2664548184e6400a417600a4a2278f")
  ("beginend" . "62c75804ba7d74f4c01c0629722c061c11bed393")
  ("blackout" . "c221fa2c8a204b4aff2e09c606f59be58b960b97")
  ("browse-at-remote" . "cef26f2c063f2473af42d0e126c8613fe2f709e4")
