@@ -13,6 +13,9 @@ dotfiles_distro_extra:
   - target: /usr/share/zsh/plugins/fzf-kill
     src: config/oh-my-zsh/plugins/fzf-kill
 
+  - target: /usr/share/zsh/plugins/fzf-tab-bin-git
+    src: config/oh-my-zsh/plugins/fzf-tab
+
   - target: /usr/share/zsh-theme-powerlevel10k/gitstatus
     src: config/oh-my-zsh/plugins/gitstatus
 
@@ -21,9 +24,6 @@ dotfiles_distro_extra:
 
   - target: /usr/share/zsh/plugins/zsh-autosuggestions
     src: config/oh-my-zsh/plugins/zsh-autosuggestions
-
-  - target: /usr/share/zsh/plugins/zsh-interactive-cd
-    src: config/oh-my-zsh/plugins/zsh-interactive-cd
 
   - target: /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
     src: config/oh-my-zsh/themes/powerlevel10k.zsh-theme

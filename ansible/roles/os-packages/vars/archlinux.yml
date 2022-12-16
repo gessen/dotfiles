@@ -70,6 +70,7 @@ packages_asdeps:
 
 packages_aur:
   - dropbox
+  - fzf-tab-bin-git
   - git-completion
   - include-what-you-use
   - mkinitcpio-firmware
@@ -98,11 +99,6 @@ packages_own:
       - PKGBUILD
       - .SRCINFO
       - zsh-fzf-kill.install
-  - name: zsh-interactive-cd-git
-    files:
-      - PKGBUILD
-      - .SRCINFO
-      - zsh-interactive-cd.install
 
 reflector_options:
   - regexp: '^#?[ ]*--country'
