@@ -199,6 +199,7 @@ plugins=(
   fzf
   fzf-git
   fzf-kill
+  fzf-tab
   git
   rsync
   sublime
@@ -207,7 +208,6 @@ plugins=(
   tmux
   zsh-autopair
   zsh-autosuggestions
-  zsh-interactive-cd
 )
 
 autoload -U +X bashcompinit && bashcompinit
