@@ -672,7 +672,7 @@ window instead."
 
 ;; Set basic window management commands
 (set-leader-keys!
-  "bd" #'kill-this-buffer
+  "bd" #'kill-current-buffer
   "bx" #'kill-buffer-and-window
   "FB" #'display-buffer-other-frame
   "w0" #'delete-window
@@ -692,8 +692,8 @@ window instead."
 ;; Overwrite default `delete-other-windows' maximize-buffer
 (bind-key "C-x 1" #'maximize-buffer)
 
-;; Shorter binding to `kill-this-buffer', overwrites `quoted-insert'.
-(bind-key "C-q" #'kill-this-buffer)
+;; Shorter binding to `kill-current-buffer', overwrites `quoted-insert'.
+(bind-key "C-q" #'kill-current-buffer)
 
 ;; Bind keys for multi-frame management
 (set-leader-keys!
