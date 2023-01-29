@@ -1156,7 +1156,7 @@ window instead."
 
   (set-leader-keys! "fd" #'consult-dir)
 
-  :bind (:map vertico
+  :bind (:map vertico-map
               ("M-l" . #'consult-dir)
               ("M-k" . #'consult-dir-jump-file))
 
@@ -1179,6 +1179,7 @@ window instead."
     "p!" #'projectile-run-shell-command-in-root
     "p&" #'projectile-run-async-shell-command-in-root
     "p%" #'projectile-replace-regexp
+    "p?" #'projectile-find-references
     "pa" #'projectile-toggle-between-implementation-and-test
     "pb" #'projectile-switch-to-buffer
     "pc" #'projectile-compile-project
@@ -2747,6 +2748,9 @@ Spell Commands^^            Add To Dictionary^^               Other^^
 (use-package! consult-yasnippet
   :init
 
+  ;; Use `thing-at-point' as initial value for `consult-yasnippet'.
+  (setq consult-yasnippet-use-thing-at-point t)
+
   (set-leader-keys!
     "ii" #'consult-yasnippet
     "iv" #'consult-yasnippet-visit-snippet-file))
@@ -2861,12 +2865,6 @@ Spell Commands^^            Add To Dictionary^^               Other^^
 (use-package! consult
   :init
 
-  (defun consult-git-ls (&optional dir)
-    "Search for regexp with git-ls-files in DIR."
-    (interactive)
-    (let ((consult-find-command '("git" "ls-files" "--full-path" "--")))
-      (call-interactively #'consult-find)))
-
   (defun consult-line-symbol-at-point ()
     "Search for a matching line starting search with symbol at
 point. "
@@ -2886,7 +2884,6 @@ point. "
     "fO" #'consult-file-externally
     "fr" #'consult-recent-file
     "g/" #'consult-git-grep
-    "gf" #'consult-git-ls
     "ji" #'consult-imenu
     "jI" #'consult-imenu-multi
     "km" #'consult-kmacro
@@ -3078,6 +3075,12 @@ completing-read prompter."
   ;; The default setting seem a little too low.
   (setq prescient-history-length 1000)
 
+  ;; Sort fully matched candidates before others. Prescient can sort by recency,
+  ;; frequency, and candidate length. With this option, fully matched candidates
+  ;; will be sorted before partially matched candidates, but candidates in each
+  ;; group will still be sorted like normal.
+  (setq prescient-sort-full-matches-first t)
+
   ;; Do not litter `user-emacs-directory' with persistent prescient file.
   (setq prescient-save-file (expand-file-name
                              "prescient-save.el"
@@ -3101,21 +3104,6 @@ completing-read prompter."
     (unless (eq minibuffer-history-variable t)
       (add-to-history minibuffer-history-variable (minibuffer-contents))))
 
-  (defadvice! my--vertico-sort-with-prescient ()
-    :after #'vertico-insert
-    "Remember chosen candidate for `prescient'."
-    (prescient-remember (vertico--candidate)))
-
-  (defun vertico-backward-kill-sexp (&optional arg)
-    "Vertico wrapper for `backward-kill-sexp'.
-ARG is the same as for `backward-kill-sexp'."
-    (interactive "p")
-    ;; For Vertico file prompts `backward-kill-sexp' would wrongly
-    ;; include trailing (read only) spaces as part of the input.
-    (save-restriction
-      (narrow-to-region (minibuffer-prompt-end) (point-max))
-      (backward-kill-sexp arg)))
-
   (defun vertico-restrict-to-matches ()
     "Restrict the set of candidates to the currently visible candidates."
     (interactive)
@@ -3133,10 +3121,7 @@ ARG is the same as for `backward-kill-sexp'."
                ("<prior>"   . #'vertico-scroll-down)
                ("C-M-n"     . #'vertico-next-group)
                ("C-M-p"     . #'vertico-previous-group)
-               ("S-SPC"     . #'vertico-restrict-to-matches)
-               ;; Use <backtab> to go up with `find-file'.
-               ("<backtab>" . #'vertico-backward-kill-sexp)
-               ("S-TAB"     . #'vertico-backward-kill-sexp))
+               ("S-SPC"     . #'vertico-restrict-to-matches))
          (:map minibuffer-local-map
                ("M-s"       . nil)))
 
@@ -3149,8 +3134,13 @@ ARG is the same as for `backward-kill-sexp'."
   ;; Wrap around when using `vertico-next' and `vertico-previous'.
   (setq vertico-cycle t)
 
-  ;; Sort candidates using `prescient'.
-  (setq vertico-sort-function #'prescient-sort)
+  ;; Feature `vertico-directory' provides Ido-like directory navigation
+  ;; commands.
+  (use-feature! vertico-directory
+    :demand t
+    :bind (:map vertico-map
+                ("<backtab>" . #'vertico-directory-delete-word)
+                ("S-TAB"     . #'vertico-directory-delete-word)))
 
   ;; Feature `vertico-flat' enables flat, horizontal display.
   (use-feature! vertico-flat
@@ -3187,6 +3177,19 @@ ARG is the same as for `backward-kill-sexp'."
     :bind (:map vertico-map
                 ("M-i" . #'vertico-quick-insert)
                 ("M-j" . #'vertico-quick-exit))))
+
+;; Package `vertico-prescient' provides an interface for using Prescient to
+;; sort and filter candidates in Vertico menus.
+(use-package! vertico-prescient
+  :demand t
+  :after vertico
+  :config
+
+  ;; Let `orderless' filter candidates.
+  (setq vertico-prescient-enable-filtering nil)
+
+  ;; Use `prescient' for Vertico menus.
+  (vertico-prescient-mode +1))
 
 ;;; IDE features
 ;;;; Definition location
@@ -3388,10 +3391,6 @@ menu to disappear and then come back after `company-idle-delay'."
                  ("M-h" . company-posframe-quickhelp-toggle))))
 
   :config
-
-  ;; Do not display metadata (e.g. signature) of the selection below the visible
-  ;; candidates.
-  (setq company-posframe-show-metadata nil)
 
   ;; Trigger popup manually with `company-posframe-quickhelp-toggle'.
   (setq company-posframe-quickhelp-delay nil)
@@ -3829,11 +3828,16 @@ a new window."
     (setq lsp-rust-analyzer-cargo-watch-command "clippy")
 
     ;; Show inlay hints, e.g. type inference, type parameters at call site.
-    (setq lsp-rust-analyzer-server-display-inlay-hints t
-          lsp-rust-analyzer-display-parameter-hints t
-          lsp-rust-analyzer-display-chaining-hints t
+    (setq lsp-rust-analyzer-display-chaining-hints t
+          lsp-rust-analyzer-closing-brace-hints t
+          lsp-rust-analyzer-closing-brace-hints-min-lines 25
           lsp-rust-analyzer-display-closure-return-type-hints t
-          lsp-rust-analyzer-display-reborrow-hints t)
+          lsp-rust-analyzer-display-lifetime-elision-hints-enable "skip_trivial"
+          lsp-rust-analyzer-display-lifetime-elision-hints-use-parameter-names nil
+          lsp-rust-analyzer-display-parameter-hints t
+          lsp-rust-analyzer-server-display-inlay-hints t
+          lsp-rust-analyzer-hide-closure-initialization nil
+          lsp-rust-analyzer-hide-named-constructor nil)
 
     ;; Limit the maximum length of inlay hints.
     (setq lsp-rust-analyzer-max-inlay-hint-length 25)
@@ -4438,6 +4442,9 @@ ALL when non-nil determines whether words will be pickable."
 (use-package! rustic
   :init
 
+  ;; Disable default keymap, we have our own.
+  (setq rustic-mode-map (make-sparse-keymap))
+
   (defhook! my--rustic-mode-setup ()
     rustic-mode-hook
     "Set custom settings for `rustic-mode'."
@@ -4479,13 +4486,16 @@ ALL when non-nil determines whether words will be pickable."
     "cd" #'rustic-cargo-doc
     "cf" #'rustic-cargo-clippy-fix
     "ci" #'rustic-cargo-init
+    "cI" #'rustic-cargo-install
     "ck" #'rustic-cargo-clippy
     "cn" #'rustic-cargo-new
 
     ;; Edit
     "ea" #'rustic-cargo-add
+    "ed" #'rustic-cargo-add-missing-dependencies
     "er" #'rustic-cargo-rm
     "eu" #'rustic-cargo-upgrade
+    "eU" #'rustic-cargo-update
 
     ;; Jump
     "oc" #'rustic-open-dependency-file))
@@ -5146,6 +5156,27 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
   (set-leader-keys!
     "gr" #'browse-at-remote
     "gR" #'browse-at-remote-kill))
+
+;; Package `consult-git-log-grep' provides an interactive way to search the git
+;; log using `consult'.
+(use-package! consult-git-log-grep
+  :init
+
+  (set-leader-keys! "g?" #'consult-git-log-grep)
+
+  :config
+
+  ;; Use `magit' to show the commit (must be called from `magit-status').
+  (setq consult-git-log-grep-open-function #'magit-show-commit))
+
+;; Package `consult-ls-git' allows to quickly select a file from a git
+;; repository or act on a stash. It provides a consult multi view of files
+;; considered by git status, stashes as well as all tracked files. Alternatively
+;; you can narrow to a specific section via the shortcut key.
+(use-package! consult-ls-git
+  :init
+
+  (set-leader-keys! "gf" #'consult-ls-git))
 
 ;; Package `git-commit' assists the user in writing good Git commit messages.
 ;; While Git allows for the message to be provided on the command line, it is
