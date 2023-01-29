@@ -89,5 +89,6 @@
       "enabled": true,
     },
   },
-  "log_stderr": true,
+  "semantic_highlighting": true,
+  "show_inlay_hints": true,
 }

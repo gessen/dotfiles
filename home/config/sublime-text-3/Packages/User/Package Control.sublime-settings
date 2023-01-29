@@ -8,6 +8,7 @@
 		"CMakeEditor",
 		"FileIcons",
 		"LSP",
+		"LSP-rust-analyzer",
 		"MarkdownPreview",
 		"Package Control",
 		"Pretty JSON",
