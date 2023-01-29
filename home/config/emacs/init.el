@@ -5313,6 +5313,14 @@ Goto^^              Actions^^         Other^^
   :defer 2
   :init
 
+  (defadvice! my--magit-list-refs-sorted (fn &optional namespaces format sortby)
+    :around #'magit-list-refs
+    "Apply prescient sorting when listing refs."
+    (let ((res (funcall fn namespaces format sortby)))
+      (if (or sortby magit-list-refs-sortby)
+          res
+        (prescient-sort res))))
+
   ;; Disable default keybindings.
   (setq magit-define-global-key-bindings nil)
 
