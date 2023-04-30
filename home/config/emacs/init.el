@@ -5682,20 +5682,6 @@ possibly new window."
 
 ;;;; Theme
 
-;; Package `darkokai-theme' is a darker variant on Monokai.
-(use-package! darkokai-theme)
-
-;; Package `monokai-alt-theme' is theme with a dark background. Based on Sublime
-;; Monokai theme.
-(use-package! monokai-alt-theme)
-
-;; Package `monokai-pro-theme' is a simple theme based on the Monokai Pro
-;; Sublime colour schemes.
-(use-package! monokai-pro-theme)
-
-;; Package `monokai-theme' is a fruity colour theme for Emacs.
-(use-package! monokai-theme)
-
 ;; Package `modus-themes' is a pack of themes that conform with the highest
 ;; standard for colour-contrast accessibility between background and foreground
 ;; values (WCAG AAA).
