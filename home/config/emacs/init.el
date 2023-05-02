@@ -521,35 +521,35 @@ BINDINGS is a series of KEY DEF pair."
     (when (memq 'S modifiers)
       (setq c (logior (lsh 1 25) c)))
     (vector c))
-    (with-eval-after-load 'xterm
-      ;; C-M-%
-      (bind-key "\x1b[37;7u" (apply-mods 37 'C 'M) xterm-function-map)
-      ;; C-'
-      (bind-key "\x1b[39;5u" (apply-mods 39 'C) xterm-function-map)
-      ;; C-M-'
-      (bind-key "\x1b[39;7u" (apply-mods 39 'C 'M) xterm-function-map)
-      ;; C-,
-      (bind-key "\x1b[44;5u" (apply-mods 44 'C) xterm-function-map)
-      ;; C-M-,
-      (bind-key "\x1b[44;7u" (apply-mods 44 'C 'M) xterm-function-map)
-      ;; C-.
-      (bind-key "\x1b[46;5u" (apply-mods 46 'C) xterm-function-map)
-      ;; C-M-.
-      (bind-key "\x1b[46;7u" (apply-mods 46 'C 'M) xterm-function-map)
-      ;; C-;
-      (bind-key "\x1b[59;5u" (apply-mods 59 'C) xterm-function-map)
-      ;; C-M-;
-      (bind-key "\x1b[59;7u" (apply-mods 59 'C 'M) xterm-function-map)
-      ;; C-=
-      (bind-key "\x1b[61;5u" (apply-mods 61 'C) xterm-function-map)
-      ;; C-M-=
-      (bind-key "\x1b[61;7u" (apply-mods 61 'C 'M) xterm-function-map)
-      ;; C-M-@
-      (bind-key "\x1b[64;7u" (apply-mods 64 'C 'M) xterm-function-map)
-      ;; C-`
-      (bind-key "\x1b[96;5u" (apply-mods 96 'C) xterm-function-map)
-      ;; C-M-`
-      (bind-key "\x1b[96;7u" (apply-mods 96 'C 'M) xterm-function-map)))
+  (with-eval-after-load 'xterm
+    ;; C-M-%
+    (bind-key "\x1b[37;7u" (apply-mods 37 'C 'M) xterm-function-map)
+    ;; C-'
+    (bind-key "\x1b[39;5u" (apply-mods 39 'C) xterm-function-map)
+    ;; C-M-'
+    (bind-key "\x1b[39;7u" (apply-mods 39 'C 'M) xterm-function-map)
+    ;; C-,
+    (bind-key "\x1b[44;5u" (apply-mods 44 'C) xterm-function-map)
+    ;; C-M-,
+    (bind-key "\x1b[44;7u" (apply-mods 44 'C 'M) xterm-function-map)
+    ;; C-.
+    (bind-key "\x1b[46;5u" (apply-mods 46 'C) xterm-function-map)
+    ;; C-M-.
+    (bind-key "\x1b[46;7u" (apply-mods 46 'C 'M) xterm-function-map)
+    ;; C-;
+    (bind-key "\x1b[59;5u" (apply-mods 59 'C) xterm-function-map)
+    ;; C-M-;
+    (bind-key "\x1b[59;7u" (apply-mods 59 'C 'M) xterm-function-map)
+    ;; C-=
+    (bind-key "\x1b[61;5u" (apply-mods 61 'C) xterm-function-map)
+    ;; C-M-=
+    (bind-key "\x1b[61;7u" (apply-mods 61 'C 'M) xterm-function-map)
+    ;; C-M-@
+    (bind-key "\x1b[64;7u" (apply-mods 64 'C 'M) xterm-function-map)
+    ;; C-`
+    (bind-key "\x1b[96;5u" (apply-mods 96 'C) xterm-function-map)
+    ;; C-M-`
+    (bind-key "\x1b[96;7u" (apply-mods 96 'C 'M) xterm-function-map)))
 
 ;;;; Encryption
 
@@ -3458,7 +3458,7 @@ menu to disappear and then come back after `company-idle-delay'."
 
   ;; Display error messages only if there is no error list visible.
   (setq flycheck-display-errors-function
-    #'flycheck-display-error-messages-unless-error-list)
+        #'flycheck-display-error-messages-unless-error-list)
 
   ;; For the above functionality, check syntax in a buffer that you switched to
   ;; only briefly. This allows "refreshing" the syntax check state for several
@@ -3502,7 +3502,7 @@ nothing if function `lsp-ui-mode' is active and function
 
   ;; Inhibit display popups if Flycheck error list is visible.
   (add-hook 'flycheck-posframe-inhibit-functions
-    (lambda () (flycheck-get-error-list-window 'current-frame)))
+            (lambda () (flycheck-get-error-list-window 'current-frame)))
 
   (with-eval-after-load 'company
     ;; Inhibit displaying popups if Company is active.
@@ -4512,7 +4512,7 @@ ALL when non-nil determines whether words will be pickable."
     (setq sh-basic-offset 2)
     (require 'company)
     (setq-local company-backends '((company-shell company-shell-env
-                                    company-files)
+                                                  company-files)
                                    company-capf))
     ;; Enable syntax checking and spellchecking in comments.
     (flycheck-mode +1)
