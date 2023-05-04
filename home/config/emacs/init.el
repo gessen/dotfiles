@@ -5830,6 +5830,10 @@ possibly new window."
   ;; Gray out icons for unselected buffers.
   (setq centaur-tabs-gray-out-icons 'buffer)
 
+  ;; Add a count of the current tab position in the total number of tabs in the
+  ;; current window
+  (setq centaur-tabs-show-count t)
+
   ;; Draw the underline at the same place as the descent line.
   (setq x-underline-at-descent-line t)
 
@@ -5847,7 +5851,8 @@ possibly new window."
               ("C-<prior>" . #'centaur-tabs-backward)
               ("C-<next>"  . #'centaur-tabs-forward)
               ("C-<home>"  . #'centaur-tabs-backward-group)
-              ("C-<end>"   . #'centaur-tabs-forward-group)))
+              ("C-<end>"   . #'centaur-tabs-forward-group)
+              ("M-J"       . #'centaur-tabs-ace-jump)))
 
 ;;; Closing
 
