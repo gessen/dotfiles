@@ -2303,8 +2303,7 @@ will not refresh `column-number-mode."
     (push "--max-columns-preview" args)
     (push "--max-columns=150" args)
     (push "--follow" args)
-    (push "--hidden" args)
-    (push "--no-config" args)))
+    (push "--hidden" args)))
 
 ;; Package `visual-regexp' provides an alternate version of `query-replace'
 ;; which highlights matches and replacements as you type.
@@ -2857,11 +2856,10 @@ Spell Commands^^            Add To Dictionary^^               Other^^
 ;; Package `consult' implements a set of commands which use `completing-read' to
 ;; select from a list of candidates. Most provided commands follow the naming
 ;; scheme `consult-<thing>'. Some commands are drop-in replacements for existing
-;; functions, e.g., `consult-apropos' or the enhanced buffer switcher
-;; `consult-buffer.' Other commands provide additional functionality, e.g.,
-;; `consult-line', to search for a line. Many commands support candidate
-;; preview. If a candidate is selected in the completion view, the buffer shows
-;; the candidate immediately.
+;; functions or the enhanced buffer switcher `consult-buffer.' Other commands
+;; provide additional functionality, e.g., `consult-line', to search for a line.
+;; Many commands support candidate preview. If a candidate is selected in the
+;; completion view, the buffer shows the candidate immediately.
 (use-package! consult
   :init
 
@@ -2881,7 +2879,6 @@ point. "
     "Fb" #'consult-buffer-other-frame
     "fb" #'consult-bookmark
     "fF" #'consult-find
-    "fO" #'consult-file-externally
     "fr" #'consult-recent-file
     "g/" #'consult-git-grep
     "ji" #'consult-imenu
@@ -2892,11 +2889,10 @@ point. "
     "rs" #'consult-register-store
     "ry" #'consult-yank-replace
     "ss" #'consult-line
-    "sS" #'consult-multi-occur
     "tT" #'consult-theme)
 
   ;; Narrow and widen selection with "[".
-  (setq consult-narrow-key (kbd "["))
+  (setq consult-narrow-key "[")
 
   ;; Configure the register formatting. This improves the register preview
   ;; for `consult-register', `consult-register-load', `consult-register-store'
@@ -2927,9 +2923,7 @@ point. "
          ("M-s l"           . #'consult-line)
          ("M-s M-l"         . #'consult-line)
          ("M-s ;"           . #'consult-line-symbol-at-point)
-         ("M-s M-;"         . #'consult-line-symbol-at-point)
-         ("M-s m"           . #'consult-multi-occur)
-         ("M-s M-m"         . #'consult-multi-occur))
+         ("M-s M-;"         . #'consult-line-symbol-at-point))
 
   :config
 
@@ -2942,7 +2936,7 @@ point. "
    consult-bookmark consult-recent-file consult-xref
    consult--source-bookmark consult--source-recent-file
    consult--source-project-recent-file
-   :preview-key (kbd "M-."))
+   :preview-key "M-.")
 
   ;; Configure a function which returns the project root directory
   (with-eval-after-load 'projectile
@@ -2964,6 +2958,10 @@ point. "
 
   :bind (("M-s a"   . #'embark-act)
          ("M-s M-a" . #'embark-act)
+         ("M-s A"   . #'embark-act-all)
+         ("M-s M-A" . #'embark-act-all)
+         ("M-s c"   . #'embark-collect)
+         ("M-s M-c" . #'embark-collect)
          ("M-s e"   . #'embark-export)
          ("M-s M-e" . #'embark-export)
          ("M-s s"   . #'embark-dwim)
@@ -3012,9 +3010,7 @@ completing-read prompter."
       (apply fn args))))
 
 ;; Package `embark-consult' provides integration between Embark and Consult.
-(use-package! embark-consult
-  :demand t
-  :after (embark consult))
+(use-package! embark-consult)
 
 ;; Package `marginalia' enriches existing commands with completion annotations
 ;; by adding marginalia to the minibuffer completions. Marginalia are marks or
@@ -3702,6 +3698,7 @@ list of additional parameters sent with this request."
     "tD" #'lsp-modeline-diagnostics-mode
     "tf" #'lsp-toggle-on-type-formatting
     "th" #'lsp-toggle-symbol-highlight
+    "ti" #'lsp-inlay-hints-mode
     "tl" #'lsp-lens-mode
     "tL" #'lsp-toggle-trace-io
     "tS" #'lsp-toggle-signature-auto-activate)
@@ -3724,6 +3721,9 @@ list of additional parameters sent with this request."
 
   ;; Enable semantic highlighting support.
   (setq lsp-semantic-tokens-enable t)
+
+  ;; Display inlay hints.
+  (setq lsp-inlay-hint-enable t)
 
   ;; Inhibit automatic edits suggested by the language server before saving a
   ;; document.
@@ -3810,10 +3810,7 @@ a new window."
       "od" #'lsp-rust-analyzer-open-external-docs
 
       ;; Session
-      "sR" #'lsp-rust-analyzer-reload-workspace
-
-      ;; Toggle
-      "ti" #'lsp-rust-analyzer-inlay-hints-mode)
+      "sR" #'lsp-rust-analyzer-reload-workspace)
 
     (with-eval-after-load 'lsp-treemacs
       (set-leader-keys-for-major-mode! 'rustic-mode
@@ -3843,23 +3840,7 @@ a new window."
     (setq lsp-rust-analyzer-max-inlay-hint-length 25)
 
     ;; Sideline does not work well with inlay hints
-    (setq lsp-ui-sideline-enable nil)
-
-    (define-minor-mode lsp-rust-analyzer-inlay-hints-mode
-      "Mode for displaying inlay hints (after save)."
-      :lighter nil
-      (cond
-       (lsp-rust-analyzer-inlay-hints-mode
-        (lsp-rust-analyzer-update-inlay-hints (current-buffer))
-        (add-hook 'after-save-hook
-                  #'lsp-rust-analyzer-inlay-hints-change-handler nil t))
-       (t
-        (remove-overlays (point-min) (point-max)
-                         'lsp-rust-analyzer-inlay-hint t)
-        (remove-hook 'after-save-hook
-                     #'lsp-rust-analyzer-inlay-hints-change-handler t))))
-
-    (lsp-rust-analyzer-inlay-hints-mode +1)))
+    (setq lsp-ui-sideline-enable nil)))
 
 ;; Package `lsp-ui' provides a pretty UI for showing diagnostic messages from
 ;; LSP in the buffer using overlays. It's configured automatically by
@@ -3928,8 +3909,7 @@ a new window."
    ;; Disable the automatic preview where the preview may be expensive due to
    ;; file loading.
    consult-lsp-diagnostics consult-lsp-symbols
-   :preview-key (kbd "M-.")))
-
+   :preview-key "M-."))
 
 ;; Package `lsp-treemacs' brings integration between `lsp-mode' and `treemacs'
 ;; and implementation of treeview controls using Treemacs as a tree renderer.
@@ -4628,8 +4608,7 @@ unhelpful."
     "hm" #'describe-mode
     "hM" #'describe-keymap
     "hn" #'view-emacs-news
-    "ht" #'describe-theme
-    "hx" #'describe-command)
+    "ht" #'describe-theme)
 
   ;; Always select help window for viewing.
   (setq help-window-select 't))
@@ -4645,13 +4624,15 @@ unhelpful."
     "hI" #'helpful-at-point
     "hk" #'helpful-key
     "hs" #'helpful-symbol
-    "hv" #'helpful-variable)
+    "hv" #'helpful-variable
+    "hx" #'helpful-command)
 
   :bind (;; Remap standard commands.
          ([remap describe-function] . #'helpful-callable)
          ([remap describe-variable] . #'helpful-variable)
          ([remap describe-symbol]   . #'helpful-symbol)
-         ([remap describe-key]      . #'helpful-key)))
+         ([remap describe-key]      . #'helpful-key)
+         ([remap describe-command]  . #'helpful-command)))
 
 ;;;; Emacs Lisp development
 
@@ -5686,44 +5667,30 @@ possibly new window."
 ;; standard for colour-contrast accessibility between background and foreground
 ;; values (WCAG AAA).
 (use-package! modus-themes
-  :bind ("<f9>" . modus-themes-toggle)
+  :bind ("<f9>" . modus-themes-select)
   :config
 
   ;; Use italic font forms in more code constructs, like comments.
   (setq modus-themes-italic-constructs t)
 
-  ;; Use a bold typographic weight and foreground colour more prominent for text
-  ;; in command prompts, e.g. minibuffer.
-  (setq modus-themes-prompts '(bold intense))
+  ;; Use a bold typographic weight for text in command prompts, e.g. minibuffer.
+  (setq modus-themes-prompts '(bold))
 
-  ;; Apply a three-dimensional effect to the active mode line. The inactive mode
-  ;; lines remain two-dimensional and are toned down a bit, relative to the
-  ;; default style.
-  (setq modus-themes-mode-line '(3d))
+  (setq modus-themes-common-palette-overrides
+        '(;; Make the mode line borderless
+          (border-mode-line-active unspecified)
+          (border-mode-line-inactive unspecified)
+          ;; Make matching delimiters produced by `show-paren-mode` or
+          ;; `show-smartparens-mode` much more prominent.
+          (bg-paren-match bg-magenta-intense)
+          (underline-paren-match fg-main)))
 
-  ;; Increase the overall colouration, draw a line below matching characters and
-  ;; make a background of selection colourful instead of gray.
+  ;; Draw a line below matching characters in completions buffers.
   (setq modus-themes-completions
-      '((matches . (intense underline))
-        (selection . (intense accented))
-        (popup . (accented))))
-
-  ;; Amplify the colours of in-buffer warnings and errors produced by spell
-  ;; checkers, code linters and the like.
-  (setq modus-themes-lang-checkers '(intense))
-
-  ;; Amplify the colour of the current line of `hl-line-mode'.
-  (setq modus-themes-hl-line '(intense))
-
-  ;; Make matching delimiters produced by `show-paren-mode` or
-  ;; `show-smartparens-mode` much more prominent.
-  (setq modus-themes-paren-match '(bold intense underline))
-
-  ;; Apply a more colourful background to the region.
-  (setq modus-themes-region '(accented)))
+        '((matches . (underline)))))
 
 ;; Load default theme.
-(load-theme 'modus-vivendi t)
+(load-theme 'modus-vivendi :no-confirm)
 
 ;;;; Modeline
 
@@ -5769,11 +5736,13 @@ possibly new window."
 (use-package! keycast
   :init
 
-  (set-leader-keys!
-    "tk" #'keycast-mode
-    "tK" #'keycast-log-mode)
+  (set-leader-keys! "tk" #'keycast-mode-line-mode)
 
   :config
+
+  ;; Configure `keycast-mode-line-mode' to work with `doom-modeline'.
+  (setq keycast-mode-line-insert-after '(:eval (doom-modeline-format--main)))
+  (add-to-list 'global-mode-string '("" keycast-mode-line))
 
   ;; Replace typing with a simple message.
   (dolist (input '(self-insert-command
@@ -5784,31 +5753,7 @@ possibly new window."
   (dolist (event '(mouse-event-p
                    mouse-movement-p
                    mwheel-scroll))
-    (add-to-list 'keycast-substitute-alist `(,event nil)))
-
-  (defadvice! my--keycast-store-embark-action-key (cmd)
-    :filter-return #'embark-keymap-prompter
-    "Store Embark action from `embark-keymap' for Keycast to use."
-    (setq keycast--this-command-keys (this-single-command-keys)
-          keycast--this-command cmd))
-
-  (defadvice! my--keycast-force-mode-line-update-embark-act (&rest _)
-    :before #'embark-act
-    "Force mode line update before `embark-act'."
-    (force-mode-line-update t))
-
-  (defadvice! my--keycast-force-mode-line-update-embark-become (&rest _)
-    :before #'embark-become
-    "Force mode line update before `embark-become'."
-    (force-mode-line-update t))
-
-  (define-minor-mode keycast-mode
-    "Show current command and its key binding in the mode line."
-    :global t
-    (if keycast-mode
-        (add-hook 'pre-command-hook 'keycast--update t)
-      (remove-hook 'pre-command-hook 'keycast--update)))
-  (add-to-list 'global-mode-string '("" keycast-mode-line)))
+    (add-to-list 'keycast-substitute-alist `(,event nil))))
 
 ;; Package `minions' implements a menu that lists enabled minor-modes, as
 ;; well as commonly but not currently enabled minor-modes.  It can be used to
