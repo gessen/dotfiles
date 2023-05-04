@@ -3040,21 +3040,13 @@ completing-read prompter."
   (setq completion-styles '(orderless))
   (setq completion-category-defaults nil)
 
-  ;; Change literal to initialism and add prefixes (partial completion from
-  ;; Emacs).
-  (setq orderless-matching-styles '(orderless-regexp
-                                    orderless-initialism
-                                    orderless-prefixes))
-
-  (defun orderless-flex-dispatcher (pattern _index _total)
-    "Return `orderless-flex' if pattern starts/ends with \".\"."
-    (cond ((string-suffix-p "." pattern)
-           `(orderless-flex . ,(substring pattern 0 -1)))
-          ((string-prefix-p "." pattern)
-           `(orderless-flex . ,(substring pattern 1)))))
-
-  ;; Enable fuzzy matching when the pattern starts or ends with "~".
-  (setq orderless-style-dispatchers '(orderless-flex-dispatcher))
+  ;; Modify default dispatch list to use \"?\" for fuzzy matching.
+  (setq orderless-affix-dispatch-alist
+        '((?% . char-fold-to-regexp)
+          (?! . orderless-without-literal)
+          (?, . orderless-initialism)
+          (?= . orderless-literal)
+          (?? . orderless-flex)))
 
   ;; Extend separator from space to spaces.
   (setq orderless-component-separator "[ ]+"))
