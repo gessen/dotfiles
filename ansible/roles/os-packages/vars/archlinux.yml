@@ -36,6 +36,7 @@ packages:
   - openssh
   - pacman-contrib
   - plantuml
+  - qbittorrent
   - ranger
   - reflector
   - ripgrep
@@ -49,7 +50,9 @@ packages:
   - tmux
   - tree
   - ttf-hack
-  - ttf-nerd-fonts-symbols-2048-em
+  - ttf-nerd-fonts-symbols
+  - xdg-user-dirs
+  - yt-dlp
   - zsh-autosuggestions
   - zsh-completions
   - zsh-theme-powerlevel10k
