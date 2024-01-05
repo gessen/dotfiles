@@ -1,0 +1,14 @@
+pkgbase = emacs-lsp-booster-git
+	pkgdesc = Improves performance of lsp-mode using a wrapper executable.
+	pkgver = 23.7ef6849
+	pkgrel = 1
+	url = https://github.com/blahgeek/emacs-lsp-booster
+	arch = x86_64
+	license = UNLICENSE
+	makedepends = git
+	makedepends = rust
+	depends = gcc-libs
+	source = emacs-lsp-booster::git+https://github.com/blahgeek/emacs-lsp-booster
+	sha256sums = SKIP
+
+pkgname = emacs-lsp-booster-git
