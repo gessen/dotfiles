@@ -42,4 +42,5 @@
 	"theme": "Gravity.sublime-theme",
 	"translate_tabs_to_spaces": true,
 	"ui_scale": 1.2,
+	"index_files": true,
 }
