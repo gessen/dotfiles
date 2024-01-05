@@ -29,6 +29,7 @@ export LESSHISTFILE="-"
 
 # Use bat as MANPAGER
 export MANPAGER="sh -c 'col -b | bat -l man -p'"
+export MANROFFOPT="-c"
 
 # emacsclient starts emacs in daemon mode if it can't connect to it
 export ALTERNATE_EDITOR=''
