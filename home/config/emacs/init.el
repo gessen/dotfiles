@@ -436,6 +436,9 @@ BINDINGS is a series of KEY DEF pair."
 (use-package! hydra
   :demand t)
 
+;;; Load some packages early
+(use-package! nerd-icons)
+
 ;;; Configure ~/.emacs.d paths
 
 (require 'xdg)
@@ -1311,6 +1314,15 @@ window instead."
     ;; Force loading `treemacs-projectile' package if `treemacs' wasn't loaded
     ;; by it via `treemacs-projectile' function.
     (require 'treemacs-projectile)))
+
+;; Package `treemacs-nerd-icons' provides icons for Treemacs that work in GUI
+;; and in terminal.
+(use-package! treemacs-nerd-icons
+  :after treemacs
+  :demand t
+  :config
+
+  (treemacs-load-theme "nerd-icons"))
 
 ;; Package `treemacs-projectile' brings Projectile integration for Treemacs.
 (use-package! treemacs-projectile
@@ -2844,14 +2856,14 @@ Spell Commands^^            Add To Dictionary^^               Other^^
 
   (savehist-mode +1))
 
-;; Package `all-the-icons-completion' adds icons to completion candidates using
+;; Package `nerd-icons-completion' adds icons to completion candidates using
 ;; the built in completion metadata functions.
-(use-package! all-the-icons-completion
-  :after (marginalia all-the-icons)
-  :hook (marginalia-mode-hook . all-the-icons-completion-marginalia-setup)
+(use-package! nerd-icons-completion
+  :after (marginalia nerd-icons)
+  :hook (marginalia-mode-hook . nerd-icons-completion-marginalia-setup)
   :init
 
-  (all-the-icons-completion-mode +1))
+  (nerd-icons-completion-mode +1))
 
 ;; Package `consult' implements a set of commands which use `completing-read' to
 ;; select from a list of candidates. Most provided commands follow the naming
@@ -5052,12 +5064,9 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
               ("C-c C-f" . #'fd-dired)
               ("C-c /"   . #'fd-grep-dired)))
 
-;; Package `treemacs-icons-dired' brings Treemacs icons for Dired.
-(use-package! treemacs-icons-dired
-  :init
-
-  (after-display-graphic-init!
-    (add-hook 'dired-mode-hook #'treemacs-icons-dired-mode)))
+;; Package `nerd-icons-dired' shows icons for each file in Dired,
+(use-package! nerd-icons-dired
+  :hook (dired-mode-hook . nerd-icons-dired-mode))
 
 ;;;;; Ranger
 
