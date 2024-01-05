@@ -80,6 +80,10 @@ packages_aur:
 packages_ignore:
 
 packages_own:
+  - name: emacs-lsp-booster
+    files:
+      - PKGBUILD
+      - .SRCINFO
   - name: tig-completion
     files:
       - PKGBUILD

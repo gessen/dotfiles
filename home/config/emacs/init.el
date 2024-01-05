@@ -3651,6 +3651,32 @@ list of additional parameters sent with this request."
             ("ms"  "session")
             ("mt"  "toggle"))))
 
+  (defadvice! lsp-booster-parse-bytecode
+      (func &rest args)
+    :around #'json-parse-buffer
+    "Try to parse bytecode instead of json."
+    (or
+     (when (equal (following-char) ?#)
+       (let ((bytecode (read (current-buffer))))
+         (when (byte-code-function-p bytecode)
+           (funcall bytecode))))
+     (apply func args)))
+
+  (defadvice! add-lsp-server-booster
+      (func cmd &optional test?)
+    :around #'lsp-resolve-final-command
+    "Prepend emacs-lsp-booster command to lsp CMD."
+    (let ((orig-result (funcall func cmd test?)))
+      (if (and (not test?)
+               (not (file-remote-p default-directory))
+               lsp-use-plists
+               (not (functionp 'json-rpc-connection))
+               (executable-find "emacs-lsp-booster"))
+          (progn
+            (message "Using emacs-lsp-booster for %s!" orig-result)
+            (cons "emacs-lsp-booster" orig-result))
+        orig-result)))
+
   ;; Disable default keymap, we have our own.
   (setq lsp-mode-map (make-sparse-keymap))
 
