@@ -3718,6 +3718,9 @@ list of additional parameters sent with this request."
   ;; Do not auto-execute single action, let us see what that action is.
   (setq lsp-auto-execute-action nil)
 
+  ;; `lsp-mode' hardcodes `all-the-icons' while we use `nerd-icons'.
+  (setq lsp-modeline-code-action-fallback-icon "")
+
   ;; Do not wait such long time (10s) before deciding a server timed out.
   (setq lsp-response-timeout 5)
 
