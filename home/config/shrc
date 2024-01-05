@@ -16,7 +16,7 @@ alias free='free --human'
 alias ls='lsd'
 alias ll='ls --long'
 alias la='ll --almost-all'
-alias l='la'
+alias l='la --git'
 
 # Emacs
 alias ec='emacsclient --tty'
