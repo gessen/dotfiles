@@ -439,6 +439,9 @@ BINDINGS is a series of KEY DEF pair."
 ;;; Load some packages early
 (use-package! nerd-icons)
 
+;; `magit' will complain about loading built-in version of `transient'
+(use-package! transient)
+
 ;;; Configure ~/.emacs.d paths
 
 (require 'xdg)
@@ -2309,13 +2312,11 @@ will not refresh `column-number-mode."
   :bind ("<f5>" . #'deadgrep)
   :config
 
-  (defadvice! my--deadgrep-arguments-patch (args)
-    :filter-return #'deadgrep--arguments
-    "Add additional flags to `deadgrep--arguments'."
-    (push "--max-columns-preview" args)
-    (push "--max-columns=150" args)
-    (push "--follow" args)
-    (push "--hidden" args)))
+  ;; Add additional flags to ripgrep.
+  (push "--max-columns-preview" deadgrep-extra-arguments)
+  (push "--max-columns=150" deadgrep-extra-arguments)
+  (push "--follow" deadgrep-extra-arguments)
+  (push "--hidden" deadgrep-extra-arguments))
 
 ;; Package `visual-regexp' provides an alternate version of `query-replace'
 ;; which highlights matches and replacements as you type.
@@ -2888,9 +2889,10 @@ point. "
     "bB" #'consult-buffer-other-window
     "bf" #'consult-focus-lines
     "bk" #'consult-keep-lines
+    "bt" #'consult-buffer-other-tab
     "Fb" #'consult-buffer-other-frame
     "fb" #'consult-bookmark
-    "fF" #'consult-find
+    "fF" #'consult-fd
     "fr" #'consult-recent-file
     "g/" #'consult-git-grep
     "ji" #'consult-imenu
@@ -3527,7 +3529,7 @@ nothing if function `lsp-ui-mode' is active and function
     "di" #'devdocs-browser-install-doc
     "dr" #'devdocs-browser-uninstall-doc
 
-    "duu" #'devdocs-browser-update-docs
+    "duu" #'devdocs-browser-update-metadata
     "dug" #'devdocs-browser-upgrade-doc
     "duG" #'devdocs-browser-upgrade-all-docs)
 
@@ -5705,11 +5707,15 @@ possibly new window."
   ;; mode in GUI.
   (setq doom-modeline-icon t)
 
+  ;; Show total number of lines after the current cursor position.
+  (setq doom-modeline-total-line-number t)
+
   ;; Display minor modes in modeline, with `minions-mode' they won't be visible
   ;; anyway but could be quickly looked at by disabling `minions-mode'.
   (setq doom-modeline-minor-modes t)
 
   ;; We do not use any modal editing so its icon is redundant.
+  (setq doom-modeline-modal nil)
   (setq doom-modeline-modal-icon nil)
 
   ;; Use unicode as a fallback (instead of ASCII) when not using icons.
@@ -5717,8 +5723,8 @@ possibly new window."
 
   ;; Redesign modeline to have much less information from the default one.
   (doom-modeline-def-modeline 'main
-    '(bar window-number matches buffer-info remote-host buffer-position
-          selection-info)
+    '(eldoc bar window-number matches buffer-info remote-host buffer-position
+            selection-info)
     '(misc-info grip debug lsp minor-modes indent-info buffer-encoding
                 major-mode process vcs checker))
 
@@ -5787,15 +5793,8 @@ possibly new window."
   :demand t
   :init
 
-  (set-leader-keys!
-    "Td" #'centaur-tabs-open-directory-in-external-application
-    "Tf" #'centaur-tabs-extract-window-to-new-frame
-    "Tk" #'centaur-tabs-kill-other-buffers-in-current-group
-    "Tn" #'centaur-tabs-forward
-    "TN" #'centaur-tabs-forward-group
-    "To" #'centaur-tabs-open-in-external-application
-    "Tp" #'centaur-tabs-backward
-    "TP" #'centaur-tabs-backward-group)
+  ;; Display an icon from `nerd-icons' alongside the tab name.
+  (setq centaur-tabs-set-icons t)
 
   :config
 
@@ -5823,9 +5822,6 @@ possibly new window."
 
   ;; Increase the height by about 50%.
   (setq centaur-tabs-height 32)
-
-  ;; Display an icon from `all-the-icons' alongside the tab name.
-  (setq centaur-tabs-set-icons t)
 
   ;; Display a marker when the buffer is modified.
   (setq centaur-tabs-set-modified-marker t)
@@ -5855,6 +5851,16 @@ possibly new window."
   ;; Make the headline face match the centaur-tabs-default face. This makes the
   ;; tab bar have an uniform appearance
   (centaur-tabs-headline-match)
+
+  (set-leader-keys!
+    "Td" #'centaur-tabs-open-directory-in-external-application
+    "Tf" #'centaur-tabs-extract-window-to-new-frame
+    "Tk" #'centaur-tabs-kill-other-buffers-in-current-group
+    "Tn" #'centaur-tabs-forward
+    "TN" #'centaur-tabs-forward-group
+    "To" #'centaur-tabs-open-in-external-application
+    "Tp" #'centaur-tabs-backward
+    "TP" #'centaur-tabs-backward-group)
 
   :bind (:map centaur-tabs-mode-map
               ("C-<prior>" . #'centaur-tabs-backward)
