@@ -100,6 +100,9 @@ export GNUPGHOME="${XDG_DATA_HOME}/gnupg"
 # Conform to XDG with GTK 2
 export GTK2_RC_FILES="${XDG_CONFIG_HOME}/gtk-2.0/settings.ini"
 
+# Use plists for Emacs LSP mode deserialization.
+export LSP_USE_PLISTS=true
+
 # Include the current load to the ninja status
 export NINJA_STATUS="[%s/%f/%t] (j%r/%e) "
 
