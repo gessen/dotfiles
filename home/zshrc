@@ -17,7 +17,7 @@ export ZSH=/usr/share/oh-my-zsh
 ZSH_THEME="powerlevel10k"
 
 # Defines character set used by powerlevel10k.
-POWERLEVEL9K_MODE='nerdfont-complete'
+POWERLEVEL9K_MODE='nerdfont-v3'
 
 # Default colors of dir segment.
 POWERLEVEL9K_DIR_BACKGROUND=blue
