@@ -159,9 +159,6 @@ mkdir -p $ZSH_CACHE_DIR
 # Move completion dump to XDG cache dir
 ZSH_COMPDUMP="${ZSH_CACHE_DIR}/zcompdump-${ZSH_VERSION}"
 
-# Use XDG directory for tmux, otherwise tmux plugin will set it to $HOME
-ZSH_TMUX_CONFIG="${XDG_CONFIG_HOME}/tmux/tmux.conf"
-
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
