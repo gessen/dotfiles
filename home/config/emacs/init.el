@@ -3654,6 +3654,9 @@ list of additional parameters sent with this request."
   ;; Disable default keymap, we have our own.
   (setq lsp-mode-map (make-sparse-keymap))
 
+  ;; Use plists for deserialization for better performance.
+  (setq lsp-use-plists t)
+
   :config
 
   (set-leader-keys-for-minor-mode! 'lsp-mode
