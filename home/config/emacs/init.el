@@ -509,53 +509,25 @@ BINDINGS is a series of KEY DEF pair."
   ;; Enable basic mouse support (click and drag).
   (xterm-mouse-mode t))
 
-;;;; CSI U integration
+;;;; Keyboard integration
 
-;; Enable some of the keybinds that do not work in terminal mode with the help
-;; from CSI U sequences.
-(unless (display-graphic-p)
-  (defun apply-mods (c &rest modifiers)
-    "Apply modifiers to the character C.
-  MODIFIERS must be a list of symbols amongst (M C S).
-  Return an event vector."
-    (when (memq 'C modifiers)
-      (setq c (if (and (<= ?a c) ( <= c ?z))
-                  (logand c ?\x1f)
-                (logior (lsh 1 26) c))))
-    (when (memq 'M modifiers)
-      (setq c (logior (lsh 1 27) c)))
-    (when (memq 'S modifiers)
-      (setq c (logior (lsh 1 25) c)))
-    (vector c))
-  (with-eval-after-load 'xterm
-    ;; C-M-%
-    (bind-key "\x1b[37;7u" (apply-mods 37 'C 'M) xterm-function-map)
-    ;; C-'
-    (bind-key "\x1b[39;5u" (apply-mods 39 'C) xterm-function-map)
-    ;; C-M-'
-    (bind-key "\x1b[39;7u" (apply-mods 39 'C 'M) xterm-function-map)
-    ;; C-,
-    (bind-key "\x1b[44;5u" (apply-mods 44 'C) xterm-function-map)
-    ;; C-M-,
-    (bind-key "\x1b[44;7u" (apply-mods 44 'C 'M) xterm-function-map)
-    ;; C-.
-    (bind-key "\x1b[46;5u" (apply-mods 46 'C) xterm-function-map)
-    ;; C-M-.
-    (bind-key "\x1b[46;7u" (apply-mods 46 'C 'M) xterm-function-map)
-    ;; C-;
-    (bind-key "\x1b[59;5u" (apply-mods 59 'C) xterm-function-map)
-    ;; C-M-;
-    (bind-key "\x1b[59;7u" (apply-mods 59 'C 'M) xterm-function-map)
-    ;; C-=
-    (bind-key "\x1b[61;5u" (apply-mods 61 'C) xterm-function-map)
-    ;; C-M-=
-    (bind-key "\x1b[61;7u" (apply-mods 61 'C 'M) xterm-function-map)
-    ;; C-M-@
-    (bind-key "\x1b[64;7u" (apply-mods 64 'C 'M) xterm-function-map)
-    ;; C-`
-    (bind-key "\x1b[96;5u" (apply-mods 96 'C) xterm-function-map)
-    ;; C-M-`
-    (bind-key "\x1b[96;7u" (apply-mods 96 'C 'M) xterm-function-map)))
+;; Package `kpp' provides support for the Kitty Keyboard Protocol. KKP defines
+;; an alternative way to handle keyboard input for programs running in the
+;; terminal. This allows, if the terminal (and intermediaries such as terminal
+;; multiplexers) support the protocol as well, the transmission of more detailed
+;; information about a key event from the terminal to Emacs, e.g., it transmits
+;; "<tab>" and "C-i" differently. Currently, there exists another solution which
+;; solves the same problem, xterm’s "modifyOtherKeys", which is already
+;; supported by Emacs (and activated by default if the terminal supports it).
+;; KKP has the advantage of supporting more keys (e.g., "<menu>" or
+;; "<Scroll_Lock>"), more key combinations (e.g., "C-M-S-z") and more modifiers,
+;; i.e., the Hyper and Super keys. It can also dynamically detect if a terminal
+;; supports the protocol, whereas Emacs has to deduce "modifyOtherKeys" support
+;; from the TERM variable.
+(use-package! kkp
+  :init
+
+  (global-kkp-mode +1))
 
 ;;;; Encryption
 
@@ -1374,8 +1346,10 @@ window instead."
 ;; Rebind `quoted-insert' as C-q will be used by `kill-buffer'
 (bind-key "C-z" #'quoted-insert)
 
-;; Use M-DEL to remove word in terminal like in GUI
-(bind-key "<M-delete>" #'backward-kill-word)
+;; Use M-delete and M-backspace to remove word in terminal like in GUI where
+;; they are automatically translated from M-DEL.
+(bind-key "<M-delete>"    #'backward-kill-word)
+(bind-key "<M-backspace>" #'backward-kill-word)
 
 (set-leader-keys!
   "t C-f" #'auto-fill-mode
@@ -3141,8 +3115,7 @@ completing-read prompter."
   (use-feature! vertico-directory
     :demand t
     :bind (:map vertico-map
-                ("<backtab>" . #'vertico-directory-delete-word)
-                ("S-TAB"     . #'vertico-directory-delete-word)))
+                ("<backtab>" . #'vertico-directory-delete-word)))
 
   ;; Feature `vertico-flat' enables flat, horizontal display.
   (use-feature! vertico-flat
