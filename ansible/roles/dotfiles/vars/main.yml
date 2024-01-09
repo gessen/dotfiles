@@ -11,6 +11,7 @@ dotfiles:
   - config/emacs/init.el
   - config/gdb/libstdcxx
   - config/gdb/libcxx
+  - config/gdb-dashboard/config
   - config/git/attributes
   - config/git/config
   - config/git/config.local
@@ -32,11 +33,11 @@ dotfiles:
   - config/tmux/tmux.conf
   - config/shprofile
   - config/shrc
-  - gdbinit.d/init
   - local/share/cargo/config.toml
   - ssh/config
   - zprofile
   - zshrc
 
 dotdirs:
+  - local/share/gdb
   - local/share/tig
