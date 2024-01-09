@@ -25,7 +25,7 @@
                             (top . 0)
                             (left . 0)
                             (user-size . t)
-                            (width . 120)
+                            (width . 130)
                             (height . 60)))
 
 ;; Set initial frame to be maximized
