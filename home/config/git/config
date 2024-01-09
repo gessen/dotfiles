@@ -1,5 +1,6 @@
 [core]
 	pager = delta
+	untrackedcache = true
 [init]
 	defaultbranch = master
 [commit]
