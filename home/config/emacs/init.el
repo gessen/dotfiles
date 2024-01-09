@@ -2614,12 +2614,6 @@ Spell Commands^^            Add To Dictionary^^               Other^^
   ;; autopair when the next symbol is a word constituent.
   (require 'sp-sublimetext-like)
 
-  ;; Extend SublimeText-like config to "" and ''.
-  (let ((when '(sp-point-not-before-word))
-        (actions '(insert wrap autoskip navigate)))
-    (sp-pair "\"" "\"" :when when :actions actions)
-    (sp-pair "'"  "'"  :when when :actions actions))
-
   ;; Enable Smartparens functionality in all buffers.
   (smartparens-global-mode +1)
 
