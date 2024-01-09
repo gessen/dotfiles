@@ -29,4 +29,4 @@ dotfiles_distro_extra:
     src: config/oh-my-zsh/themes/powerlevel10k.zsh-theme
 
   - target: /usr/share/gdb-dashboard/.gdbinit
-    src: gdbinit
+    src: config/gdb/gdbinit
