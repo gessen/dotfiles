@@ -322,3 +322,6 @@ user_pref("browser.search.suggest.enabled", false);
 
 // do not embed the `missing flash player` frame
 user_pref("plugins.notifyMissingFlash", false);
+
+// enable hardware acceleration
+user_pref("media.ffmpeg.vaapi.enabled", true);
