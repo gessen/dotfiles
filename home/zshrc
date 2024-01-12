@@ -14,6 +14,7 @@ fi
 ZSH_CACHE_DIR="${XDG_CACHE_HOME}/zsh"
 mkdir -p "${ZSH_CACHE_DIR}"
 
+export ANSIBLE_HOME="${XDG_CONFIG_HOME}/ansible"
 export ASPELL_CONF="home-dir ${XDG_CONFIG_HOME}/aspell/; per-conf aspell.conf"
 export CARGO_HOME="${XDG_DATA_HOME}/cargo"
 export CCACHE_CONFIGPATH="${XDG_CONFIG_HOME}/ccache/config"
