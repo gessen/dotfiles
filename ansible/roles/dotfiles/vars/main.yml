@@ -4,7 +4,7 @@ dotfiles:
   - config/VSCodium/User/keybindings.json
   - config/aspell/aspell.conf
   - config/bat/config
-  - config/ccache/config
+  - config/ccache/ccache.conf
   - config/clangd/config.yaml
   - config/emacs/straight/versions/default.el
   - config/emacs/early-init.el
