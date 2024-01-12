@@ -4,29 +4,5 @@ dotfiles_distro:
   - config/paru/paru.conf
 
 dotfiles_distro_extra:
-  - target: /usr/share/zsh/plugins/fast-syntax-highlighting
-    src: config/oh-my-zsh/plugins/fast-syntax-highlighting
-
-  - target: /usr/share/zsh/plugins/fzf-git
-    src: config/oh-my-zsh/plugins/fzf-git
-
-  - target: /usr/share/zsh/plugins/fzf-kill
-    src: config/oh-my-zsh/plugins/fzf-kill
-
-  - target: /usr/share/zsh/plugins/fzf-tab-bin-git
-    src: config/oh-my-zsh/plugins/fzf-tab
-
-  - target: /usr/share/zsh-theme-powerlevel10k/gitstatus
-    src: config/oh-my-zsh/plugins/gitstatus
-
-  - target: /usr/share/zsh/plugins/zsh-autopair/autopair.zsh
-    src: config/oh-my-zsh/plugins/zsh-autopair/zsh-autopair.plugin.zsh
-
-  - target: /usr/share/zsh/plugins/zsh-autosuggestions
-    src: config/oh-my-zsh/plugins/zsh-autosuggestions
-
-  - target: /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
-    src: config/oh-my-zsh/themes/powerlevel10k.zsh-theme
-
   - target: /usr/share/gdb-dashboard/.gdbinit
     src: config/gdb/gdbinit

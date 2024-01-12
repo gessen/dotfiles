@@ -27,12 +27,11 @@ dotfiles:
   - config/ranger/rc.conf
   - config/ripgrep/config
   - config/sccache/config
+  - config/sheldon/plugins.toml
   - config/sublime-text-3/Packages/FileIcons
   - config/sublime-text-3/Packages/User
   - config/tig/config
   - config/tmux/tmux.conf
-  - config/shprofile
-  - config/shrc
   - local/share/cargo/config.toml
   - ssh/config
   - zprofile

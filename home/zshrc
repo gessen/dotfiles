@@ -1,3 +1,6 @@
+# Help Tramp and Eshell.
+[[ "${TERM}" = "dumb" ]] && unsetopt zle && PS1="$ " && return
+
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -5,19 +8,936 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-# Help Tramp and Eshell.
-[[ "${TERM}" = "dumb" ]] && unsetopt zle && PS1='$ ' && return
+## XDG
 
-# Path to your oh-my-zsh installation.
-export ZSH=/usr/share/oh-my-zsh
+# Set cache for various plugins to XDG cache dir
+ZSH_CACHE_DIR="${XDG_CACHE_HOME}/zsh"
+mkdir -p "${ZSH_CACHE_DIR}"
 
-# Set name of the theme to load. Optionally, if you set this to "random"
-# it'll load a random theme each time that oh-my-zsh is loaded.
-# See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-ZSH_THEME="powerlevel10k"
+export ASPELL_CONF="home-dir ${XDG_CONFIG_HOME}/aspell/; per-conf aspell.conf"
+export CARGO_HOME="${XDG_DATA_HOME}/cargo"
+export CCACHE_CONFIGPATH="${XDG_CONFIG_HOME}/ccache/config"
+export CCACHE_DIR="${XDG_CACHE_HOME}/ccache"
+export _FASD_DATA="${XDG_CACHE_HOME}/fasd"
+export GNUPGHOME="${XDG_DATA_HOME}/gnupg"
+export GTK2_RC_FILES="${XDG_CONFIG_HOME}/gtk-2.0/settings.ini"
+export RIPGREP_CONFIG_PATH="${XDG_CONFIG_HOME}/ripgrep/config"
+export RUSTUP_HOME="${XDG_DATA_HOME}/rustup"
+
+## Completion
+
+# Load all stock functions to be called.
+autoload -U compaudit compinit bashcompinit zrecompile
+
+# Set completion dump to XDG cache dir.
+ZSH_COMPDUMP="${ZSH_CACHE_DIR}/zcompdump-${ZSH_VERSION}"
+
+# Load completions from all directories.
+compinit -i -d "${ZSH_COMPDUMP}"
+
+# zcompile the completion dump file if the .zwc is older or missing.
+if command mkdir "${ZSH_COMPDUMP}.lock" 2> /dev/null; then
+  zrecompile -q -p "${ZSH_COMPDUMP}"
+  command rm -rf "${ZSH_COMPDUMP}.lock"
+fi
+
+# Characters in this variable are considered part of a word. Leaving it empty
+# will cause ZSH to treat most special characters as word delimiters.
+WORDCHARS=""
+
+# If a completion is performed with the cursor within a word, and a full
+# completion is inserted, the cursor is moved to the end of the word. That is,
+# the cursor is moved to the end of the word if either a single match is
+# inserted or menu completion is performed.
+setopt ALWAYS_TO_END
+
+# The cursor stays and completion is done from both ends.
+setopt COMPLETE_IN_WORD
+
+# [S-Tab] moves through the completion menu backwards.
+bindkey "^[[Z" reverse-menu-complete
+
+# Highlight possible choices in the completion menu.
+zstyle ":completion:*" menu select
+
+# Case and hyphen insensitive, partial-word and substring completion.
+zstyle ":completion:*" matcher-list \
+  "m:{[:lower:][:upper:]-_}={[:upper:][:lower:]_-}" "r:|=*" "l:|=* r:|=*"
+
+# Complete "." and ".." special directories
+zstyle ":completion:*" special-dirs true
+
+# By default, the completion system will expand // to /*/. Instead, squeeze
+# slashes to /.
+zstyle ":completion:*" squeeze-slashes true
+
+# Default coloring for GNU-based ls.
+source <(dircolors --sh)
+
+# Colorize completion items based on $LS_COLORS.
+zstyle ":completion:*" list-colors "${(s.:.)LS_COLORS}"
+
+# Colorize completion items for kill command completion.
+zstyle ":completion:*:*:kill:*:processes" list-colors \
+  "=(#b) #([0-9]#) ([0-9a-z-]#)*=01;34=0=01"
+
+# Use better list than the default one for the processes completion.
+zstyle ":completion:*:*:*:*:processes" command \
+  "ps -u ${USERNAME} -o pid,user,comm -w -w"
+
+# Prints the type of the completion.
+# zstyle ":completion:*:descriptions" format "%B%F{green}--- %d ---%f%b"
+zstyle ":completion:*:descriptions" format "[%d]"
+
+# Prints the possible corrections with more details.
+zstyle ":completion:*:corrections" format \
+  "%B%F{yellow}!-- %d (errors: %e) --!%f%b"
+
+# Show warning message when no completion is possible.
+zstyle ":completion:*:warnings" format "%F{red}No matches for:%f %B%d%b"
+
+# Group the different type of matches under their descriptions.
+zstyle ":completion:*" group-name ""
+
+# Activates approximate completion, but only after regular completion.
+zstyle ":completion:::::" completer _complete _approximate
+# Allows one error per 3 character typed.
+zstyle ":completion:*:approximate:*" max-errors \
+  'reply=( $(( ($#PREFIX+$#SUFFIX)/3 )) numeric )'
+
+# Activates the completion caching layer for any completions which use it via the
+# _store_cache, _retrieve_cache and _cache_invalid functions.
+zstyle ":completion:*" use-cache yes
+zstyle ":completion:*" cache-path "${ZSH_CACHE_DIR}"
+
+# Don't complete uninteresting users, e.g. for SSH command unless it's actually
+# typed.
+zstyle ":completion:*:*:*:users" ignored-patterns \
+  avahi bin daemon dbus ftp mail nobody polkitd sddm "systemd-*" tss usbmux \
+  uuidd
+zstyle ":completion:*" single-ignored show
+
+function expand-or-complete-with-dots() {
+  COMPLETION_WAITING_DOTS="%F{red}...%f"
+  printf "\e[?7l%s\e[?7h" "${(%)COMPLETION_WAITING_DOTS}"
+  zle expand-or-complete
+  zle redisplay
+}
+# Create a user-defined widget.
+zle -N expand-or-complete-with-dots
+# Bind the widget, i.e. the function as the default tab completion widget.
+bindkey "^I" expand-or-complete-with-dots
+
+# Load bash completion functions.
+bashcompinit
+
+### Fzf
+
+source "/usr/share/fzf/key-bindings.zsh"
+
+# Set fd as the default source for fzf.
+export FZF_DEFAULT_COMMAND="fd \
+--hidden \
+--follow \
+--exclude='.git/' \
+"
+
+# Default fzf options.
+export FZF_DEFAULT_OPTS=" \
+--height=60% \
+--bind alt-p:preview-up,alt-n:preview-down \
+--bind ctrl-alt-p:preview-half-page-up,ctrl-alt-n:preview-half-page-down \
+--bind alt-up:preview-half-page-up,alt-down:preview-half-page-down \
+--bind ctrl-v:half-page-down,alt-v:half-page-up \
+--bind alt-a:select-all,ctrl-alt-a:deselect-all,alt-t:toggle-all \
+"
+
+# Paste selected files and directories onto the command line with [C-t].
+export FZF_CTRL_T_COMMAND="${FZF_DEFAULT_COMMAND}"
+
+# Change directory with preview with [M-c].
+export FZF_ALT_C_COMMAND="${FZF_DEFAULT_COMMAND} --type directory"
+export FZF_ALT_C_OPTS="--preview 'tree -C {} | head -200'"
+
+# Open all fzf commands in tmux popup.
+export FZF_TMUX=1
+export FZF_TMUX_OPTS="-p80%,60%"
+
+## Command line navigation
+
+# [Home], [End], [Delete] behaves as expected.
+bindkey "^[[H" beginning-of-line
+bindkey "^[[F" end-of-line
+bindkey "^[[1~" beginning-of-line
+bindkey "^[[4~" end-of-line
+bindkey "^[[3~" delete-char
+
+# Use [M-a] and [M-e] for the same effect as [C-a] and [C-e] respectively.
+bindkey "^[a" beginning-of-line
+bindkey "^[e" end-of-line
+
+# Quickly jump to n-th arguments by pressing [M-number].
+bindkey "^[1" beginning-of-line
+bindkey -s "^[2" "^A^[f"
+bindkey -s "^[3" "^A^[f^[f"
+bindkey -s "^[4" "^A^[f^[f^[f"
+bindkey -s "^[5" "^A^[f^[f^[f^[f"
+bindkey -s "^[6" "^A^[f^[f^[f^[f^[f"
+bindkey -s "^[7" "^A^[f^[f^[f^[f^[f^[f"
+bindkey -s "^[8" "^A^[f^[f^[f^[f^[f^[f^[f"
+bindkey -s "^[9" "^A^[f^[f^[f^[f^[f^[f^[f^[f"
+
+# Use [C-u] to kill a whole line backwards.
+bindkey "^U" backward-kill-line
+
+# Swap [M-h] with [C-M-h].
+bindkey "^[^H" run-help
+bindkey "^[H" backward-kill-word
+bindkey "^[h" backward-kill-word
+
+# Edit the current command line in $EDITOR with [C-x C-c].
+autoload -U edit-command-line
+zle -N edit-command-line
+bindkey "^X^E" edit-command-line
+
+# Copy previous word with [M-m].
+bindkey "^[m" copy-prev-shell-word
+
+alias fu='sudo !!'
+
+## Files and Directories management
+
+# If a command is issued that can’t be executed as a normal command, and the
+# command is the name of a directory, perform the cd command to that directory.
+setopt AUTO_CD
+
+# Make cd push the old directory onto the directory stack.
+setopt AUTO_PUSHD
+
+# Don’t push multiple copies of the same directory onto the directory stack.
+setopt PUSHD_IGNORE_DUPS
+
+# Exchanges the meanings of "+" and "-" when used with a number to specify a
+# directory in the stack.
+setopt PUSHD_MINUS
+
+alias -g ...='../..'
+alias -g ....='../../..'
+alias -g .....='../../../..'
+alias -g ......='../../../../..'
+
+alias -- -='cd -'
+alias 1='cd -1'
+alias 2='cd -2'
+alias 3='cd -3'
+alias 4='cd -4'
+alias 5='cd -5'
+alias 6='cd -6'
+alias 7='cd -7'
+alias 8='cd -8'
+alias 9='cd -9'
+
+alias md='mkdir -p'
+alias rd='rmdir'
+
+# Human readable outputs by default.
+alias du='du --max-depth=1 --human-readable'
+alias df='df --human-readable'
+alias free='free --human'
+
+# mkdir + cd
+function mkcd() {
+  mkdir -p "$@" && cd "${@:$#}" || return
+}
+compdef _mkdir mkcd
+
+alias rsync-copy='rsync --archive --compress -hhh --progress'
+alias rsync-move='rsync-copy --remove-source-files'
+alias rsync-update='rsync-copy --update'
+alias rsync-synchronize='rsync-update --delete'
+alias cpv='rsync-copy'
+
+### Lsd
+alias ls='lsd'
+alias ll='ls --long'
+alias la='ll --almost-all'
+alias l='la --git'
+
+### Fasd
+fasd --init posix-alias zsh-hook zsh-ccomp zsh-ccomp-install \
+    zsh-wcomp zsh-wcomp-install >| "${ZSH_CACHE_DIR}/fasd-init-cache"
+source "${ZSH_CACHE_DIR}/fasd-init-cache"
+unalias a 2> /dev/null
+unalias d 2> /dev/null
+unalias f 2> /dev/null
+unalias z 2> /dev/null
+unalias zz 2> /dev/null
+
+# Use [C-x C-a], [C-x C-f] and [C-x C-d] for various fasd completion.
+bindkey "^X^A" fasd-complete
+bindkey "^X^F" fasd-complete-f
+bindkey "^X^D" fasd-complete-d
+
+# Normal fasd when used with arguments but displays an fzf prompt when used
+# without any.
+function z() {
+  [[ $# > 0 ]] && fasd_cd -d "$*" && return
+  local dir
+  dir="$(fasd -Rdl | fzf --select-1 --exit-0 --no-sort --no-multi)" \
+    && cd "${dir}" \
+    || return 1
+}
+
+# Like the function above but always displays fzf prompt.
+function zz() {
+  local dir
+  dir="$(fasd -Rdl "$1" | fzf --select-1 --exit-0 --no-sort --no-multi)" \
+    && cd "${dir}" \
+    || return 1
+}
+
+### Ranger
+
+# Allows ranger to change cwd either normally or with in new window or pane if
+# inside tmux.
+function ranger() {
+  local tempfile
+  local IFS=$'\t\n'
+  tempfile="$(mktemp -t ranger-cwd.XXXXXX)"
+  local ranger_cmd=(
+    command
+    ranger
+    --cmd="map Qq chain shell echo %d > ${tempfile}; quitall"
+    --cmd="map Qs chain shell echo %d > ${tempfile}; shell tmux split-window -h"
+    --cmd="map Qv chain shell echo %d > ${tempfile}; shell tmux split-window -v"
+    --cmd="map Qw chain shell echo %d > ${tempfile}; shell tmux new-window"
+  )
+
+  "${ranger_cmd[@]}" "$@"
+  if cwd="$(cat -- "${tempfile}")" \
+    && [[ -n "${cwd}" ]] \
+    && [[ "${cwd}" != "${PWD}" ]]; then
+    cd -- "${cwd}" || return
+  fi
+  command rm -f -- "${tempfile}" 2> /dev/null
+}
+
+## Paging
+
+# Causes less to automatically exit the second time it reaches end-of-file.
+LESS="--quit-at-eof"
+
+# Causes less to automatically exit if the entire file can be displayed on the
+# first screen.
+LESS="--quit-if-one-screen $LESS"
+
+# Causes searches to ignore case; that is, uppercase and lowercase are
+# considered identical. This option is ignored if any uppercase letters appear
+# in the search pattern.
+LESS="--ignore-case $LESS"
+
+# Causes less to prompt verbosely with the percent into the file.
+LESS="--LONG-PROMPT $LESS"
+
+# Causes "raw" control characters to be displayed. The default is to display
+# control characters using the caret notation.
+LESS="--RAW-CONTROL-CHARS $LESS"
+
+# Disables sending the termcap initialization and deinitialization strings to
+# the terminal. This is sometimes desirable if the deinitialization string does
+# something unnecessary, like clearing the screen.
+LESS="--no-init $LESS"
+
+# Temporarily highlights the first "new" line after a forward movement of a full
+# page. The first "new" line is the line immediately following the line
+# previously at the bottom of the screen. Also highlights the target line after
+# a g or p command. The highlight is removed at the next command which causes
+# movement.
+LESS="--hilite-unread $LESS"
+
+# Changes the default scrolling window size to WINDOW_SIZE-4 lines.
+LESS="--window=-4 $LESS"
+
+# Specifies the default number of positions to scroll horizontally in the
+# RIGHTARROW and LEFTARROW commands.
+LESS="--shift 5 $LESS"
+
+# Causes consecutive blank lines to be squeezed into a single blank line.
+LESS="--squeeze-blank-lines $LESS"
+export LESS
+
+# Do not save less search history in ~/.lesshst.
+export LESSHISTFILE="-"
+
+### Bat
+
+# Use bat as MANPAGER.
+export MANPAGER="sh -c 'col -b | bat -l man -p'"
+export MANROFFOPT="-c"
+
+# Use bat instead of cat by default.
+alias cat='bat'
+
+## Emacs
+
+# Set both EDITOR and VISUAL to emacsclient with autostarted server.
+export EDITOR="emacsclient --tty"
+# export EDITOR="helix"
+export VISUAL="$EDITOR"
+
+# emacsclient starts emacs in daemon mode if it can't connect to it.
+export ALTERNATE_EDITOR=""
+
+# Use plists for Emacs LSP mode de-serialization.
+export LSP_USE_PLISTS=true
+
+alias ec='emacsclient --tty'
+alias ecg='emacsclient --create-frame --no-wait'
+alias mg='ec --eval "(magit-status)"'
+alias mgg='ecg --eval "(magit-status)"'
+
+# Open the selected file with EDITOR or xdg-open with fasd+fzf.
+function e() {
+  local key
+  local file
+  local out
+  IFS=$'\n' out="$(fasd -Rfl "$1" \
+    | fzf --select-1 --exit-0 --no-sort --no-multi --expect=ctrl-o,ctrl-e)"
+  key="$(head --lines=1 <<< "${out}")"
+  file="$(tail --lines=1 <<< "${out}")"
+  if [[ -z "${file}" ]]; then return; fi
+  if [[ "${key}" = "ctrl-o" ]]; then
+    xdg-open "${file}"
+  else
+    eval "${EDITOR} \"${file}\""
+  fi
+}
+
+# Open the selected files with EDITOR or xdg-open with fd+fzf.
+function fe() {
+  local key
+  local -a files
+  local out
+  IFS=$'\n' out="$(fd --type=file "$1" \
+    | fzf --select-1 --exit-0 --multi --expect=ctrl-o,ctrl-e)"
+  key="$(head --lines=1 <<< "${out}")"
+  files=($(tail --lines=+2 <<< "${out}"))
+  if [[ -z ${files} ]]; then return; fi
+  for i in {1..$#files}; do files[${i}]="\"${files[${i}]}\""; done
+  if [[ "${key}" = "ctrl-o" ]]; then
+    for file in ${files}; do xdg-open "${file}"; done
+  else
+    eval "${EDITOR} ${files[@]}"
+  fi
+}
+
+# Fuzzy grep open via ripgrep.
+function eg() {
+  local file
+  local line
+  local column
+  local -a out
+  if [[ "$#" == 0 ]]; then return 1; fi
+  out=(${(f)"$(rg --no-heading --column --line-number --color=always "$@" \
+    | fzf --ansi --select-1 --exit-0 --multi \
+    | awk -F: '{printf "%s:%s:%s\n", $1, $2, $3}')"})
+  if [[ -z ${out} ]]; then return; fi
+  if [[ "${EDITOR}" =~ emacs ]]; then
+    for i in {1..$#out}; do
+      IFS=$':' read -r file line column <<< $(echo "${out[$i]}")
+      out[${i}]="+${line}:${column} \"${file}\""
+    done
+  fi
+  eval "${EDITOR} ${out[@]}"
+}
+
+# Fuzzy grep open with preview via ripgrep.
+function egp() {
+  local -a files
+  if [[ "$#" == 0 ]]; then return 1; fi
+  IFS=$'\n' files=($(rg --max-count=1 --files-with-matches --no-messages "$@" \
+    | fzf --select-1 --exit-0 --multi \
+      --preview="rg --pretty --context=10 $* {}"))
+  if [[ -z ${files} ]]; then return; fi
+  for i in {1..$#files}; do files[${i}]="\"${files[${i}]}\""; done
+  [[ -n "${files}" ]] && eval "${EDITOR} ${files[@]}"
+}
+
+# Grep with syntax highlighting.
+function rgd {
+  if [[ "$#" == 0 ]]; then return 1; fi
+  rg --json --context=3 "$@" | delta
+}
+
+## VSCodium
+
+# Use original code command with vscodium and set extensions directory to
+# conform to XDG.
+alias code='vscodium --extensions-dir ${XDG_DATA_HOME}/vscode'
+
+## Expansion and Globbing
+
+# All unquoted arguments of the form "anything=expression" appearing after the
+# command name have filename expansion, (that is, where expression has a leading
+# "~" or "=") performed on expression as if it were a parameter assignment.
+setopt MAGIC_EQUAL_SUBST
+
+## History
+
+export HISTFILE="${XDG_DATA_HOME}/zsh/history"
+export HISTSIZE=1000000
+export SAVEHIST=500000
+mkdir -p "${XDG_DATA_HOME}/zsh"
+
+# Save each command’s beginning timestamp (in seconds since the epoch) and the
+# duration (in seconds) to the history file.
+setopt EXTENDED_HISTORY
+
+# If the history needs to be trimmed to add the current command line, cause the
+# oldest history event that has a duplicate to be lost before losing a unique
+# event from the list.
+setopt HIST_EXPIRE_DUPS_FIRST
+
+# Do not enter command lines into the history list if they are duplicates of the
+# previous event.
+setopt HIST_IGNORE_DUPS
+
+# Remove command lines from the history list when the first character on the
+# line is a space, or when one of the expanded aliases contains a leading space.
+# Only normal aliases (not global or suffix aliases) have this behavior.
+setopt HIST_IGNORE_SPACE
+
+# Remove the history (fc -l) command from the history list when invoked.
+setopt HIST_NO_STORE
+
+# Remove superfluous blanks from each command line being added to the history
+# list.
+setopt HIST_REDUCE_BLANKS
+
+# Whenever the user enters a line with history expansion, don’t execute the line
+# directly; instead, perform history expansion and reload the line into the
+# editing buffer.
+setopt HIST_VERIFY
+
+# Import new commands from the history file, and also make typed commands to be
+# appended to the history file
+setopt SHARE_HISTORY
+
+# [PageUp] and [PageDown] for navigating history.
+bindkey "^[[5~" up-line-or-history
+bindkey "^[[6~" down-line-or-history
+
+## Input/Output
+
+# Output flow control via start/stop characters (usually assigned to ^S/^Q) is
+# disabled in the shell’s editor.
+unsetopt FLOW_CONTROL
+
+# Allow comments even in interactive shells.
+setopt INTERACTIVE_COMMENTS
+
+# Do not query the user before executing "rm *" or "rm path/*".
+setopt RM_STAR_SILENT
+
+## Job Control
+
+# Print job notifications in the long format by default.
+setopt LONG_LIST_JOBS
+
+## Git
+
+function git_current_branch() {
+  local ref
+  ref=$(GIT_OPTIONAL_LOCKS=0 git symbolic-ref --quiet HEAD 2> /dev/null)
+  local ret=$?
+  if [[ $ret != 0 ]]; then
+    [[ $ret == 128 ]] && return
+    ref=$(GIT_OPTIONAL_LOCKS=0 git rev-parse --short HEAD 2> /dev/null) \
+      || return
+  fi
+  echo "${ref#refs/heads/}"
+}
+
+function git_develop_branch() {
+  git rev-parse --git-dir &> /dev/null || return
+  local branch
+  for ref in refs/heads/{dev,devel,develop}; do
+    if git show-ref --quiet --verify "${ref}"; then
+      echo "${ref#refs/heads/}"
+      return
+    fi
+  done
+}
+
+function git_master_branch() {
+  git rev-parse --git-dir &> /dev/null || return
+  local ref
+  for ref in refs/heads/{master,main}; do
+    if git show-ref --quiet --verify "${ref}"; then
+      echo "${ref#refs/heads/}"
+      return
+    fi
+  done
+}
+
+alias ga='git add'
+alias gaa='git add --all'
+alias gapa='git add --patch'
+alias gau='git add --update'
+alias gav='git add --verbose'
+
+alias gam='git am'
+alias gama='git am --abort'
+alias gamc='git am --continue'
+alias gamscp='git am --show-current-patch'
+alias gams='git am --skip'
+
+alias gap='git apply'
+alias gapt='git apply --3way'
+
+alias gbs='git bisect'
+alias gbsb='git bisect bad'
+alias gbsg='git bisect good'
+alias gbsn='git bisect new'
+alias gbso='git bisect old'
+alias gbsr='git bisect reset'
+alias gbss='git bisect start'
+
+alias gbl='git blame -w'
+
+alias gb='git branch'
+alias gba='git branch --all'
+alias gbd='git branch --delete'
+alias gbD='git branch --delete --force'
+alias gbg='git branch -vv | grep ": gone\]"'
+alias gbm='git branch --move'
+alias gbnm='git branch --no-merged'
+alias gbr='git branch --remote'
+alias gbso='git branch --set-upstream-to=origin/$(git_current_branch)'
+alias gbsu='git branch --set-upstream-to=upstream/$(git_current_branch)'
+
+function gbda() {
+  git branch --no-color --merged \
+    | grep -vE "^([+*]|\s*($(git_master_branch)|$(git_develop_branch))\s*$)" \
+    | xargs git branch --delete 2>/dev/null
+}
+
+alias gco='git checkout'
+alias gcor='git checkout --recurse-submodules'
+alias gcb='git checkout -b'
+alias gcB='git checkout -B'
+alias gcd='git checkout $(git_develop_branch)'
+alias gcm='git checkout $(git_master_branch)'
+
+alias gcp='git cherry-pick'
+alias gcpa='git cherry-pick --abort'
+alias gcpc='git cherry-pick --continue'
+
+alias gclean='git clean --interactive -d'
+alias gcl='git clone --recurse-submodules'
+
+alias gcam='git commit --all --message'
+alias gcas='git commit --all --signoff'
+alias gcasm='git commit --all --signoff --message'
+alias gcs='git commit --gpg-sign'
+alias gcss='git commit --gpg-sign --signoff'
+alias gcssm='git commit --gpg-sign --signoff --message'
+alias gcmsg='git commit --message'
+alias gcsm='git commit --signoff --message'
+alias gc='git commit --verbose'
+alias gca='git commit --verbose --all'
+alias gca!='git commit --verbose --all --amend'
+alias gcan!='git commit --verbose --all --no-edit --amend'
+alias gcans!='git commit --verbose --all --signoff --no-edit --amend'
+alias gc!='git commit --verbose --amend'
+alias gcn!='git commit --verbose --no-edit --amend'
+
+alias gcf='git config --list'
+alias gdct='git describe --tags $(git rev-list --tags --max-count=1)'
+
+alias gd='git diff'
+alias gd2='git -c delta.side-by-side=true diff'
+alias gdn='git -c delta.navigate=true diff'
+alias gdn2='git -c delta.navigate=true -c delta.side-by-side=true diff'
+alias gdca='git diff --cached'
+alias gdca2='git -c delta.side-by-side=true diff --cached'
+alias gdcan='git -c delta.navigate=true diff --cached'
+alias gdcan2='git -c delta.navigate=true -c delta.side-by-side=true diff --cached'
+alias gdcat='git -c diff.external=difft diff --cached'
+alias gdcw='git diff --cached --word-diff'
+alias gds='git diff --staged'
+alias gdw='git diff --word-diff'
+alias gdu='git diff @{upstream}'
+alias gduc='git diff @ @{upstream}'
+alias gdt='git -c diff.external=difft diff'
+alias gdtool='git difftool'
+alias gdtoolg='git difftool --gui'
+
+alias gf='git fetch'
+alias gfa='git fetch --all --prune --jobs=10'
+alias gfo='git fetch origin'
+
+alias gg='git gui citool'
+alias gga='git gui citool --amend'
+
+alias ghh='git help'
+
+alias gcount='git shortlog --summary --numbered'
+alias glg='git log --stat'
+alias glgg='git log --graph'
+alias glgga='git log --graph --decorate --all'
+alias glgp='git log --stat --patch'
+alias glod='git log --graph --pretty="%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%an>%Creset"'
+alias glods='git log --graph --pretty="%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%an>%Creset" --date=short'
+alias glol='git log --graph --pretty="%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset"'
+alias glola='git log --graph --pretty="%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset" --all'
+alias glols='git log --graph --pretty="%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset" --stat'
+alias glo='git log --oneline --decorate'
+alias glog='git log --oneline --decorate --graph'
+alias gloga='git log --oneline --decorate --graph --all'
+
+alias gignored='git ls-files --others'
+
+alias gm='git merge'
+alias gma='git merge --abort'
+alias gms='git merge --squash'
+alias gmod='git merge origin/$(git_develop_branch)'
+alias gmom='git merge origin/$(git_master_branch)'
+alias gmtool='git mergetool'
+alias gmtoolg='git mergetool --gui'
+alias gmud='git merge upstream/$(git_develop_branch)'
+alias gmum='git merge upstream/$(git_master_branch)'
+
+alias gmtl='git mergetool --no-prompt'
+alias gmtlvim='git mergetool --no-prompt --tool=vimdiff'
+
+alias gl='git pull'
+alias glr='git pull --rebase'
+alias glrv='git pull --rebase --verbose'
+alias glra='git pull --rebase --autostash'
+alias glrav='git pull --rebase --autostash --verbose'
+alias glrod='git pull --rebase origin $(git_develop_branch)'
+alias glrom='git pull --rebase origin $(git_master_branch)'
+alias glrud='git pull --rebase upstream $(git_develop_branch)'
+alias glrum='git pull --rebase upstream $(git_master_branch)'
+
+alias gp='git push'
+alias gpd='git push --dry-run'
+alias gpf='git push --force-with-lease --force-if-includes'
+alias gpsop='git push --set-upstream origin $(git_current_branch)'
+alias gpsopf='git push --set-upstream origin $(git_current_branch) \
+  --force-with-lease --force-if-includes'
+alias gpsup='git push --set-upstream upstream $(git_current_branch)'
+alias gpsupf='git push --set-upstream upstream $(git_current_branch) \
+  --force-with-lease --force-if-includes'
+alias gpv='git push --verbose'
+alias gpo='git push origin'
+alias gpoat='git push origin --all && git push origin --tags'
+alias gpod='git push origin --delete'
+alias gpu='git push upstream'
+alias gpuat='git push upstream --all && git push upstream --tags'
+alias gpud='git push upstream --delete'
+
+alias grb='git rebase'
+alias grba='git rebase --abort'
+alias grbc='git rebase --continue'
+alias grbi='git rebase --interactive'
+alias grbo='git rebase --onto'
+alias grbs='git rebase --skip'
+alias grbd='git rebase $(git_develop_branch)'
+alias grbm='git rebase $(git_master_branch)'
+alias grbod='git rebase origin/$(git_develop_branch)'
+alias grbom='git rebase origin/$(git_master_branch)'
+alias grbud='git rebase upstream/$(git_develop_branch)'
+alias grbum='git rebase upstream/$(git_master_branch)'
+
+alias gr='git remote'
+alias gra='git remote add'
+alias grmv='git remote rename'
+alias grrm='git remote remove'
+alias grset='git remote set-url'
+alias grup='git remote update'
+alias grv='git remote --verbose'
+
+alias gpristine='git reset --hard && git clean --force -dfx'
+alias grh='git reset'
+alias grhh='git reset --hard'
+alias grhk='git reset --keep'
+alias grhs='git reset --soft'
+alias gru='git reset --'
+alias groh='git reset origin/$(git_current_branch) --hard'
+alias gruh='git reset upstream/$(git_current_branch) --hard'
+
+alias grs='git restore'
+alias grss='git restore --source'
+alias grst='git restore --staged'
+
+function gwip() {
+  git add --all
+  git rm $(git ls-files --deleted) 2> /dev/null
+  git commit --no-verify --no-gpg-sign --message "--wip--"
+}
+
+function gunwip() {
+  git rev-list --max-count=1 --format="%s" HEAD | grep --quiet "\--wip--" \
+    && git reset HEAD~1
+}
+
+function gunwipall() {
+  local commit=$(git log --grep="--wip--" --invert-grep --max-count=1 --format=format:%H)
+
+  if [[ "${commit}" != "$(git rev-parse HEAD)" ]]; then
+    git reset "${commit}" || return 1
+  fi
+}
+
+alias grev='git revert'
+alias grm='git rm'
+alias grmc='git rm --cached'
+
+alias gsh='git show'
+alias gsps='git show --pretty=short --show-signature'
+
+alias gsta='git stash push'
+alias gstaa='git stash apply'
+alias gstall='git stash --all'
+alias gstc='git stash clear'
+alias gstd='git stash drop'
+alias gstl='git stash list'
+alias gstp='git stash pop'
+alias gsts='git stash show --patch'
+alias gstu='git stash push --include-untracked'
+
+alias gst='git status'
+alias gss='git status --short'
+alias gsb='git status --short --branch'
+
+alias gsi='git submodule init'
+alias gsu='git submodule update'
+
+alias gsd='git switch $(git_develop_branch)'
+alias gsm='git switch $(git_master_branch)'
+alias gsw='git switch'
+alias gswc='git switch --create'
+
+alias gta='git tag --annotate'
+alias gts='git tag --sign'
+alias gtv='git tag | sort -V'
+
+alias gignore='git update-index --skip-worktree'
+alias gunignore='git update-index --no-skip-worktree'
+
+alias gwt='git worktree'
+alias gwta='git worktree add'
+alias gwtls='git worktree list'
+alias gwtmv='git worktree move'
+alias gwtrm='git worktree remove'
+
+alias tia='tig --all'
+
+## Tmux
+
+# Create new tmux session or switch to existing one. Works from within tmux too.
+function tm() {
+  [[ -n "${TMUX}" ]] && change="switch-client" || change="attach-session"
+  if [[ -n "$1" ]]; then
+    tmux "${change}" -t "$1" 2> /dev/null \
+      || (tmux new-session -d -s "$1" && tmux "${change}" -t "$1")
+    return
+  fi
+  local session
+  session="$(tmux list-sessions -F "#{session_name}" 2> /dev/null \
+    | fzf --select-1 --exit-0)" \
+    && tmux "${change}" -t "${session}"
+}
+
+# Open gdb within 2 tmux panes.
+function gdb-tmux() {
+  local id
+  local tty
+  id="$(tmux split-pane -hPF "#D" "tail -f /dev/null")"
+  tmux last-pane
+  tty="$(tmux display-message -p -t "${id}" '#{pane_tty}')"
+  gdb -ex "dashboard -output ${tty}" "$@"
+  tmux kill-pane -t "${id}"
+}
+
+alias ta='tmux attach -t'
+alias tad='tmux attach -d -t'
+alias ts='tmux new-session -s'
+alias tl='tmux list-sessions'
+alias tksv='tmux kill-server'
+alias tkss='tmux kill-session -t'
+
+## CMake
+
+# By default, use nproc number of threads.
+export CMAKE_BUILD_PARALLEL_LEVEL=$(nproc)
+
+# Generates compile_commands.json by default.
+export CMAKE_EXPORT_COMPILE_COMMANDS=ON
+
+# Use Ninja by default.
+export CMAKE_GENERATOR=Ninja
+
+# Use sccache by default.
+export CMAKE_C_COMPILER_LAUNCHER="sccache"
+export CMAKE_CXX_COMPILER_LAUNCHER="sccache"
+
+# Output should be logged for failed tests.
+export CTEST_OUTPUT_ON_FAILURE=ON
+
+# Report CTest progress by repeatedly updating the same line.
+export CTEST_PROGRESS_OUTPUT=ON
+
+# Include the current load to the ninja status.
+export NINJA_STATUS="[%s/%f/%t] (j%r/%e) "
+
+## Kitty
+
+# Ensures that terminfo is uploaded.
+alias ssh='kitty +kitten ssh'
+
+# Nicer scp/rsync.
+alias transfer='kitty +kitten transfer'
+
+## Plugins
+
+### Dircycle
+
+# Use [M-S-Left] and [M-S-Right] for dircycle.
+bindkey "^[[1;4D" insert-cycledleft
+bindkey "^[[1;4C" insert-cycledright
+
+### Fzf-Tab
+
+# Use tmux popups instead.
+zstyle ":fzf-tab:*" fzf-command ftb-tmux-popup
+
+# Switches group using F1 and F2.
+zstyle ":fzf-tab:*" switch-group F1 F2
+
+# Disable prefix before colorized completions.
+zstyle ":fzf-tab:*" prefix ""
+
+### Zsh-Autosuggestion
+
+# Changes to slightly more visible color when highlighting a suggestion.
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=60"
+
+# Sets max size of buffer to trigger autosuggestion. This can be useful when
+# pasting large amount of text in the terminal, to avoid triggering
+# autosuggestion for strings that are too long.
+ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=40
+
+# Tries to find a suggestion from the history, but, if it can't find a match,
+# will find a suggestion from the completion engine.
+ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+
+### Theme
 
 # Defines character set used by powerlevel10k.
-POWERLEVEL9K_MODE='nerdfont-v3'
+POWERLEVEL9K_MODE=nerdfont-v3
 
 # Default colors of dir segment.
 POWERLEVEL9K_DIR_BACKGROUND=blue
@@ -29,7 +949,7 @@ POWERLEVEL9K_DIR_FOREGROUND=brightwhite
 POWERLEVEL9K_SHORTEN_STRATEGY=truncate_to_unique
 
 # Color of the shortened directory entries.
-POWERLEVEL9K_DIR_SHORTENED_FOREGROUND='248'
+POWERLEVEL9K_DIR_SHORTENED_FOREGROUND=248
 
 # Shorten directory if it's longer than this even if there is space for it. The
 # value can be either absolute (e.g., '80') or a percentage of terminal width
@@ -50,16 +970,16 @@ POWERLEVEL9K_SHORTEN_FOLDER_MARKER="(${(j:|:)anchors})"
 unset -v anchors
 
 # Colors of writable segment.
-POWERLEVEL9K_DIR_WRITABLE_FORBIDDEN_BACKGROUND='red'
-POWERLEVEL9K_DIR_WRITABLE_FORBIDDEN_FOREGROUND='white'
+POWERLEVEL9K_DIR_WRITABLE_FORBIDDEN_BACKGROUND=red
+POWERLEVEL9K_DIR_WRITABLE_FORBIDDEN_FOREGROUND=white
 
 # Colors of vcs segment that depends on its state.
-POWERLEVEL9K_VCS_CLEAN_BACKGROUND='076'
-POWERLEVEL9K_VCS_CLEAN_FOREGROUND='black'
-POWERLEVEL9K_VCS_UNTRACKED_BACKGROUND='076'
-POWERLEVEL9K_VCS_UNTRACKED_FOREGROUND='black'
-POWERLEVEL9K_VCS_MODIFIED_BACKGROUND='220'
-POWERLEVEL9K_VCS_MODIFIED_FOREGROUND='black'
+POWERLEVEL9K_VCS_CLEAN_BACKGROUND=076
+POWERLEVEL9K_VCS_CLEAN_FOREGROUND=black
+POWERLEVEL9K_VCS_UNTRACKED_BACKGROUND=076
+POWERLEVEL9K_VCS_UNTRACKED_FOREGROUND=black
+POWERLEVEL9K_VCS_MODIFIED_BACKGROUND=220
+POWERLEVEL9K_VCS_MODIFIED_FOREGROUND=black
 
 # Don't show standard Powerline branch icon.
 POWERLEVEL9K_HIDE_BRANCH_ICON=true
@@ -79,16 +999,16 @@ POWERLEVEL9K_VCS_COMMITS_BEHIND_MAX_NUM=-1
 POWERLEVEL9K_STATUS_OK=false
 
 # Colors of error status.
-POWERLEVEL9K_STATUS_ERROR_BACKGROUND='red'
-POWERLEVEL9K_STATUS_ERROR_FOREGROUND='226'
+POWERLEVEL9K_STATUS_ERROR_BACKGROUND=red
+POWERLEVEL9K_STATUS_ERROR_FOREGROUND=226
 
 # Colors of background jobs.
-POWERLEVEL9K_BACKGROUND_JOBS_BACKGROUND='black'
-POWERLEVEL9K_BACKGROUND_JOBS_FOREGROUND='cyan'
+POWERLEVEL9K_BACKGROUND_JOBS_BACKGROUND=black
+POWERLEVEL9K_BACKGROUND_JOBS_FOREGROUND=cyan
 
 # Colors of execution time.
-POWERLEVEL9K_COMMAND_EXECUTION_TIME_BACKGROUND='245'
-POWERLEVEL9K_COMMAND_EXECUTION_TIME_FOREGROUND='black'
+POWERLEVEL9K_COMMAND_EXECUTION_TIME_BACKGROUND=245
+POWERLEVEL9K_COMMAND_EXECUTION_TIME_FOREGROUND=black
 
 # Show duration of the last command if it takes at least this many seconds.
 POWERLEVEL9K_COMMAND_EXECUTION_TIME_THRESHOLD=2
@@ -115,10 +1035,10 @@ POWERLEVEL9K_PROMPT_ADD_NEWLINE=true
 POWERLEVEL9K_PROMPT_ON_NEWLINE=true
 
 # Filler between left and right prompt on the first prompt line.
-POWERLEVEL9K_MULTILINE_FIRST_PROMPT_GAP_CHAR='·'
+POWERLEVEL9K_MULTILINE_FIRST_PROMPT_GAP_CHAR=·
 
 # The color of the filler.
-POWERLEVEL9K_MULTILINE_FIRST_PROMPT_GAP_FOREGROUND='244'
+POWERLEVEL9K_MULTILINE_FIRST_PROMPT_GAP_FOREGROUND=244
 
 # Transient prompt works similarly to the builtin transient_rprompt option - it
 # trims down prompt when accepting a command line. Supported values:
@@ -129,182 +1049,7 @@ POWERLEVEL9K_MULTILINE_FIRST_PROMPT_GAP_FOREGROUND='244'
 #               directory.
 POWERLEVEL9K_TRANSIENT_PROMPT=same-dir
 
-# Uncomment the following line to use hyphen-insensitive completion. Case
-# sensitive completion must be off. _ and - will be interchangeable.
-HYPHEN_INSENSITIVE="true"
+### Sheldon
 
-# Uncomment the following line to disable bi-weekly auto-update checks.
-DISABLE_AUTO_UPDATE="true"
-
-# Uncomment the following line to display red dots whilst waiting for completion.
-COMPLETION_WAITING_DOTS="true"
-
-# Uncomment the following line if you want to disable marking untracked files
-# under VCS as dirty. This makes repository status check for large repositories
-# much, much faster.
-DISABLE_UNTRACKED_FILES_DIRTY="true"
-
-# Uncomment the following line if you want to disable marking untracked files
-# under VCS as dirty. This makes repository status check for large repositories
-# much, much faster.
-DISABLE_UNTRACKED_FILES_DIRTY="true"
-
-# Would you like to use another custom folder than $ZSH/custom?
-ZSH_CUSTOM="${XDG_CONFIG_HOME}/oh-my-zsh"
-
-# Move cache to XDG cache dir
-ZSH_CACHE_DIR="${XDG_CACHE_HOME}/zsh"
-mkdir -p $ZSH_CACHE_DIR
-
-# Move completion dump to XDG cache dir
-ZSH_COMPDUMP="${ZSH_CACHE_DIR}/zcompdump-${ZSH_VERSION}"
-
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
-plugins=(
-  cp
-  dircycle
-  dirhistory
-  extract
-  fasd
-  fast-syntax-highlighting
-  fzf
-  fzf-git
-  fzf-kill
-  fzf-tab
-  git
-  rsync
-  sublime
-  sudo
-  tig
-  tmux
-  zsh-autopair
-  zsh-autosuggestions
-)
-
-autoload -U +X bashcompinit && bashcompinit
-
-source $ZSH/oh-my-zsh.sh
-
-# Make master as a default branch
-function git_main_branch() {
-  echo master
-}
-
-# The following function is used internally by fzf widgets. History widget,
-# bound to CTRL-R, duplicates the inserted entry but only inside tmux and when
-# powerlevel10k theme is used. The original function returns either fzf-tmux or
-# fzf but we've already aliased fzf to fzf-tmux so the following should not
-# break anything.
-__fzfcmd() {
-  echo fzf
-}
-
-# ZSH configuration
-
-# Treat the '!' character specially during expansion.
-setopt BANG_HIST
-
-# Write the history file in the ":start:elapsed;command" format.
-setopt EXTENDED_HISTORY
-
-# Share history between all sessions.
-setopt SHARE_HISTORY
-
-# Expire duplicate entries first when trimming history.
-setopt HIST_EXPIRE_DUPS_FIRST
-
-# Don't record an entry that was just recorded again.
-setopt HIST_IGNORE_DUPS
-
-# Delete old recorded entry if new entry is a duplicate.
-setopt HIST_IGNORE_ALL_DUPS
-
-# Do not display a line previously found.
-setopt HIST_FIND_NO_DUPS
-
-# Don't record an entry starting with a space.
-setopt HIST_IGNORE_SPACE
-
-# Don't write duplicate entries in the history file.
-setopt HIST_SAVE_NO_DUPS
-
-# Remove superfluous blanks before recording entry.
-setopt HIST_REDUCE_BLANKS
-
-# Don't execute immediately upon history expansion.
-setopt HIST_VERIFY
-
-# Remove the history command from the history list when invoked.
-setopt HIST_NO_STORE
-
-# Make cd push the old directory onto the directory stack.
-setopt AUTO_PUSHD
-
-# Don’t push multiple copies of the same directory onto the directory stack.
-setopt PUSHD_IGNORE_DUPS
-
-# Do not print the directory stack after pushd or popd.
-setopt PUSHD_SILENT
-
-# Have pushd with no arguments act like ‘pushd $HOME’.
-setopt PUSHD_TO_HOME
-
-# Do not ask for confirmation while removing glob
-setopt RM_STAR_SILENT
-
-# All unquoted arguments of the form ‘anything=expression’ appearing after the
-# command name have filename expansion
-setopt MAGIC_EQUAL_SUBST
-
-# Color to use when highlighting suggestion
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=60'
-
-# Max size of buffer to trigger autosuggestion. Leave null for no upper bound.
-ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=40
-
-# User configuration
-. "${XDG_CONFIG_HOME}/shrc"
-
-# Use ALT-{A/E} for the same effect as CTRL-{A/E}
-bindkey '^[a' beginning-of-line
-bindkey '^[e' end-of-line
-
-# Quick jumping to n-th arguments by pressing Alt-number
-bindkey '^[1' beginning-of-line
-bindkey -s '^[2' '^A^[f'
-bindkey -s '^[3' '^A^[f^[f'
-bindkey -s '^[4' '^A^[f^[f^[f'
-bindkey -s '^[5' '^A^[f^[f^[f^[f'
-bindkey -s '^[6' '^A^[f^[f^[f^[f^[f'
-bindkey -s '^[7' '^A^[f^[f^[f^[f^[f^[f'
-bindkey -s '^[8' '^A^[f^[f^[f^[f^[f^[f^[f'
-bindkey -s '^[9' '^A^[f^[f^[f^[f^[f^[f^[f^[f'
-
-# Use CTRL-U to kill whole line backward
-bindkey "^U" backward-kill-line
-
-# Swap ALT-H with CTRL-ALT-H
-bindkey "^[^H" run-help
-bindkey "^[H" backward-kill-word
-bindkey "^[h" backward-kill-word
-
-# Use ALT-Shift-{Left/Right} for dircycle
-bindkey '^[[1;4D' insert-cycledleft
-bindkey '^[[1;4C' insert-cycledright
-
-# Use CTRL-{A/F/D} for fasd completion
-bindkey '^X^A' fasd-complete
-bindkey '^X^F' fasd-complete-f
-bindkey '^X^D' fasd-complete-d
-
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
+# Load all plugins.
+eval "$(sheldon source)"

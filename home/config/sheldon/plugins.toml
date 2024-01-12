@@ -1,0 +1,42 @@
+shell = "zsh"
+
+[templates]
+defer = "{% for file in files %} zsh-defer source \"{{ file }}\"\n {% endfor %}"
+
+[plugins.zsh-defer]
+github = "romkatv/zsh-defer"
+
+[plugins.dircycle]
+remote = 'https://github.com/ohmyzsh/ohmyzsh/raw/master/plugins/dircycle/dircycle.plugin.zsh'
+apply = ["defer"]
+
+[plugins.dirhistory]
+remote = 'https://github.com/ohmyzsh/ohmyzsh/raw/master/plugins/dirhistory/dirhistory.plugin.zsh'
+apply = ["defer"]
+
+[plugins.fzf-tab]
+github = "Aloxaf/fzf-tab"
+apply = ["defer"]
+
+[plugins.fast-syntax-highlighting]
+github = "zdharma-continuum/fast-syntax-highlighting"
+apply = ["defer"]
+
+[plugins.fzf-git]
+github = "gessen/zsh-fzf-git"
+apply = ["defer"]
+
+[plugins.fzf-kill]
+github = "gessen/zsh-fzf-kill"
+apply = ["defer"]
+
+[plugins.zsh-autopair]
+github = "hlissner/zsh-autopair"
+apply = ["defer"]
+
+[plugins.zsh-autosuggestions]
+github = "zsh-users/zsh-autosuggestions"
+apply = ["defer"]
+
+[plugins.powerlevel10k]
+github = "romkatv/powerlevel10k"
