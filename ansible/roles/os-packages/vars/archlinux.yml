@@ -32,7 +32,6 @@ packages:
   - mpv
   - ncdu
   - ninja
-  - oh-my-zsh-git
   - openssh
   - pacman-contrib
   - plantuml
@@ -44,6 +43,7 @@ packages:
   - rustup
   - rust-analyzer
   - sccache
+  - sheldon
   - shfmt
   - signal-desktop
   - tig
@@ -53,9 +53,7 @@ packages:
   - ttf-nerd-fonts-symbols
   - xdg-user-dirs
   - yt-dlp
-  - zsh-autosuggestions
   - zsh-completions
-  - zsh-theme-powerlevel10k
 
 packages_asdeps:
   - atool
@@ -67,15 +65,12 @@ packages_asdeps:
 
 packages_aur:
   - dropbox
-  - fzf-tab-bin-git
   - git-completion
   - mkinitcpio-firmware
   - pandoc-bin
   - shellcheck-bin
   - vscodium-bin
   - vscodium-bin-marketplace
-  - zsh-autopair-git
-  - zsh-fast-syntax-highlighting
 
 packages_ignore:
 
@@ -89,16 +84,6 @@ packages_own:
       - PKGBUILD
       - .SRCINFO
       - completion.patch
-  - name: zsh-fzf-git-git
-    files:
-      - PKGBUILD
-      - .SRCINFO
-      - zsh-fzf-git.install
-  - name: zsh-fzf-kill-git
-    files:
-      - PKGBUILD
-      - .SRCINFO
-      - zsh-fzf-kill.install
 
 reflector_options:
   - regexp: '^#?[ ]*--country'
