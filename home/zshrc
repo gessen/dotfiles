@@ -1,6 +1,16 @@
 # Help Tramp and Eshell.
 [[ "${TERM}" = "dumb" ]] && unsetopt zle && PS1="$ " && return
 
+# Automatic SSH agent.
+
+if ! pgrep -u "${USER}" ssh-agent > /dev/null; then
+  ssh-agent -s > "/tmp/ssh-agent.env"
+fi
+
+if [[ ! "${SSH_AGENT_PID}" ]]; then
+  source "/tmp/ssh-agent.env" >/dev/null
+fi
+
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
