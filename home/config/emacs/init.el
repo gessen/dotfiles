@@ -4998,9 +4998,6 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
   ;; Remap find-file{-other-window} to dired-x-find-file{-other-window}
   (setq dired-x-hands-off-my-keys nil)
 
-  ;; This would bind "I" and it is used to kill subdirs.
-  (setq dired-bind-info nil)
-
   :config
 
   ;; Prevent annoying "Omitted N lines" messages when auto-reverting.
@@ -5049,6 +5046,14 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
 ;; `dired'.
 (use-package! diredfl
   :hook (dired-mode-hook . diredfl-mode))
+
+;; Package `fasd' hooks into to `find-file-hook' to add all visited files and
+;; directories to `fasd' database.
+(use-package! fasd
+  :demand t
+  :config
+
+  (global-fasd-mode +1))
 
 ;; Package `fd-dired' provides a dired-mode interface for fd's result. Same
 ;; functionality as `find-dired' and `find-grep-dired', use fd and rg instead.

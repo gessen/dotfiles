@@ -48,6 +48,7 @@
  ("emacs-bind-map" . "510a24138d8de3b8df0783f1ac493a551fc9bd74")
  ("emacs-ccls" . "dd33da8ed74ea3936c1ac969fe1be02879825e86")
  ("emacs-devdocs-browser" . "afc460e687bec4eb947ab85d207778fc3b9b3bbc")
+ ("emacs-fasd" . "c1d92553f33ebb018135c698db1a6d7f86731a26")
  ("emacs-hide-mode-line" . "bc5d293576c5e08c29e694078b96a5ed85631942")
  ("emacs-htmlize" . "dd27bc3f26efd728f2b1f01f9e4ac4f61f2ffbf9")
  ("emacs-libvterm" . "c3a3a23a5eace137947524c93644204bf6b56cff")
