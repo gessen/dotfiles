@@ -325,3 +325,7 @@ user_pref("plugins.notifyMissingFlash", false);
 
 // enable hardware acceleration
 user_pref("media.ffmpeg.vaapi.enabled", true);
+
+// always use XDG portals for file pickers which will make it use KDE's file
+// picker insted of GTK one
+user_pref("widget.use-xdg-desktop-portal.file-picker", 1);
