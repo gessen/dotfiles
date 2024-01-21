@@ -5696,6 +5696,34 @@ possibly new window."
   (setq modus-themes-completions
         '((matches . (underline)))))
 
+(defvar after-load-theme-hook nil
+  "Hook run after a color theme is loaded using `load-theme'.")
+
+(defadvice! my--after-load-theme (&rest _)
+  :after #'load-theme
+  "After theme is loaded, run `after-load-theme-hook'."
+  (run-hooks 'after-load-theme-hook))
+
+(defhook! my--set-cursor-color-in-terminal ()
+  (after-load-theme-hook server-after-make-frame-hook)
+  "Set cursor color in terminal Emacs based on the current theme."
+  (unless (display-graphic-p)
+    (let ((color (face-attribute 'cursor :background)))
+      (if color
+          ;; Only some terminals support this exact escape code.
+          (send-string-to-terminal (format "\e]12;%s\a" color))))))
+
+(defhook! my--reset-cursor-color-in-terminal-main ()
+  kill-emacs-hook
+  "Reset cursor color in terminal Emacs after exiting it."
+  (unless (display-graphic-p)
+    (send-string-to-terminal "\e]112\a")))
+
+(defun my--reset-cursor-color-in-terminal (terminal)
+  "Reset cursor color in terminal Emacs"
+  (send-string-to-terminal "\e]112\a" terminal))
+(add-to-list 'delete-terminal-functions #'my--reset-cursor-color-in-terminal)
+
 ;; Load default theme.
 (load-theme 'modus-vivendi :no-confirm)
 
