@@ -25,8 +25,9 @@
                             (top . 0)
                             (left . 0)
                             (user-size . t)
-                            (width . 130)
-                            (height . 60)))
+                            (width . 110)
+                            (height . 36)
+                            (font . "JetBrains Mono-17")))
 
 ;; Set initial frame to be maximized
 ; (setq initial-frame-alist '((fullscreen . maximized)))

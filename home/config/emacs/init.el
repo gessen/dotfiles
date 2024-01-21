@@ -5634,9 +5634,6 @@ possibly new window."
 
 ;;;; Font
 
-;; Set default font.
-(face-spec-set 'default '((t :family "Hack" :height 150)))
-
 ;; Package `default-text-scale' provides commands for increasing or decreasing
 ;; the default font size in all GUI Emacs frames - it is like an Emacs-wide
 ;; version of `text-scale-mode'.
@@ -5716,7 +5713,7 @@ possibly new window."
 (add-to-list 'delete-terminal-functions #'my--reset-cursor-color-in-terminal)
 
 ;; Load default theme.
-(load-theme 'modus-vivendi :no-confirm)
+(load-theme 'modus-operandi :no-confirm)
 
 ;;;; Modeline
 

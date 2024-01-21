@@ -1,0 +1,29 @@
+theme = "modus_operandi"
+
+[editor]
+line-number = "relative"
+cursorline = true
+idle-timeout = 0
+bufferline = "multiple"
+color-modes = true
+
+[editor.lsp]
+display-messages = true
+display-inlay-hints = true
+
+[editor.cursor-shape]
+insert = "bar"
+
+[editor.file-picker]
+hidden = false
+
+[editor.indent-guides]
+render = true
+
+[keys.normal]
+"ret" = ["move_line_down", "goto_first_nonwhitespace"]
+X = "extend_line_above"
+D = "delete_char_backward"
+
+[keys.insert]
+j = { k = "normal_mode" }

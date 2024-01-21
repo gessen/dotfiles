@@ -1,0 +1,11 @@
+[manager]
+sort_by = "natural"
+sort_reverse = false
+sort_sensitive = false
+show_hidden = true
+
+[opener]
+edit = [
+  { exec = '$EDITOR "$@"', block = true,  for = "unix" },
+  { exec = 'helix "$@"', block = true, for = "unix" },
+]
