@@ -18,14 +18,21 @@
 	features = colors-dark decorations line-numbers
 	word-diff-regex = "\\S+"
 [delta "colors-dark"]
+	dark = true
 	minus-style = syntax "#4f0000"
 	minus-emph-style = syntax bold "#c81010"
 	plus-style = syntax "#004f00"
-	plus-emph-style = syntax bold "#008000"
+	plus-emph-style = syntax bold "#10c810"
+[delta "colors-light"]
+	light = true
+	minus-style = syntax "#ffe0e0"
+	minus-emph-style = syntax bold "#ffc0c0"
+	plus-style = syntax "#d0ffd0"
+	plus-emph-style = syntax bold "#a0efa0"
 [delta "decorations"]
-	file-style = bold yellow ul
+	file-style = yellow bold ul
 	file-decoration-style = none
-	commit-decoration-style = bold yellow box ul
+	commit-decoration-style = yellow bold box
 	hunk-header-style = file line-number syntax
 	hunk-header-decoration-style = cyan box ul
 [delta "line-numbers"]
