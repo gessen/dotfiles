@@ -158,47 +158,59 @@ frame is created."
 ;; Define this variable for native compilation disabled Emacs.
 (setq native-comp-deferred-compilation-deny-list '())
 
-;;;; straight.el
+;;;; elpaca
 
-(eval-and-compile
-  ;; Get the latest version of straight.el from the develop branch, rather than
-  ;; the default master which is updated less frequently
-  (setq straight-repository-branch "develop")
-
-  ;; Disable checks for package modifications to save up time during startup
-  (setq straight-check-for-modifications nil)
-
-  ;; Clear out recipe overrides (in case of re-init).
-  (setq straight-recipe-overrides nil))
-
-;; Bootstrap the package manager, straight.el.
-(defvar bootstrap-version)
-(let ((bootstrap-file
-       (expand-file-name "straight/repos/straight.el/bootstrap.el"
-                         user-emacs-directory))
-      (bootstrap-version 5))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-        (url-retrieve-synchronously
-         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-         'silent 'inhibit-cookies)
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
-  (load bootstrap-file nil 'nomessage))
+(defvar elpaca-installer-version 0.6)
+(defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
+(defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
+(defvar elpaca-repos-directory (expand-file-name "repos/" elpaca-directory))
+(defvar elpaca-order '(elpaca :repo "https://github.com/progfolio/elpaca.git"
+                              :ref nil
+                              :files (:defaults "elpaca-test.el" (:exclude "extensions"))
+                              :build (:not elpaca--activate-package)))
+(let* ((repo  (expand-file-name "elpaca/" elpaca-repos-directory))
+       (build (expand-file-name "elpaca/" elpaca-builds-directory))
+       (order (cdr elpaca-order))
+       (default-directory repo))
+  (add-to-list 'load-path (if (file-exists-p build) build repo))
+  (unless (file-exists-p repo)
+    (make-directory repo t)
+    (when (< emacs-major-version 28) (require 'subr-x))
+    (condition-case-unless-debug err
+        (if-let ((buffer (pop-to-buffer-same-window "*elpaca-bootstrap*"))
+                 ((zerop (call-process "git" nil buffer t "clone"
+                                       (plist-get order :repo) repo)))
+                 ((zerop (call-process "git" nil buffer t "checkout"
+                                       (or (plist-get order :ref) "--"))))
+                 (emacs (concat invocation-directory invocation-name))
+                 ((zerop (call-process emacs nil buffer nil "-Q" "-L" "." "--batch"
+                                       "--eval" "(byte-recompile-directory \".\" 0 'force)")))
+                 ((require 'elpaca))
+                 ((elpaca-generate-autoloads "elpaca" repo)))
+            (progn (message "%s" (buffer-string)) (kill-buffer buffer))
+          (error "%s" (with-current-buffer buffer (buffer-string))))
+      ((error) (warn "%s" err) (delete-directory repo 'recursive))))
+  (unless (require 'elpaca-autoloads nil t)
+    (require 'elpaca)
+    (elpaca-generate-autoloads "elpaca" repo)
+    (load "./elpaca-autoloads")))
+(add-hook 'after-init-hook #'elpaca-process-queues)
+(elpaca `(,@elpaca-order))
 
 ;;;; use-package
 
-;; Package `use-package' provides a handy macro by the same name which is
-;; essentially a wrapper around `with-eval-after-load' with a lot of handy
-;; syntactic sugar and useful features.
-(straight-use-package 'use-package)
+; ;; Package `use-package' provides a handy macro by the same name which is
+; ;; essentially a wrapper around `with-eval-after-load' with a lot of handy
+; ;; syntactic sugar and useful features.
+(elpaca elpaca-use-package
+  ;; When configuring a feature with `use-package', also tell elpaca to install
+  ;; a package of the same name, unless otherwise specified using the
+  ;; `:elpaca' keyword.
+  (elpaca-use-package-mode)
+  ;; Assume :elpaca t unless otherwise specified.
+  (setq elpaca-use-package-by-default t))
 
 (eval-and-compile
-  ;; When configuring a feature with `use-package', also tell straight.el to
-  ;; install a package of the same name, unless otherwise specified using the
-  ;; `:straight' keyword.
-  (setq straight-use-package-by-default t)
-
   ;; Tell `use-package' to always load features lazily unless told otherwise.
   ;; It's nicer to have this kind of thing be deterministic: if `:demand' is
   ;; present, the loading is eager; otherwise, the loading is lazy.
@@ -212,12 +224,15 @@ frame is created."
 (eval-when-compile
   (require 'use-package))
 
+;; Block until `use-package' is processed.
+(elpaca-wait)
+
 (defmacro use-feature! (name &rest args)
-  "Like `use-package', but with `straight-use-package-by-default' disabled.
+  "Like `use-package', but with `elpaca-use-package-by-default' disabled.
 NAME and ARGS are as in `use-package'."
   (declare (indent defun))
   `(use-package ,name
-     :straight nil
+     :elpaca nil
      ,@args))
 
 (defmacro use-package! (name &rest args)
@@ -233,14 +248,6 @@ NAME and ARGS are as in `use-package'."
 ;; those provided by similar packages `diminish', `delight' and `dim'.
 (use-package! blackout
   :demand t)
-
-;;;; straight.el configuration
-
-;; Feature `straight-x' from package `straight' provides experimental/unstable
-;; extensions to straight.el which are not yet ready for official inclusion.
-(use-feature! straight-x
-  ;; Add an autoload for this extremely useful command.
-  :commands (straight-x-fetch-all))
 
 ;;; Keybindings
 
@@ -364,13 +371,6 @@ BINDINGS is a series of KEY DEF pair."
     (setq key (pop bindings)
           def (pop bindings))))
 
-;; Package `bind-key' provides a macro by the same name (along with `bind-key*'
-;; and `unbind-key') which provides a much prettier API for manipulating keymaps
-;; than `define-key' and `global-set-key' do. It's also the same API that
-;; `:bind' and similar keywords in `use-package' use.
-(use-package! bind-key
-  :demand t)
-
 ;; Package `bind-map' is an Emacs package providing the macro bind-map which can
 ;; be used to make a keymap available across different "leader keys". It is
 ;; essentially a generalization of the idea of a leader key as used in vim or
@@ -379,9 +379,8 @@ BINDINGS is a series of KEY DEF pair."
 (use-package! bind-map
   :demand t)
 
-;; Bind `leader-key' to `my-leader-key-map'.
-(bind-map my-leader-key-map
-  :keys (my-leader-key))
+;; Block until `blackout' and `bind-map' is processed.
+(elpaca-wait)
 
 ;; Package `which-key' displays the key bindings and associated commands
 ;; following the currently-entered key prefix in a popup.
@@ -436,11 +435,27 @@ BINDINGS is a series of KEY DEF pair."
 (use-package! hydra
   :demand t)
 
-;;; Load some packages early
-(use-package! nerd-icons)
+;; Bind `leader-key' to `my-leader-key-map'.
+(bind-map my-leader-key-map
+  :keys (my-leader-key))
 
-;; `magit' will complain about loading built-in version of `transient'
-(use-package! transient)
+;; Block until `hydra' is processed.
+(elpaca-wait)
+
+;;; Load some packages early
+(defun my--elpaca-unload-seq (e)
+  "Unload seq before continuing the elpaca build, then
+continue to build the recipe E."
+  (and (featurep 'seq) (unload-feature 'seq t))
+  (elpaca--continue-build e))
+
+(use-package! seq :elpaca
+  `(seq :build ,(append
+                 (butlast
+                  (if (file-exists-p
+                       (expand-file-name "seq" elpaca-builds-directory))
+                      elpaca--pre-built-steps elpaca-build-steps))
+                 (list 'my--elpaca-unload-seq 'elpaca--activate-package))))
 
 ;;; Configure ~/.emacs.d paths
 
@@ -1046,7 +1061,7 @@ window instead."
         (list
          "COMMIT_EDITMSG\\'"
          my-cache-dir
-         (file-truename (expand-file-name "straight" straight-base-dir))))
+         (file-truename (expand-file-name "elpaca" elpaca-directory))))
 
   ;; Suppress messages saying the recentf file was either loaded or saved.
   (dolist (func '(recentf-load-list recentf-save-list))
@@ -1200,9 +1215,9 @@ window instead."
                                         "projectile-bookmarks.el"
                                         my-cache-dir))
 
-  ;; Ignore `straight' repos when opening them.
+  ;; Ignore `elpaca' repos when opening them.
   (setq projectile-ignored-projects (list (expand-file-name
-                                           "straight/"
+                                           "elpaca/"
                                            user-emacs-directory)))
 
   ;; Register CMake project type.
@@ -2183,6 +2198,9 @@ will not refresh `column-number-mode."
 ;; to invoke `occur' with a regexp that matches all known keywords, and to
 ;; insert a keyword.
 (use-package! hl-todo
+  ;; This packages only exposes its version through git tags which can't be
+  ;; read correctly with shallow clones.
+  :elpaca (:depth nil)
   :demand t
   :config
 
@@ -3056,7 +3074,7 @@ completing-read prompter."
 ;; Additional enhancements are available as extensions or complementary
 ;; packages.
 (use-package! vertico
-  :straight (:files (:defaults "extensions/*"))
+  :elpaca (:files (:defaults "extensions/*"))
   :init
 
   (defadvice! my--vertico-add-history ()
@@ -4708,7 +4726,7 @@ unhelpful."
 (use-package! org
   ;; We use straight mirror as the official repo does not allow to fetch a
   ;; shallow repo with a frozen git hash.
-  :straight (:host github :repo "emacs-straight/org-mode" :local-repo "org")
+  :elpaca (:host github :repo "emacs-straight/org-mode" :local-repo "org")
   :init
 
   (defhook! my--org-mode-setup ()
@@ -5013,7 +5031,7 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
 ;; Package `dired-copy-paste' enables you to cut, copy and paste files and
 ;; directories in Emacs Dired.
 (use-package! dired-copy-paste
-  :straight (:host github :repo "jsilve24/dired-copy-paste")
+  :elpaca (:host github :repo "jsilve24/dired-copy-paste")
   :after dired
   :commands (dired-copy-paste-do-cut
              dired-copy-paste-do-copy
@@ -5662,6 +5680,7 @@ possibly new window."
 ;; standard for colour-contrast accessibility between background and foreground
 ;; values (WCAG AAA).
 (use-package! modus-themes
+  :demand t
   :bind ("<f9>" . modus-themes-select)
   :config
 
@@ -5682,7 +5701,10 @@ possibly new window."
 
   ;; Draw a line below matching characters in completions buffers.
   (setq modus-themes-completions
-        '((matches . (underline)))))
+        '((matches . (underline))))
+
+  ;; Load modus dark theme.
+  (load-theme 'modus-vivendi :no-confirm))
 
 (defvar after-load-theme-hook nil
   "Hook run after a color theme is loaded using `load-theme'.")
@@ -5711,9 +5733,6 @@ possibly new window."
   "Reset cursor color in terminal Emacs"
   (send-string-to-terminal "\e]112\a" terminal))
 (add-to-list 'delete-terminal-functions #'my--reset-cursor-color-in-terminal)
-
-;; Load default theme.
-(load-theme 'modus-operandi :no-confirm)
 
 ;;;; Modeline
 
@@ -5796,13 +5815,6 @@ possibly new window."
 
 ;;;; Tabs
 
-;; Package `powerline' is a library for customizing the mode-line that is based
-;; on the Vim Powerline. A collection of predefined themes comes with the
-;; package.
-(use-package! powerline
-  ;; This package has issues with native compilation.
-  :straight (:build (:not native-compile)))
-
 ;; Package `centaur-tabs' is an Emacs plugin aiming to become an aesthetic,
 ;; modern looking tabs plugin. This package offers tabs with a wide range of
 ;; customization options, both aesthetical and functional, implementing them
@@ -5832,7 +5844,7 @@ possibly new window."
                                          "*lsp"
                                          "*LSP"
                                          "*Mini"
-                                         "*straight"
+                                         "*elpaca"
                                          "*temp"
                                          "*tramp"
                                          "*which"))
@@ -5890,15 +5902,6 @@ possibly new window."
               ("M-J"       . #'centaur-tabs-ace-jump)))
 
 ;;; Closing
-
-;; Prune the build cache for straight.el - this will prevent it from growing too
-;; large.
-(straight-prune-build-cache)
-
-;; Occasionally, prune the build directory as well.
-(unless (bound-and-true-p my--currently-profiling-p)
-  (when (= 0 (random 20))
-    (straight-prune-build-directory)))
 
 ;; Restore default values after startup.
 (dolist (handler file-name-handler-alist)
