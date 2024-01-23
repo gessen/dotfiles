@@ -4766,12 +4766,7 @@ unhelpful."
 
   ;; Add additional backends to export engine.
   (dolist (backend '(beamer md confluence))
-    (push backend org-export-backends))
-
-  ;; Add plantuml for generating diagrams inside Org Mode.
-  (org-babel-do-load-languages
-   'org-babel-load-languages
-   '((plantuml . t))))
+    (push backend org-export-backends)))
 
 ;; Package `org-contrib' contains add-ons to Org-mode. These contributions are
 ;; not part of GNU Emacs or of the official Org-mode package.
@@ -4783,7 +4778,14 @@ unhelpful."
 
   ;; Do not require confirmation before interactively evaluating code blocks in
   ;; Org buffers.
-  (setq org-confirm-babel-evaluate nil))
+  (setq org-confirm-babel-evaluate nil)
+
+  ;; Support Emacs Lisp, PlantUML and Shell languages to Babel.
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((emacs-lisp . t)
+     (plantuml . t)
+     (shell . t))))
 
 ;; Feature `ob-plantuml' provides Org-Babel support for evaluating plantuml
 ;; scripts.
