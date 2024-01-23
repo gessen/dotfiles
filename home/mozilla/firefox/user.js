@@ -233,6 +233,19 @@ user_pref("network.cookie.cookieBehavior", 4);
 // Cookie lifetime (accept them normally)
 user_pref("network.cookie.lifetimePolicy", 0);
 
+// Punycode is a representation of Unicode with the limited ASCII character
+// subset used for Internet host names. Using Punycode, host names containing
+// Unicode characters are transcoded to a subset of ASCII consisting of letters,
+// digits, and hyphen, which is called the Letter-Digit-Hyphen (LDH) subset.
+// Punycode is used to encode internationalized domain names (IDNs) as a defense
+// against address spoofing. From a security perspective, Unicode domains can be
+// problematic because many Unicode characters are difficult to distinguish from
+// common ASCII characters. It is possible to register domains such as
+// "xn–pple-43d.com", which is equivalent to "аpple.com". It may not be obvious
+// at first glance, but "аpple.com" uses the Cyrillic "а" (U+0430) rather than
+// the ASCII "a" (U+0061). This is known as a homograph attack.
+user_pref("network.IDN_show_punycode", 1);
+
 //
 user_pref("dom.flyweb.enabled", false);
 
