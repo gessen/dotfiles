@@ -4876,6 +4876,13 @@ unhelpful."
 ;; Package `htmlize' converts the buffer text and the associated decorations to HTML.
 (use-package! htmlize)
 
+;; Package `org-modern' implements a modern style for your Org buffers using
+;; font locking and text properties. The package styles headlines, keywords,
+;; tables and source blocks. The styling is configurable, you can enable,
+;; disable or modify the style of each syntax element individually.
+(use-package! org-modern
+  :hook (org-mode-hook . org-modern-mode))
+
 ;; Package `org-sticky-header' displays in the header-line the Org heading for
 ;; the node that's at the top of the window.  This way, if the heading for the
 ;; text at the top of the window is beyond the top of the window, you don't
@@ -4887,11 +4894,6 @@ unhelpful."
 
   ;; Show the full outline path.
   (setq org-sticky-header-full-path 'full))
-
-;; Package `org-superstar' prettifies headings and plain lists in `org-mode'.
-;; It's a direct descendant of `org-bullets’.
-(use-package! org-superstar
-  :hook (org-mode-hook . org-superstar-mode))
 
 ;; Package `toc-org' helps you to have an up-to-date table of contents in Org
 ;; or Markdown files without exporting. Every time you save an Org file, the
