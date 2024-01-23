@@ -5896,6 +5896,19 @@ possibly new window."
               ("C-<end>"   . #'centaur-tabs-forward-group)
               ("M-J"       . #'centaur-tabs-ace-jump)))
 
+;;;; Padding
+
+;; Package `spacious-padding' provides a global minor mode to increase the
+;; spacing/padding of Emacs windows and frames. The idea is to make editing and
+;; reading feel more comfortable.
+(use-package! spacious-padding
+  :demand t
+  :bind ("<f8>" . spacious-padding-mode)
+  :config
+
+  (when (display-graphic-p)
+    (spacious-padding-mode +1)))
+
 ;;; Closing
 
 ;; Prune the build cache for straight.el - this will prevent it from growing too
