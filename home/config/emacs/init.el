@@ -872,16 +872,16 @@ window instead."
 ;; Emacs.
 (use-package! winum
   :demand t
-  :bind (:map winum-keymap
-              ("M-1" . #'winum-select-window-1)
-              ("M-2" . #'winum-select-window-2)
-              ("M-3" . #'winum-select-window-3)
-              ("M-4" . #'winum-select-window-4)
-              ("M-5" . #'winum-select-window-5)
-              ("M-6" . #'winum-select-window-6)
-              ("M-7" . #'winum-select-window-7)
-              ("M-8" . #'winum-select-window-8)
-              ("M-9" . #'winum-select-window-9))
+  :bind ( :map winum-keymap
+          ("M-1" . #'winum-select-window-1)
+          ("M-2" . #'winum-select-window-2)
+          ("M-3" . #'winum-select-window-3)
+          ("M-4" . #'winum-select-window-4)
+          ("M-5" . #'winum-select-window-5)
+          ("M-6" . #'winum-select-window-6)
+          ("M-7" . #'winum-select-window-7)
+          ("M-8" . #'winum-select-window-8)
+          ("M-9" . #'winum-select-window-9))
 
   :config
 
@@ -1123,20 +1123,20 @@ window instead."
     (split-string (shell-command-to-string "fasd -ld") "\n" t))
 
   (defvar consult-dir--source-fasd
-    `(:name     "Fasd dirs"
-                :narrow   ?f
-                :category file
-                :face     consult-file
-                :history  file-name-history
-                :enabled  ,(lambda () (executable-find "fasd"))
-                :items    ,#'consult-dir--fasd-dirs)
+    `( :name     "Fasd dirs"
+       :narrow   ?f
+       :category file
+       :face     consult-file
+       :history  file-name-history
+       :enabled  ,(lambda () (executable-find "fasd"))
+       :items    ,#'consult-dir--fasd-dirs)
     "Fasd directory source for `consult-dir'.")
 
   (set-leader-keys! "fd" #'consult-dir)
 
-  :bind (:map vertico-map
-              ("M-l" . #'consult-dir)
-              ("M-k" . #'consult-dir-jump-file))
+  :bind ( :map vertico-map
+          ("M-l" . #'consult-dir)
+          ("M-k" . #'consult-dir-jump-file))
 
   :config
 
@@ -1479,11 +1479,11 @@ window instead."
   :init
   ;; Indent all lines interactively starting in the region.
   (set-leader-keys! "x TAB" #'indent-rigidly)
-  :bind (:map indent-rigidly-map
-              ("f"   . #'indent-rigidly-right)
-              ("b"   . #'indent-rigidly-left)
-              ("M-f" . #'indent-rigidly-right-to-tab-stop)
-              ("M-b" . #'indent-rigidly-left-to-tab-stop)))
+  :bind ( :map indent-rigidly-map
+          ("f"   . #'indent-rigidly-right)
+          ("b"   . #'indent-rigidly-left)
+          ("M-f" . #'indent-rigidly-right-to-tab-stop)
+          ("M-b" . #'indent-rigidly-left-to-tab-stop)))
 
 ;; Package `visual-fill-column' brings a small minor mode that mimics the effect
 ;; of `fill-column' in `visual-line-mode'. Instead of wrapping lines at the
@@ -1697,8 +1697,8 @@ original line and use the absolute value."
     "se" #'iedit-mode
     "sE" #'iedit-rectangle-mode)
 
-  :bind (:map iedit-mode-keymap
-              ("M-'" . #'iedit-show/hide-context-lines)))
+  :bind ( :map iedit-mode-keymap
+          ("M-'" . #'iedit-show/hide-context-lines)))
 
 ;; Package `multiple-cursors' implements multiple cursors for Emacs in a similar
 ;; way in other text editors.
@@ -2326,8 +2326,8 @@ will not refresh `column-number-mode."
 ;; the file buffer interactively.
 (use-package! wgrep
   :demand t
-  :bind (:map grep-mode-map
-              ("C-c C-e" . #'wgrep-change-to-wgrep-mode))
+  :bind ( :map grep-mode-map
+          ("C-c C-e" . #'wgrep-change-to-wgrep-mode))
   :config
 
   ;; Auto-save buffers after finishing editing.
@@ -3008,8 +3008,8 @@ completing-read prompter."
 
   (marginalia-mode +1)
 
-  :bind (:map minibuffer-local-map
-              ("M-A" . marginalia-cycle)))
+  :bind ( :map minibuffer-local-map
+          ("M-A" . marginalia-cycle)))
 
 ;; Package `orderless' provides an orderless completion style that divides the
 ;; pattern into components (space-separated by default), and matches candidates
@@ -3086,14 +3086,14 @@ completing-read prompter."
 
   (vertico-mode +1)
 
-  :bind ((:map vertico-map
-               ("<next>"    . #'vertico-scroll-up)
-               ("<prior>"   . #'vertico-scroll-down)
-               ("C-M-n"     . #'vertico-next-group)
-               ("C-M-p"     . #'vertico-previous-group)
-               ("S-SPC"     . #'vertico-restrict-to-matches))
-         (:map minibuffer-local-map
-               ("M-s"       . nil)))
+  :bind ( :map vertico-map
+          ("<next>"    . #'vertico-scroll-up)
+          ("<prior>"   . #'vertico-scroll-down)
+          ("C-M-n"     . #'vertico-next-group)
+          ("C-M-p"     . #'vertico-previous-group)
+          ("S-SPC"     . #'vertico-restrict-to-matches)
+          :map minibuffer-local-map
+          ("M-s"       . nil))
 
   :config
 
@@ -3108,14 +3108,14 @@ completing-read prompter."
   ;; commands.
   (use-feature! vertico-directory
     :demand t
-    :bind (:map vertico-map
-                ("<backtab>" . #'vertico-directory-delete-word)))
+    :bind ( :map vertico-map
+            ("<backtab>" . #'vertico-directory-delete-word)))
 
   ;; Feature `vertico-flat' enables flat, horizontal display.
   (use-feature! vertico-flat
     :demand t
-    :bind (:map vertico-map
-                ("M-q" . #'vertico-flat-mode)))
+    :bind ( :map vertico-map
+            ("M-q" . #'vertico-flat-mode)))
 
   ;; Feature! vertico-mouse' adds mouse support for scrolling and candidate
   ;; selection.
@@ -3143,9 +3143,9 @@ completing-read prompter."
   ;; keys.
   (use-feature! vertico-quick
     :demand t
-    :bind (:map vertico-map
-                ("M-i" . #'vertico-quick-insert)
-                ("M-j" . #'vertico-quick-exit))))
+    :bind ( :map vertico-map
+            ("M-i" . #'vertico-quick-insert)
+            ("M-j" . #'vertico-quick-exit))))
 
 ;; Package `vertico-prescient' provides an interface for using Prescient to
 ;; sort and filter candidates in Vertico menus.
@@ -3238,16 +3238,16 @@ completing-read prompter."
     "ta" #'company-mode
     "tA" #'global-company-mode)
 
-  :bind ((:map company-mode-map
-               ("C-;"     . #'company-complete)
-               ("M-\\"    . #'company-complete)
-               ("C-\\"    . #'company-other-backend))
-         (:map company-active-map
-               ("M-n"     . #'company-select-next)
-               ("M-p"     . #'company-select-previous))
-         (:map company-search-map
-               ("M-n"     . #'company-select-next)
-               ("M-p"     . #'company-select-previous)))
+  :bind (( :map company-mode-map
+           ("C-;"     . #'company-complete)
+           ("M-\\"    . #'company-complete)
+           ("C-\\"    . #'company-other-backend))
+         ( :map company-active-map
+           ("M-n"     . #'company-select-next)
+           ("M-p"     . #'company-select-previous))
+         ( :map company-search-map
+           ("M-n"     . #'company-select-next)
+           ("M-p"     . #'company-select-previous)))
 
   :config
 
@@ -3373,8 +3373,8 @@ menu to disappear and then come back after `company-idle-delay'."
 ;; with the completion candidates you would see in the company popup.
 (use-package! consult-company
   :after (company consult )
-  :bind (:map company-active-map
-              ("M-'" . #'consult-company)))
+  :bind ( :map company-active-map
+          ("M-'" . #'consult-company)))
 
 ;;;; Syntax checking and code linting
 
@@ -3853,11 +3853,11 @@ a new window."
 (use-package! lsp-ui
   :demand t
   :after lsp-mode
-  :bind ((:map lsp-ui-mode-map
-               ;; Remap `xref' to use `lsp-ui-peek' feature.
-               ([remap xref-find-definitions] . #'lsp-ui-peek-find-definitions)
-               ([remap xref-find-references]  . #'lsp-ui-peek-find-references)
-               ("C-c z"                       . #'lsp-ui-doc-focus-frame)))
+  :bind ( :map lsp-ui-mode-map
+          ;; Remap `xref' to use `lsp-ui-peek' feature.
+          ([remap xref-find-definitions] . #'lsp-ui-peek-find-definitions)
+          ([remap xref-find-references]  . #'lsp-ui-peek-find-references)
+          ("C-c z"                       . #'lsp-ui-doc-focus-frame))
 
   :config
 
@@ -3897,8 +3897,8 @@ a new window."
 (use-package! consult-lsp
   :demand t
   :after (consult lsp-mode xref)
-  :bind (:map lsp-mode-map
-              ([remap xref-find-apropos] . #'consult-lsp-symbols))
+  :bind ( :map lsp-mode-map
+          ([remap xref-find-apropos] . #'consult-lsp-symbols))
 
   :config
 
@@ -4081,10 +4081,10 @@ a new window."
 ;; supporting multi-million line C++ code-bases, powered by libclang. It
 ;; leverages `lsp-mode', but also provides some ccls extensions to LSP.
 (use-package! ccls
-  :bind (:map ccls-tree-mode-map
-              ("e" . #'ccls-tree-toggle-expand)
-              ("n" . #'ccls-tree-next-line)
-              ("p" . #'ccls-tree-prev-line))
+  :bind ( :map ccls-tree-mode-map
+          ("e" . #'ccls-tree-toggle-expand)
+          ("n" . #'ccls-tree-next-line)
+          ("p" . #'ccls-tree-prev-line))
   :config
 
   (lsp-define-extension! "ccls" "find-base" (levels)
@@ -4148,9 +4148,9 @@ ALL when non-nil determines whether words will be pickable."
                  (lsp--send-request
                   (lsp--make-request
                    "textDocument/documentSymbol"
-                   `(:textDocument ,(lsp--text-document-identifier)
-                                   ,@(when all '(:excludeRole 0))
-                                   :startLine ,start-line :endLine ,end-line)))
+                   `( :textDocument ,(lsp--text-document-identifier)
+                      ,@(when all '( :excludeRole 0))
+                      :startLine ,start-line :endLine ,end-line)))
                  for range = loc
                  for range_start = (gethash "start" range)
                  for range_end = (gethash "end" range)
@@ -4343,8 +4343,8 @@ ALL when non-nil determines whether words will be pickable."
 ;; Package `grip-mode' instantly previews GitHub-flavored Markdown/Org using
 ;; grip.
 (use-package! grip-mode
-  :bind (:map markdown-mode-command-map
-              ("g" . #'grip-mode)))
+  :bind ( :map markdown-mode-command-map
+          ("g" . #'grip-mode)))
 
 ;;;; Meson
 
@@ -4736,9 +4736,9 @@ unhelpful."
     "tl" #'org-toggle-link-display)
   (set-leader-keys! "ol" #'org-store-link)
 
-  :bind (:map org-mode-map
-              ("M-p" . #'org-backward-element)
-              ("M-n" . #'org-forward-element))
+  :bind ( :map org-mode-map
+          ("M-p" . #'org-backward-element)
+          ("M-n" . #'org-forward-element))
 
   :config
 
@@ -4842,9 +4842,9 @@ unhelpful."
 (use-feature! consult-org
   :demand t
   :after org
-  :bind (:map org-mode-map
-              ("M-g o"   . #'consult-org-heading)
-              ("M-g M-o" . #'consult-org-heading)))
+  :bind ( :map org-mode-map
+          ("M-g o"   . #'consult-org-heading)
+          ("M-g M-o" . #'consult-org-heading)))
 
 ;; Feature `ox' implements a generic export engine for Org, built on its
 ;; syntactical parser - Org Elements.
@@ -4955,16 +4955,16 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
 
   :hook (dired-mode-hook . dired-hide-details-mode)
 
-  :bind (:map dired-mode-map
-              ;; This binding is way nicer than ^.
-              ("J"   . #'dired-up-directory)
-              ("I"   . #'dired-kill-subdir)
-              ;; Bind both creations to be nearby each others
-              ("\["  . #'dired-create-empty-file)
-              ("\]"  . #'dired-create-directory)
-              ("/"   . #'dired-limit-regexp)
-              ("M-n" . #'dired-next-subdir)
-              ("M-p" . #'dired-prev-subdir))
+  :bind ( :map dired-mode-map
+          ;; This binding is way nicer than ^.
+          ("J"   . #'dired-up-directory)
+          ("I"   . #'dired-kill-subdir)
+          ;; Bind both creations to be nearby each others
+          ("\["  . #'dired-create-empty-file)
+          ("\]"  . #'dired-create-directory)
+          ("/"   . #'dired-limit-regexp)
+          ("M-n" . #'dired-next-subdir)
+          ("M-p" . #'dired-prev-subdir))
 
   :config
   ;; Switches passed to ls for `dired':
@@ -5015,8 +5015,8 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
 ;; buffers.
 (use-feature! wdired
   :after dired
-  :bind (:map dired-mode-map
-              ("C-c C-e" . #'wdired-change-to-wdired-mode))
+  :bind ( :map dired-mode-map
+          ("C-c C-e" . #'wdired-change-to-wdired-mode))
 
   :config
 
@@ -5031,10 +5031,10 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
   :commands (dired-copy-paste-do-cut
              dired-copy-paste-do-copy
              dired-copy-paste-do-paste)
-  :bind (:map dired-mode-map
-              ("C-c C-w" . #'dired-copy-paste-do-cut)
-              ("C-c C-c" . #'dired-copy-paste-do-copy)
-              ("C-c C-y" . #'dired-copy-paste-do-paste)))
+  :bind ( :map dired-mode-map
+          ("C-c C-w" . #'dired-copy-paste-do-cut)
+          ("C-c C-c" . #'dired-copy-paste-do-copy)
+          ("C-c C-y" . #'dired-copy-paste-do-paste)))
 
 ;; Package `dired-subtree' defines function `dired-subtree-insert' which inserts
 ;; the subdirectory directly below its line in the original listing, and indents
@@ -5043,8 +5043,8 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
 ;; manipulation provided by `dired-maybe-insert-subdir'.
 (use-package! dired-subtree
   :after dired
-  :bind (:map dired-mode-map
-              ("TAB" . #'dired-subtree-toggle)))
+  :bind ( :map dired-mode-map
+          ("TAB" . #'dired-subtree-toggle)))
 
 ;; Package `diredfl' provides extra font lock rules for a more colourful
 ;; `dired'.
@@ -5070,9 +5070,9 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
     "f" #'fd-dired
     "g" #'fd-grep-dired)
 
-  :bind (:map dired-mode-map
-              ("C-c C-f" . #'fd-dired)
-              ("C-c /"   . #'fd-grep-dired)))
+  :bind ( :map dired-mode-map
+          ("C-c C-f" . #'fd-dired)
+          ("C-c /"   . #'fd-grep-dired)))
 
 ;; Package `nerd-icons-dired' shows icons for each file in Dired,
 (use-package! nerd-icons-dired
@@ -5106,8 +5106,8 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
     "jr" #'deer
     "jR" #'deer-jump-other-window)
 
-  :bind (:map ranger-mode-map
-              ("-" . #'ranger-up-directory))
+  :bind ( :map ranger-mode-map
+          ("-" . #'ranger-up-directory))
 
   :config
   (with-eval-after-load 'golden-ratio
@@ -5289,8 +5289,8 @@ Goto^^              Actions^^         Other^^
     "gtt" #'git-timemachine
     "gtb" #'git-timemachine-switch-branch)
 
-  :bind (:map git-timemachine-mode-map
-              ("C-g" . git-timemachine-quit))
+  :bind ( :map git-timemachine-mode-map
+          ("C-g" . git-timemachine-quit))
 
   :config
 
@@ -5438,9 +5438,9 @@ current theme. This will also disable line numbers and decorations."
 ;; buffer and whatever buffer you are editing.
 (use-package! vterm-toggle
   :bind (("<f2>"    . #'vterm-toggle)
-         (:map vterm-mode-map
-               ("<f2>"    . #'vterm-toggle)
-               ("C-c C-d" . #'vterm-toggle-insert-cd))))
+         :map vterm-mode-map
+         ("<f2>"    . #'vterm-toggle)
+         ("C-c C-d" . #'vterm-toggle-insert-cd)))
 
 ;;;; External commands
 
@@ -5891,12 +5891,12 @@ possibly new window."
     "Tp" #'centaur-tabs-backward
     "TP" #'centaur-tabs-backward-group)
 
-  :bind (:map centaur-tabs-mode-map
-              ("C-<prior>" . #'centaur-tabs-backward)
-              ("C-<next>"  . #'centaur-tabs-forward)
-              ("C-<home>"  . #'centaur-tabs-backward-group)
-              ("C-<end>"   . #'centaur-tabs-forward-group)
-              ("M-J"       . #'centaur-tabs-ace-jump)))
+  :bind ( :map centaur-tabs-mode-map
+          ("C-<prior>" . #'centaur-tabs-backward)
+          ("C-<next>"  . #'centaur-tabs-forward)
+          ("C-<home>"  . #'centaur-tabs-backward-group)
+          ("C-<end>"   . #'centaur-tabs-forward-group)
+          ("M-J"       . #'centaur-tabs-ace-jump)))
 
 ;;;; Padding
 
