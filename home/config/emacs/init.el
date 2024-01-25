@@ -856,7 +856,7 @@ window instead."
   (popper-mode +1)
   (popper-echo-mode +1)
 
-  :bind (("M-`"   . popper-toggle-latest)
+  :bind (("M-`"   . popper-toggle)
          ("C-`"   . popper-cycle)
          ("C-M-`" . popper-toggle-type))
 
