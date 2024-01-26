@@ -67,6 +67,7 @@ packages_aur:
   - dropbox
   - git-completion
   - mkinitcpio-firmware
+  - mpv-thumbnail-script
   - pandoc-bin
   - shellcheck-bin
   - vscodium-bin
