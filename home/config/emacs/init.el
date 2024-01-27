@@ -279,7 +279,8 @@ NAME and ARGS are as in `use-package'."
                                    "u" "undo"
                                    "v" "multiple cursors"
                                    "w" "windows"
-                                   "x" "text")
+                                   "x" "text"
+                                   "z" "zoom")
   "List of all prefixes used with leader key.")
 
 (defun declare-prefix-for-mode! (mode prefix name)
@@ -5650,27 +5651,12 @@ possibly new window."
 ;; Set default font.
 (face-spec-set 'default '((t :family "Hack" :height 150)))
 
-;; Package `default-text-scale' provides commands for increasing or decreasing
-;; the default font size in all GUI Emacs frames - it is like an Emacs-wide
-;; version of `text-scale-mode'.
-(use-package! default-text-scale
-  :demand t
-  :config
-
-  (defhydra hydra-zoom (:color pink :hint nil)
-    "
-[_+_] zoom in [_-_] zoom out
-[_0_] reset   [_q_] quit
-"
-    ("+" default-text-scale-increase)
-    ("=" default-text-scale-increase)
-    ("-" default-text-scale-decrease)
-    ("0" default-text-scale-reset)
-    ("q" nil :exit t)
-    ("C-g" nil :exit t))
-  (set-leader-keys! "z" '("zoom" . hydra-zoom/body))
-
-  (default-text-scale-mode +1))
+;; Bind keys for font size changes.
+(set-leader-keys!
+  "z=" '("text-scale-adjust-increase" . global-text-scale-adjust)
+  "z+" '("text-scale-adjust-increase" . global-text-scale-adjust)
+  "z-" '("text-scale-adjust-decrease" . global-text-scale-adjust)
+  "z0" '("text-scale-adjust-reset"    . global-text-scale-adjust))
 
 ;;;; Theme
 
