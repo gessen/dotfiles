@@ -31,7 +31,6 @@
  ("ctrlf" . "9b4cf6c79a961f2bfbb949805aa300fcf1eb40a6")
  ("dash.el" . "e32a70ca636bad42232b6c79f1491dc86802a721")
  ("deadgrep" . "38abe362997d2f18633a75d04c09da751bf8085e")
- ("default-text-scale" . "bfc0987c37e93742255d3b23d86c17096fda8e7e")
  ("dired-copy-paste" . "aefb5597e65bc1a7b771c2c82961f5a10b5f424b")
  ("dired-hacks" . "874449d6fc98aee565e1715ec18acec3c1c2cafb")
  ("diredfl" . "f6d599c30875ab4894c1deab9713ff2faea54e06")
