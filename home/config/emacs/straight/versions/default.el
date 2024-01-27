@@ -140,7 +140,6 @@
  ("queue" . "7ab8f23e770f64f6bd28a44c46c8becfc1af03d8")
  ("rainbow-delimiters" . "f40ece58df8b2f0fb6c8576b527755a552a5e763")
  ("ranger.el" . "2498519cb21dcd5791d240607a72a204d1761668")
- ("restart-emacs" . "1607da2bc657fe05ae01f7fdf26f716eafead02c")
  ("rust-mode" . "9c26dc1195ec05309ee15c014631fb9abd6cf5d2")
  ("rustic" . "39423d1cf4fa054c36bf9577356451f4c06ee148")
  ("s.el" . "dda84d38fffdaf0c9b12837b504b402af910d01d")
