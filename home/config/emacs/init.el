@@ -5503,15 +5503,10 @@ possibly new window."
 
 ;;; Shutdown
 
-;; Package `restart-emacs' provides an easy way to restart Emacs from inside of
-;; Emacs, both in the terminal and in windowed mode.
-(use-package! restart-emacs
-  :init
-  (set-leader-keys! "qr" #'restart-emacs))
-
 ;; Bind additional helpful commands for shutting down Emacs.
 (set-leader-keys!
   "qq" #'kill-emacs
+  "qr" #'restart-emacs
   "qs" #'save-buffers-kill-terminal
   "qS" #'save-buffers-kill-emacs)
 
