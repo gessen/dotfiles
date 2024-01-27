@@ -932,29 +932,6 @@ window instead."
           (call-interactively #'projectile-invalidate-cache)
           (message "File '%s' deleted" filename)))))
 
-(defun rename-current-buffer-file ()
-  "Rename the current buffer and file it is visiting."
-  (interactive)
-  (let ((name (buffer-name))
-        (filename (buffer-file-name)))
-    (unless (and filename (file-exists-p filename))
-      (user-error "Buffer '%s' is not visiting a file" name))
-    (let* ((basename (file-name-nondirectory filename))
-           (new-filename (read-file-name
-                          "New name: " (file-name-directory filename)
-                          basename nil basename)))
-      (when (get-buffer new-filename)
-        (user-error "A buffer named '%s' already exists" new-filename))
-      (rename-file filename new-filename 1)
-      (rename-buffer new-filename)
-      (set-visited-file-name new-filename)
-      (set-buffer-modified-p nil)
-      (recentf-add-file new-filename)
-      (recentf-remove-if-non-kept filename)
-      (call-interactively #'projectile-invalidate-cache)
-      (message "File '%s' renamed to '%s'"
-               name (file-name-nondirectory new-filename)))))
-
 (defun open-in-external-app ()
   "Open current file in external application."
   (interactive)
@@ -990,7 +967,7 @@ window instead."
   "ff"  #'find-file
   "fi"  #'insert-file
   "fl"  #'find-file-literally
-  "fm"  #'rename-current-buffer-file
+  "fm"  #'rename-visited-file
   "fo"  #'open-in-external-app
   "fs"  #'save-buffer
   "fS"  #'save-some-buffers
