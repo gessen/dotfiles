@@ -4918,27 +4918,25 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
 
   ;; Compress with Zstandard by default
   (setq dired-compress-file-default-suffix ".zst"
-        dired-compress-directory-default-suffix ".tar.zst"))
+        dired-compress-directory-default-suffix ".tar.zst")
+
+  ;; Open common video extensions with `shell-command' by default.
+  (setq dired-guess-shell-alist-user
+        '(("\\.\\(mp4\\|webm\\|mkv\\)" (open-in-external-app)))))
 
 ;; Feature `dired-x' provides extra `dired' functionality.
 (use-feature! dired-x
   :demand t
   :after dired
-  :commands (dired-jump dired-jump-other-window)
+  :config
 
-  :init
+  :config
 
   ;; Remap find-file{-other-window} to dired-x-find-file{-other-window}
   (setq dired-x-hands-off-my-keys nil)
 
-  :config
-
   ;; Prevent annoying "Omitted N lines" messages when auto-reverting.
-  (setq dired-omit-verbose nil)
-
-  ;; Open common video extensions with `shell-command' by default.
-  (setq dired-guess-shell-alist-user
-        '(("\\.\\(mp4\\|webm\\|mkv\\)" (open-in-external-app)))))
+  (setq dired-omit-verbose nil))
 
 ;; Feature `wdired' allows to rename files editing their names in `dired'
 ;; buffers.
