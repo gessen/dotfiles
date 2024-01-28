@@ -910,6 +910,14 @@ alias ssh='kitty +kitten ssh'
 # Nicer scp/rsync.
 alias transfer='kitty +kitten transfer'
 
+## SSH
+
+# Copy current terminfo file to the given host.
+function ssh-copy-terminfo() {
+  if [[ "$#" == 0 ]]; then return 1; fi
+  infocmp -a | ssh "$1" tic -x -o \~/.terminfo /dev/stdin
+}
+
 ## Plugins
 
 ### Dircycle
