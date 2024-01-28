@@ -1004,6 +1004,16 @@ window instead."
     (interactive)
     (set-buffer-file-coding-system 'undecided-dos nil)))
 
+;; Feature `project' provides simple operations on the current project. We use
+;; `projectile' instead as it provides more functionality, but `project' may
+;; still be used by some packages, although `projectile' is integrated into
+;; `project' via the `project-find-functions' hook.
+(use-feature! project
+  :config
+
+  ;; Do not litter `user-emacs-directory' with Project persistent history.
+  (setq project-list-file (expand-file-name "projects" my-cache-dir)))
+
 ;; Feature `recentf' maintains a menu for visiting files that were operated on
 ;; recently. The recent files list is automatically saved across Emacs sessions.
 (use-feature! recentf
