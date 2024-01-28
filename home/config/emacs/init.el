@@ -4926,6 +4926,9 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
   ;; Copy directories recursively.
   (setq dired-recursive-copies 'always)
 
+  ;; Hide free space label at the top
+  (setq dired-free-space nil)
+
   ;; Compress with Zstandard by default
   (setq dired-compress-file-default-suffix ".zst"
         dired-compress-directory-default-suffix ".tar.zst")
