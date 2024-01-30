@@ -66,7 +66,6 @@
  ("fd-dired" . "458464771bb220b6eb87ccfd4c985c436e57dc7e")
  ("flycheck" . "e56e30d8c66ffc9776d07740658d3b542c1a8e21")
  ("flycheck-clang-tidy" . "f9ae7306bd6ca08b689b36c1e8f6f6b91d61db5f")
- ("flycheck-posframe" . "19896b922c76a0f460bf3fe8d8ebc2f9ac9028d8")
  ("flyspell-correct" . "1e7a5a56362dd875dddf848b9a9e25d1395b9d37")
  ("frog-jump-buffer" . "ab830cb7a5af9429866ba88fb37589a0366d8bf2")
  ("frog-menu" . "2198af1f1c450cc5e0cfe68936b923a5ca94293f")
