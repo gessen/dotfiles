@@ -2210,8 +2210,24 @@ will not refresh `column-number-mode."
   :commands ctrlf-mode
   :init
 
+  (defun ctrlf-yank-word-or-char ()
+    "Pull next character or word from buffer into search string."
+    (interactive)
+    (let ((input (field-string (point-max))) yank)
+      (when (or ctrlf--match-bounds (= (length input) 0))
+        (with-current-buffer (window-buffer (minibuffer-selected-window))
+          (setq yank (buffer-substring-no-properties
+                      (or (and ctrlf--match-bounds
+                               (cdr ctrlf--match-bounds))
+                          ctrlf--current-starting-point)
+                      (progn (forward-word) (point)))))
+        (goto-char (field-end (point-max)))
+        (insert yank))))
+
   (ctrlf-mode +1)
 
+  :bind ( :map ctrlf-minibuffer-mode-map
+          ("C-w" . #'ctrlf-yank-word-or-char))
   :config
 
   ;; Switch literal/regexp default keybindings to regexp/fuzzy-regexp.
