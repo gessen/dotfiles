@@ -1875,6 +1875,11 @@ possibly new window."
 ;; the top or bottom of the screen.
 (setq scroll-conservatively 101)
 
+;; Open buffers visiting read-only files in `view-mode'.
+(setq view-read-only t)
+
+(set-leader-keys! "wr" #'view-mode)
+
 ;; Feature `bookmark' provides a way to mark places in a buffer. Some other
 ;; packages use this package
 (use-feature! bookmark
