@@ -2868,6 +2868,8 @@ point. "
 ;; convenient key), offering you relevant actions to use on a target determined
 ;; by the context.
 (use-package! embark
+  :commands (embark-next-symbol
+             embark-previous-symbol)
   :init
 
   (set-leader-keys!
@@ -2877,7 +2879,9 @@ point. "
   ;; Replace the key help with a completing-read interface.
   (setq prefix-help-command #'embark-prefix-help-command)
 
-  :bind (("M-s a"   . #'embark-act)
+  :bind (("M-n"     . #'embark-next-symbol)
+         ("M-p"     . #'embark-previous-symbol)
+         ("M-s a"   . #'embark-act)
          ("M-s M-a" . #'embark-act)
          ("M-s A"   . #'embark-act-all)
          ("M-s M-A" . #'embark-act-all)
