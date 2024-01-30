@@ -3364,9 +3364,8 @@ menu to disappear and then come back after `company-idle-delay'."
   ;; Decrease the delay before displaying errors at point.
   (setq flycheck-display-errors-delay 0.25)
 
-  ;; Display error messages only if there is no error list visible.
-  (setq flycheck-display-errors-function
-        #'flycheck-display-error-messages-unless-error-list)
+  ;; Inhibit displaying error messages as they take Eldoc space.
+  (setq flycheck-display-errors-function nil)
 
   ;; For the above functionality, check syntax in a buffer that you switched to
   ;; only briefly. This allows "refreshing" the syntax check state for several
@@ -3387,34 +3386,6 @@ menu to disappear and then come back after `company-idle-delay'."
 
   :bind (("M-g e"   . #'consult-flycheck)
          ("M-g M-e" . #'consult-flycheck)))
-
-(defun my--flycheck-popup-mode ()
-  "Activate flycheck popup mode.
-If available and in GUI Emacs activate command
-`flycheck-posframe-mode'. Disable showing errors otherwise. Do
-nothing if function `lsp-ui-mode' is active and function
-`lsp-ui-sideline-enable' is non-nil."
-  (unless (and (bound-and-true-p lsp-ui-mode)
-               (bound-and-true-p lsp-ui-sideline-enable))
-    (if (display-graphic-p)
-        (flycheck-posframe-mode +1)
-      (setq-local flycheck-display-errors-function nil))))
-
-;; Package `flycheck-posframe' displays Flycheck errors using posframe.el.
-(use-package! flycheck-posframe
-  :hook (flycheck-mode-hook . my--flycheck-popup-mode)
-  :config
-
-  (set-face-attribute 'flycheck-posframe-warning-face nil :inherit 'warning)
-  (set-face-attribute 'flycheck-posframe-error-face nil :inherit 'error)
-
-  ;; Inhibit display popups if Flycheck error list is visible.
-  (add-hook 'flycheck-posframe-inhibit-functions
-            (lambda () (flycheck-get-error-list-window 'current-frame)))
-
-  (with-eval-after-load 'company
-    ;; Inhibit displaying popups if Company is active.
-    (add-hook 'flycheck-posframe-inhibit-functions #'company--active-p)))
 
 ;;;; Online documentation
 
