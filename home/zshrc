@@ -24,15 +24,6 @@ fi
 ZSH_CACHE_DIR="${XDG_CACHE_HOME}/zsh"
 mkdir -p "${ZSH_CACHE_DIR}"
 
-export ANSIBLE_HOME="${XDG_CONFIG_HOME}/ansible"
-export ASPELL_CONF="home-dir ${XDG_CONFIG_HOME}/aspell/; per-conf aspell.conf"
-export CARGO_HOME="${XDG_DATA_HOME}/cargo"
-export _FASD_DATA="${XDG_CACHE_HOME}/fasd"
-export GNUPGHOME="${XDG_DATA_HOME}/gnupg"
-export GTK2_RC_FILES="${XDG_CONFIG_HOME}/gtk-2.0/settings.ini"
-export RIPGREP_CONFIG_PATH="${XDG_CONFIG_HOME}/ripgrep/config"
-export RUSTUP_HOME="${XDG_DATA_HOME}/rustup"
-
 ## Completion
 
 # Load all stock functions to be called.
