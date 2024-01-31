@@ -5578,9 +5578,6 @@ possibly new window."
 
 ;;;; Font
 
-;; Set default font.
-(face-spec-set 'default '((t :family "Hack" :height 150)))
-
 ;; Bind keys for font size changes.
 (set-leader-keys!
   "z=" '("text-scale-adjust-increase" . global-text-scale-adjust)
