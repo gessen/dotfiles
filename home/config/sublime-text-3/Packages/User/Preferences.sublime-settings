@@ -16,12 +16,12 @@
 		"build",
 		"build-*"
 	],
-	"font_face": "Source Code Pro",
+	"font_face": "JetBrains Mono",
 	"font_options":
 	[
 		"ss01"
 	],
-	"font_size": 14,
+	"font_size": 15,
 	"gravity_highlight_color_orange": true,
 	"gravity_selected_tab_bold": true,
 	"hot_exit": false,
