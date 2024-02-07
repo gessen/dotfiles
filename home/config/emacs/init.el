@@ -9,7 +9,7 @@
 ;; Produce backtrace when error occurs
 ;; (setq debug-on-error t)
 
-(defvar my-minimum-emacs-version "28.1"
+(defvar my-minimum-emacs-version "29.1"
   "This Emacs configuration does not support any Emacs version below this.")
 
 ;; Make sure we are running a modern enough Emacs, otherwise abort init
@@ -270,8 +270,34 @@ NAME and ARGS are as in `use-package'."
 
 ;;; Keybindings
 
-(defvar my-leader-key-map (make-sparse-keymap)
-  "Keymap for all leader key commands that should be put under a prefix.")
+(defvar-keymap my-leader-key-map
+  :doc "Keymap for all common leader key commands."
+  "a" `("applications" . ,(make-sparse-keymap)) ;
+  "b" `("buffers" . ,(make-sparse-keymap))
+  "c" `("compile" . ,(make-sparse-keymap))
+  "e" `("errors" . ,(make-sparse-keymap))
+  "g" `("git" . ,(make-sparse-keymap))
+  "f" `("files" . ,(make-sparse-keymap))
+  "F" `("frames" . ,(make-sparse-keymap))
+  "h" `("help" . ,(make-sparse-keymap))
+  "i" `("insert" . ,(make-sparse-keymap))
+  "j" `("jump" . ,(make-sparse-keymap))
+  "k" `("macros" . ,(make-sparse-keymap))
+  "o" `("org" . ,(make-sparse-keymap))
+  "p" `("projects" . ,(make-sparse-keymap))
+  "q" `("quit" . ,(make-sparse-keymap))
+  "r" `("registers/rings" . ,(make-sparse-keymap))
+  "R" `("rectangles" . ,(make-sparse-keymap))
+  "s" `("search" . ,(make-sparse-keymap))
+  "S" `("spellcheck" . ,(make-sparse-keymap))
+  "t" `("toggle" . ,(make-sparse-keymap))
+  "T" `("tabs" . ,(make-sparse-keymap))
+  "u" `("undo" . ,(make-sparse-keymap))
+  "v" `("multiple cursors" . ,(make-sparse-keymap))
+  "w" `("windows" . ,(make-sparse-keymap))
+  "x" `("text" . ,(make-sparse-keymap))
+  "z" `("zoom" . ,(make-sparse-keymap))
+  "t h" `("highlight" . ,(make-sparse-keymap)))
 
 (defconst my-leader-key "M-m"
   "The leader key.")
@@ -279,136 +305,146 @@ NAME and ARGS are as in `use-package'."
 (defconst my-major-mode-leader-key "C-M-m"
   "Major mode leader key.")
 
-(defconst my-leader-key-prefixes '("a" "applications"
-                                   "b" "buffers"
-                                   "c" "compile"
-                                   "d" "devdocs"
-                                   "D" "diff"
-                                   "e" "errors"
-                                   "g" "git"
-                                   "f" "files"
-                                   "F" "frames"
-                                   "h" "help"
-                                   "i" "insert"
-                                   "j" "jump"
-                                   "k" "macros"
-                                   "o" "org"
-                                   "p" "projects"
-                                   "q" "quit"
-                                   "r" "registers/rings"
-                                   "R" "rectangles"
-                                   "s" "search"
-                                   "S" "spellcheck"
-                                   "t" "toggle"
-                                   "T" "tabs"
-                                   "th" "highlight"
-                                   "u" "undo"
-                                   "v" "multiple cursors"
-                                   "w" "windows"
-                                   "x" "text"
-                                   "z" "zoom")
-  "List of all prefixes used with leader key.")
+(defconst my-major-mode-leader-key-alt "M-m m"
+  "Alternative major mode leader key.")
 
-(defun declare-prefix-for-mode! (mode prefix name)
-  "Declares a `which-key' PREFIX for MODE.
-MODE is the mode in which this prefix command should be added.
-PREFIX is a string describing a key sequence. NAME is a string
-used as the prefix command."
+(defconst my-major-mode-leader-key-alt2 "M-m M-m"
+  "Another alternative major mode leader key.")
+
+(defvar my-major-modes-alist '()
+  "Each element takes the form (MAP-ACTIVE . MAJOR-MODE). The car is
+the variable used to activate a map when the major mode is an
+element of the cdr.")
+
+(defhook! my--change-major-mode-after-body-hook ()
+  change-major-mode-after-body-hook
+  "Called to activate major mode maps in a buffer."
+  (dolist (entry my-major-modes-alist) ;
+    (if (boundp (car entry))
+        (setf (symbol-value (car entry))
+              (eq major-mode (cdr entry)))
+      (message "%s is void in change major mode hook" (car entry)))))
+
+(defmacro my--init-mode-map (map &rest args)
+  "Bind keymap MAP in multiple locations.
+this will create a new sparse keymap with the name MAP. Supports
+conditioning the bindings on major or minor modes being active.
+The options are controlled through the keyword arguments ARGS"
   (declare (indent defun))
-  (let* ((is-major-mode (string-prefix-p "m" prefix))
-         (is-minor-mode (not is-major-mode))
-         (map (intern (format "my-%s-map" mode))))
-    (when (my--init-leader-mode-map mode map is-minor-mode)
-      (which-key-add-keymap-based-replacements
-        (symbol-value map)
-        (if is-major-mode (substring prefix 1) prefix) name))))
+  (let* ((root-map (intern (format "%s-root" map)))
+         (active (intern (format "%s-active" map)))
+         (keys '(my-major-mode-leader-key
+                 my-major-mode-leader-key-alt
+                 my-major-mode-leader-key-alt2))
+         (minor (plist-get args :minor-mode))
+         (major (plist-get args :major-mode)))
+    (append
+     '(progn)
+     `((defvar-keymap ,map)
+       (defvar-keymap ,root-map))
+     (when (and (not minor) (not major))
+       (error "Must use either :minor-mode or :major-mode"))
+     (when minor
+       `((push (cons ',minor ,root-map) minor-mode-map-alist)))
+     (when major
+       `((defvar-local ,active nil)
+         (push (cons ',active ,root-map) minor-mode-map-alist)
+         (push (cons ',active ',major) my-major-modes-alist)))
+     `((dolist (key (list ,@keys))
+         (keymap-set ,root-map key ,map)))
+     `(',map))))
 
-(defun declare-prefix! (prefix name &rest more)
-  "Declares a `which-key' PREFIX.
-PREFIX is a string describing a key sequence. NAME is a string
-used as the prefix command."
+(defun set-prefixes-for-mode! (mode is-minor prefix name &rest more)
+  "Declares a series of prefixes to `my-mode-map'.
+MODE should be a quoted symbol corresponding to a valid mode.
+IS-MINOR denotes whether that MODE is minor. PREFIX is a string
+that satisfies `key-valid-p' while NAME is its displayed name."
+  (declare (indent defun))
+  (let ((map (intern (format "my-%s-map" mode))))
+    (unless (boundp map)
+      (eval `(my--init-mode-map ,map
+               ,(if is-minor :minor-mode :major-mode) ,mode)))
+    (while prefix
+      (let* ((map (symbol-value map))
+             (definition (cons name (or (keymap-lookup map prefix)
+                                        (make-sparse-keymap)))))
+        (keymap-set map prefix definition)
+        (setq prefix (pop more)
+              name (pop more))))))
+
+(defun set-prefixes-for-minor-mode! (mode prefix name &rest more)
+  "Declares a series of prefixes to `my-mode-map'.
+MODE should be a quoted symbol corresponding to a valid minor
+mode. PREFIX is a string that satisfies `key-valid-p' while NAME
+is its displayed name."
+  (declare (indent defun))
+  (apply #'set-prefixes-for-mode! mode t prefix name more))
+
+(defun set-prefixes-for-major-mode! (mode prefix name &rest more)
+  "Declares a series of prefixes to `my-mode-map'.
+MODE should be a quoted symbol corresponding to a valid major
+mode. PREFIX is a string that satisfies `key-valid-p' while NAME
+is its displayed name."
+  (declare (indent defun))
+  (apply #'set-prefixes-for-mode! mode nil prefix name more))
+
+(defun set-prefixes! (prefix name &rest more)
+  "Declares a series of prefixes to `my-leader-key-map'.
+PREFIX is a string that satisfies `key-valid-p' while NAME is its
+displayed name."
   (declare (indent defun))
   (while prefix
     (let* ((map my-leader-key-map)
-           (def (cons name (or (lookup-key map (kbd prefix))
-                               (make-sparse-keymap)))))
-      (bind-key prefix def my-leader-key-map))
+           (definition (cons name (or (keymap-lookup map prefix)
+                                      (make-sparse-keymap)))))
+      (keymap-set map prefix definition))
     (setq prefix (pop more)
           name (pop more))))
 
-(defun my--init-leader-mode-map (mode map &optional minor)
-  "Initialise MAP prefix if it doesn't exist yet.
-Use `bind-map' to create MAP prefix and bind it to
-`my-major-mode-leader-key'. If MODE is a minor-mode, the third
-argument should be non nil."
-  (let* ((prefix (intern (format "%s-prefix" map)))
-         (leader-key1 my-major-mode-leader-key)
-         (leader-key2 (concat my-leader-key " m"))
-         (leader-key3 (concat my-leader-key " M-m"))
-         (leaders (list leader-key1 leader-key2 leader-key3)))
-    (or (boundp prefix)
-        (progn
-          (eval
-           `(bind-map ,map
-              :prefix-cmd ,prefix
-              ,(if minor :minor-modes :major-modes) (,mode)
-              :keys ,leaders))
-          (boundp prefix)))))
-
-(defun set-leader-keys-for-mode! (mode is-minor-mode key def &rest bindings)
-  "Add a series of BINDINGS to `my-mode-map'.
-MODE should be a quoted symbol corresponding to a valid minor
-mode. IS-MINOR-MODE denotes whether the MODE is minor. BINDINGS
-is a series of KEY DEF pair."
+(defun set-leader-keys-for-mode! (mode is-minor key definition &rest more)
+  "Add a series of keybindings to `my-mode-map'.
+MODE should be a quoted symbol corresponding to a valid mode.
+IS-MINOR denotes whether that MODE is minor. KEY is a string that
+satisfies `key-valid-p' while DEFINITION is anything that can be
+a key's definition."
   (declare (indent defun))
   (let ((map (intern (format "my-%s-map" mode))))
-    (when (my--init-leader-mode-map mode map is-minor-mode)
-      (while key
-        (bind-key key def (symbol-value map))
-        (setq key (pop bindings)
-              def (pop bindings))))))
+    (unless (boundp map)
+      (eval `(my--init-mode-map ,map
+               ,(if is-minor :minor-mode :major-mode) ,mode)))
+    (while key
+      (keymap-set (symbol-value map) key definition)
+      (setq key (pop more)
+            definition (pop more)))))
 
-(defun set-leader-keys-for-minor-mode! (mode key def &rest bindings)
-  "Add a series of BINDINGS to `my-mode-map'.
+(defun set-leader-keys-for-minor-mode! (mode key definition &rest more)
+  "Add a series of keybindings to `my-mode-map'.
 MODE should be a quoted symbol corresponding to a valid minor
-mode. BINDINGS is a series of KEY DEF pair."
+mode. KEY is a string that satisfies `key-valid-p' while
+DEFINITION is anything that can be a key's definition."
   (declare (indent defun))
-  (apply #'set-leader-keys-for-mode! mode t key def bindings))
+  (apply #'set-leader-keys-for-mode! mode t key definition more))
 
-(defun set-leader-keys-for-major-mode! (mode key def &rest bindings)
-  "Add a series of BINDINGS to `my-mode-map'.
+(defun set-leader-keys-for-major-mode! (mode key definition &rest more)
+  "Add a series of keybindings to `my-mode-map'.
 MODE should be a quoted symbol corresponding to a valid major
-mode. BINDINGS is a series of KEY DEF pair."
+mode. KEY is a string that satisfies `key-valid-p' while
+DEFINITION is anything that can be a key's definition."
   (declare (indent defun))
-  (apply #'set-leader-keys-for-mode! mode nil key def bindings))
+  (apply #'set-leader-keys-for-mode! mode nil key definition more))
 
-(defun set-leader-keys! (key def &rest bindings)
-  "Add a series of BINDINGS to `my-leader-key-map'.
-BINDINGS is a series of KEY DEF pair."
+(defun set-leader-keys! (key definition &rest more)
+  "Add a series of keybindings to `my-leader-key-map'.
+KEY is a string that satisfies `key-valid-p' while DEFINITION is
+anything that can be a key's definition."
   (declare (indent defun))
   (while key
-    (bind-key key def my-leader-key-map)
-    (setq key (pop bindings)
-          def (pop bindings))))
+    (keymap-set my-leader-key-map key definition)
+    (setq key (pop more)
+          definition (pop more))))
 
-;; Package `bind-key' provides a macro by the same name (along with `bind-key*'
-;; and `unbind-key') which provides a much prettier API for manipulating keymaps
-;; than `define-key' and `global-set-key' do. It's also the same API that
-;; `:bind' and similar keywords in `use-package' use.
-(use-package! bind-key
-  :demand t)
-
-;; Package `bind-map' is an Emacs package providing the macro bind-map which can
-;; be used to make a keymap available across different "leader keys". It is
-;; essentially a generalization of the idea of a leader key as used in vim or
-;; the Emacs https://github.com/cofi/evil-leader package, and allows for an
-;; arbitrary number of "leader keys".
-(use-package! bind-map
-  :demand t)
-
-;; Bind `leader-key' to `my-leader-key-map'.
-(bind-map my-leader-key-map
-  :keys (my-leader-key))
+;; Bind `my-leader-key' to `my-leader-key-map'.
+(keymap-global-set my-leader-key my-leader-key-map)
 
 ;; Package `which-key' displays the key bindings and associated commands
 ;; following the currently-entered key prefix in a popup.
@@ -416,12 +452,11 @@ BINDINGS is a series of KEY DEF pair."
   :demand t
   :config
 
-  ;; Declare all defined prefixes used with leader key
-  (apply #'declare-prefix! my-leader-key-prefixes)
-
-  ;; Replace major mode prefixes with a single common text.
-  (push '((nil . "my-.+-map-prefix") . (nil . "major mode"))
-        which-key-replacement-alist)
+  ;; Replace major/minor mode prefix with a single common text.
+  (dolist (key `(,my-major-mode-leader-key-alt
+                 ,my-major-mode-leader-key-alt2))
+    (push `((,(concat "\\`" key "\\'") . nil) . (nil . "major mode"))
+          which-key-replacement-alist))
 
   ;; Allow a key binding to match and be modified by multiple elements in
   ;; `which-key-replacement-alist'
@@ -430,6 +465,9 @@ BINDINGS is a series of KEY DEF pair."
   ;; Show remapped command if a command has been remapped given the currently
   ;; active keymaps
   (setq which-key-compute-remaps t)
+
+  ;; Turn off displaying the current prefix sequence.
+  (setq which-key-show-prefix nil)
 
   ;; Echo keystrokes almost instantly. It needs to be less than
   ;; `which-key-idle-delay' or else the keystroke echo will erase the
@@ -535,8 +573,8 @@ BINDINGS is a series of KEY DEF pair."
 ;; according to the turning of the mouse wheel
 (with-display-graphic!
   (pixel-scroll-precision-mode +1)
-  (unbind-key "<prior>" pixel-scroll-precision-mode-map)
-  (unbind-key "<next>"  pixel-scroll-precision-mode-map))
+  (keymap-unset pixel-scroll-precision-mode-map "<prior>")
+  (keymap-unset pixel-scroll-precision-mode-map "<next>"))
 
 ;; Mouse integration works out of the box in windowed mode but not terminal mode
 (without-display-graphic!
@@ -680,35 +718,35 @@ window instead."
 
 ;; Set basic window management commands
 (set-leader-keys!
-  "bd" #'kill-current-buffer
-  "bx" #'kill-buffer-and-window
-  "FB" #'display-buffer-other-frame
-  "w0" #'delete-window
-  "w1" #'split-window-single
-  "w2" #'split-window-double
-  "w3" #'split-window-triple
-  "w4" #'split-window-grid
-  "wb" #'switch-to-minibuffer-window
-  "we" #'balance-windows-area
-  "wm" #'maximize-buffer
-  "ws" #'split-window-below
-  "wS" #'split-window-below-and-focus
-  "wv" #'split-window-right
-  "wV" #'split-window-right-and-focus
-  "wx" #'kill-buffer-and-window)
+  "b d" #'kill-current-buffer
+  "b x" #'kill-buffer-and-window
+  "F B" #'display-buffer-other-frame
+  "w 0" #'delete-window
+  "w 1" #'split-window-single
+  "w 2" #'split-window-double
+  "w 3" #'split-window-triple
+  "w 4" #'split-window-grid
+  "w b" #'switch-to-minibuffer-window
+  "w e" #'balance-windows-area
+  "w m" #'maximize-buffer
+  "w s" #'split-window-below
+  "w S" #'split-window-below-and-focus
+  "w v" #'split-window-right
+  "w V" #'split-window-right-and-focus
+  "w x" #'kill-buffer-and-window)
 
 ;; Overwrite default `delete-other-windows' maximize-buffer
-(bind-key "C-x 1" #'maximize-buffer)
+(keymap-global-set "C-x 1" #'maximize-buffer)
 
 ;; Shorter binding to `kill-current-buffer', overwrites `quoted-insert'.
-(bind-key "C-q" #'kill-current-buffer)
+(keymap-global-set "C-q" #'kill-current-buffer)
 
 ;; Bind keys for multi-frame management
 (set-leader-keys!
-  "Fd" #'delete-frame
-  "FD" #'delete-other-frames
-  "Fn" #'make-frame
-  "Fo" #'other-frame)
+  "F d" #'delete-frame
+  "F D" #'delete-other-frames
+  "F n" #'make-frame
+  "F o" #'other-frame)
 
 ;; Feature `follow' makes two windows, both showing the same buffer, scroll as a
 ;; single tall virtual window. In Follow mode, if you move point outside the
@@ -717,12 +755,16 @@ window instead."
 ;; parts of one large window.
 (use-feature! follow
   :init
-  (set-leader-keys! "wF" #'follow-mode)
+  (set-leader-keys! "w F" #'follow-mode)
   :blackout " ⓕ")
 
 ;; Feature `ibuffer' provides a more modern replacement for the `list-buffers'
 ;; command.
 (use-feature! ibuffer
+  :init
+
+  (set-leader-keys! "b l" #'ibuffer-other-window)
+
   :bind ([remap list-buffers] . #'ibuffer-other-window))
 
 ;; Package `ibuffer-projectile' adds functionality to `ibuffer' for grouping
@@ -760,8 +802,8 @@ window instead."
   :config
 
   (set-leader-keys!
-    "wu" #'winner-undo
-    "wU" #'winner-redo)
+    "w u" #'winner-undo
+    "w U" #'winner-redo)
 
   (setq winner-boring-buffer '("*Completions*"
                                "*Compile-Log*"
@@ -787,10 +829,10 @@ window instead."
   :init
 
   (set-leader-keys!
-    "wd" #'ace-delete-window
-    "wD" #'ace-delete-other-windows
-    "wM" #'ace-swap-window
-    "ww" #'ace-window)
+    "w d" #'ace-delete-window
+    "w D" #'ace-delete-other-windows
+    "w M" #'ace-swap-window
+    "w w" #'ace-window)
   :bind ("M-o" . #'ace-window)
 
   :config
@@ -804,7 +846,7 @@ window instead."
 (use-package! golden-ratio
   :demand t
   :config
-  (set-leader-keys! "tg" #'golden-ratio-mode)
+  (set-leader-keys! "t g" #'golden-ratio-mode)
 
   (dolist (mode '("bs-mode"
                   "calc-mode"
@@ -993,43 +1035,47 @@ window instead."
 ;; it will just redirect you to the existing buffer.
 (setq find-file-suppress-same-file-warnings t)
 
-(declare-prefix! "fe" "emacs")
+(set-prefixes! "f e" "emacs")
 
 (set-leader-keys!
-  "be"  #'safe-erase-buffer
-  "bR"  #'safe-revert-buffer
-  "fA"  #'find-alternate-file
-  "fc"  #'write-file
-  "fD"  #'delete-current-buffer-file
-  "fei" #'find-user-init-file
-  "fed" #'find-user-emacs-directory
-  "ff"  #'find-file
-  "fi"  #'insert-file
-  "fl"  #'find-file-literally
-  "fm"  #'rename-visited-file
-  "fo"  #'open-in-external-app
-  "fs"  #'save-buffer
-  "fS"  #'save-some-buffers
-  "Ff"  #'find-file-other-frame
-  "wf"  #'find-file-other-window)
+  "b e"   #'safe-erase-buffer
+  "b R"   #'safe-revert-buffer
+  "f A"   #'find-alternate-file
+  "f c"   #'write-file
+  "f D"   #'delete-current-buffer-file
+  "f e i" #'find-user-init-file
+  "f e d" #'find-user-emacs-directory
+  "f f"   #'find-file
+  "f i"   #'insert-file
+  "f l"   #'find-file-literally
+  "f m"   #'rename-visited-file
+  "f o"   #'open-in-external-app
+  "f s"   #'save-buffer
+  "f S"   #'save-some-buffers
+  "F f"   #'find-file-other-frame
+  "w f"   #'find-file-other-window)
 
 ;; Feature `files-x' extends file handling with local persistent variables.
 (use-feature! files-x
   :init
-  (declare-prefix! "fv" "variables")
+
+  (set-prefixes! "f v" "variables")
+
   (set-leader-keys!
-    "fvd" #'add-dir-local-variable
-    "fvf" #'add-file-local-variable
-    "fvp" #'add-file-local-variable-prop-line))
+    "f v d" #'add-dir-local-variable
+    "f v f" #'add-file-local-variable
+    "f v p" #'add-file-local-variable-prop-line))
 
 ;; Feature `mule' provides basic commands for multilingual environment
 (use-feature! mule
   :commands (dos2unix unix2dox)
   :init
-  (declare-prefix! "fC" "convert")
+
+  (set-prefixes! "f C" "convert")
+
   (set-leader-keys!
-    "fCu" #'dos2unix
-    "fCd" #'unix2dos)
+    "f C u" #'dos2unix
+    "f C d" #'unix2dos)
 
   :config
 
@@ -1159,7 +1205,7 @@ window instead."
        :items    ,#'consult-dir--fasd-dirs)
     "Fasd directory source for `consult-dir'.")
 
-  (set-leader-keys! "fd" #'consult-dir)
+  (set-leader-keys! "f d" #'consult-dir)
 
   :bind ( :map vertico-map
           ("M-l" . #'consult-dir)
@@ -1181,29 +1227,29 @@ window instead."
   :init
 
   (set-leader-keys!
-    "p!" #'projectile-run-shell-command-in-root
-    "p&" #'projectile-run-async-shell-command-in-root
-    "p%" #'projectile-replace-regexp
-    "p?" #'projectile-find-references
-    "pa" #'projectile-toggle-between-implementation-and-test
-    "pb" #'projectile-switch-to-buffer
-    "pc" #'projectile-compile-project
-    "pC" #'projectile-configure-project
-    "pd" #'projectile-find-dir
-    "pD" #'projectile-dired
-    "pe" #'projectile-edit-dir-locals
-    "pf" #'projectile-find-file
-    "pF" #'projectile-find-file-in-known-projects
-    "pg" #'projectile-grep
-    "pi" #'projectile-install-project
-    "pI" #'projectile-invalidate-cache
-    "pk" #'projectile-kill-buffers
-    "pp" #'projectile-switch-project
-    "pP" #'projectile-package-project
-    "pr" #'projectile-recentf
-    "pR" #'projectile-replace
-    "ps" #'projectile-run-vterm
-    "pt" #'projectile-test-project)
+    "p !" #'projectile-run-shell-command-in-root
+    "p &" #'projectile-run-async-shell-command-in-root
+    "p %" #'projectile-replace-regexp
+    "p ?" #'projectile-find-references
+    "p a" #'projectile-toggle-between-implementation-and-test
+    "p b" #'projectile-switch-to-buffer
+    "p c" #'projectile-compile-project
+    "p C" #'projectile-configure-project
+    "p d" #'projectile-find-dir
+    "p D" #'projectile-dired
+    "p e" #'projectile-edit-dir-locals
+    "p f" #'projectile-find-file
+    "p F" #'projectile-find-file-in-known-projects
+    "p g" #'projectile-grep
+    "p i" #'projectile-install-project
+    "p I" #'projectile-invalidate-cache
+    "p k" #'projectile-kill-buffers
+    "p p" #'projectile-switch-project
+    "p P" #'projectile-package-project
+    "p r" #'projectile-recentf
+    "p R" #'projectile-replace
+    "p s" #'projectile-run-vterm
+    "p t" #'projectile-test-project)
 
   :config
 
@@ -1263,10 +1309,10 @@ window instead."
 (use-package! sudo-edit
   :init
 
-  (set-leader-keys! "fE" #'sudo-edit)
+  (set-leader-keys! "f E" #'sudo-edit)
 
   (with-eval-after-load 'embark
-    (bind-key "s" #'sudo-edit embark-file-map)))
+    (keymap-set embark-file-map "s" #'sudo-edit)))
 
 ;; Package `treemacs' is a file and project explorer similar to NeoTree or vim’s
 ;; NerdTree, but largely inspired by the Project Explorer in Eclipse. It shows
@@ -1330,7 +1376,7 @@ window instead."
 (use-package! treemacs-projectile
   :init
 
-  (set-leader-keys! "pT" #'treemacs-projectile))
+  (set-leader-keys! "p T" #'treemacs-projectile))
 
 ;;; Saving files
 
@@ -1366,26 +1412,26 @@ window instead."
 ;;;; Text formatting
 
 ;; When region is active, make `capitalize-word' and friends act on it.
-(bind-key "M-i" #'capitalize-dwim)
-(bind-key "M-l" #'downcase-dwim)
-(bind-key "M-u" #'upcase-dwim)
+(keymap-global-set "M-i" #'capitalize-dwim)
+(keymap-global-set "M-l" #'downcase-dwim)
+(keymap-global-set "M-u" #'upcase-dwim)
 
 ;; Rebind `quoted-insert' as C-q will be used by `kill-buffer'
-(bind-key "C-z" #'quoted-insert)
+(keymap-global-set "C-z" #'quoted-insert)
 
 ;; Use M-delete and M-backspace to remove word in terminal like in GUI where
 ;; they are automatically translated from M-DEL.
-(bind-key "<M-delete>"    #'backward-kill-word)
-(bind-key "<M-backspace>" #'backward-kill-word)
+(keymap-global-set "M-<delete>"    #'backward-kill-word)
+(keymap-global-set "M-<backspace>" #'backward-kill-word)
 
 (set-leader-keys!
   "t C-f" #'auto-fill-mode
-  "tt"    #'toggle-truncate-lines
-  "tl"    #'visual-line-mode
-  "tL"    #'global-visual-line-mode
-  "xb"    #'delete-blank-lines
-  "xf"    #'fill-paragraph
-  "xt"    #'delete-trailing-whitespace)
+  "t t"   #'toggle-truncate-lines
+  "t l"   #'visual-line-mode
+  "t L"   #'global-visual-line-mode
+  "x b"   #'delete-blank-lines
+  "x f"   #'fill-paragraph
+  "x t"   #'delete-trailing-whitespace)
 
 ;; Make `kill-line' kills the whole line.
 (setq kill-whole-line t)
@@ -1412,8 +1458,8 @@ window instead."
 (use-feature! whitespace
   :init
   (set-leader-keys!
-    "tw" #'whitespace-mode
-    "tW" #'global-whitespace-mode)
+    "t w" #'whitespace-mode
+    "t W" #'global-whitespace-mode)
 
   (defhook! my--whitespace-setup ()
     prog-mode-hook
@@ -1458,15 +1504,16 @@ window instead."
     ("C-g" nil :exit t))
 
   (set-leader-keys!
-    "xc" '("inflection-camelcase" . string-inflection-lower-camelcase)
-    "xk" '("inflection-kebabcase" . string-inflection-kebab-case)
-    "xp" '("inflection-pascalcase" . string-inflection-camelcase)
-    "xs" '("inflection-snakecase" . string-inflection-underscore)
-    "xu" '("inflection-uppercase" . string-inflection-upcase)
-    "xx" '("inflections" . hydra-string-inflection/body))
+    "x c" (cons "inflection-camelcase" #'string-inflection-lower-camelcase)
+    "x k" (cons "inflection-kebabcase" #'string-inflection-kebab-case)
+    "x p" (cons "inflection-pascalcase" #'string-inflection-camelcase)
+    "x s" (cons "inflection-snakecase" #'string-inflection-underscore)
+    "x u" (cons "inflection-uppercase" #'string-inflection-upcase)
+    "x x" (cons "inflections" #'hydra-string-inflection/body))
 
   (with-eval-after-load 'embark
-    (bind-key "x" #'hydra-string-inflection/body embark-identifier-map)))
+    (keymap-set embark-identifier-map "x"
+                '("inflections" . hydra-string-inflection/body))))
 
 ;; Package `ws-butler' unobtrusively remove trailing whitespace. What this means
 ;; is that only lines touched get trimmed. If the whitespace at end of buffer is
@@ -1539,14 +1586,14 @@ window instead."
 ;; Move point to the first new line after `duplicate-line' or `duplicate-dwim'.
 (setq duplicate-line-final-position 1)
 
-(bind-key "M-c" #'duplicate-dwim)
+(keymap-global-set "M-c" #'duplicate-dwim)
 
 (set-leader-keys!
-  "bi" #'clone-indirect-buffer
-  "bI" #'clone-indirect-buffer-other-window
-  "by" #'copy-clipboard-to-buffer
-  "bw" #'copy-buffer-to-clipboard
-  "ib" #'insert-buffer)
+  "b i" #'clone-indirect-buffer
+  "b I" #'clone-indirect-buffer-other-window
+  "b y" #'copy-clipboard-to-buffer
+  "b w" #'copy-buffer-to-clipboard
+  "i b" #'insert-buffer)
 
 ;; Eliminate duplicates in the kill ring. That is, if you kill the same thing
 ;; twice, you won't have to use M-y twice to get past it to older entries in the
@@ -1586,8 +1633,8 @@ window instead."
   :config
 
   (set-leader-keys!
-    "td" #'hungry-delete-mode
-    "tD" #'global-hungry-delete-mode)
+    "t d" #'hungry-delete-mode
+    "t D" #'global-hungry-delete-mode)
 
   ;; Leave words separated by a single space if they would have been joined.
   (setq hungry-delete-join-reluctantly t)
@@ -1610,7 +1657,7 @@ window instead."
 
 ;;;; Selection
 
-(set-leader-keys! "ba" #'mark-whole-buffer)
+(set-leader-keys! "b a" #'mark-whole-buffer)
 
 ;; Package `easy-kill-extras' contains extra functions for `easy-kill' and
 ;; `easy-mark'.
@@ -1622,7 +1669,7 @@ window instead."
 (use-package! expand-region
   :init
 
-  (set-leader-keys! "V" '("expand region" . er/expand-region))
+  (set-leader-keys! "V" (cons "expand region" #'er/expand-region))
 
   :config
 
@@ -1660,8 +1707,8 @@ window instead."
   :init
 
   (set-leader-keys!
-    "vj" #'ace-mc-add-multiple-cursors
-    "vJ" #'ace-mc-add-single-cursor))
+    "v j" #'ace-mc-add-multiple-cursors
+    "v J" #'ace-mc-add-single-cursor))
 
 ;; Package `iedit' includes Emacs minor modes (iedit-mode and
 ;; iedit-rectangle-mode) based on a API library (iedit-lib) and allows you to
@@ -1672,8 +1719,8 @@ window instead."
   :init
 
   (set-leader-keys!
-    "se" #'iedit-mode
-    "sE" #'iedit-rectangle-mode)
+    "s e" #'iedit-mode
+    "s E" #'iedit-rectangle-mode)
 
   :bind ( :map iedit-mode-keymap
           ("M-'" . #'iedit-show/hide-context-lines)))
@@ -1686,24 +1733,25 @@ window instead."
               mc/mmlte--right
               mc/mmlte--left)
   :init
+
   (set-leader-keys!
-    "va" #'mc/mark-all-dwim
-    "vA" #'mc/mark-all-like-this
-    "vb" #'mc/edit-beginnings-of-lines
-    "ve" #'mc/edit-ends-of-lines
-    "vg" #'mc/vertical-align-with-space
-    "vG" #'mc/vertical-align
-    "vl" #'mc/edit-lines
-    "vn" #'mc/mark-next-like-this
-    "vp" #'mc/mark-previous-like-this
-    "vr" #'mc/mark-all-in-region
-    "vR" #'mc/mark-all-in-region-regexp
-    "vs" #'mc/skip-to-next-like-this
-    "vS" #'mc/skip-to-previous-like-this
-    "vu" #'mc/unmark-next-like-this
-    "vU" #'mc/unmark-previous-like-this
-    "vv" #'mc/mark-more-like-this-extended
-    "vw" #'mc/mark-all-words-like-this)
+    "v a" #'mc/mark-all-dwim
+    "v A" #'mc/mark-all-like-this
+    "v b" #'mc/edit-beginnings-of-lines
+    "v e" #'mc/edit-ends-of-lines
+    "v g" #'mc/vertical-align-with-space
+    "v G" #'mc/vertical-align
+    "v l" #'mc/edit-lines
+    "v n" #'mc/mark-next-like-this
+    "v p" #'mc/mark-previous-like-this
+    "v r" #'mc/mark-all-in-region
+    "v R" #'mc/mark-all-in-region-regexp
+    "v s" #'mc/skip-to-next-like-this
+    "v S" #'mc/skip-to-previous-like-this
+    "v u" #'mc/unmark-next-like-this
+    "v U" #'mc/unmark-previous-like-this
+    "v v" #'mc/mark-more-like-this-extended
+    "v w" #'mc/mark-all-words-like-this)
 
   (with-eval-after-load 'multiple-cursors-core
     ;; Load other `multiple-cursors' libraries.
@@ -1717,17 +1765,17 @@ window instead."
     (mc/load-lists)
 
     ;; Do not leave `multiple-cursors-mode' with RET.
-    (unbind-key "<return>" mc/keymap)
+    (keymap-unset mc/keymap "<return>")
 
     ;; Show only selected lines with `M-\''.
-    (bind-key "M-'" #'mc-hide-unmatched-lines-mode mc/keymap)
+    (keymap-set mc/keymap "M-'" #'mc-hide-unmatched-lines-mode)
 
     ;; Add additional bindings for `mc/mark-more-like-this-extended' in order
     ;; to not use keyboard arrows.
-    (bind-key "C-n" #'mc/mmlte--down  mc/mark-more-like-this-extended-keymap)
-    (bind-key "C-p" #'mc/mmlte--up    mc/mark-more-like-this-extended-keymap)
-    (bind-key "C-s" #'mc/mmlte--right mc/mark-more-like-this-extended-keymap)
-    (bind-key "C-r" #'mc/mmlte--left  mc/mark-more-like-this-extended-keymap))
+    (keymap-set mc/mark-more-like-this-extended-keymap "C-n" #'mc/mmlte--down)
+    (keymap-set mc/mark-more-like-this-extended-keymap "C-p" #'mc/mmlte--up)
+    (keymap-set mc/mark-more-like-this-extended-keymap "C-s" #'mc/mmlte--right)
+    (keymap-set mc/mark-more-like-this-extended-keymap "C-r" #'mc/mmlte--left))
 
   :bind (("M-}" . #'mc/mark-next-like-this-word)
          ("M-{" . #'mc/mark-previous-like-this-word)
@@ -1745,17 +1793,17 @@ window instead."
   :init
 
   (set-leader-keys!
-    "Rc" #'delete-whitespace-rectangle
-    "Rd" #'delete-rectangle
-    "Re" #'rectangle-exchange-point-and-mark
-    "Ri" #'copy-rectangle-to-register
-    "Rk" #'kill-rectangle
-    "Rm" #'rectangle-mark-mode
-    "RN" #'rectangle-number-lines
-    "Ro" #'open-rectangle
-    "Rs" #'string-rectangle
-    "Rx" #'clear-rectangle
-    "Ry" #'yank-rectangle))
+    "R c" #'delete-whitespace-rectangle
+    "R d" #'delete-rectangle
+    "R e" #'rectangle-exchange-point-and-mark
+    "R i" #'copy-rectangle-to-register
+    "R k" #'kill-rectangle
+    "R m" #'rectangle-mark-mode
+    "R N" #'rectangle-number-lines
+    "R o" #'open-rectangle
+    "R s" #'string-rectangle
+    "R x" #'clear-rectangle
+    "R y" #'yank-rectangle))
 
 ;;;; Folding
 
@@ -1811,7 +1859,7 @@ Close^^           Open^^            Toggle^^         Goto^^         Other^^
     ("q" nil :exit t)
     ("C-g" nil :exit t))
 
-  (set-leader-keys! "l" '("fold" . hydra-origami/body))
+  (set-leader-keys! "l" (cons "fold" #'hydra-origami/body))
 
   :hook (prog-mode-hook . origami-mode)
 
@@ -1838,10 +1886,10 @@ Close^^           Open^^            Toggle^^         Goto^^         Other^^
   :init
 
   (set-leader-keys!
-    "au" #'vundo
-    "ur" #'undo-redo
-    "uu" #'undo
-    "uv" #'vundo)
+    "a u" #'vundo
+    "u r" #'undo-redo
+    "u u" #'undo
+    "u v" #'vundo)
 
   :config
 
@@ -1874,8 +1922,8 @@ possibly new window."
       (switch-to-buffer (current-buffer)))))
 
 (set-leader-keys!
-  "bm" #'switch-to-messages-buffer
-  "bn" #'new-empty-buffer)
+  "b m" #'switch-to-messages-buffer
+  "b n" #'new-empty-buffer)
 
 ;; Keep point screen position unchanged when scrolling
 (setq scroll-preserve-screen-position t)
@@ -1892,7 +1940,7 @@ possibly new window."
 ;; Open buffers visiting read-only files in `view-mode'.
 (setq view-read-only t)
 
-(set-leader-keys! "wr" #'view-mode)
+(set-leader-keys! "w r" #'view-mode)
 
 ;; Feature `bookmark' provides a way to mark places in a buffer. Some other
 ;; packages use this package
@@ -1914,8 +1962,8 @@ possibly new window."
   :config
 
   (set-leader-keys!
-    "tc" #'subword-mode
-    "tC" #'global-subword-mode)
+    "t c" #'subword-mode
+    "t C" #'global-subword-mode)
 
   (global-subword-mode +1)
 
@@ -1935,7 +1983,7 @@ possibly new window."
   :init
 
   ;; Unbind `M-j' to and use it for `avy'
-  (unbind-key "M-j")
+  (keymap-global-unset "M-j")
 
   :bind (("M-'"     . #'avy-goto-char)
          ("M-\""    . #'avy-goto-subword-1)
@@ -1992,8 +2040,8 @@ possibly new window."
   :init
 
   (set-leader-keys!
-    "t-" #'centered-cursor-mode
-    "t_" #'global-centered-cursor-mode)
+    "t -" #'centered-cursor-mode
+    "t _" #'global-centered-cursor-mode)
 
   :config
 
@@ -2024,7 +2072,7 @@ possibly new window."
 (use-package! goto-chg
   :init
 
-  (set-leader-keys! "jc" #'goto-last-change))
+  (set-leader-keys! "j c" #'goto-last-change))
 
 ;; Package `mwim' stands for "Move Where I Mean".  It provides commands to
 ;; switch between various positions on the current line (particularly, to move
@@ -2040,8 +2088,8 @@ possibly new window."
 
 ;; Allow to disable font colouring when needed.
 (set-leader-keys!
-  "thf" #'font-lock-mode
-  "thF" #'global-font-lock-mode)
+  "t h f" #'font-lock-mode
+  "t h F" #'global-font-lock-mode)
 
 ;; Feature `hl-line' provides minor mode to ;; highlight, on a suitable
 ;; terminal, the line on which point is. The global mode highlights the current
@@ -2053,8 +2101,8 @@ possibly new window."
   :config
 
   (set-leader-keys!
-    "thl" #'hl-line-mode
-    "thL" #'global-hl-line-mode)
+    "t h l" #'hl-line-mode
+    "t h L" #'global-hl-line-mode)
 
   (global-hl-line-mode +1))
 
@@ -2075,8 +2123,8 @@ will not refresh `column-number-mode."
       (column-enforce-mode +1)))
 
   (set-leader-keys!
-    "t8" #'column-enforce-mode
-    "t*" #'global-column-enforce-mode)
+    "t 8" #'column-enforce-mode
+    "t *" #'global-column-enforce-mode)
 
   ;; Set the column limit with the same limit as `fill-column'.
   (setq column-enforce-column nil)
@@ -2094,7 +2142,7 @@ will not refresh `column-number-mode."
 (use-package! highlight-indent-guides
   :init
 
-  (set-leader-keys! "thi" #'highlight-indent-guides-mode)
+  (set-leader-keys! "t h i" #'highlight-indent-guides-mode)
 
   :config
 
@@ -2119,7 +2167,7 @@ will not refresh `column-number-mode."
 (use-package! highlight-numbers
   :init
 
-  (set-leader-keys! "thn" #'highlight-numbers-mode)
+  (set-leader-keys! "t h n" #'highlight-numbers-mode)
 
   :hook (prog-mode-hook . highlight-numbers-mode))
 
@@ -2128,8 +2176,8 @@ will not refresh `column-number-mode."
   :init
 
   (set-leader-keys!
-    "thp" #'highlight-parentheses-mode
-    "thP" #'global-highlight-parentheses-mode)
+    "t h p" #'highlight-parentheses-mode
+    "t h P" #'global-highlight-parentheses-mode)
 
   :hook (prog-mode-hook . highlight-parentheses-mode)
   :config
@@ -2153,14 +2201,15 @@ will not refresh `column-number-mode."
   :demand t
   :config
 
-  (declare-prefix! "st" "todo")
+  (set-prefixes! "s t" "todo")
+
   (set-leader-keys!
-    "it"  #'hl-todo-insert
-    "stn" #'hl-todo-next
-    "sto" #'hl-todo-occur
-    "stp" #'hl-todo-previous
-    "tht" #'hl-todo-mode
-    "thT" #'global-hl-todo-mode)
+    "i t"   #'hl-todo-insert
+    "s t n" #'hl-todo-next
+    "s t o" #'hl-todo-occur
+    "s t p" #'hl-todo-previous
+    "t h t" #'hl-todo-mode
+    "t h T" #'global-hl-todo-mode)
 
   (global-hl-todo-mode +1))
 
@@ -2169,8 +2218,9 @@ will not refresh `column-number-mode."
 (use-package! prism
   :init
 
-  (set-leader-keys! "ths" #'prism-mode)
-  (set-leader-keys! "thS" #'prism-whitespace-mode)
+  (set-leader-keys!
+    "t h s" #'prism-mode
+    "t h S" #'prism-whitespace-mode)
 
   (defun prism-shuffle-colors ()
     "Shuffle random number of theme faces."
@@ -2205,7 +2255,7 @@ will not refresh `column-number-mode."
 (use-package! rainbow-delimiters
   :init
 
-  (set-leader-keys! "thr" #'rainbow-delimiters-mode)
+  (set-leader-keys! "t h r" #'rainbow-delimiters-mode)
 
   :hook (prog-mode-hook . rainbow-delimiters-mode))
 
@@ -2247,12 +2297,12 @@ will not refresh `column-number-mode."
     (hydra-symbol-overlay/body))
 
   (set-leader-keys!
-    "so" #'symbol-overlay
-    "sO" #'symbol-overlay-remove-all)
+    "s o" #'symbol-overlay
+    "s O" #'symbol-overlay-remove-all)
 
   (with-eval-after-load 'embark
-    (bind-key "y" #'symbol-overlay embark-identifier-map)
-    (bind-key "u" #'symbol-overlay-put embark-identifier-map)))
+    (keymap-set embark-identifier-map "y" #'symbol-overlay)
+    (keymap-set embark-identifier-map "u" #'symbol-overlay-put)))
 
 ;;;; Find and replace
 
@@ -2312,7 +2362,7 @@ jump to the position before `recenter' was called."
 (use-package! visual-regexp
   :init
 
-  (set-leader-keys! "vm" #'vr/mc-mark)
+  (set-leader-keys! "v m" #'vr/mc-mark)
   :bind ([remap query-replace] . #'vr/query-replace)
 
   :config
@@ -2398,17 +2448,17 @@ SCOPE can be:
              ispell-init-process)
   :init
 
-  (declare-prefix! "Sa" "add word")
+  (set-prefixes! "S a" "add word")
 
   (set-leader-keys!
-    "Sab" #'add-word-to-dict-buffer
-    "Sag" #'add-word-to-dict-global
-    "Sas" #'add-word-to-dict-session
-    "Sb"  #'flyspell-buffer
-    "Sd"  #'ispell-change-dictionary
-    "Sn"  #'flyspell-goto-next-error
-    "Sr"  #'flyspell-region
-    "tS"  #'spellchecking-mode)
+    "S a b" #'add-word-to-dict-buffer
+    "S a g" #'add-word-to-dict-global
+    "S a s" #'add-word-to-dict-session
+    "S b"   #'flyspell-buffer
+    "S d"   #'ispell-change-dictionary
+    "S n"   #'flyspell-goto-next-error
+    "S r"   #'flyspell-region
+    "t S"   #'spellchecking-mode)
 
   ;; Inhibit initial aspell start message.
   (advice-add #'ispell-init-process :around #'advice-silence-messages!)
@@ -2436,7 +2486,7 @@ SCOPE can be:
 (use-package! consult-flyspell
   :init
 
-  (set-leader-keys! "SS" #'consult-flyspell)
+  (set-leader-keys! "S S" #'consult-flyspell)
 
   :config
 
@@ -2477,12 +2527,10 @@ Spell Commands^^            Add To Dictionary^^               Other^^
     ("q" nil :exit t)
     ("C-g" nil :exit t))
 
-  (declare-prefix! "S." "spellcheck")
-
   (set-leader-keys!
-    "Sc" #'flyspell-correct-wrapper
-    "Ss" #'flyspell-correct-at-point
-    "S." #'hydra-flyspell/body))
+    "S c" #'flyspell-correct-wrapper
+    "S s" #'flyspell-correct-at-point
+    "S ." (cons "spellcheck" #'hydra-flyspell/body)))
 
 ;; Package `powerthesaurus' is an integration with powerthesaurus.org. It helps
 ;; to look up a word in powerthesaurus and either replace or insert selected
@@ -2491,8 +2539,8 @@ Spell Commands^^            Add To Dictionary^^               Other^^
   :init
 
   (set-leader-keys!
-    "St" #'powerthesaurus-lookup-synonyms-dwim
-    "ST" #'powerthesaurus-lookup-antonyms-dwim))
+    "S t" #'powerthesaurus-lookup-synonyms-dwim
+    "S T" #'powerthesaurus-lookup-antonyms-dwim))
 
 ;;;; Miscellaneous
 
@@ -2511,29 +2559,32 @@ Spell Commands^^            Add To Dictionary^^               Other^^
 ;; macros, by default F3 and F4.
 (use-feature! kmacro
   :init
-  (declare-prefix! "kc" "counter")
-  (declare-prefix! "ke" "edit")
-  (declare-prefix! "kr" "ring")
+
+  (set-prefixes!
+    "k c" "counter"
+    "k e" "edit"
+    "k r" "ring")
+
   (set-leader-keys!
-    "kca" #'kmacro-add-counter
-    "kcc" #'kmacro-insert-counter
-    "kcC" #'kmacro-set-counter
-    "kcf" #'kmacro-set-format
-    "keb" #'kmacro-bind-to-key
-    "kee" #'kmacro-edit-macro-repeat
-    "kel" #'kmacro-edit-lossage
-    "ken" #'kmacro-name-last-macro
-    "ker" #'kmacro-to-register
-    "kes" #'kmacro-step-edit-macro
-    "krd" #'kmacro-delete-ring-head
-    "krl" #'kmacro-call-ring-2nd-repeat
-    "krL" #'kmacro-view-ring-2nd
-    "krn" #'kmacro-cycle-ring-next
-    "krp" #'kmacro-cycle-ring-previous
-    "krs" #'kmacro-swap-ring
-    "kk"  #'kmacro-start-macro-or-insert-counter
-    "kK"  #'kmacro-end-or-call-macro
-    "kv"  #'kmacro-view-macro-repeat))
+    "k c a" #'kmacro-add-counter
+    "k c c" #'kmacro-insert-counter
+    "k c C" #'kmacro-set-counter
+    "k c f" #'kmacro-set-format
+    "k e b" #'kmacro-bind-to-key
+    "k e e" #'kmacro-edit-macro-repeat
+    "k e l" #'kmacro-edit-lossage
+    "k e n" #'kmacro-name-last-macro
+    "k e r" #'kmacro-to-register
+    "k e s" #'kmacro-step-edit-macro
+    "k r d" #'kmacro-delete-ring-head
+    "k r l" #'kmacro-call-ring-2nd-repeat
+    "k r L" #'kmacro-view-ring-2nd
+    "k r n" #'kmacro-cycle-ring-next
+    "k r p" #'kmacro-cycle-ring-previous
+    "k r s" #'kmacro-swap-ring
+    "k k"   #'kmacro-start-macro-or-insert-counter
+    "k K"   #'kmacro-end-or-call-macro
+    "k v"   #'kmacro-view-macro-repeat))
 
 ;;; Electricity: automatic things
 ;;;; Autorepeat
@@ -2559,8 +2610,8 @@ Spell Commands^^            Add To Dictionary^^               Other^^
   :init
 
   (set-leader-keys!
-    "tr" #'auto-revert-mode
-    "tR" #'global-auto-revert-mode)
+    "t r" #'auto-revert-mode
+    "t R" #'global-auto-revert-mode)
 
   :config
 
@@ -2615,12 +2666,12 @@ Spell Commands^^            Add To Dictionary^^               Other^^
   :config
 
   (set-leader-keys!
-    "js" #'sp-split-sexp
-    "jn" #'sp-newline
-    "tp" #'smartparens-mode
-    "tP" #'smartparens-global-mode
-    "tq" #'smartparens-strict-mode
-    "tQ" #'smartparens-global-strict-mode)
+    "j s" #'sp-split-sexp
+    "j n" #'sp-newline
+    "t p" #'smartparens-mode
+    "t P" #'smartparens-global-mode
+    "t q" #'smartparens-strict-mode
+    "t Q" #'smartparens-global-strict-mode)
 
   ;; Load the default pair definitions for Smartparens.
   (require 'smartparens-config)
@@ -2647,8 +2698,11 @@ Spell Commands^^            Add To Dictionary^^               Other^^
 
   ;; Make C-k kill the sexp following point in Lisp modes, instead of just the
   ;; current line.
-  (bind-key [remap kill-line] #'sp-kill-hybrid-sexp smartparens-mode-map
-            (apply #'derived-mode-p sp-lisp-modes))
+  (keymap-set smartparens-mode-map "<remap> <kill-line>"
+              '(menu-item "" nil
+                          :filter (lambda (&optional _)
+                                    (when (apply #'derived-mode-p sp-lisp-modes)
+                                      #'sp-kill-hybrid-sexp))))
 
   ;; Quiet some silly messages.
   (dolist (key '(:unmatched-expression :no-matching-tag))
@@ -2728,10 +2782,10 @@ Spell Commands^^            Add To Dictionary^^               Other^^
   :init
 
   (set-leader-keys!
-    "ic" #'aya-create
-    "ie" #'aya-expand
-    "io" #'aya-open-line
-    "iw" #'aya-persist-snippet)
+    "i c" #'aya-create
+    "i e" #'aya-expand
+    "i o" #'aya-open-line
+    "i w" #'aya-persist-snippet)
 
   :config
 
@@ -2747,8 +2801,8 @@ Spell Commands^^            Add To Dictionary^^               Other^^
   (setq consult-yasnippet-use-thing-at-point t)
 
   (set-leader-keys!
-    "ii" #'consult-yasnippet
-    "iv" #'consult-yasnippet-visit-snippet-file))
+    "i i" #'consult-yasnippet
+    "i v" #'consult-yasnippet-visit-snippet-file))
 
 ;; Package `yasnippet' allows the expansion of user-defined abbreviations into
 ;; fillable templates. The only reason we have it here is because it gets pulled
@@ -2761,10 +2815,10 @@ Spell Commands^^            Add To Dictionary^^               Other^^
   :init
 
   (set-leader-keys!
-    "ip" #'yas-prev-field
-    "in" #'yas-next-field
-    "ty" #'yas-minor-mode
-    "tY" #'yas-global-mode)
+    "i p" #'yas-prev-field
+    "i n" #'yas-next-field
+    "t y" #'yas-minor-mode
+    "t Y" #'yas-global-mode)
 
   ;; Disable default keymap with TAB expansion.
   (setq yas-minor-mode-map (make-sparse-keymap))
@@ -2866,27 +2920,27 @@ point. "
     (consult-line (thing-at-point 'symbol)))
 
   (set-leader-keys!
-    "/"  '("search project" . consult-ripgrep)
-    "am" #'consult-man'
-    "bb" #'consult-buffer
-    "bB" #'consult-buffer-other-window
-    "bf" #'consult-focus-lines
-    "bk" #'consult-keep-lines
-    "bt" #'consult-buffer-other-tab
-    "Fb" #'consult-buffer-other-frame
-    "fb" #'consult-bookmark
-    "fF" #'consult-fd
-    "fr" #'consult-recent-file
-    "g/" #'consult-git-grep
-    "ji" #'consult-imenu
-    "jI" #'consult-imenu-multi
-    "km" #'consult-kmacro
-    "rl" #'consult-register-load
-    "rr" #'consult-register
-    "rs" #'consult-register-store
-    "ry" #'consult-yank-replace
-    "ss" #'consult-line
-    "tT" #'consult-theme)
+    "/"   (cons "search project" #'consult-ripgrep)
+    "a m" #'consult-man
+    "b b" #'consult-buffer
+    "b B" #'consult-buffer-other-window
+    "b f" #'consult-focus-lines
+    "b k" #'consult-keep-lines
+    "b t" #'consult-buffer-other-tab
+    "F b" #'consult-buffer-other-frame
+    "f b" #'consult-bookmark
+    "f F" #'consult-fd
+    "f r" #'consult-recent-file
+    "g /" #'consult-git-grep
+    "j i" #'consult-imenu
+    "j I" #'consult-imenu-multi
+    "k m" #'consult-kmacro
+    "r l" #'consult-register-load
+    "r r" #'consult-register
+    "r s" #'consult-register-store
+    "r y" #'consult-yank-replace
+    "s s" #'consult-line
+    "t T" #'consult-theme)
 
   ;; Narrow and widen selection with "[".
   (setq consult-narrow-key "[")
@@ -2949,8 +3003,8 @@ point. "
   :init
 
   (set-leader-keys!
-    "?"  '("describe keybinds" . embark-bindings)
-    "hB" #'embark-bindings)
+    "?"   (cons "describe keybinds" #'embark-bindings)
+    "h B" #'embark-bindings)
 
   ;; Replace the key help with a completing-read interface.
   (setq prefix-help-command #'embark-prefix-help-command)
@@ -3204,8 +3258,8 @@ completing-read prompter."
   :init
 
   (set-leader-keys!
-    "F." #'xref-find-definitions-other-frame
-    "w." #'xref-find-definitions-other-window)
+    "F ." #'xref-find-definitions-other-frame
+    "w ." #'xref-find-definitions-other-window)
 
   :config
 
@@ -3234,7 +3288,7 @@ completing-read prompter."
 (use-feature! eldoc
   :init
 
-  (set-leader-keys! "eh" #'eldoc-doc-buffer)
+  (set-leader-keys! "e h" #'eldoc-doc-buffer)
 
   :hook (eval-expression-minibuffer-setup-hook . eldoc-mode)
   :blackout t)
@@ -3287,8 +3341,8 @@ completing-read prompter."
       (corfu-mode +1)))
 
   (set-leader-keys!
-    "ta" #'corfu-mode
-    "tA" #'global-corfu-mode)
+    "t a" #'corfu-mode
+    "t A" #'global-corfu-mode)
 
   :bind ( :map corfu-map
           ("TAB"   . #'corfu-next)
@@ -3305,7 +3359,7 @@ completing-read prompter."
        (let ((completion-extra-properties extras)
              completion-cycle-threshold completion-cycling)
          (consult-completion-in-region beg end table pred)))))
-  (bind-key "M-m" #'corfu-move-to-minibuffer corfu-map)
+  (keymap-set corfu-map "M-m" #'corfu-move-to-minibuffer)
   (push #'corfu-move-to-minibuffer corfu-continue-commands)
 
   (defun my--corfu-sort (candidates)
@@ -3453,15 +3507,15 @@ defeats the purpose of `corfu-prescient'."
     "p" #'flymake-goto-prev-error)
 
   (set-leader-keys!
-    "e?" #'flymake-running-backends
-    "eb" #'flymake-start
-    "el" #'flymake-show-buffer-diagnostics
-    "eL" #'flymake-show-project-diagnostics
-    "en" #'flymake-goto-next-error
-    "ep" #'flymake-goto-prev-error
-    "es" #'flymake-switch-to-log-buffer
-    "ev" #'flymake-reporting-backends
-    "ts" #'flymake-mode)
+    "e ?" #'flymake-running-backends
+    "e b" #'flymake-start
+    "e l" #'flymake-show-buffer-diagnostics
+    "e L" #'flymake-show-project-diagnostics
+    "e n" #'flymake-goto-next-error
+    "e p" #'flymake-goto-prev-error
+    "e s" #'flymake-switch-to-log-buffer
+    "e v" #'flymake-reporting-backends
+    "t s" #'flymake-mode)
 
   ;; Increase the idle time after Flymake will start a syntax check as 0.5s is
   ;; a bit too naggy.
@@ -3474,7 +3528,7 @@ defeats the purpose of `corfu-prescient'."
 (use-feature! consult-flymake
   :init
 
-  (set-leader-keys! "ee" #'consult-flymake)
+  (set-leader-keys! "e e" #'consult-flymake)
 
   :bind (("M-g e"   . #'consult-flymake)
          ("M-g M-e" . #'consult-flymake)))
@@ -3504,24 +3558,27 @@ defeats the purpose of `corfu-prescient'."
 (use-package! devdocs-browser
   :init
 
-  (declare-prefix! "do" "offline")
-  (declare-prefix! "du" "update")
+  (set-prefixes!
+    "d"   "devdocs"
+    "d u" "update")
 
   (set-leader-keys!
-    "dd" #'devdocs-browser-open
-    "dD" #'devdocs-browser-open-in
-    "di" #'devdocs-browser-install-doc
-    "dr" #'devdocs-browser-uninstall-doc
+    "d d" #'devdocs-browser-open
+    "d D" #'devdocs-browser-open-in
+    "d i" #'devdocs-browser-install-doc
+    "d r" #'devdocs-browser-uninstall-doc
 
-    "duu" #'devdocs-browser-update-metadata
-    "dug" #'devdocs-browser-upgrade-doc
-    "duG" #'devdocs-browser-upgrade-all-docs)
+    "d u u" #'devdocs-browser-update-metadata
+    "d u g" #'devdocs-browser-upgrade-doc
+    "d u G" #'devdocs-browser-upgrade-all-docs)
 
   :config
 
+  (set-prefixes! "d o" "offline")
+
   (set-leader-keys!
-    "dod" #'devdocs-browser-download-offline-data
-    "dor" #'devdocs-browser-remove-offline-data)
+    "d o d" #'devdocs-browser-download-offline-data
+    "d o r" #'devdocs-browser-remove-offline-data)
 
   ;; Do not litter `user-emacs-directory' with offline data.
   (setq devdocs-browser-cache-directory my-cache-dir))
@@ -3532,43 +3589,45 @@ defeats the purpose of `corfu-prescient'."
 (use-feature! ediff
   :init
 
-  (declare-prefix! "Db"  "buffers")
-  (declare-prefix! "Dd"  "directories")
-  (declare-prefix! "Df"  "files")
-  (declare-prefix! "Dm"  "merge")
-  (declare-prefix! "Dmb" "buffers")
-  (declare-prefix! "Dmd" "directories")
-  (declare-prefix! "Dmf" "files")
-  (declare-prefix! "Dmr" "revisions")
-  (declare-prefix! "Dr"  "regions")
-  (declare-prefix! "Dw"  "windows")
+  (set-prefixes!
+    "D"     "diff"
+    "D b"   "buffers"
+    "D d"   "directories"
+    "D f"   "files"
+    "D m"   "merge"
+    "D m b" "buffers"
+    "D m d" "directories"
+    "D m f" "files"
+    "D m r" "revisions"
+    "D r"   "regions"
+    "D w"   "windows")
 
   (set-leader-keys!
-    "Db3"  #'ediff-buffers3
-    "Dbb"  #'ediff-buffers
-    "DbB"  #'ediff-backup
-    "Dbp"  #'ediff-patch-buffer
-    "Dd3"  #'ediff-directories3
-    "Ddd"  #'ediff-directories
-    "Ddr"  #'ediff-directory-revisions
-    "Df3"  #'ediff-files3
-    "Dff"  #'ediff-files
-    "Dfp"  #'ediff-patch-file
-    "Dfv"  #'ediff-revision
-    "Dmb3" #'ediff-merge-buffers-with-ancestor
-    "Dmbb" #'ediff-merge-buffers
-    "Dmd3" #'ediff-merge-directories-with-ancestor
-    "Dmdd" #'ediff-merge-directories
-    "Dmf3" #'ediff-merge-files-with-ancestor
-    "Dmff" #'ediff-merge-files
-    "Dmr3" #'ediff-merge-revisions-with-ancestor
-    "Dmrr" #'ediff-merge-revisions
-    "Drl"  #'ediff-regions-linewise
-    "Drw"  #'ediff-regions-wordwise
-    "Dwl"  #'ediff-windows-linewise
-    "Dww"  #'ediff-windows-wordwise
-    "Ds"   #'ediff-show-registry
-    "Dh"   #'ediff-documentation)
+    "D b 3"   #'ediff-buffers3
+    "D b b"   #'ediff-buffers
+    "D b B"   #'ediff-backup
+    "D b p"   #'ediff-patch-buffer
+    "D d 3"   #'ediff-directories3
+    "D d d"   #'ediff-directories
+    "D d r"   #'ediff-directory-revisions
+    "D f 3"   #'ediff-files3
+    "D f f"   #'ediff-files
+    "D f p"   #'ediff-patch-file
+    "D f v"   #'ediff-revision
+    "D m b 3" #'ediff-merge-buffers-with-ancestor
+    "D m b b" #'ediff-merge-buffers
+    "D m d 3" #'ediff-merge-directories-with-ancestor
+    "D m d d" #'ediff-merge-directories
+    "D m f 3" #'ediff-merge-files-with-ancestor
+    "D m f f" #'ediff-merge-files
+    "D m r 3" #'ediff-merge-revisions-with-ancestor
+    "D m r r" #'ediff-merge-revisions
+    "D r l"   #'ediff-regions-linewise
+    "D r w"   #'ediff-regions-wordwise
+    "D w l"   #'ediff-windows-linewise
+    "D w w"   #'ediff-windows-wordwise
+    "D s"     #'ediff-show-registry
+    "D h"     #'ediff-documentation)
 
   :config
 
@@ -3620,21 +3679,6 @@ list of additional parameters sent with this request."
          (interactive "p")
          (lsp-ui-peek-find-custom ,request ,extra))))
 
-  (defhook! my--lsp-mode-setup ()
-    lsp-after-initialize-hook
-    "Set custom settings after initialising LSP server."
-    ;; Declare prefixes common for all LSP servers.
-    (mapc (lambda (prefix) (apply #'declare-prefix-for-mode! 'lsp-mode prefix))
-          '(("m="  "format")
-            ("ma"  "code actions")
-            ("mf"  "folders")
-            ("mg"  "goto")
-            ("mG"  "peek")
-            ("mh"  "help")
-            ("mr"  "refactor")
-            ("ms"  "session")
-            ("mt"  "toggle"))))
-
   (defadvice! lsp-booster-parse-bytecode
       (func &rest args)
     :around #'json-parse-buffer
@@ -3669,58 +3713,69 @@ list of additional parameters sent with this request."
 
   :config
 
+  (set-prefixes-for-minor-mode! 'lsp-mode
+    "=" "format"
+    "a" "code actions"
+    "f" "folders"
+    "g" "goto"
+    "G" "peek"
+    "h" "help"
+    "r" "refactor"
+    "s" "session"
+    "t" "toggle")
+
   (set-leader-keys-for-minor-mode! 'lsp-mode
     ;; Format
-    "==" #'lsp-format-buffer
-    "=r" #'lsp-format-region
+    "= =" #'lsp-format-buffer
+    "= r" #'lsp-format-region
 
     ;; Code actions
-    "aa" #'lsp-execute-code-action
-    "ah" #'lsp-document-highlight
-    "al" #'lsp-avy-lens
+    "a a" #'lsp-execute-code-action
+    "a h" #'lsp-document-highlight
+    "a l" #'lsp-avy-lens
 
     ;; Folders
-    "fa" #'lsp-workspace-folders-add
-    "fb" #'lsp-workspace-blacklist-remove
-    "fr" #'lsp-workspace-folders-remove
-    "fs" #'lsp-workspace-folders-open
+    "f a" #'lsp-workspace-folders-add
+    "f b" #'lsp-workspace-blacklist-remove
+    "f r" #'lsp-workspace-folders-remove
+    "f s" #'lsp-workspace-folders-open
 
     ;; Goto
-    "gd" #'lsp-find-declaration
-    "gg" #'lsp-find-definition
-    "gi" #'lsp-find-implementation
-    "gr" #'lsp-find-references
-    "gt" #'lsp-find-type-definition
+    "g d" #'lsp-find-declaration
+    "g g" #'lsp-find-definition
+    "g i" #'lsp-find-implementation
+    "g r" #'lsp-find-references
+    "g t" #'lsp-find-type-definition
 
     ;; Peek
-    "Gd" #'lsp-find-declaration
-    "Gt" #'lsp-find-type-definition
+    "G d" #'lsp-find-declaration
+    "G t" #'lsp-find-type-definition
 
     ;; Help
-    "hh" #'lsp-describe-thing-at-point
-    "hs" #'lsp-signature-activate
+    "h h" #'lsp-describe-thing-at-point
+    "h s" #'lsp-signature-activate
 
     ;; Refactor
-    "ro" #'lsp-organize-imports
-    "rr" #'lsp-rename
+    "r o" #'lsp-organize-imports
+    "r r" #'lsp-rename
 
     ;; Session
-    "sd" #'lsp-describe-session
-    "sD" #'lsp-disconnect
-    "sq" #'lsp-workspace-shutdown
-    "sr" #'lsp-workspace-restart
-    "ss" #'lsp
+    "s d" #'lsp-describe-session
+    "s D" #'lsp-disconnect
+    "s q" #'lsp-workspace-shutdown
+    "s r" #'lsp-workspace-restart
+    "s s" #'lsp
 
     ;; Toggle
-    "ta" #'lsp-modeline-code-actions-mode
-    "tb" #'lsp-headerline-breadcrumb-mode
-    "tD" #'lsp-modeline-diagnostics-mode
-    "tf" #'lsp-toggle-on-type-formatting
-    "th" #'lsp-toggle-symbol-highlight
-    "ti" #'lsp-inlay-hints-mode
-    "tl" #'lsp-lens-mode
-    "tL" #'lsp-toggle-trace-io
-    "tS" #'lsp-toggle-signature-auto-activate)
+    "t a" #'lsp-modeline-code-actions-mode
+    "t b" #'lsp-headerline-breadcrumb-mode
+    "t D" #'lsp-modeline-diagnostics-mode
+    "t f" #'lsp-toggle-on-type-formatting
+    "t h" #'lsp-toggle-symbol-highlight
+    "t i" #'lsp-inlay-hints-mode
+    "t l" #'lsp-lens-mode
+    "t L" #'lsp-toggle-trace-io
+    "t S" #'lsp-toggle-signature-auto-activate)
 
   ;; Do not litter `user-emacs-directory' with persistent LSP files.
   (setq lsp-session-file (expand-file-name "lsp-session-v1" my-cache-dir))
@@ -3821,7 +3876,7 @@ style setting with a special `lsp-passthrough' style."
     :init
 
     (set-leader-keys-for-minor-mode! 'lsp-mode
-      "re" #'lsp-iedit-highlights))
+      "r e" #'lsp-iedit-highlights))
 
   ;; Feature `lsp-clangd' brings implementation of clangd client for Emacs.
   (use-feature! lsp-clangd
@@ -3835,10 +3890,10 @@ a new window."
 
     (dolist (mode '(c-mode c++-mode))
       (set-leader-keys-for-major-mode! mode
-        "ga" #'lsp-clangd-find-other-file
-        "gA" #'lsp-clangd-find-other-file-other-window
-        "Ga" #'lsp-clangd-find-other-file
-        "GA" #'lsp-clangd-find-other-file-other-window))
+        "g a" #'lsp-clangd-find-other-file
+        "g A" #'lsp-clangd-find-other-file-other-window
+        "G a" #'lsp-clangd-find-other-file
+        "G A" #'lsp-clangd-find-other-file-other-window))
 
     ;; Set some basic logging for debugging purpose, change completion style to
     ;; be more detailed and remove automatic header insertion.
@@ -3853,19 +3908,19 @@ a new window."
 
     (set-leader-keys-for-major-mode! 'rustic-mode
       ;; Code actions
-      "ae" #'lsp-rust-analyzer-expand-macro
-      "aj" #'lsp-rust-analyzer-join-lines
+      "a e" #'lsp-rust-analyzer-expand-macro
+      "a j" #'lsp-rust-analyzer-join-lines
 
       ;; Open
-      "od" #'lsp-rust-analyzer-open-external-docs
+      "o d" #'lsp-rust-analyzer-open-external-docs
 
       ;; Session
-      "sR" #'lsp-rust-analyzer-reload-workspace)
+      "s R" #'lsp-rust-analyzer-reload-workspace)
 
     (with-eval-after-load 'lsp-treemacs
       (set-leader-keys-for-major-mode! 'rustic-mode
-        "gc" #'lsp-treemacs-call-hierarchy
-        "Gc" #'lsp-treemacs-call-hierarchy))
+        "g c" #'lsp-treemacs-call-hierarchy
+        "G c" #'lsp-treemacs-call-hierarchy))
 
     ;; Enable proc macro support, rust-analyzer does it by default but Lsp Rust
     ;; disables it.
@@ -3908,17 +3963,17 @@ a new window."
 
   (set-leader-keys-for-minor-mode! 'lsp-mode
     ;; Peek
-    "Gg" #'lsp-ui-peek-find-definitions
-    "Gi" #'lsp-ui-peek-find-implementation
-    "GM" #'lsp-ui-imenu
-    "Gr" #'lsp-ui-peek-find-references
+    "G g" #'lsp-ui-peek-find-definitions
+    "G i" #'lsp-ui-peek-find-implementation
+    "G M" #'lsp-ui-imenu
+    "G r" #'lsp-ui-peek-find-references
 
     ;; Help
-    "hg" #'lsp-ui-doc-glance
+    "h g" #'lsp-ui-doc-glance
 
     ;; Toggle
-    "td" #'lsp-ui-doc-mode
-    "ts" #'lsp-ui-sideline-mode)
+    "t d" #'lsp-ui-doc-mode
+    "t s" #'lsp-ui-sideline-mode)
 
   ;; Update sideline information when changing current line, not when moving
   ;; cursor
@@ -3948,12 +4003,12 @@ a new window."
   :config
 
   (set-leader-keys-for-minor-mode! 'lsp-mode
-    "ge"  #'consult-lsp-diagnostics
-    "gs"  #'consult-lsp-file-symbols
-    "gS"  #'consult-lsp-symbols
-    "Ge"  #'consult-lsp-diagnostics
-    "Gs"  #'consult-lsp-file-symbols
-    "GS"  #'consult-lsp-symbols)
+    "g e"  #'consult-lsp-diagnostics
+    "g s"  #'consult-lsp-file-symbols
+    "g S"  #'consult-lsp-symbols
+    "G e"  #'consult-lsp-diagnostics
+    "G s"  #'consult-lsp-file-symbols
+    "G S"  #'consult-lsp-symbols)
 
   (consult-customize
    ;; Disable the automatic preview where the preview may be expensive due to
@@ -3967,13 +4022,13 @@ a new window."
   :config
 
   (set-leader-keys-for-minor-mode! 'lsp-mode
-    "gE" #'lsp-treemacs-errors-list
-    "gR" #'lsp-treemacs-references
+    "g E" #'lsp-treemacs-errors-list
+    "g R" #'lsp-treemacs-references
 
-    "GE" #'lsp-treemacs-errors-list
-    "GR" #'lsp-treemacs-references
+    "G E" #'lsp-treemacs-errors-list
+    "G R" #'lsp-treemacs-references
 
-    "tt" #'lsp-treemacs-sync-mode))
+    "t t" #'lsp-treemacs-sync-mode))
 
 ;;; Language support
 ;;;; C, C++
@@ -3989,13 +4044,15 @@ a new window."
     (lsp-deferred))
 
   (dolist (mode '(c-mode c++-mode))
-    (declare-prefix-for-mode! mode "mg" "goto")
-    (declare-prefix-for-mode! mode "mG" "peek")
+    (set-prefixes-for-major-mode! mode
+      "g" "goto"
+      "G" "peek")
+
     (set-leader-keys-for-major-mode! mode
-      "ga" #'projectile-find-other-file
-      "gA" #'projectile-find-other-file-other-window
-      "Ga" #'projectile-find-other-file
-      "GA" #'projectile-find-other-file-other-window))
+      "g a" #'projectile-find-other-file
+      "g A" #'projectile-find-other-file-other-window
+      "G a" #'projectile-find-other-file
+      "G A" #'projectile-find-other-file-other-window))
 
   :config
 
@@ -4240,47 +4297,47 @@ ALL when non-nil determines whether words will be pickable."
     (ccls-inheritance-hierarchy t))
 
   (dolist (mode '(c-mode c++-mode))
-    (mapc (lambda (prefix) (apply #'declare-prefix-for-mode! mode prefix))
-          '(("mgh" "hierarchy")
-            ("mgm" "members")
-            ("mGh" "hierarchy")
-            ("mGm" "members")))
+    (set-prefixes-for-minor-mode! mode
+      "g h" "hierarchy"
+      "g m" "members"
+      "G h" "hierarchy"
+      "G m" "members")
 
     (set-leader-keys-for-major-mode! mode
       ;; Code actions
-      "ap"  #'ccls-preprocess-file
+      "a p"  #'ccls-preprocess-file
 
       ;; Goto
-      "gb"  #'ccls-find-base
-      "gc"  #'ccls-find-callers
-      "gC"  #'ccls-find-callees
-      "gd"  #'ccls-find-derived
-      "ghi" #'ccls-inheritance-hierarchy
-      "ghI" #'ccls-inheritance-hierarchy-inv
-      "ghc" #'ccls-call-hierarchy
-      "ghC" #'ccls-call-hierarchy-inv
-      "ghm" #'ccls-member-hierarchy
-      "gmm" #'ccls-find-member-vars
-      "gmf" #'ccls-find-member-funcs
-      "gmt" #'ccls-find-member-types
-      "gk"  #'ccls-avy-goto-symbol
-      "gK"  #'ccls-avy-goto-word
+      "g b"   #'ccls-find-base
+      "g c"   #'ccls-find-callers
+      "g C"   #'ccls-find-callees
+      "g d"   #'ccls-find-derived
+      "g h i" #'ccls-inheritance-hierarchy
+      "g h I" #'ccls-inheritance-hierarchy-inv
+      "g h c" #'ccls-call-hierarchy
+      "g h C" #'ccls-call-hierarchy-inv
+      "g h m" #'ccls-member-hierarchy
+      "g m m" #'ccls-find-member-vars
+      "g m f" #'ccls-find-member-funcs
+      "g m t" #'ccls-find-member-types
+      "g k"   #'ccls-avy-goto-symbol
+      "g K"   #'ccls-avy-goto-word
 
       ;; Peek
-      "Gb"  #'ccls-ui-peek-find-base
-      "Gc"  #'ccls-ui-peek-find-callers
-      "GC"  #'ccls-ui-peek-find-callees
-      "Gd"  #'ccls-ui-peek-find-derived
-      "Ghi" #'ccls-inheritance-hierarchy
-      "GhI" #'ccls-inheritance-hierarchy-inv
-      "Ghc" #'ccls-call-hierarchy
-      "GhC" #'ccls-call-hierarchy-inv
-      "Ghm" #'ccls-member-hierarchy
-      "Gmm" #'ccls-ui-peek-find-member-vars
-      "Gmf" #'ccls-ui-peek-find-member-funcs
-      "Gmt" #'ccls-ui-peek-find-member-types
-      "Gk"  #'ccls-avy-goto-symbol
-      "GK"  #'ccls-avy-goto-word))
+      "G b"   #'ccls-ui-peek-find-base
+      "G c"   #'ccls-ui-peek-find-callers
+      "G C"   #'ccls-ui-peek-find-callees
+      "G d"   #'ccls-ui-peek-find-derived
+      "G h i" #'ccls-inheritance-hierarchy
+      "G h I" #'ccls-inheritance-hierarchy-inv
+      "G h c" #'ccls-call-hierarchy
+      "G h C" #'ccls-call-hierarchy-inv
+      "G h m" #'ccls-member-hierarchy
+      "G m m" #'ccls-ui-peek-find-member-vars
+      "G m f" #'ccls-ui-peek-find-member-funcs
+      "G m t" #'ccls-ui-peek-find-member-types
+      "G k"   #'ccls-avy-goto-symbol
+      "G K"   #'ccls-avy-goto-word))
 
   ;; Set some basic logging for debugging purpose.
   (setq ccls-args (list "-log-file=/tmp/ccls.log" "-v=1"))
@@ -4461,49 +4518,50 @@ ALL when non-nil determines whether words will be pickable."
     (sp-with-modes '(rustic-mode)
       (sp-local-pair "{" nil :post-handlers '(("||\n[i]" "RET")))))
 
-  (mapc (lambda (prefix) (apply #'declare-prefix-for-mode! 'rustic-mode prefix))
-        '(("mb" "build")
-          ("mc" "cargo")
-          ("me" "edit")
-          ("mo" "open")))
+  (set-prefixes-for-major-mode! 'rustic-mode
+    "=" "format"
+    "b" "build"
+    "c" "cargo"
+    "e" "edit"
+    "o" "open")
 
   (set-leader-keys-for-major-mode! 'rustic-mode
     ;; Format
-    "=;" #'rustic-docstring-dwim
+    "= ;" #'rustic-docstring-dwim
 
     ;; Build
-    "bb" #'rustic-cargo-build
-    "bc" #'rustic-compile
-    "bd" #'rustic-cargo-doc
-    "be" #'rustic-cargo-clean
-    "bf" #'rustic-format-buffer
-    "bF" #'rustic-cargo-fmt
-    "bk" #'rustic-cargo-check
-    "bn" #'rustic-cargo-outdated
-    "bp" #'rustic-popup
-    "br" #'rustic-cargo-run
-    "bt" #'rustic-cargo-test
-    "bT" #'rustic-cargo-current-test
+    "b b" #'rustic-cargo-build
+    "b c" #'rustic-compile
+    "b d" #'rustic-cargo-doc
+    "b e" #'rustic-cargo-clean
+    "b f" #'rustic-format-buffer
+    "b F" #'rustic-cargo-fmt
+    "b k" #'rustic-cargo-check
+    "b n" #'rustic-cargo-outdated
+    "b p" #'rustic-popup
+    "b r" #'rustic-cargo-run
+    "b t" #'rustic-cargo-test
+    "b T" #'rustic-cargo-current-test
 
     ;; Cargo
-    "cb" #'rustic-cargo-bench
-    "cc" #'rustic-cargo-clean
-    "cd" #'rustic-cargo-doc
-    "cf" #'rustic-cargo-clippy-fix
-    "ci" #'rustic-cargo-init
-    "cI" #'rustic-cargo-install
-    "ck" #'rustic-cargo-clippy
-    "cn" #'rustic-cargo-new
+    "c b" #'rustic-cargo-bench
+    "c c" #'rustic-cargo-clean
+    "c d" #'rustic-cargo-doc
+    "c f" #'rustic-cargo-clippy-fix
+    "c i" #'rustic-cargo-init
+    "c I" #'rustic-cargo-install
+    "c k" #'rustic-cargo-clippy
+    "c n" #'rustic-cargo-new
 
     ;; Edit
-    "ea" #'rustic-cargo-add
-    "ed" #'rustic-cargo-add-missing-dependencies
-    "er" #'rustic-cargo-rm
-    "eu" #'rustic-cargo-upgrade
-    "eU" #'rustic-cargo-update
+    "e a" #'rustic-cargo-add
+    "e d" #'rustic-cargo-add-missing-dependencies
+    "e r" #'rustic-cargo-rm
+    "e u" #'rustic-cargo-upgrade
+    "e U" #'rustic-cargo-update
 
-    ;; Jump
-    "oc" #'rustic-open-dependency-file))
+    ;; Open
+    "o c" #'rustic-open-dependency-file))
 
 ;;;; Shell
 
@@ -4519,20 +4577,21 @@ ALL when non-nil determines whether words will be pickable."
     (flymake-mode +1)
     (flyspell-prog-mode))
 
-  (declare-prefix-for-mode! 'sh-mode "mi" "insert")
+  (set-prefixes-for-major-mode! 'sh-mode "i" "insert")
+
   (set-leader-keys-for-major-mode! 'sh-mode
-    "\\" #'sh-backslash-region
-    "ic" #'sh-case
-    "ie" #'sh-indexed-loop
-    "if" #'sh-function
-    "ig" #'sh-while-getopts
-    "ii" #'sh-if
-    "io" #'sh-for
-    "ir" #'sh-repeat
-    "is" #'sh-select
-    "iu" #'sh-until
-    "iw" #'sh-while
-    "s"  #'sh-set-shell)
+    "\\"  #'sh-backslash-region
+    "i c" #'sh-case
+    "i e" #'sh-indexed-loop
+    "i f" #'sh-function
+    "i g" #'sh-while-getopts
+    "i i" #'sh-if
+    "i o" #'sh-for
+    "i r" #'sh-repeat
+    "i s" #'sh-select
+    "i u" #'sh-until
+    "i w" #'sh-while
+    "s"   #'sh-set-shell)
 
   ;; Add dotfiles versions of Bash and Zsh.
   :mode ("\\(bash\\|zsh\\)rc\\'" . sh-mode)
@@ -4548,9 +4607,11 @@ ALL when non-nil determines whether words will be pickable."
 (use-package! shfmt
   :init
 
+  (set-prefixes-for-major-mode! 'sh-mode "=" "format")
+
   (set-leader-keys-for-major-mode! 'sh-mode
-    "==" #'shfmt-buffer
-    "=r" #'shfmt-region)
+    "= =" #'shfmt-buffer
+    "= r" #'shfmt-region)
 
   :config
 
@@ -4592,7 +4653,7 @@ ALL when non-nil determines whether words will be pickable."
 ;;;; Help
 
 ;; Allows to print a stacktrace in case of an error.
-(set-leader-keys! "te" #'toggle-debug-on-error)
+(set-leader-keys! "t e" #'toggle-debug-on-error)
 
 ;; Feature `help' powers the *Help* buffer and related functionality.
 (use-feature! help
@@ -4619,13 +4680,13 @@ unhelpful."
     (add-hook #'xref-backend-functions #'elisp--xref-backend nil 'local))
 
   (set-leader-keys!
-    "hb" #'describe-bindings
-    "hc" #'describe-key-briefly
-    "hF" #'describe-face
-    "hm" #'describe-mode
-    "hM" #'describe-keymap
-    "hn" #'view-emacs-news
-    "ht" #'describe-theme)
+    "h b" #'describe-bindings
+    "h c" #'describe-key-briefly
+    "h F" #'describe-face
+    "h m" #'describe-mode
+    "h M" #'describe-keymap
+    "h n" #'view-emacs-news
+    "h t" #'describe-theme)
 
   ;; Always select help window for viewing.
   (setq help-window-select 't))
@@ -4637,15 +4698,14 @@ unhelpful."
   :init
 
   (set-leader-keys!
-    "hf" #'helpful-callable
-    "hI" #'helpful-at-point
-    "hk" #'helpful-key
-    "hs" #'helpful-symbol
-    "hv" #'helpful-variable
-    "hx" #'helpful-command)
+    "h f" #'helpful-callable
+    "h I" #'helpful-at-point
+    "h k" #'helpful-key
+    "h s" #'helpful-symbol
+    "h v" #'helpful-variable
+    "h x" #'helpful-command)
 
-  :bind (;; Remap standard commands.
-         ([remap describe-function] . #'helpful-callable)
+  :bind (([remap describe-function] . #'helpful-callable)
          ([remap describe-variable] . #'helpful-variable)
          ([remap describe-symbol]   . #'helpful-symbol)
          ([remap describe-key]      . #'helpful-key)
@@ -4728,16 +4788,16 @@ unhelpful."
     "Set custom settings for `org-mode'."
     (turn-on-auto-fill))
 
-  (declare-prefix-for-mode! 'org-mode "mt" "toggle")
+  (set-prefixes-for-major-mode! 'org-mode "t" "toggle")
 
   (set-leader-keys-for-major-mode! 'org-mode
     "l"   #'org-store-link
     "C-l" #'org-insert-link
 
     ;; Toggle
-    "ti" #'org-toggle-inline-images
-    "tl" #'org-toggle-link-display)
-  (set-leader-keys! "ol" #'org-store-link)
+    "t i" #'org-toggle-inline-images
+    "t l" #'org-toggle-link-display)
+  (set-leader-keys! "o l" #'org-store-link)
 
   :bind ( :map org-mode-map
           ("M-p" . #'org-backward-element)
@@ -4802,7 +4862,7 @@ unhelpful."
   :init
 
   (set-leader-keys-for-major-mode! 'org-mode "c" #'org-capture)
-  (set-leader-keys! "oc" #'org-capture)
+  (set-leader-keys! "o c" #'org-capture)
 
   :config
 
@@ -4876,7 +4936,8 @@ unhelpful."
 
   (push 'reveal org-export-backends))
 
-;; Package `htmlize' converts the buffer text and the associated decorations to HTML.
+;; Package `htmlize' converts the buffer text and the associated decorations to
+;; HTML.
 (use-package! htmlize)
 
 ;; Package `org-modern' implements a modern style for your Org buffers using
@@ -4947,14 +5008,14 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
     (add-to-history 'dired--limit-hist regexp))
 
   (set-leader-keys!
-    "ad" #'dired
-    "aD" #'dired-other-window
-    "fj" #'dired-jump
-    "fJ" #'dired-jump-other-window
-    "FO" #'dired-other-frame
-    "jd" #'dired-jump
-    "jD" #'dired-jump-other-window
-    "wO" #'dired-other-window)
+    "a d" #'dired
+    "a D" #'dired-other-window
+    "f j" #'dired-jump
+    "f J" #'dired-jump-other-window
+    "F O" #'dired-other-frame
+    "j d" #'dired-jump
+    "j D" #'dired-jump-other-window
+    "w O" #'dired-other-window)
 
   :hook (dired-mode-hook . dired-hide-details-mode)
 
@@ -5105,10 +5166,10 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
   (defvar ranger-was-ranger nil)
 
   (set-leader-keys!
-    "ar" #'ranger
-    "aR" #'deer
-    "jr" #'deer
-    "jR" #'deer-jump-other-window)
+    "a r" #'ranger
+    "a R" #'deer
+    "j r" #'deer
+    "j R" #'deer-jump-other-window)
 
   :bind ( :map ranger-mode-map
           ("-" . #'ranger-up-directory))
@@ -5119,14 +5180,14 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
 
 ;;;; Processes
 
-(set-leader-keys! "ap" #'list-processes)
+(set-leader-keys! "a p" #'list-processes)
 
 ;; Feature `proced' makes an Emacs buffer containing a listing of the current
 ;; system processes. You can use the normal Emacs commands to move around in
 ;; this buffer, and special Proced commands to operate on the processes listed.
 (use-feature! proced
   :init
-  (set-leader-keys! "aP" #'proced))
+  (set-leader-keys! "a P" #'proced))
 
 ;;;; Version control
 
@@ -5147,15 +5208,15 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
   :init
 
   (set-leader-keys!
-    "gr" #'browse-at-remote
-    "gR" #'browse-at-remote-kill))
+    "g r" #'browse-at-remote
+    "g R" #'browse-at-remote-kill))
 
 ;; Package `consult-git-log-grep' provides an interactive way to search the git
 ;; log using `consult'.
 (use-package! consult-git-log-grep
   :init
 
-  (set-leader-keys! "g?" #'consult-git-log-grep)
+  (set-leader-keys! "g ?" #'consult-git-log-grep)
 
   :config
 
@@ -5169,7 +5230,7 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
 (use-package! consult-ls-git
   :init
 
-  (set-leader-keys! "gf" #'consult-ls-git))
+  (set-leader-keys! "g f" #'consult-ls-git))
 
 ;; Package `git-commit' assists the user in writing good Git commit messages.
 ;; While Git allows for the message to be provided on the command line, it is
@@ -5230,8 +5291,7 @@ Goto^^              Actions^^         Other^^
     ("q" nil :quit t)
     ("C-g" nil :exit t))
 
-  (declare-prefix! "g." "git-gutter")
-  (set-leader-keys! "g." #'hydra-git-gutter/body)
+  (set-leader-keys! "g ." (cons "git-gutter" #'hydra-git-gutter/body))
 
   (defhook! my--git-gutter-load ()
     find-file-hook
@@ -5265,7 +5325,7 @@ Goto^^              Actions^^         Other^^
 (use-package! git-messenger
   :init
 
-  (set-leader-keys! "gm" #'git-messenger:popup-message)
+  (set-leader-keys! "g m" (cons "git-messenger" #'git-messenger:popup-message))
 
   :config
 
@@ -5286,11 +5346,11 @@ Goto^^              Actions^^         Other^^
     (when (bound-and-true-p git-timemachine-mode)
       (user-error "Cannot revert the timemachine buffer")))
 
-  (declare-prefix! "gt" "timemachine")
+  (set-prefixes! "g t" "timemachine")
 
   (set-leader-keys!
-    "gtt" #'git-timemachine
-    "gtb" #'git-timemachine-switch-branch)
+    "g t t" #'git-timemachine
+    "g t b" #'git-timemachine-switch-branch)
 
   :bind ( :map git-timemachine-mode-map
           ("C-g" . git-timemachine-quit))
@@ -5317,18 +5377,18 @@ Goto^^              Actions^^         Other^^
   (setq magit-define-global-key-bindings nil)
 
   (set-leader-keys!
-    "gb" #'magit-blame
-    "gc" #'magit-clone
-    "gd" #'magit-diff
-    "gF" #'magit-find-file
-    "gg" #'magit-dispatch
-    "gG" #'magit-file-dispatch
-    "gi" #'magit-init
-    "gl" #'magit-log-buffer-file
-    "gL" #'magit-list-repositories
-    "gs" #'magit-status
-    "gS" #'magit-stage-file
-    "gU" #'magit-unstage-file)
+    "g b" #'magit-blame
+    "g c" #'magit-clone
+    "g d" #'magit-diff
+    "g F" #'magit-find-file
+    "g g" #'magit-dispatch
+    "g G" #'magit-file-dispatch
+    "g i" #'magit-init
+    "g l" #'magit-log-buffer-file
+    "g L" #'magit-list-repositories
+    "g s" #'magit-status
+    "g S" #'magit-stage-file
+    "g U" #'magit-unstage-file)
 
   ;; Suppress the message we get about "Turning on magit-auto-revert-mode" when
   ;; loading Magit.
@@ -5384,11 +5444,11 @@ current theme. This will also disable line numbers and decorations."
 (use-package! magit-todos
   :init
 
-  (declare-prefix! "gT" "todos")
+  (set-prefixes! "g T" "todos")
 
   (set-leader-keys!
-    "gTT" #'magit-todos-list
-    "gTm" #'magit-todos-mode))
+    "g T T" #'magit-todos-list
+    "g T m" #'magit-todos-mode))
 
 ;; Package `transient' is the interface used by Magit to display popups.
 (use-package! transient
@@ -5429,8 +5489,8 @@ current theme. This will also disable line numbers and decorations."
     (setq-local global-hl-line-mode nil))
 
   (set-leader-keys!
-    "as" #'vterm
-    "aS" #'vterm-other-window)
+    "a s" #'vterm
+    "a S" #'vterm-other-window)
 
   :config
 
@@ -5447,7 +5507,7 @@ current theme. This will also disable line numbers and decorations."
 
 ;;;; External commands
 
-(set-leader-keys! "!" '("shell cmd" . #'shell-command))
+(set-leader-keys! "!" (cons "shell cmd" #'shell-command))
 
 ;; Feature `compile' provides a way to run a shell command from Emacs and view
 ;; the output in real time, with errors and warnings highlighted and
@@ -5478,11 +5538,11 @@ possibly new window."
       (ansi-color-apply-on-region compilation-filter-start (point))))
 
   (set-leader-keys!
-    "bc" #'switch-to-compilation-buffer
-    "cb" #'switch-to-compilation-buffer
-    "cC" #'compile
-    "ck" #'kill-compilation
-    "cr" #'recompile)
+    "b c" #'switch-to-compilation-buffer
+    "c b" #'switch-to-compilation-buffer
+    "c C" #'compile
+    "c k" #'kill-compilation
+    "c r" #'recompile)
 
   :config
 
@@ -5577,10 +5637,10 @@ possibly new window."
 
 ;; Bind additional helpful commands for shutting down Emacs.
 (set-leader-keys!
-  "qq" #'kill-emacs
-  "qr" #'restart-emacs
-  "qs" #'save-buffers-kill-terminal
-  "qS" #'save-buffers-kill-emacs)
+  "q q" #'kill-emacs
+  "q r" #'restart-emacs
+  "q s" #'save-buffers-kill-terminal
+  "q S" #'save-buffers-kill-emacs)
 
 ;;; Miscellaneous
 
@@ -5625,8 +5685,8 @@ possibly new window."
   :init
 
   (set-leader-keys!
-    "tn" #'display-line-numbers-mode
-    "tN" #'global-display-line-numbers-mode)
+    "t n" #'display-line-numbers-mode
+    "t N" #'global-display-line-numbers-mode)
 
   :hook ((prog-mode-hook text-mode-hook) . display-line-numbers-mode))
 
@@ -5636,8 +5696,8 @@ possibly new window."
   :init
 
   (set-leader-keys!
-    "tf" #'display-fill-column-indicator-mode
-    "tF" #'global-display-fill-column-indicator-mode)
+    "t f" #'display-fill-column-indicator-mode
+    "t F" #'global-display-fill-column-indicator-mode)
 
   :hook (prog-mode-hook . display-fill-column-indicator-mode))
 
@@ -5645,10 +5705,10 @@ possibly new window."
 
 ;; Bind keys for font size changes.
 (set-leader-keys!
-  "z=" '("text-scale-adjust-increase" . global-text-scale-adjust)
-  "z+" '("text-scale-adjust-increase" . global-text-scale-adjust)
-  "z-" '("text-scale-adjust-decrease" . global-text-scale-adjust)
-  "z0" '("text-scale-adjust-reset"    . global-text-scale-adjust))
+  "z =" (cons "text-scale-adjust-increase" #'global-text-scale-adjust)
+  "z +" (cons "text-scale-adjust-increase" #'global-text-scale-adjust)
+  "z -" (cons "text-scale-adjust-decrease" #'global-text-scale-adjust)
+  "z 0" (cons "text-scale-adjust-reset"    #'global-text-scale-adjust))
 
 ;;;; Theme
 
@@ -5757,7 +5817,7 @@ possibly new window."
 (use-package! keycast
   :init
 
-  (set-leader-keys! "tk" #'keycast-mode-line-mode)
+  (set-leader-keys! "t k" #'keycast-mode-line-mode)
 
   :config
 
@@ -5784,7 +5844,7 @@ possibly new window."
   :demand t
   :config
 
-  (set-leader-keys! "tm" #'minions-mode)
+  (set-leader-keys! "t m" #'minions-mode)
 
   (minions-mode +1))
 
@@ -5858,14 +5918,14 @@ possibly new window."
   (centaur-tabs-headline-match)
 
   (set-leader-keys!
-    "Td" #'centaur-tabs-open-directory-in-external-application
-    "Tf" #'centaur-tabs-extract-window-to-new-frame
-    "Tk" #'centaur-tabs-kill-other-buffers-in-current-group
-    "Tn" #'centaur-tabs-forward
-    "TN" #'centaur-tabs-forward-group
-    "To" #'centaur-tabs-open-in-external-application
-    "Tp" #'centaur-tabs-backward
-    "TP" #'centaur-tabs-backward-group)
+    "T d" #'centaur-tabs-open-directory-in-external-application
+    "T f" #'centaur-tabs-extract-window-to-new-frame
+    "T k" #'centaur-tabs-kill-other-buffers-in-current-group
+    "T n" #'centaur-tabs-forward
+    "T N" #'centaur-tabs-forward-group
+    "T o" #'centaur-tabs-open-in-external-application
+    "T p" #'centaur-tabs-backward
+    "T P" #'centaur-tabs-backward-group)
 
   :bind ( :map centaur-tabs-mode-map
           ("C-<prior>" . #'centaur-tabs-backward)
