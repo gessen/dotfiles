@@ -3044,10 +3044,7 @@ completing-read prompter."
           (?! . orderless-without-literal)
           (?, . orderless-initialism)
           (?= . orderless-literal)
-          (?? . orderless-flex)))
-
-  ;; Extend separator from space to spaces.
-  (setq orderless-component-separator "[ ]+"))
+          (?? . orderless-flex))))
 
 ;; Package `prescient' is a library for intelligent sorting and filtering in
 ;; various contexts.
@@ -3238,159 +3235,184 @@ completing-read prompter."
 
 ;;;; Autocompletion
 
-;; Package `company' provides an in-buffer autocompletion framework. It allows
-;; for packages to define backends that supply completion candidates, as well as
-;; optional documentation and source code. Then Company allows for multiple
-;; frontends to display the candidates, such as a tooltip menu.
-(use-package! company
-  :defines (company-dabbrev-downcase
-            company-dabbrev-ignore-case
-            company-dabbrev-other-buffers)
-  :functions company-mode-hook
-  :defer 0.5
+;; Enable indentation and completion using the TAB key. `completion-at-point' is
+;; bound to C-M-i, which is M-TAB in a terminal without kitty protocol.
+(setq tab-always-indent 'complete)
+
+;; Package `cape' provides Completion At Point Extensions which can be used in
+;; combination with Corfu, Company or the default completion UI. The completion
+;; backends used by completion-at-point are so called
+;; completion-at-point-functions (Capfs).
+(use-package! cape
   :init
 
-  (set-leader-keys!
-    "ta" #'company-mode
-    "tA" #'global-company-mode)
+  ;; The order of the functions matters, the first function returning a result
+  ;; wins.
+  (push #'cape-dabbrev completion-at-point-functions)
+  (push #'cape-file completion-at-point-functions))
 
-  :bind (( :map company-mode-map
-           ("C-;"     . #'company-complete)
-           ("M-\\"    . #'company-complete)
-           ("C-\\"    . #'company-other-backend))
-         ( :map company-active-map
-           ("M-n"     . #'company-select-next)
-           ("M-p"     . #'company-select-previous))
-         ( :map company-search-map
-           ("M-n"     . #'company-select-next)
-           ("M-p"     . #'company-select-previous)))
+;; Package `corfu' enhances in-buffer completion with a small completion popup.
+;; The current candidates are shown in a popup below or above the point. The
+;; candidates can be selected by moving up and down. Corfu is the minimalistic
+;; in-buffer completion counterpart of the Vertico minibuffer UI. Corfu is a
+;; small package, which relies on the Emacs completion facilities and
+;; concentrates on providing a polished completion UI. In-buffer completion UIs
+;; in Emacs can hook into `'completion-in-region', which implements the
+;; interaction with the user. Completions at point are either provided by
+;; commands like `dabbrev-completion' or by pluggable backends
+;; (`completion-at-point-functions', Capfs) and are then passed to
+;; `completion-in-region'. Many programming, text and shell major modes
+;; implement a Capf. Corfu does not include its own completion backends. The
+;; Emacs built-in Capfs and the Capfs provided by third-party programming
+;; language packages are often sufficient. Additional Capfs and completion
+;; utilities are provided by the Cape package.
+(use-package! corfu
+  :defer 0.5
+  :straight (:files (:defaults "extensions/*"))
+  :init
+
+  (defhook! my--corfu-enable-in-minibuffer ()
+    minibuffer-setup-hook
+    "Enable Corfu in the minibuffer."
+    (when (local-variable-p 'completion-at-point-functions)
+      ;; Disable automatic echo and popup.
+      (setq-local corfu-echo-delay nil
+                  corfu-popupinfo-delay nil)
+      (corfu-mode +1)))
+
+  (set-leader-keys!
+    "ta" #'corfu-mode
+    "tA" #'global-corfu-mode)
+
+  :bind ( :map corfu-map
+          ("TAB"   . #'corfu-next)
+          ("<tab>"   . #'corfu-next)
+          ("<backtab>" . #'corfu-previous))
 
   :config
 
-  (dolist (face '(company-tooltip-common company-tooltip-common-selection))
-    (set-face-attribute face nil :weight 'bold))
+  (defun corfu-move-to-minibuffer ()
+    "Transfer the Corfu completion session to the minibuffer."
+    (interactive)
+    (pcase completion-in-region--data
+      (`(,beg ,end ,table ,pred ,extras)
+       (let ((completion-extra-properties extras)
+             completion-cycle-threshold completion-cycling)
+         (consult-completion-in-region beg end table pred)))))
+  (bind-key "M-m" #'corfu-move-to-minibuffer corfu-map)
+  (push #'corfu-move-to-minibuffer corfu-continue-commands)
 
-  ;; Make completion with no delay.
-  (setq company-idle-delay 0)
+  (defun my--corfu-sort (candidates)
+    "Sort candidates after completion backend pre-sorts them.
+Most of the completion backends will pre-sort candidates but this
+defeats the purpose of `corfu-prescient'."
+    (let ((candidates
+           (let ((display-sort-func (corfu--metadata-get
+                                     'display-sort-function)))
+             (if display-sort-func
+                 (funcall display-sort-func candidates)
+               candidates))))
+      (if corfu-sort-function
+          (funcall corfu-sort-function candidates)
+        candidates)))
 
-  ;; Make completions display when you have only typed one character, instead of
-  ;; three.
-  (setq company-minimum-prefix-length 1)
+  ;; Enable auto completion without explicit keybinding.
+  ;; (setq corfu-auto t)
 
-  ;; Always display the entire suggestion list onscreen, placing it above the
-  ;; cursor if necessary.
-  (setq company-tooltip-minimum company-tooltip-limit)
+  ;; Enable cycling for `corfu-next' and `corfu-previous'.
+  (setq corfu-cycle t)
 
-  ;; Values for `company-backends' used everywhere. Each major-mode should
-  ;; modify this list to suit its needs.
-  (setq company-backends '(company-capf))
+  ;; Always select the prompt, rather than the valid candidate. This means that
+  ;; immediate `corfu-insert' will not change the buffer.
+  (setq corfu-preselect 'prompt)
 
-  ;; Always show candidates in an overlay tooltip
-  (setq company-frontends '(company-pseudo-tooltip-frontend
-                            company-echo-metadata-frontend))
+  ;; Slightly lower delay for auto completion.
+  (setq corfu-auto-delay 0.1)
 
-  ;; Show quick-reference numbers in the tooltip. Select a completion with M-1
-  ;; through M-0.
-  (setq company-show-quick-access t)
+  ;; Displays completions when you have typed two characters, instead of three.
+  (setq corfu-auto-prefix 2)
 
-  ;; Dismiss the completions menu with non-matching input.
-  (setq company-require-match nil)
+  ;; Sort candidates after completion backend pre-sorts them.
+  (setq corfu-sort-override-function #'my--corfu-sort)
 
-  ;; Only search the current buffer to get suggestions for `company-dabbrev'
-  ;; (a backend that creates suggestions from text found in your buffers). This
-  ;; prevents Company from causing lag once you have a lot of buffers open.
-  (setq company-dabbrev-other-buffers nil)
+  (global-corfu-mode +1)
 
-  ;; Make the `company-dabbrev' backend fully case-sensitive, to improve the UX
-  ;; when working with domain-specific words that have particular casing.
-  (setq company-dabbrev-ignore-case nil
-        company-dabbrev-downcase nil)
+  ;; Feature `corfu-echo' shows candidate documentation in echo area.
+  (use-feature! corfu-echo
+    :demand t
+    :config
 
-  ;; When candidates in the autocompletion tooltip have additional metadata,
-  ;; like a type signature, align that information to the right-hand side.
-  (setq company-tooltip-align-annotations t)
+    ;; Show documentation string immediately.
+    (setq corfu-echo-delay 0)
 
-  (defvar-local my--company-buffer-modified-counter nil
-    "Last return value of `buffer-chars-modified-tick'.
-Used to ensure that Company only initiates a completion when the
-buffer is modified.")
+    (corfu-echo-mode +1))
 
-  (defadvice! my--company-should-begin ()
-    :override #'company--should-begin
-    "Make Company trigger a completion when the buffer is modified.
-This is in contrast to the default behavior, which is to trigger
-a completion when one of a whitelisted set of commands is used.
-One specific improvement this brings about is that you get
-completions automatically when backspacing into a symbol."
-    (let ((tick (buffer-chars-modified-tick)))
-      (unless (equal tick my--company-buffer-modified-counter)
-        ;; Only trigger completion if previous counter value was non-nil (i.e.,
-        ;; don't trigger completion just as we're jumping to a buffer for the
-        ;; first time).
-        (prog1 (and my--company-buffer-modified-counter
-                    (not (and (symbolp this-command)
-                              (string-match-p
-                               "^\\(company-\\|undo-\\|undo$\\)"
-                               (symbol-name this-command)))))
-          (setq my--company-buffer-modified-counter tick)))))
+  ;; Feature `corfu-indexed' prefixes candidates with indices if enabled via
+  ;; `corfu-indexed-mode'. It allows you to select candidates with prefix
+  ;; arguments. This is designed to be a faster alternative to selecting a
+  ;; candidate with `corfu-next' and `corfu-previous'.
+  (use-feature! corfu-indexed
+    :demand t
+    :config
 
-  (defadvice! my--company-should-continue-update-buffer-modified-counter ()
-    :after #'company--should-continue
-    "Make sure `my--company-buffer-modified-counter' is up to date.
-If we don't do this on `company--should-continue' as well as
-`company--should-begin', then we may end up in a situation where
-autocomplete triggers when it shouldn't. Specifically suppose we
-delete a char from a symbol, triggering autocompletion, then type
-it back, but there is more than one candidate so the menu stays
-onscreen. Without this advice, saving the buffer will cause the
-menu to disappear and then come back after `company-idle-delay'."
-    (setq my--company-buffer-modified-counter
-          (buffer-chars-modified-tick)))
+    ;; Start indexing from 0.
+    (setq corfu-indexed-start 1)
 
-  (global-company-mode +1)
+    (corfu-indexed-mode +1))
+
+  ;; Feature `corfu-popupinfo' displays an information popup for completion
+  ;; candidate when using Corfu. The popup displays either the candidate
+  ;; documentation or the candidate location.
+  (use-feature! corfu-popupinfo
+    :demand t
+    :config
+
+    (corfu-popupinfo-mode +1))
+
+  ;; Feature `corfu-quick' prefixes candidates with quick keys. Typing these
+  ;; quick keys allows you to select the candidate in front of them. This is
+  ;; designed to be a faster alternative to selecting a candidate with
+  ;; `corfu-next' and `corfu-previous'.
+  (use-feature! corfu-quick
+    :demand t
+    :bind ( :map corfu-map
+            ("C-q" . #'corfu-quick-complete)
+            ("M-q" . #'corfu-quick-insert)))
 
   :blackout " Ⓐ")
 
-;; Package `company-prescient' provides intelligent sorting for candidates in
-;; Company completions. Note that it does not change the filtering behavior of
-;; Company.
-(use-package! company-prescient
+;; Package `corfu-terminal' replaces Corfu's child frames (which are unusuable
+;; on terminal) with popup/popon which works everywhere.
+(use-package! corfu-terminal
+  :straight (:host codeberg :repo "akib/emacs-corfu-terminal")
   :demand t
-  :after company
+  :after corfu
   :config
 
-  ;; Use `prescient' for Company menus.
-  (company-prescient-mode +1))
+  (without-display-graphic!
+    (corfu-terminal-mode +1)))
 
-;; Package `company-posframe' is a Company extension which lets Company use
-;; child frame as its candidate menu.
-(use-package! company-posframe
-  :commands (company-posframe-quickhelp-toggle)
-  :init
-
-  (with-display-graphic!
-    (with-eval-after-load 'company
-      (require 'company-posframe)
-      (add-hook #'company-mode-hook #'company-posframe-mode)
-      (bind-keys :map company-posframe-active-map
-                 ("M-h" . company-posframe-quickhelp-toggle))))
-
+;; Package `corfu-prescient' provides an interface for using Prescient to
+;; sort and filter candidates in Corfu menus.
+(use-package! corfu-prescient
+  :demand t
+  :after corfu
   :config
 
-  ;; Trigger popup manually with `company-posframe-quickhelp-toggle'.
-  (setq company-posframe-quickhelp-delay nil)
+  ;; Let `orderless' filter candidates.
+  (setq corfu-prescient-enable-filtering nil)
 
-  :blackout t)
+  ;; Use `prescient' for Corfu menus.
+  (corfu-prescient-mode +1))
 
-;; Package `consult-company' provides a command to interactively complete a
-;; Company completion candidate through completing-read using the Consult API.
-;; This works much like the builtin `completion-at-point' command except
-;; it can accept candidates from `company-backends' making it consistent
-;; with the completion candidates you would see in the company popup.
-(use-package! consult-company
-  :after (company consult )
-  :bind ( :map company-active-map
-          ("M-'" . #'consult-company)))
+;; Package `nerd-icons-corfu' adds icons to completions in Corfu. It uses
+;; `nerd-icons` under the hood and, as such, works on both GUI and terminal
+(use-package! nerd-icons-corfu
+  :demand t
+  :after corfu
+  :config
+
+  (push #'nerd-icons-corfu-formatter corfu-margin-formatters))
 
 ;;;; Syntax checking and code linting
 
@@ -3747,8 +3769,36 @@ list of additional parameters sent with this request."
   (use-feature! lsp-completion
     :init
 
-    ;; Let me configure completion provider (`company-capf') by myself.
-    (setq lsp-completion-provider :none))
+    (defun my--lsp-mode-setup-completion ()
+      "Re-enable completion style filtering.
+`lsp-mode' completely disables completion style
+filtering (including highlighting) by overriding the completion
+style setting with a special `lsp-passthrough' style."
+      (interactive)
+      (setf (alist-get 'styles (alist-get
+                                'lsp-capf completion-category-defaults))
+            '(orderless))
+      ;; Corfu retrieves the candidate completion table once at the beginning of
+      ;; a completion session and doesn’t reload it while the word is being
+      ;; typed. This is advantageous for most `completion-at-point-functions'
+      ;; since it opens up caching opportunities. Lsp Mode completion function
+      ;; doesn’t refresh the completion table itself. This is problematic, as
+      ;; language servers often only provide limited list of completions.
+      ;; Therefore, when using auto completion and typing slowly, possible
+      ;; completion candidates may be missing, because the initial list was
+      ;; missing the intended string. This behavior can be changed with the
+      ;; cache buster from Cape, which ensures that the completion table is
+      ;; refreshed such that the candidates are always obtained again from the
+      ;; server.
+      (setq-local completion-at-point-functions
+                  (list (cape-capf-buster #'lsp-completion-at-point)
+                        #'cape-file
+                        #'cape-dabbrev)))
+
+    ;; Let me configure completion provider (`corfu') by myself.
+    (setq lsp-completion-provider :none)
+
+    :hook (lsp-completion-mode-hook . my--lsp-mode-setup-completion))
 
   ;; Feature `lsp-dired' provides integration with Dired file explorer.
   ;; Lsp-Mode will show which files/folders contain errors/warnings/hints.
@@ -4296,12 +4346,6 @@ ALL when non-nil determines whether words will be pickable."
   (defhook! my--cmake-mode-setup ()
     cmake-mode-hook
     "Set custom settings for `cmake-mode'."
-    (require 'company)
-    (setq-local company-backends '(company-files
-                                   (company-cmake
-                                    :separate
-                                    company-dabbrev-code)
-                                   company-dabbrev))
     ;; It's highly annoying with CMake.
     (electric-indent-mode -1)))
 
@@ -4339,19 +4383,7 @@ ALL when non-nil determines whether words will be pickable."
 ;; highlighting works reliably.  Indentation works too, but there are probably
 ;; cases, where it breaks.  Simple completion is supported via
 ;; `completion-at-point'.
-(use-package! meson-mode
-  :init
-
-  (defhook! my--meson-mode-setup ()
-    meson-mode-hook
-    "Set custom settings for `meson-mode'."
-    (require 'company)
-    (setq-local company-backends '(company-files
-                                   (company-capf
-                                    :separate
-                                    company-dabbrev-code)
-                                   company-dabbrev))
-    (company-mode +1)))
+(use-package! meson-mode)
 
 ;;;; PlantUML
 
@@ -4367,17 +4399,13 @@ ALL when non-nil determines whether words will be pickable."
     (let ((bounds (bounds-of-thing-at-point 'symbol))
           (keywords plantuml-kwdList))
       (when (and bounds keywords)
-        (list (car bounds)
-              (cdr bounds)
-              keywords
-              :exclusive 'no
-              :company-docsig #'identity))))
+        (list (car bounds) (cdr bounds) keywords :exclusive 'no))))
 
-  (defhook! my-plantuml-setup ()
+  (defhook! my--plantuml-setup ()
     plantuml-mode-hook
     "Set custom settings for `plantuml-mode'."
     ;; Enable custom `completion-at-point'.
-    (add-hook 'completion-at-point-functions #'plantuml-completion-at-point
+    (add-hook #'completion-at-point-functions #'plantuml-completion-at-point
               nil 'local)
     (flycheck-mode +1))
 
@@ -4482,10 +4510,6 @@ ALL when non-nil determines whether words will be pickable."
     sh-mode-hook
     "Set custom settings for `sh-mode'."
     (setq sh-basic-offset 2)
-    (require 'company)
-    (setq-local company-backends '((company-shell company-shell-env
-                                                  company-files)
-                                   company-capf))
     ;; Enable syntax checking and spellchecking in comments.
     (flycheck-mode +1)
     (flyspell-prog-mode))
@@ -4513,10 +4537,6 @@ ALL when non-nil determines whether words will be pickable."
   ;; Silence messages when opening Shell scripts.
   (dolist (func '(sh-set-shell sh-make-vars-local))
     (advice-add func :around #'advice-silence-messages!)))
-
-;; Package `company-shell' provides Company backend to complete environment
-;; variables and binaries found on your $PATH.
-(use-package! company-shell)
 
 ;; Package `'shfmt' provides commands and a minor mode for easily reformatting
 ;; shell scripts using the external "shfmt" program.
@@ -4631,15 +4651,6 @@ unhelpful."
 ;; Feature `elisp-mode' provides the major mode for Emacs Lisp.
 (use-feature! elisp-mode
   :config
-
-  (with-eval-after-load 'helpful
-    (defadvice! my--company-doc-buffer-use-helpful
-        (func &rest args)
-      :around #'elisp--company-doc-buffer
-      "Cause `company' to use Helpful to show Elisp documentation."
-      (cl-letf (((symbol-function #'describe-function) #'helpful-function)
-                ((symbol-function #'describe-variable) #'helpful-variable))
-        (apply func args))))
 
   (defadvice! my--fill-elisp-docstrings-correctly (&rest _)
     :before-until #'fill-context-prefix
@@ -5793,7 +5804,6 @@ possibly new window."
   (setq centaur-tabs-excluded-prefixes '("*Async-native-compile-log"
                                          "*Compile-Log*"
                                          "*ccls"
-                                         "*company"
                                          "*ediff"
                                          "*Ediff"
                                          "*Flycheck"
