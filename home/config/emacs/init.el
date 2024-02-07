@@ -2333,8 +2333,8 @@ jump to the position before `recenter' was called."
 
 ;; Package `wgrep' allows you to edit a grep buffer and apply those changes to
 ;; the file buffer interactively.
-(use-package! wgrep
-  :demand t
+(use-package wgrep
+  :commands wgrep-change-to-wgrep-mode
   :bind ( :map grep-mode-map
           ("C-c C-e" . #'wgrep-change-to-wgrep-mode))
   :config
@@ -5474,8 +5474,6 @@ possibly new window."
 ;; Feature `consult-compile' provides the command `consult-compile-error' to
 ;; quickly jump to compilation errors and warnings.
 (use-feature! consult-compile
-  :demand t
-  :after compile
   :bind (("M-g c"   . #'consult-compile-error)
          ("M-g M-c" . #'consult-compile-error)))
 
