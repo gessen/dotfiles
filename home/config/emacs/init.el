@@ -5869,6 +5869,15 @@ possibly new window."
   :bind ("<f8>" . spacious-padding-mode)
   :config
 
+  ;; Keep default settings but lower mode line width
+  (setq spacious-padding-widths
+        '( :internal-border-width 15
+           :header-line-width 4
+           :mode-line-width 1
+           :tab-width 4
+           :right-divider-width 30
+           :scroll-bar-width 8))
+
   (with-display-graphic!
     (spacious-padding-mode +1)))
 
