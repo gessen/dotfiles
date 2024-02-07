@@ -594,6 +594,9 @@ For details on DATA, CONTEXT, and signal, see
 ;; Prevent Custom from modifying this file.
 (setq custom-file (expand-file-name "custom.el" my-cache-dir))
 
+;; Silence Emacs in terminal.
+(setq ring-bell-function #'ignore)
+
 ;; Feature `request' provides a layer for URL requests.
 (use-feature! request
   :config
