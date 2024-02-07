@@ -287,7 +287,6 @@ NAME and ARGS are as in `use-package'."
   "p" `("projects" . ,(make-sparse-keymap))
   "q" `("quit" . ,(make-sparse-keymap))
   "r" `("registers/rings" . ,(make-sparse-keymap))
-  "R" `("rectangles" . ,(make-sparse-keymap))
   "s" `("search" . ,(make-sparse-keymap))
   "S" `("spellcheck" . ,(make-sparse-keymap))
   "t" `("toggle" . ,(make-sparse-keymap))
@@ -1713,21 +1712,6 @@ window instead."
     "v j" #'ace-mc-add-multiple-cursors
     "v J" #'ace-mc-add-single-cursor))
 
-;; Package `iedit' includes Emacs minor modes (iedit-mode and
-;; iedit-rectangle-mode) based on a API library (iedit-lib) and allows you to
-;; edit one occurrence of some text in a buffer (possibly narrowed) or region,
-;; and simultaneously have other occurrences edited in the same way, with visual
-;; feedback as you type.
-(use-package! iedit
-  :init
-
-  (set-leader-keys!
-    "s e" #'iedit-mode
-    "s E" #'iedit-rectangle-mode)
-
-  :bind ( :map iedit-mode-keymap
-          ("M-'" . #'iedit-show/hide-context-lines)))
-
 ;; Package `multiple-cursors' implements multiple cursors for Emacs in a similar
 ;; way in other text editors.
 (use-package! multiple-cursors
@@ -1795,18 +1779,20 @@ window instead."
 
   :init
 
+  (set-prefixes! "s r" "rectangular")
+
   (set-leader-keys!
-    "R c" #'delete-whitespace-rectangle
-    "R d" #'delete-rectangle
-    "R e" #'rectangle-exchange-point-and-mark
-    "R i" #'copy-rectangle-to-register
-    "R k" #'kill-rectangle
-    "R m" #'rectangle-mark-mode
-    "R N" #'rectangle-number-lines
-    "R o" #'open-rectangle
-    "R s" #'string-rectangle
-    "R x" #'clear-rectangle
-    "R y" #'yank-rectangle))
+    "s r c" #'delete-whitespace-rectangle
+    "s r d" #'delete-rectangle
+    "s r e" #'rectangle-exchange-point-and-mark
+    "s r i" #'copy-rectangle-to-register
+    "s r k" #'kill-rectangle
+    "s r m" #'rectangle-mark-mode
+    "s r N" #'rectangle-number-lines
+    "s r o" #'open-rectangle
+    "s r s" #'string-rectangle
+    "s r x" #'clear-rectangle
+    "s r y" #'yank-rectangle))
 
 ;;;; Folding
 
@@ -2364,12 +2350,48 @@ jump to the position before `recenter' was called."
   (push "--follow" deadgrep-extra-arguments)
   (push "--hidden" deadgrep-extra-arguments))
 
+;; Package `iedit' includes Emacs minor modes based on a API library and allows
+;; you to edit one occurrence of some text in a buffer (possibly narrowed) or
+;; region, and simultaneously have other occurrences edited in the same way,
+;; with visual feedback as you type.
+(use-package! iedit
+  :init
+
+  (set-leader-keys!
+    "s e" #'iedit-mode
+    "s E" #'iedit-rectangle-mode)
+
+  :bind ( :map iedit-mode-keymap
+          ("M-'" . #'iedit-show/hide-context-lines)))
+
+;; Package `substitute' is a set of commands that perform text replacement (i)
+;; throughout the buffer, (ii) limited to the current definition (per
+;; narrow-to-defun), (iii) from point to the end of the buffer, and (iv) from
+;; point to the beginning of the buffer. These substitutions are meant to be as
+;; quick as possible and, as such, differ from the standard `query-replace'. The
+;; provided commands prompt for substitute text and perform the substitution
+;; outright.
+(use-package! substitute
+  :init
+
+  ;; Report the matches that changed in the given context.
+  (add-hook 'substitute-post-replace-functions #'substitute-report-operation)
+
+  (set-leader-keys!
+    "s s" #'substitute-target-in-buffer
+    "s f" #'substitute-target-in-defun
+    "s <" #'substitute-target-above-point
+    "s >" #'substitute-target-below-point))
+
 ;; Package `visual-regexp' provides an alternate version of `query-replace'
 ;; which highlights matches and replacements as you type.
 (use-package! visual-regexp
   :init
 
-  (set-leader-keys! "v m" #'vr/mc-mark)
+  (set-leader-keys!
+    "s m" #'vr/mc-mark
+    "v m" #'vr/mc-mark)
+
   :bind ([remap query-replace] . #'vr/query-replace)
 
   :config
@@ -2946,7 +2968,6 @@ point. "
     "r r" #'consult-register
     "r s" #'consult-register-store
     "r y" #'consult-yank-replace
-    "s s" #'consult-line
     "t T" #'consult-theme)
 
   ;; Narrow and widen selection with "[".
