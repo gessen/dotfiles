@@ -531,6 +531,13 @@ BINDINGS is a series of KEY DEF pair."
 ;; mouse click.
 (context-menu-mode +1)
 
+;; Toggle pixel scrolling which allows to scroll the display precisely,
+;; according to the turning of the mouse wheel
+(with-display-graphic!
+  (pixel-scroll-precision-mode +1)
+  (unbind-key "<prior>" pixel-scroll-precision-mode-map)
+  (unbind-key "<next>"  pixel-scroll-precision-mode-map))
+
 ;; Mouse integration works out of the box in windowed mode but not terminal mode
 (without-display-graphic!
   ;; Enable basic mouse support (click and drag).
