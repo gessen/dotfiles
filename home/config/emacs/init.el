@@ -234,7 +234,7 @@ graphical frame is created."
   ;; It inhibits a simple introspection of hooks by Emacs.
   (setq use-package-hook-name-suffix nil))
 
-;; Explicitly require `use-package' when compiling to keep Flycheck happy.
+;; Explicitly require `use-package' when compiling to keep Flymake happy.
 (eval-when-compile
   (require 'use-package))
 
@@ -872,9 +872,12 @@ window instead."
   (setq popper-reference-buffers
         '("\\*Messages\\*"
           "Output\\*$"
+          "^\\*eldoc.*\\*$"
+          compilation-mode
           help-mode
           helpful-mode
-          compilation-mode
+          flymake-diagnostics-buffer-mode
+          flymake-project-diagnostics-mode
           rustic-compilation-mode
           rustic-cargo-clippy-mode
           rustic-cargo-run-mode
@@ -3229,8 +3232,11 @@ completing-read prompter."
 ;; allows function signatures or other metadata to be displayed in the echo
 ;; area.
 (use-feature! eldoc
-  :hook (eval-expression-minibuffer-setup-hook . eldoc-mode)
+  :init
 
+  (set-leader-keys! "eh" #'eldoc-doc-buffer)
+
+  :hook (eval-expression-minibuffer-setup-hook . eldoc-mode)
   :blackout t)
 
 ;;;; Autocompletion
@@ -3416,75 +3422,77 @@ defeats the purpose of `corfu-prescient'."
 
 ;;;; Syntax checking and code linting
 
-;; Package `flycheck' provides a framework for in-buffer error and warning
-;; highlighting.
-(use-package! flycheck
-  :defer 1
-  :commands (flycheck-buffer
-             flycheck-clear
-             flycheck-compile
-             flycheck-copy-errors-as-kill
-             flycheck-describe-checker
-             flycheck-disable-checker
-             flycheck-explain-error-at-point
-             flycheck-list-errors
-             flycheck-next-error
-             flycheck-previous-error
-             flycheck-select-checker
-             flycheck-verify-setup)
-  :init
-
-  (set-leader-keys!
-    "e?" #'flycheck-describe-checker
-    "eb" #'flycheck-buffer
-    "ec" #'flycheck-compile
-    "eC" #'flycheck-clear
-    "eh" #'display-local-help
-    "el" #'flycheck-list-errors
-    "en" #'flycheck-next-error
-    "ep" #'flycheck-previous-error
-    "es" #'flycheck-select-checker
-    "ev" #'flycheck-verify-setup
-    "ew" #'flycheck-copy-errors-as-kill
-    "ex" #'flycheck-disable-checker
-    "ts" #'flycheck-mode)
-
-  :hook ((flycheck-error-list-mode-hook . hide-mode-line-mode))
-
+;; Package `flymake' is a minor Emacs mode performing on-the-fly syntax checks.
+;; Flymake collects diagnostic information for multiple sources, called
+;; backends, and visually annotates the relevant portions in the buffer.
+(use-package! flymake
+  :demand t
+  :bind ( :map flymake-project-diagnostics-mode-map
+          ("RET" . #'flymake-goto-diagnostic)
+          ("SPC" . #'flymake-show-diagnostic))
   :config
 
-  ;; Rerunning checks on every newline is a bit excessive.
-  (delq 'new-line flycheck-check-syntax-automatically)
+  (defvar-local flymake-old-next-error-function nil
+    "Remember the old `next-error-function'.")
 
-  ;; Increase the idle time after Flycheck will start a syntax check as 0.5s is
+  (defhook! my--flymake-setup ()
+    flymake-mode-hook
+    "Support error navigation with `next-error'."
+    (cond
+     (flymake-mode
+      (setq flymake-old-next-error-function next-error-function)
+      (setq next-error-function #'flymake-goto-next-error))
+     (t
+      (setq next-error-function flymake-old-next-error-function)
+      (setq flymake-old-next-error-function nil))))
+
+  (defvar-keymap flymake-repeat-map
+    :doc "Support Flymake based navigation with repeats."
+    :repeat t
+    "n" #'flymake-goto-next-error
+    "p" #'flymake-goto-prev-error)
+
+  (set-leader-keys!
+    "e?" #'flymake-running-backends
+    "eb" #'flymake-start
+    "el" #'flymake-show-buffer-diagnostics
+    "eL" #'flymake-show-project-diagnostics
+    "en" #'flymake-goto-next-error
+    "ep" #'flymake-goto-prev-error
+    "es" #'flymake-switch-to-log-buffer
+    "ev" #'flymake-reporting-backends
+    "ts" #'flymake-mode)
+
+  ;; Increase the idle time after Flymake will start a syntax check as 0.5s is
   ;; a bit too naggy.
-  (setq flycheck-idle-change-delay 1.0)
-
-  ;; Decrease the delay before displaying errors at point.
-  (setq flycheck-display-errors-delay 0.25)
-
-  ;; Inhibit displaying error messages as they take Eldoc space.
-  (setq flycheck-display-errors-function nil)
-
-  ;; For the above functionality, check syntax in a buffer that you switched to
-  ;; only briefly. This allows "refreshing" the syntax check state for several
-  ;; buffers quickly after e.g. changing a config file.
-  (setq flycheck-buffer-switch-check-intermediate-buffers t)
-
-  ;; Use the load-path of the current Emacs session during syntax checking.
-  (setq flycheck-emacs-lisp-load-path 'inherit)
+  (setq flymake-no-changes-timeout 1.0)
 
   :blackout " ⓢ")
 
-;; Package `consult-flycheck' shows Flycheck errors, warnings, notifications
+;; Feature `consult-flymake' shows Flymake errors, warnings, notifications
 ;; within consult buffer with live preview.
-(use-package! consult-flycheck
+(use-feature! consult-flymake
   :init
 
-  (set-leader-keys! "ee" #'consult-flycheck)
+  (set-leader-keys! "ee" #'consult-flymake)
 
-  :bind (("M-g e"   . #'consult-flycheck)
-         ("M-g M-e" . #'consult-flycheck)))
+  :bind (("M-g e"   . #'consult-flymake)
+         ("M-g M-e" . #'consult-flymake)))
+
+;; Package `flymake-collection' provides a comprehensive list of diagnostic
+;; functions for use with Flymake, give users the tools to easily define new
+;; syntax checkers and help selectively enable or disable diagnostic functions
+;; based on major modes.
+(use-package! flymake-collection)
+
+;; Package `flymake-popon' shows Flymake diagnostics on cursor hover. This works
+;; on both graphical and non-graphical displays.
+(use-package! flymake-popon
+  :hook (flymake-mode . flymake-popon-mode)
+  :config
+
+  ;; Increase the idle timeout from the default of 0.2 seconds.
+  (setq flymake-popon-delay 1.5))
 
 ;;;; Online documentation
 
@@ -4322,12 +4330,6 @@ ALL when non-nil determines whether words will be pickable."
   ;; Use default rainbow semantic highlight theme.
   (ccls-use-default-rainbow-sem-highlight))
 
-;; Package `flycheck-clang-tidy' adds a Flycheck syntax checker for C/C++ based
-;; on clang-tidy.
-(use-package! flycheck-clang-tidy
-  :after flycheck
-  :hook (flycheck-mode-hook . flycheck-clang-tidy-setup))
-
 ;;;; CMake
 
 ;; Package `cmake-font-lock' brings advanced syntax coloring support for CMake
@@ -4401,13 +4403,14 @@ ALL when non-nil determines whether words will be pickable."
       (when (and bounds keywords)
         (list (car bounds) (cdr bounds) keywords :exclusive 'no))))
 
-  (defhook! my--plantuml-setup ()
+  (defhook! my--plantuml-mode-setup ()
     plantuml-mode-hook
     "Set custom settings for `plantuml-mode'."
     ;; Enable custom `completion-at-point'.
     (add-hook #'completion-at-point-functions #'plantuml-completion-at-point
               nil 'local)
-    (flycheck-mode +1))
+    (add-hook #'flymake-diagnostic-functions 'flymake-plantuml)
+    (flymake-mode +1))
 
   :config
 
@@ -4415,23 +4418,25 @@ ALL when non-nil determines whether words will be pickable."
   ;; plantuml servers
   (setq plantuml-default-exec-mode 'executable)
 
-  ;; Define flycheck checker for plantuml.
-  (require 'flycheck)
-  (flycheck-define-checker plantuml
-    "A checker using plantuml."
-    :command ("plantuml" "-headless" "-syntax")
-    :standard-input t
-    :error-patterns ((error line-start "ERROR" "\n" line "\n" (message)
-                            line-end))
-    :modes plantuml-mode)
-  (add-to-list 'flycheck-checkers 'plantuml))
+  ;; Define Flymake checker for PlantUML.
+  (require 'flymake-collection-define)
+  (flymake-collection-define-rx
+   flymake-plantuml
+   "PlantUML checker using plantuml executable."
+
+   :title "plantuml"
+   :pre-let ((plantuml-exec (executable-find "plantuml")))
+   :pre-check (unless plantuml-exec
+                (error "Cannot find plantuml executable"))
+   :write-type 'pipe
+   :command (list plantuml-exec "-headless" "-syntax")
+   :regexps ((error bol "ERROR" "\n" line "\n" (message) eol))))
 
 ;;;; Rust
 
 ;; Package `rustic' implements a major-mode for editing Rust source code. It
 ;; also provides additional features:
 ;; - rust-analyzer configuration
-;; - flycheck integration
 ;; - cargo popup
 ;; - multiline error parsing
 ;; - translation of ANSI control sequences through xterm-color
@@ -4511,7 +4516,7 @@ ALL when non-nil determines whether words will be pickable."
     "Set custom settings for `sh-mode'."
     (setq sh-basic-offset 2)
     ;; Enable syntax checking and spellchecking in comments.
-    (flycheck-mode +1)
+    (flymake-mode +1)
     (flyspell-prog-mode))
 
   (declare-prefix-for-mode! 'sh-mode "mi" "insert")
@@ -5710,11 +5715,14 @@ possibly new window."
 ;; minimalism design. It's integrated into Doom Emacs.
 (use-package! doom-modeline
   :demand t
-  :config
+  :init
 
-  ;; Display the icons in the mode-line. We set it explicitly because of server
-  ;; mode in GUI.
-  (setq doom-modeline-icon t)
+  ;; Use unicode as a fallback (instead of ASCII) when not using icons. Needs to
+  ;; be set before loading `doom-modeline', otherwise it would complain when
+  ;; used with Flymake.
+  (setq doom-modeline-unicode-fallback t)
+
+  :config
 
   ;; Show total number of lines after the current cursor position.
   (setq doom-modeline-total-line-number t)
@@ -5726,9 +5734,6 @@ possibly new window."
   ;; We do not use any modal editing so its icon is redundant.
   (setq doom-modeline-modal nil)
   (setq doom-modeline-modal-icon nil)
-
-  ;; Use unicode as a fallback (instead of ASCII) when not using icons.
-  (setq doom-modeline-unicode-fallback t)
 
   ;; Redesign modeline to have much less information from the default one.
   (doom-modeline-def-modeline 'main
@@ -5806,7 +5811,7 @@ possibly new window."
                                          "*ccls"
                                          "*ediff"
                                          "*Ediff"
-                                         "*Flycheck"
+                                         "*Flymake"
                                          "*help"
                                          "*Help"
                                          "*helpful"
