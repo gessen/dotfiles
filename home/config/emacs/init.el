@@ -2161,6 +2161,39 @@ will not refresh `column-number-mode."
 
   (global-hl-todo-mode +1))
 
+;; Package `prism' disperses lisp forms (and other languages) into a spectrum of
+;; color by depth.
+(use-package! prism
+  :init
+
+  (set-leader-keys! "ths" #'prism-mode)
+  (set-leader-keys! "thS" #'prism-whitespace-mode)
+
+  (defun prism-shuffle-colors ()
+    "Shuffle random number of theme faces."
+    (interactive)
+    (prism-set-colors
+     :num 24
+     :colors (let* ((faces (list
+                            'font-lock-regexp-grouping-backslash
+                            'font-lock-regexp-grouping-construct
+                            'font-lock-negation-char-face
+                            'font-lock-preprocessor-face
+                            'font-lock-function-name-face
+                            'font-lock-keyword-face
+                            'font-lock-variable-name-face
+                            'font-lock-warning-face
+                            'font-lock-builtin-face
+                            'font-lock-constant-face
+                            'font-lock-string-face
+                            'font-lock-type-face))
+                    (colors (->> faces
+                                 (--map (face-attribute it :foreground))
+                                 (--remove (eq 'unspecified it))
+                                 -uniq))
+                    (num (max 3 (random (1+ (length colors))))))
+               (prism-shuffle (seq-take colors num))))))
+
 ;; Package `rainbow-delimiters' is a "rainbow parentheses"-like mode which
 ;; highlights parentheses, brackets, and braces according to their depth. Each
 ;; successive level is highlighted in a different color. This makes it easy to

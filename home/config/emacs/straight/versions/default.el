@@ -134,6 +134,7 @@
  ("posframe" . "017deece88360c7297265680d78a0bb316470716")
  ("powerline" . "c35c35bdf5ce2d992882c1f06f0f078058870d4a")
  ("prescient.el" . "0e1790515bea9781d5bca8d37706a13226b93755")
+ ("prism.el" . "169b49afa91e69d35b8756df49ed3ca06f418d35")
  ("project" . "dc0e5cb4cdc0c21dae72c8c4b1eb6b76fe35c809")
  ("projectile" . "e0fc464d1e41c8d7267636ea2b7330491087c19d")
  ("rainbow-delimiters" . "f40ece58df8b2f0fb6c8576b527755a552a5e763")
