@@ -818,7 +818,9 @@ window instead."
                   "gdb-inferior-io-mode"
                   "gdb-disassembly-mode"
                   "gdb-memory-mode"
-                  "speedbar-mode"))
+                  "speedbar-mode"
+                  "vundo-mode"
+                  "vundo-diff-mode"))
     (push mode golden-ratio-exclude-modes))
 
   (dolist (cmd '(ace-window
@@ -1825,48 +1827,23 @@ Close^^           Open^^            Toggle^^         Goto^^         Other^^
   ;; information is too large to be recorded.
   (push '(undo discard-info) warning-suppress-log-types))
 
-;; Package `undo-tree' replaces the default Emacs undo system, which is poorly
-;; designed and hard to use, with a much more powerful tree-based system. In
-;; basic usage, you don't even have to think about the tree, because it acts
-;; like a conventional undo/redo system.
-(use-package! undo-tree
-  :demand t
-  :config
-
-  ;; Suppress message saying undo history could not be loaded or that it was
-  ;; saved.
-  (dolist (func '(undo-tree-load-history undo-tree-save-history))
-    (advice-add func :around #'advice-silence-messages!))
+;; Package `vundo' (visual undo) displays the undo history as a tree and lets
+;; you move in the tree to go back to previous buffer states. To use vundo, type
+;; M-x vundo RET in the buffer you want to undo. An undo tree buffer should pop
+;; up.
+(use-package! vundo
+  :init
 
   (set-leader-keys!
-    "au" #'undo-tree-visualize
-    "ur" #'undo-tree-redo
-    "uu" #'undo-tree-undo
-    "uv" #'undo-tree-visualize)
+    "au" #'vundo
+    "ur" #'undo-redo
+    "uu" #'undo
+    "uv" #'vundo)
 
-  (global-undo-tree-mode +1)
+  :config
 
-  ;; Save undo history to a persistent file when a buffer is saved.
-  (setq undo-tree-auto-save-history t)
-
-  ;; Display timestamps in undo-tree visualisation.
-  (setq undo-tree-visualizer-timestamps t)
-
-  ;; Display a diff in undo-tree visualisation.
-  (setq undo-tree-visualizer-diff t)
-
-  ;; Keep `user-emacs-directory' clean.
-  (let ((autosave-dir (expand-file-name "undo-tree/site/" my-cache-dir))
-        (tramp-autosave-dir (expand-file-name "undo-tree/dist/" my-cache-dir)))
-    (setq undo-tree-history-directory-alist
-          `((".*" . ,autosave-dir)
-            ("\\`/[^/]*:\\([^/]*/\\)*\\([^/]*\\)\\'" . ,tramp-autosave-dir)))
-    (unless (file-directory-p autosave-dir)
-      (make-directory autosave-dir t))
-    (unless (file-directory-p tramp-autosave-dir)
-      (make-directory tramp-autosave-dir t)))
-
-  :blackout t)
+  ;; Use modern unicode symbols rather than ascii.
+  (setq vundo-glyph-alist vundo-unicode-symbols))
 
 ;;;; Navigation
 
