@@ -1435,8 +1435,11 @@ window instead."
   "x f"   #'fill-paragraph
   "x t"   #'delete-trailing-whitespace)
 
-;; Make `kill-line' kills the whole line.
+;; Make `kill-line' delete the whole line when the cursor is at start of a line.
 (setq kill-whole-line t)
+
+;; Kill entire line.
+(keymap-global-set "C-S-k" #'kill-whole-line)
 
 ;; When filling paragraphs, assume that sentences end with one space rather than
 ;; two.
