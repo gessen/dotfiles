@@ -597,13 +597,6 @@ For details on DATA, CONTEXT, and signal, see
 ;; Silence Emacs in terminal.
 (setq ring-bell-function #'ignore)
 
-;; Feature `request' provides a layer for URL requests.
-(use-feature! request
-  :config
-
-  ;; Do not litter `user-emacs-directory' with cache files.
-  (setq request-storage-directory (expand-file-name "request" my-cache-dir)))
-
 ;;; Windows management
 
 (defun maximize-buffer ()
@@ -2090,7 +2083,7 @@ possibly new window."
 (use-package! column-enforce-mode
   :init
 
-  (defadvice! my--set-fill-column (arg)
+  (defadvice! my--set-fill-column (_)
     :after
     #'set-fill-column
     "Refresh `column-enforce-mode' after changing `fill-column'
