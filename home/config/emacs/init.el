@@ -758,7 +758,7 @@ window instead."
 (use-feature! follow
   :init
   (set-leader-keys! "w F" #'follow-mode)
-  :blackout " ⓕ")
+  :blackout t)
 
 ;; Feature `ibuffer' provides a more modern replacement for the `list-buffers'
 ;; command.
@@ -900,7 +900,7 @@ window instead."
 
   (golden-ratio-mode +1)
 
-  :blackout " Ⓖ")
+  :blackout t)
 
 ;; Package `popper' is a minor-mode to tame the flood of ephemeral windows Emacs
 ;; produces, while still keeping them within arm's reach. Designate any buffer
@@ -1530,7 +1530,7 @@ window instead."
   :init
   (set-leader-keys! "t C-w" #'ws-butler-mode)
 
-  :blackout " Ⓦ")
+  :blackout t)
 
 ;;;; Indentation
 
@@ -1650,7 +1650,7 @@ window instead."
   ;; Enable `hungry-delete-mode' everywhere.
   (global-hungry-delete-mode +1)
 
-  :blackout " Ⓓ")
+  :blackout t)
 
 ;; Package `zop-to-char' is a visual `zap-to-char' command for Emacs. It works
 ;; in minibuffer and you can change direction with C-b and C-f. You can also use
@@ -1963,7 +1963,7 @@ possibly new window."
 
   (global-subword-mode +1)
 
-  :blackout " Ⓒ")
+  :blackout t)
 
 ;; Package `golden-ratio-scroll-screen' scrolls screen down or up and highlights
 ;; current line before or after scrolling. The lines it scrolls is
@@ -2050,7 +2050,7 @@ possibly new window."
   ;; Make the end of the file recentered.
   (setq ccm-recenter-at-end-of-file t)
 
-  :blackout " ⊖")
+  :blackout t)
 
 ;; Package `frog-jump-buffer allows you to hop to any Emacs buffer in 2-3 key
 ;; strokes. The buffers appear in order of most recent display or selection
@@ -2541,7 +2541,7 @@ SCOPE can be:
   ;; Do not emit messages when checking words.
   (setq flyspell-issue-message-flag nil)
 
-  :blackout " Ⓢ")
+  :blackout t)
 
 ;; Package `consult-flyspell' incorporates `flyspell' into `consult'. This
 ;; allows to display all misspelled words in the buffer with `consult', jump to
@@ -2710,7 +2710,7 @@ Spell Commands^^            Add To Dictionary^^               Other^^
 
   (global-auto-revert-mode +1)
 
-  :blackout (auto-revert-mode . " Ⓡ"))
+  :blackout (auto-revert-mode . t))
 
 ;;;; Automatic delimiter pairing
 
@@ -2771,7 +2771,7 @@ Spell Commands^^            Add To Dictionary^^               Other^^
   (dolist (key '(:unmatched-expression :no-matching-tag))
     (setf (cdr (assq key sp-message-alist)) nil))
 
-  :blackout " Ⓟ")
+  :blackout t)
 
 ;; Package `embrace' modifies pairs based on `expand-region'. It's heavily
 ;; inspired by `evil-surround' but instead of using `evil' and its text objects,
@@ -2916,7 +2916,7 @@ Spell Commands^^            Add To Dictionary^^               Other^^
   ;; Enale snippets everywhere
   (yas-global-mode +1)
 
-  :blackout (yas-minor-mode . " Ⓨ"))
+  :blackout (yas-minor-mode . t))
 
 ;; Package `yasnippet-snippets' is the official snippet collection for the
 ;; `yasnippet' package.
@@ -3501,7 +3501,7 @@ defeats the purpose of `corfu-prescient'."
             ("C-q" . #'corfu-quick-complete)
             ("M-q" . #'corfu-quick-insert)))
 
-  :blackout " Ⓐ")
+  :blackout t)
 
 ;; Package `corfu-terminal' replaces Corfu's child frames (which are unusuable
 ;; on terminal) with popup/popon which works everywhere.
@@ -3583,7 +3583,7 @@ defeats the purpose of `corfu-prescient'."
   ;; a bit too naggy.
   (setq flymake-no-changes-timeout 1.0)
 
-  :blackout " ⓢ")
+  :blackout t)
 
 ;; Feature `consult-flymake' shows Flymake errors, warnings, notifications
 ;; within consult buffer with live preview.
@@ -5203,7 +5203,8 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
 
 ;; Package `nerd-icons-dired' shows icons for each file in Dired,
 (use-package! nerd-icons-dired
-  :hook (dired-mode-hook . nerd-icons-dired-mode))
+  :hook (dired-mode-hook . nerd-icons-dired-mode)
+  :blackout t)
 
 ;;;;; Ranger
 
