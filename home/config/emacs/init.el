@@ -182,7 +182,7 @@ graphical frame is created."
 (setq native-comp-async-report-warnings-errors 'silent)
 
 ;; Define this variable for native compilation disabled Emacs.
-(setq native-comp-deferred-compilation-deny-list '())
+(setq native-comp-jit-compilation-deny-list '())
 
 ;;;; straight.el
 
