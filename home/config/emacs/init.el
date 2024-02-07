@@ -5249,7 +5249,15 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
 ;; this buffer, and special Proced commands to operate on the processes listed.
 (use-feature! proced
   :init
-  (set-leader-keys! "a P" #'proced))
+  (set-leader-keys! "a P" #'proced)
+
+  :config
+
+  ;; Auto update a Proced buffer.
+  (setq proced-auto-update-flag t)
+
+  ;; Display some process attributes with color.
+  (setq proced-enable-color-flag t))
 
 ;;;; Version control
 
