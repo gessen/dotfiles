@@ -5157,7 +5157,6 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
 ;; ".git/COMMIT_EDITMSG" (or another file in that directory, e.g.
 ;; ".git/MERGE_MSG" for merge commits).
 (use-package! git-commit
-  :demand t
   :config
 
   (defhook! my--git-commit-mode-setup ()
