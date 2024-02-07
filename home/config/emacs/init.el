@@ -5774,32 +5774,6 @@ possibly new window."
 
 ;;;; Theme
 
-;; Package `modus-themes' is a pack of themes that conform with the highest
-;; standard for colour-contrast accessibility between background and foreground
-;; values (WCAG AAA).
-(use-package! modus-themes
-  :bind ("<f9>" . modus-themes-select)
-  :config
-
-  ;; Use italic font forms in more code constructs, like comments.
-  (setq modus-themes-italic-constructs t)
-
-  ;; Use a bold typographic weight for text in command prompts, e.g. minibuffer.
-  (setq modus-themes-prompts '(bold))
-
-  (setq modus-themes-common-palette-overrides
-        '(;; Make the mode line borderless
-          (border-mode-line-active unspecified)
-          (border-mode-line-inactive unspecified)
-          ;; Make matching delimiters produced by `show-paren-mode` or
-          ;; `show-smartparens-mode` much more prominent.
-          (bg-paren-match bg-magenta-intense)
-          (underline-paren-match fg-main)))
-
-  ;; Draw a line below matching characters in completions buffers.
-  (setq modus-themes-completions
-        '((matches . (underline)))))
-
 (defvar after-load-theme-hook nil
   "Hook run after a color theme is loaded using `load-theme'.")
 
@@ -5828,8 +5802,67 @@ possibly new window."
   (send-string-to-terminal "\e]112\a" terminal))
 (add-to-list 'delete-terminal-functions #'my--reset-cursor-color-in-terminal)
 
-;; Load default theme.
-(load-theme 'modus-vivendi :no-confirm)
+;; Package `modus-themes' is a pack of themes that conform with the highest
+;; standard for colour-contrast accessibility between background and foreground
+;; values (WCAG AAA).
+(use-package! modus-themes
+  :demand t
+  :bind ("<f9>" . modus-themes-select)
+  :config
+
+  ;; Use italic font forms in more code constructs, like comments.
+  (setq modus-themes-italic-constructs t)
+
+  ;; Use a bold typographic weight for text in command prompts, e.g. minibuffer.
+  (setq modus-themes-prompts '(bold))
+
+  (setq modus-themes-common-palette-overrides
+        '(;; Make the mode line borderless
+          (border-mode-line-active unspecified)
+          (border-mode-line-inactive unspecified)
+          ;; Make matching delimiters produced by `show-paren-mode' or
+          ;; `show-smartparens-mode' much more prominent.
+          (bg-paren-match bg-magenta-intense)
+          (underline-paren-match fg-main)))
+
+  ;; Draw a line below matching characters in completions buffers.
+  (setq modus-themes-completions
+        '((matches . (underline)))))
+
+;; Package `ef-themes' is a collection of light and dark themes whose goal is to
+;; provide colorful ("pretty") yet legible options for users who want something
+;; with a bit more flair than the `modus-themes'.
+(use-package! ef-themes
+  :demand t
+  :bind ("<f8>" . ef-themes-select)
+  :config
+
+  (setq ef-themes-common-palette-overrides
+        '(;; Make matching delimiters produced by `show-paren-mode' or
+          ;; `show-smartparens-mode' much more prominent.
+          (bg-paren bg-magenta-intense))))
+
+;; Package `theme-buffet' arranges to automatically change themes during
+;; specific times of the day or at fixed intervals. The collection of themes is
+;; customisable, with the default options covering the built-in Emacs themes as
+;; well as `modus-themes' and `ef-themes'.
+(use-package! theme-buffet
+  :demand t
+  :config
+
+  ;; Silence messages when changing themes.
+  (dolist (func '(theme-buffet--reload-theme
+                  theme-buffet-timer-hours))
+    (advice-add func :around #'advice-silence-messages!))
+
+  ;; Use Modus and Ef themes when selecting the theme list.
+  (setq theme-buffet-menu 'modus-ef)
+
+  ;; Change a theme every 1 hour.
+  (theme-buffet-timer-hours 1)
+
+  ;; Load a theme from the current time period.
+  (theme-buffet-a-la-carte))
 
 ;;;; Modeline
 
@@ -6003,7 +6036,7 @@ possibly new window."
 ;; reading feel more comfortable.
 (use-package! spacious-padding
   :demand t
-  :bind ("<f8>" . spacious-padding-mode)
+  :bind ("<f7>" . spacious-padding-mode)
   :config
 
   ;; Keep default settings but lower mode line width
