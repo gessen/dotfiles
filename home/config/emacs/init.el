@@ -2273,6 +2273,14 @@ will not refresh `column-number-mode."
           ("C-w" . #'ctrlf-yank-word-or-char))
   :config
 
+  (defadvice! my--ctrlf-keep-position ()
+    :after #'ctrlf--finalize
+    "Restore original buffer's `window-start' just before exiting
+minibuffer. If `ctrlf-auto-recenter' is nil and the buffer is
+recentered with `recenter', after exiting minibuffer, it would
+jump to the position before `recenter' was called."
+    (set-window-start (get-buffer-window) ctrlf--final-window-start))
+
   ;; Switch literal/regexp default keybindings to regexp/fuzzy-regexp.
   (setq ctrlf-default-search-style 'regexp)
   (setq ctrlf-alternate-search-style 'fuzzy-regexp))
