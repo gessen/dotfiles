@@ -90,35 +90,61 @@ This is an `:around' advice for many different functions."
         (inhibit-message t))
     (apply func args)))
 
-(defvar my--after-display-system-init-list '()
+(defvar my--with-display-graphic-list '()
   "List of functions to be run after the display system is initialized.")
 
-;; Just to keep byte-compiler happy.
-(declare-function server-create-window-system-frame
-                  (display nowait proc parent-id &optional parameters))
+(defvar my--without-display-graphic-list '()
+  "List of functions to be run when the display system is not initialized.")
 
-(defadvice! my--after-server-create-window-system-frame
-    (&rest _)
-  :after #'server-create-window-system-frame
-  "After Emacs server creates a frame, run functions queued in
-`MY--AFTER-DISPLAY-SYSTEM-INIT-LIST' to do any setup that needs
-to have the display system initialized."
-  (dolist (fn (reverse my--after-display-system-init-list))
-    (funcall fn)))
+(defhook! my--with-display-graphic ()
+  server-after-make-frame-hook
+  "After Emacs server creates a frame, run queued functions.
+Run queued function in `my--with-display-graphic-list' to do any
+setup that needs to have the display system initialized."
+  (when (display-graphic-p)
+    (dolist (fn (reverse my--with-display-graphic-list))
+      (funcall fn))))
 
-(defmacro after-display-graphic-init! (&rest body)
+(defhook! my--without-display-graphic ()
+  server-after-make-frame-hook
+  "After Emacs server creates a frame, run queued functions.
+Run queued function in `my--without-display-graphic-list' to do
+any setup that is needed for terminal Emacs."
+  (unless (display-graphic-p)
+    (dolist (fn (reverse my--without-display-graphic-list))
+      (funcall fn))))
+
+(defmacro with-display-graphic! (&rest body)
   "Run `BODY' after display graphic is initialised.
 If the display-graphic is initialized, run `BODY', otherwise, add
 it to a queue of actions to perform after the first graphical
 frame is created."
   (declare (indent defun))
-  `(let ((init (cond ((boundp 'x-initialized) x-initialized)
-                     ;; fallback to normal loading behavior only if in a GUI
-                     (t (display-graphic-p)))))
-     (if init
+  `(let ((init-with-graphic
+          (cond
+           ((boundp 'x-initialized) x-initialized)
+           ;; Fallback to standard check only if Xorg was enabled.
+           (t (display-graphic-p)))))
+     (if init-with-graphic
          (progn
            ,@body)
-       (push (lambda () ,@body) my--after-display-system-init-list))))
+       (push (lambda () ,@body) my--with-display-graphic-list))))
+
+(defmacro without-display-graphic! (&rest body)
+  "Run `BODY' when display graphic is not initialised.
+If the display-graphic is not initialized, run `BODY', otherwise,
+add it to a queue of actions to perform after the first non
+graphical frame is created."
+  (declare (indent defun))
+  `(let ((init-without-graphic
+          (cond
+           ((boundp 'x-initialized) (not x-initialized))
+           ;; Fallback to standard check only if Xorg was enabled.
+           (t (not (display-graphic-p))))))
+     (if init-without-graphic
+         (progn
+           ,@body)
+       (push (lambda () ,@body) my--without-display-graphic-list))))
 
 ;;; Startup optimizations
 
@@ -506,7 +532,7 @@ BINDINGS is a series of KEY DEF pair."
 (context-menu-mode +1)
 
 ;; Mouse integration works out of the box in windowed mode but not terminal mode
-(unless (display-graphic-p)
+(without-display-graphic!
   ;; Enable basic mouse support (click and drag).
   (xterm-mouse-mode t))
 
@@ -747,7 +773,7 @@ window instead."
 
   ;; For some reason `winner-mode' must be delayed, otherwise launching
   ;; emacsclient in GUI may work strangely.
-  (after-display-graphic-init! (winner-mode +1)))
+  (with-display-graphic! (winner-mode +1)))
 
 ;; Package `ace-window' provides a function, `ace-window' which is meant to
 ;; replace `other-window' by assigning each window a short, unique label. When
@@ -3321,7 +3347,7 @@ menu to disappear and then come back after `company-idle-delay'."
   :commands (company-posframe-quickhelp-toggle)
   :init
 
-  (after-display-graphic-init!
+  (with-display-graphic!
     (with-eval-after-load 'company
       (require 'company-posframe)
       (add-hook #'company-mode-hook #'company-posframe-mode)
@@ -5826,7 +5852,7 @@ possibly new window."
   :bind ("<f8>" . spacious-padding-mode)
   :config
 
-  (when (display-graphic-p)
+  (with-display-graphic!
     (spacious-padding-mode +1)))
 
 ;;; Closing
