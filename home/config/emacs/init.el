@@ -635,6 +635,9 @@ For details on DATA, CONTEXT, and signal, see
 ;; Silence Emacs in terminal.
 (setq ring-bell-function #'ignore)
 
+;; Disable ESC key as a modifier.
+(keymap-global-set "<escape>" #'keyboard-escape-quit)
+
 ;;; Windows management
 
 (defun maximize-buffer ()
