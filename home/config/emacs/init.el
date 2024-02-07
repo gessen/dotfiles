@@ -1870,6 +1870,12 @@ Close^^           Open^^            Toggle^^         Goto^^         Other^^
 
 ;;;; Undo/redo
 
+(set-leader-keys!
+  "u r" #'undo-redo
+  "u u" #'undo)
+
+(keymap-set undo-repeat-map "r" #'undo-redo)
+
 ;; Feature `warnings' allows us to enable and disable warnings.
 (use-feature! warnings
   :config
@@ -1887,8 +1893,6 @@ Close^^           Open^^            Toggle^^         Goto^^         Other^^
 
   (set-leader-keys!
     "a u" #'vundo
-    "u r" #'undo-redo
-    "u u" #'undo
     "u v" #'vundo)
 
   :config
