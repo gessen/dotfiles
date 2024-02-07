@@ -135,6 +135,7 @@
  ("prism.el" . "169b49afa91e69d35b8756df49ed3ca06f418d35")
  ("project" . "dc0e5cb4cdc0c21dae72c8c4b1eb6b76fe35c809")
  ("projectile" . "e0fc464d1e41c8d7267636ea2b7330491087c19d")
+ ("pulsar" . "99123e6b95d99f225f0a7ac0510d6f7f648db276")
  ("rainbow-delimiters" . "f40ece58df8b2f0fb6c8576b527755a552a5e763")
  ("ranger.el" . "2498519cb21dcd5791d240607a72a204d1761668")
  ("rust-mode" . "9c26dc1195ec05309ee15c014631fb9abd6cf5d2")

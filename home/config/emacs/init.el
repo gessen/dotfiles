@@ -1962,11 +1962,17 @@ possibly new window."
 
   :blackout " Ⓒ")
 
-;; Package `golden-ratio' scrolls screen down or up and highlights current line
-;; before or after scrolling. The lines it scrolls is scren_height * 0.618.
+;; Package `golden-ratio-scroll-screen' scrolls screen down or up and highlights
+;; current line before or after scrolling. The lines it scrolls is
+;; scren_height * 0.618.
 (use-package! golden-ratio-scroll-screen
   :bind (([remap scroll-down-command] . #'golden-ratio-scroll-screen-down)
-         ([remap scroll-up-command]   . #'golden-ratio-scroll-screen-up)))
+         ([remap scroll-up-command]   . #'golden-ratio-scroll-screen-up))
+
+  :config
+
+  ;; Leave highlighting to `pulsar' instead.
+  (setq golden-ratio-scroll-highlight-flag nil))
 
 ;; Package `avy' can move point to any position in Emacs – even in a different
 ;; window – using very few keystrokes. For this, you look at the position where
@@ -2084,11 +2090,11 @@ possibly new window."
   "t h f" #'font-lock-mode
   "t h F" #'global-font-lock-mode)
 
-;; Feature `hl-line' provides minor mode to ;; highlight, on a suitable
-;; terminal, the line on which point is. The global mode highlights the current
-;; line in the selected window only (except when the minibuffer window is
-;; selected). The local mode is sticky - it highlights the line about the
-;; buffer's point even if the buffer's window is not selected.
+;; Feature `hl-line' provides minor mode to highlight, on a suitable terminal,
+;; the line on which point is. The global mode highlights the current line in
+;; the selected window only (except when the minibuffer window is selected). The
+;; local mode is sticky - it highlights the line about the buffer's point even
+;; if the buffer's window is not selected.
 (use-feature! hl-line
   :demand t
   :config
@@ -2239,6 +2245,31 @@ will not refresh `column-number-mode."
                                  -uniq))
                     (num (max 3 (random (1+ (length colors))))))
                (prism-shuffle (seq-take colors num))))))
+
+;; Package `pulsar' temporarily highlights the current line after a given
+;; function is invoked.
+(use-package! pulsar
+  :demand t
+  :config
+
+  ;; Pulse a line when jumping with `next-error', `consult' and `imenu' and when
+  ;; opening a minibuffer.
+  (dolist (hook '(next-error-hook
+                  imenu-after-jump-hook
+                  minibuffer-setup-hook))
+    (add-hook hook #'pulsar-pulse-line))
+
+  (with-eval-after-load 'consult
+    (add-hook 'consult-after-jump-hook #'pulsar-pulse-line))
+
+  ;; Pulse a line when jumping with `flymake' and `golden-ration-scroll-screen'.
+  (dolist (func '(flymake-goto-next-error
+                  flymake-goto-prev-error
+                  golden-ratio-scroll-screen-down
+                  golden-ratio-scroll-screen-up))
+    (push func pulsar-pulse-functions))
+
+  (pulsar-global-mode +1))
 
 ;; Package `rainbow-delimiters' is a "rainbow parentheses"-like mode which
 ;; highlights parentheses, brackets, and braces according to their depth. Each
