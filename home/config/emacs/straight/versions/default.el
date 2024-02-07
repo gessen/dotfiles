@@ -149,6 +149,7 @@
  ("ssh-config-mode-el" . "d560a0876a93ad4130baf33dae1b9405ad37a405")
  ("straight.el" . "b3760f5829dba37e855add7323304561eb57a3d4")
  ("string-inflection" . "50ad54970b3cc79b6b83979bde9889ad9a9e1a9c")
+ ("substitute" . "6c92210671abd2c04078db473e00bd34b484d3d7")
  ("sudo-edit" . "74eb1e6986461baed9a9269566ff838530b4379b")
  ("symbol-overlay" . "029c6c3b88d12afd3da8512630b2a439d7eefc0b")
  ("toc-org" . "6d3ae0fc47ce79b1ea06cabe21a3c596395409cd")
