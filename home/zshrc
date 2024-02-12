@@ -388,9 +388,6 @@ export VISUAL="$EDITOR"
 # emacsclient starts emacs in daemon mode if it can't connect to it.
 export ALTERNATE_EDITOR=""
 
-# Use plists for Emacs LSP mode de-serialization.
-export LSP_USE_PLISTS=true
-
 alias ec='emacsclient --tty'
 alias ecg='emacsclient --create-frame --no-wait'
 alias mg='ec --eval "(magit-status)"'
