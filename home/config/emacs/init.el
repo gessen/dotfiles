@@ -2846,8 +2846,7 @@ Spell Commands^^            Add To Dictionary^^               Other^^
     "i v" #'consult-yasnippet-visit-snippet-file))
 
 ;; Package `yasnippet' allows the expansion of user-defined abbreviations into
-;; fillable templates. The only reason we have it here is because it gets pulled
-;; in by LSP, and we need to unbreak some stuff.
+;; fillable templates.
 (use-package! yasnippet
   :functions yas-reload-all
   :defer 1
@@ -3325,7 +3324,7 @@ completing-read prompter."
 ;; Feature `eldoc' provides a minor mode (enabled by default in Emacs 25) which
 ;; allows function signatures or other metadata to be displayed in the echo
 ;; area.
-(use-feature! eldoc
+(use-package! eldoc
   :init
 
   (set-leader-keys! "e h" #'eldoc-doc-buffer)
@@ -3686,390 +3685,6 @@ defeats the purpose of `corfu-prescient'."
 
     (push #'ediff-comparison-buffer-p golden-ratio-inhibit-functions)))
 
-;;;; Language servers
-
-;; Package `lsp-mode' is an Emacs client for the Language Server Protocol
-;; <https://langserver.org/>. It is where we get all of our information for
-;; completions, definition location, documentation, and so on.
-(use-package! lsp-mode
-  :defer 3
-  :init
-
-  (defmacro lsp-define-extension!
-      (prefix suffix arglist request docstring &optional extra)
-    "Define functions that use non-standard LSP extension.
-Two functions will be defined, one using `lsp-find-custom' (its
-name will be PREFIX-SUFFIX) and another one using
-`lsp-ui-peek-find-custom' (its name will be
-PREFIX-ui-peek-SUFFIX). Each function can use a number prefix.
-ARGLIST is as in `defun'. REQUEST is a non-standard LSP request
-sent to the server. DOCSTRING is as in `defun' while EXTRA is a
-list of additional parameters sent with this request."
-    (declare (indent 3)
-             (doc-string 5))
-    (unless (stringp docstring)
-      (error "LSP extension `%S' not documented'" request))
-    `(progn
-       (defun ,(intern (format "%s-%s" prefix suffix)) ,arglist
-         ,(format "%s" docstring)
-         (interactive "p")
-         (lsp-find-custom ,request ,extra))
-       (defun ,(intern (format "%s-ui-peek-%s" prefix suffix)) ,arglist
-         ,(format "%s" docstring)
-         (interactive "p")
-         (lsp-ui-peek-find-custom ,request ,extra))))
-
-  (defadvice! lsp-booster-parse-bytecode
-      (func &rest args)
-    :around #'json-parse-buffer
-    "Try to parse bytecode instead of json."
-    (or
-     (when (equal (following-char) ?#)
-       (let ((bytecode (read (current-buffer))))
-         (when (byte-code-function-p bytecode)
-           (funcall bytecode))))
-     (apply func args)))
-
-  (defadvice! add-lsp-server-booster
-      (func cmd &optional test?)
-    :around #'lsp-resolve-final-command
-    "Prepend emacs-lsp-booster command to lsp CMD."
-    (let ((orig-result (funcall func cmd test?)))
-      (if (and (not test?)
-               (not (file-remote-p default-directory))
-               lsp-use-plists
-               (not (functionp 'json-rpc-connection))
-               (executable-find "emacs-lsp-booster"))
-          (progn
-            (message "Using emacs-lsp-booster for %s!" orig-result)
-            (cons "emacs-lsp-booster" orig-result))
-        orig-result)))
-
-  ;; Disable default keymap, we have our own.
-  (setq lsp-mode-map (make-sparse-keymap))
-
-  ;; Use plists for deserialization for better performance.
-  (setq lsp-use-plists t)
-
-  :config
-
-  (set-prefixes-for-minor-mode! 'lsp-mode
-    "=" "format"
-    "a" "code actions"
-    "f" "folders"
-    "g" "goto"
-    "G" "peek"
-    "h" "help"
-    "r" "refactor"
-    "s" "session"
-    "t" "toggle")
-
-  (set-leader-keys-for-minor-mode! 'lsp-mode
-    ;; Format
-    "= =" #'lsp-format-buffer
-    "= r" #'lsp-format-region
-
-    ;; Code actions
-    "a a" #'lsp-execute-code-action
-    "a h" #'lsp-document-highlight
-    "a l" #'lsp-avy-lens
-
-    ;; Folders
-    "f a" #'lsp-workspace-folders-add
-    "f b" #'lsp-workspace-blacklist-remove
-    "f r" #'lsp-workspace-folders-remove
-    "f s" #'lsp-workspace-folders-open
-
-    ;; Goto
-    "g d" #'lsp-find-declaration
-    "g g" #'lsp-find-definition
-    "g i" #'lsp-find-implementation
-    "g r" #'lsp-find-references
-    "g t" #'lsp-find-type-definition
-
-    ;; Peek
-    "G d" #'lsp-find-declaration
-    "G t" #'lsp-find-type-definition
-
-    ;; Help
-    "h h" #'lsp-describe-thing-at-point
-    "h s" #'lsp-signature-activate
-
-    ;; Refactor
-    "r o" #'lsp-organize-imports
-    "r r" #'lsp-rename
-
-    ;; Session
-    "s d" #'lsp-describe-session
-    "s D" #'lsp-disconnect
-    "s q" #'lsp-workspace-shutdown
-    "s r" #'lsp-workspace-restart
-    "s s" #'lsp
-
-    ;; Toggle
-    "t a" #'lsp-modeline-code-actions-mode
-    "t b" #'lsp-headerline-breadcrumb-mode
-    "t D" #'lsp-modeline-diagnostics-mode
-    "t f" #'lsp-toggle-on-type-formatting
-    "t h" #'lsp-toggle-symbol-highlight
-    "t i" #'lsp-inlay-hints-mode
-    "t l" #'lsp-lens-mode
-    "t L" #'lsp-toggle-trace-io
-    "t S" #'lsp-toggle-signature-auto-activate)
-
-  ;; Do not litter `user-emacs-directory' with persistent LSP files.
-  (setq lsp-session-file (expand-file-name "lsp-session-v1" my-cache-dir))
-
-  ;; Do not auto-execute single action, let us see what that action is.
-  (setq lsp-auto-execute-action nil)
-
-  ;; `lsp-mode' hardcodes `all-the-icons' while we use `nerd-icons'.
-  (setq lsp-modeline-code-action-fallback-icon "")
-
-  ;; Do not wait such long time (10s) before deciding a server timed out.
-  (setq lsp-response-timeout 5)
-
-  ;; Ignore watching files in the workspace if the server has requested that.
-  (setq lsp-enable-file-watchers nil)
-
-  ;; Reduce the amount of doc lines shown in signature, it is possible to show
-  ;; entire documentation with `M-a' anyway.
-  (setq lsp-signature-doc-lines 1)
-
-  ;; Enable semantic highlighting support.
-  (setq lsp-semantic-tokens-enable t)
-
-  ;; Display inlay hints.
-  (setq lsp-inlay-hint-enable t)
-
-  ;; Inhibit automatic edits suggested by the language server before saving a
-  ;; document.
-  (setq lsp-before-save-edits nil)
-
-  ;; Disable features that have great potential to be slow.
-  (setq lsp-enable-folding nil
-        lsp-enable-text-document-color nil)
-
-  ;; Reduce unexpected modifications to code
-  (setq lsp-enable-on-type-formatting nil)
-
-  ;; List of the clients to be automatically required when launching `lsp'.
-  ;; Default list is rather large which leads to requiring a lot of unnecessary
-  ;; files.
-  (setq lsp-client-packages '(lsp-clangd lsp-rust))
-
-  ;; Increase the amount of data which Emacs reads from the process. The Emacs
-  ;; default is too low (4k) considering that the some of the language server
-  ;; responses are in 800k - 3M range.
-  (setq read-process-output-max (* 1024 1024))
-
-  (with-eval-after-load 'flyspell
-    ;; With `flyspell-prog-mode', check LSP comments when semantic highlighting
-    ;; is used.
-    (cl-pushnew 'lsp-face-semhl-comment flyspell-prog-text-faces))
-
-  ;; Feature `lsp-completion' configures completion-related functionality.
-  (use-feature! lsp-completion
-    :init
-
-    (defun my--lsp-mode-setup-completion ()
-      "Re-enable completion style filtering.
-`lsp-mode' completely disables completion style
-filtering (including highlighting) by overriding the completion
-style setting with a special `lsp-passthrough' style."
-      (interactive)
-      (setf (alist-get 'styles (alist-get
-                                'lsp-capf completion-category-defaults))
-            '(orderless))
-      ;; Corfu retrieves the candidate completion table once at the beginning of
-      ;; a completion session and doesn’t reload it while the word is being
-      ;; typed. This is advantageous for most `completion-at-point-functions'
-      ;; since it opens up caching opportunities. Lsp Mode completion function
-      ;; doesn’t refresh the completion table itself. This is problematic, as
-      ;; language servers often only provide limited list of completions.
-      ;; Therefore, when using auto completion and typing slowly, possible
-      ;; completion candidates may be missing, because the initial list was
-      ;; missing the intended string. This behavior can be changed with the
-      ;; cache buster from Cape, which ensures that the completion table is
-      ;; refreshed such that the candidates are always obtained again from the
-      ;; server.
-      (setq-local completion-at-point-functions
-                  (list (cape-capf-buster #'lsp-completion-at-point)
-                        #'cape-file
-                        #'cape-dabbrev)))
-
-    ;; Let me configure completion provider (`corfu') by myself.
-    (setq lsp-completion-provider :none)
-
-    :hook (lsp-completion-mode-hook . my--lsp-mode-setup-completion))
-
-  ;; Feature `lsp-dired' provides integration with Dired file explorer.
-  ;; Lsp-Mode will show which files/folders contain errors/warnings/hints.
-  (use-feature! lsp-dired
-    :init
-
-    (lsp-dired-mode +1))
-
-  ;; Feature `lsp-iedit' provides features that allow starting Iedit on various
-  ;; different lsp-based, semantic units.
-  (use-feature! lsp-iedit
-    :init
-
-    (set-leader-keys-for-minor-mode! 'lsp-mode
-      "r e" #'lsp-iedit-highlights))
-
-  ;; Feature `lsp-clangd' brings implementation of clangd client for Emacs.
-  (use-feature! lsp-clangd
-    :config
-
-    (defun lsp-clangd-find-other-file-other-window ()
-      "Switch between the corresponding C/C++ source and header file in
-a new window."
-      (interactive)
-      (lsp-clangd-find-other-file t))
-
-    (dolist (mode '(c-ts-mode c++-ts-mode))
-      (set-leader-keys-for-major-mode! mode
-        "g a" #'lsp-clangd-find-other-file
-        "g A" #'lsp-clangd-find-other-file-other-window
-        "G a" #'lsp-clangd-find-other-file
-        "G A" #'lsp-clangd-find-other-file-other-window))
-
-    ;; Set some basic logging for debugging purpose, change completion style to
-    ;; be more detailed and remove automatic header insertion.
-    (setq lsp-clients-clangd-args (list
-                                   "-log=info"
-                                   "--completion-style=detailed"
-                                   "--header-insertion=never")))
-
-  ;; Feature `lsp-rust' brings implementation of clangd client for Emacs.
-  (use-feature! lsp-rust
-    :config
-
-    (set-leader-keys-for-major-mode! 'rust-ts-mode
-      ;; Code actions
-      "a e" #'lsp-rust-analyzer-expand-macro
-      "a j" #'lsp-rust-analyzer-join-lines
-
-      ;; Open
-      "o d" #'lsp-rust-analyzer-open-external-docs
-
-      ;; Session
-      "s R" #'lsp-rust-analyzer-reload-workspace)
-
-    (with-eval-after-load 'lsp-treemacs
-      (set-leader-keys-for-major-mode! 'rust-ts-mode
-        "g c" #'lsp-treemacs-call-hierarchy
-        "G c" #'lsp-treemacs-call-hierarchy))
-
-    ;; Enable proc macro support, rust-analyzer does it by default but Lsp Rust
-    ;; disables it.
-    (setq lsp-rust-analyzer-proc-macro-enable t)
-
-    ;; Show clippy hints as well as compiler errors.
-    (setq lsp-rust-analyzer-cargo-watch-command "clippy")
-
-    ;; Show inlay hints, e.g. type inference, type parameters at call site.
-    (setq lsp-rust-analyzer-display-chaining-hints t
-          lsp-rust-analyzer-closing-brace-hints t
-          lsp-rust-analyzer-closing-brace-hints-min-lines 25
-          lsp-rust-analyzer-display-closure-return-type-hints t
-          lsp-rust-analyzer-display-lifetime-elision-hints-enable "skip_trivial"
-          lsp-rust-analyzer-display-lifetime-elision-hints-use-parameter-names nil
-          lsp-rust-analyzer-display-parameter-hints t
-          lsp-rust-analyzer-server-display-inlay-hints t
-          lsp-rust-analyzer-hide-closure-initialization nil
-          lsp-rust-analyzer-hide-named-constructor nil)
-
-    ;; Limit the maximum length of inlay hints.
-    (setq lsp-rust-analyzer-max-inlay-hint-length 25)
-
-    ;; Sideline does not work well with inlay hints
-    (setq lsp-ui-sideline-enable nil)))
-
-;; Package `lsp-ui' provides a pretty UI for showing diagnostic messages from
-;; LSP in the buffer using overlays. It's configured automatically by
-;; `lsp-mode'.
-(use-package! lsp-ui
-  :demand t
-  :after lsp-mode
-  :bind ( :map lsp-ui-mode-map
-          ;; Remap `xref' to use `lsp-ui-peek' feature.
-          ([remap xref-find-definitions] . #'lsp-ui-peek-find-definitions)
-          ([remap xref-find-references]  . #'lsp-ui-peek-find-references)
-          ("C-c z"                       . #'lsp-ui-doc-focus-frame))
-
-  :config
-
-  (set-leader-keys-for-minor-mode! 'lsp-mode
-    ;; Peek
-    "G g" #'lsp-ui-peek-find-definitions
-    "G i" #'lsp-ui-peek-find-implementation
-    "G M" #'lsp-ui-imenu
-    "G r" #'lsp-ui-peek-find-references
-
-    ;; Help
-    "h g" #'lsp-ui-doc-glance
-
-    ;; Toggle
-    "t d" #'lsp-ui-doc-mode
-    "t s" #'lsp-ui-sideline-mode)
-
-  ;; Update sideline information when changing current line, not when moving
-  ;; cursor
-  (setq lsp-ui-sideline-update-mode 'line)
-
-  ;; Decrease the maximum width of doc frame by 33%.
-  (setq lsp-ui-doc-max-width 100)
-
-  ;; Setting this to nil will make Lsp Ui windows not disappear on mouse
-  ;; movement
-  (setq lsp-ui-doc-show-with-mouse nil)
-
-  ;; Always fontify chunks of code when peeking.
-  (setq lsp-ui-peek-fontify 'always)
-
-  ;; Show the peek view even if there is only 1 cross reference.
-  (setq lsp-ui-peek-always-show t))
-
-;; Package `consult-lsp` provides alternative of the build-in lsp-mode
-;; `xref-appropos` which provides as you type completion.
-(use-package! consult-lsp
-  :demand t
-  :after (consult lsp-mode xref)
-  :bind ( :map lsp-mode-map
-          ([remap xref-find-apropos] . #'consult-lsp-symbols))
-
-  :config
-
-  (set-leader-keys-for-minor-mode! 'lsp-mode
-    "g e"  #'consult-lsp-diagnostics
-    "g s"  #'consult-lsp-file-symbols
-    "g S"  #'consult-lsp-symbols
-    "G e"  #'consult-lsp-diagnostics
-    "G s"  #'consult-lsp-file-symbols
-    "G S"  #'consult-lsp-symbols)
-
-  (consult-customize
-   ;; Disable the automatic preview where the preview may be expensive due to
-   ;; file loading.
-   consult-lsp-diagnostics consult-lsp-symbols
-   :preview-key "M-."))
-
-;; Package `lsp-treemacs' brings integration between `lsp-mode' and `treemacs'
-;; and implementation of treeview controls using Treemacs as a tree renderer.
-(use-package! lsp-treemacs
-  :config
-
-  (set-leader-keys-for-minor-mode! 'lsp-mode
-    "g E" #'lsp-treemacs-errors-list
-    "g R" #'lsp-treemacs-references
-
-    "G E" #'lsp-treemacs-errors-list
-    "G R" #'lsp-treemacs-references
-
-    "t t" #'lsp-treemacs-sync-mode))
-
 ;;; Language support
 ;;;; Tree-sitter
 
@@ -4097,16 +3712,21 @@ a new window."
   :init
 
   (defhook! my--c-ts-mode-setup ()
-    c-ts-mode-hook
-    "Set custom settings for `c-ts-mode' mode."
-    ;; Launch `lsp-mode'
-    (lsp-deferred))
+    eglot-managed-mode-hook
+    "Set custom settings for `eglot--managed-mode'."
+    ;; Ensure that the completion table is refreshed on every change to the
+    ;; buffer.
+    (setq-local completion-at-point-functions
+                (list (cape-capf-buster #'eglot-completion-at-point))))
 
-  (set-prefixes-for-major-mode! 'c-ts-mode "g" "goto")
+  (set-prefixes-for-major-mode! 'c-ts-mode
+    "g" "goto"
+    "s" "session")
 
   (set-leader-keys-for-major-mode! 'c-ts-mode
     "g a" #'projectile-find-other-file
-    "g A" #'projectile-find-other-file-other-window)
+    "g A" #'projectile-find-other-file-other-window
+    "s s" #'eglot)
 
   ;; Launch tree-sitter version of `c-mode' instead.
   (push '(c-mode . c-ts-mode) major-mode-remap-alist))
@@ -4119,16 +3739,21 @@ a new window."
   :init
 
   (defhook! my--c++-ts-mode-setup ()
-    c++-ts-mode-hook
-    "Set custom settings for `c++-ts-mode' mode."
-    ;; Launch `lsp-mode'
-    (lsp-deferred))
+    eglot-managed-mode-hook
+    "Set custom settings for `eglot--managed-mode'."
+    ;; Ensure that the completion table is refreshed on every change to the
+    ;; buffer.
+    (setq-local completion-at-point-functions
+                (list (cape-capf-buster #'eglot-completion-at-point))))
 
-  (set-prefixes-for-major-mode! 'c++-ts-mode "g" "goto")
+  (set-prefixes-for-major-mode! 'c++-ts-mode
+    "g" "goto"
+    "s" "session")
 
   (set-leader-keys-for-major-mode! 'c++-ts-mode
     "g a" #'projectile-find-other-file
-    "g A" #'projectile-find-other-file-other-window)
+    "g A" #'projectile-find-other-file-other-window
+    "s s" #'eglot)
 
   ;; Launch tree-sitter version of `c++-mode' instead.
   (push '(c++-mode . c++-ts-mode) major-mode-remap-alist)
@@ -4234,10 +3859,57 @@ a new window."
     "Set custom settings for `rust-ts-mode'."
     ;; Rust uses (by default) column limit of 100.
     (setq-local fill-column 100
-                column-enforce-column fill-column)
-    (lsp-deferred))
+                column-enforce-column fill-column))
 
-  :mode ("\\.rs\\'"))
+  (set-prefixes-for-major-mode! 'rust-ts-mode "s" "session")
+  (set-leader-keys-for-major-mode! 'rust-ts-mode "s s" #'eglot)
+
+  :mode ("\\.rs\\'")
+
+  :config
+
+  (with-eval-after-load 'eglot
+    ;; Set additional initialization options for rust-analyzer.
+    (add-to-list
+     'eglot-server-programs
+     '(rust-ts-mode
+       . ("rust-analyzer" :initializationOptions
+          ( :diagnostics (:experimental (:enable t))
+            :inlayHints ( :closureReturnTypeHints (:enable "always")
+                          :lifetimeElisionHints (:enable "skip_trivial"))
+            :lens (:enable :json-false)
+            :procMacro (:enable t)
+            :check (:command "clippy")))))
+
+    (with-eval-after-load 'eglot-x
+      (set-prefixes-for-minor-mode! 'eglot--managed-mode
+        "b" "build"
+        "o" "open")
+
+      (set-leader-keys-for-minor-mode! 'eglot--managed-mode
+        ;; Code actions
+        "a m" #'eglot-x-expand-macro
+
+        ;; Build
+        "b m" #'eglot-x-rebuild-proc-macros
+
+        ;; Goto
+        "g R" #'eglot-x-find-refs
+        "g S" #'eglot-x-find-workspace-symbol
+
+        ;; Help
+        "h m" #'eglot-x-view-recursive-memory-layout
+        "h t" #'eglot-x-ask-related-tests
+
+        ;; Open
+        "o d" #'eglot-x-open-external-documentation
+
+        ;; Refactor
+        "r s" #'eglot-x-structural-search-replace
+
+        ;; Session
+        "s m" #'eglot-x-memory-usage
+        "s ?" #'eglot-x-analyzer-status))))
 
 ;;;; Shell
 
@@ -4323,6 +3995,133 @@ a new window."
 
 ;; Package `yaml-mode' provides a major mode for YAML.
 (use-package! yaml-mode)
+
+;;; Language servers
+
+;; Package `consult-eglot' provides an alternative of the built-in
+;; `xref-appropos' which provides as you type completion.
+(use-package! consult-eglot
+  :demand t
+  :after (consult eglot xref)
+  :bind ( :map eglot-mode-map
+          ([remap xref-find-apropos] . #'consult-eglot-symbols))
+
+  :config
+
+  (set-leader-keys-for-minor-mode! 'eglot--managed-mode
+    "g s" #'consult-eglot-symbols)
+
+  (consult-customize
+   ;; Disable the automatic preview where the preview may be expensive due to
+   ;; file loading.
+   consult-eglot-symbols
+   :preview-key "M-."))
+
+;; Package `eglot' is the Emacs client for the Language Server Protocol (LSP).
+;; The name “Eglot” is an acronym that stands for "Emacs Polyglot". Eglot
+;; provides infrastructure and a set of commands for enriching the source code
+;; editing capabilities of Emacs via LSP. LSP is a standardized communications
+;; protocol between source code editors (such as Emacs) and language
+;; servers—programs external to Emacs which analyze the source code on behalf of
+;; Emacs. The protocol allows Emacs to receive various source code services from
+;; the server, such as description and location of function calls, types of
+;; variables, class definitions, syntactic errors, etc. This way, Emacs doesn’t
+;; need to implement the language-specific parsing and analysis capabilities in
+;; its own code, but is still capable of providing sophisticated editing
+;; features that rely on such capabilities, such as automatic code completion,
+;; go-to definition of function/class, documentation of symbol at-point,
+;; refactoring, on-the-fly diagnostics, and more. Eglot itself is completely
+;; language-agnostic, but it can support any programming language for which
+;; there is a language server and an Emacs major mode.
+(use-package! eglot
+  :init
+
+  ;; Increase the amount of data which Emacs reads from the process. The Emacs
+  ;; default is too low (4k) considering that the some of the language server
+  ;; responses are in 800k - 3M range.
+  (setq read-process-output-max (* 1024 1024))
+
+  :config
+
+  (set-prefixes-for-minor-mode! 'eglot--managed-mode
+    "=" "format"
+    "a" "code actions"
+    "g" "goto"
+    "h" "help"
+    "r" "refactor"
+    "s" "session"
+    "t" "toggle")
+
+  (set-leader-keys-for-minor-mode! 'eglot--managed-mode
+    ;; Format
+    "= =" #'eglot-format-buffer
+    "= r" #'eglot-format
+
+    ;; Code actions
+    "a a" #'eglot-code-actions
+    "a e" #'eglot-code-action-extract
+    "a f" #'eglot-code-action-quickfix
+    "a i" #'eglot-code-action-organize-imports
+    "a l" #'eglot-code-action-inline
+    "a w" #'eglot-code-action-rewrite
+
+    ;; Goto
+    "g d" #'eglot-find-declaration
+    "g e" #'flymake-show-project-diagnostics
+    "g g" #'xref-find-definitions
+    "g i" #'eglot-find-implementation
+    "g r" #'xref-find-references
+    "g t" #'eglot-find-typeDefinition
+
+    ;; Help
+    "h h" #'eldoc-doc-buffer
+
+    ;; Refactor
+    "r r" #'eglot-rename
+
+    ;; Session
+    "s d" #'eglot-stderr-buffer
+    "s e" #'eglot-events-buffer
+    "s f" #'eglot-forget-pending-continuations
+    "s l" #'eglot-list-connections
+    "s q" #'eglot-shutdown
+    "s Q" #'eglot-shutdown-all
+    "s r" #'eglot-reconnect
+
+    ;; Toggle
+    "t i" #'eglot-inlay-hints-mode)
+
+  ;; Increase the idle time after Eglot will notify servers of any changes.
+  (setq eglot-send-changes-idle-time 1.0)
+
+  ;; Disable on-type-formatting from all servers.
+  (setq eglot-ignored-server-capabilities '(:documentOnTypeFormattingProvider))
+
+  ;; Disable Eglot events buffer, increase it only when debugging is needed.
+  (setq eglot-events-buffer-config '(:size 0)))
+
+;; Package `eglot-booster' enables Eglot to use emacs-lsp-booster which is a
+;; rust-based wrapper program which substantially speeds up Emacs interactions
+;; with LSP servers
+(use-package! eglot-booster
+  :straight (:host github :repo "jdtsmith/eglot-booster")
+  :demand t
+  :after eglot
+  :config
+
+  (eglot-booster-mode +1))
+
+;; Package `eglot-x' adds support for some of Language Server Protocol
+;; extensions.
+(use-package eglot-x
+  :straight (:host github :repo "nemethf/eglot-x")
+  :demand t
+  :after eglot
+  :config
+
+  ;; Set up `eglot-x' to extend Eglot's feature-set. Call it when there are no
+  ;; active LSP servers.
+  (eglot-x-setup))
 
 ;;; Introspection
 ;;;; Help
@@ -5590,8 +5389,6 @@ possibly new window."
                                          "*help"
                                          "*Help"
                                          "*helpful"
-                                         "*lsp"
-                                         "*LSP"
                                          "*Mini"
                                          "*straight"
                                          "*temp"
