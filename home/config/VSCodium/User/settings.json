@@ -141,53 +141,6 @@
     "cmake.configureOnOpen": false,
     "mesonbuild.buildFolder": "build",
     "mesonbuild.configureOnOpen": false,
-    "ccls.cache.directory": ".cache/ccls",
-    "ccls.clang.excludeArgs": [
-        "-fconserve-stack",
-        "-fmacro-prefix-map",
-        "-fmerge-constants",
-        "-fno-var-tracking-assignments",
-        "-fstack-usage",
-        "-mabi=lp64"
-    ],
-    "ccls.clang.extraArgs": [
-        "-Weverything",
-        "-Wno-c++98-compat",
-        "-Wno-c++98-compat-pedantic",
-        "-Wno-covered-switch-default",
-        "-Wno-global-constructors",
-        "-Wno-exit-time-destructors",
-        "-Wno-documentation",
-        "-Wno-padded",
-        "-Wno-unneeded-member-function",
-        "-Wno-unused-member-function",
-        "-Wno-language-extension-token",
-        "-Wno-gnu-zero-variadic-macro-arguments",
-        "-Wno-gnu-statement-expression",
-        "-Wno-unused-macros",
-        "-Wno-weak-vtables",
-        "-Wno-ctad-maybe-unsupported",
-        "-Wno-error"
-    ],
-    "ccls.codeLens.localVariables": false,
-    "ccls.codeLens.renderInline": false,
-    "ccls.completion.caseSensitivity": 1,
-    "ccls.completion.detailedLabel": false,
-    "ccls.completion.duplicateOptional": false,
-    "ccls.completion.enableSnippetInsertion": true,
-    "ccls.completion.include.maxPathSize": 30,
-    "ccls.completion.include.suffixWhitelist": [],
-    "ccls.highlight.function.face": ["enabled"],
-    "ccls.highlight.type.face": ["enabled"],
-    "ccls.highlight.variable.face": ["enabled"],
-    "ccls.index.blacklist": [
-        ".*CMakeFiles.*"
-    ],
-    "ccls.index.maxInitializerLines": 15,
-    "ccls.launch.args": [
-        "-log-file=/tmp/ccls.log",
-        "-v=1"
-    ],
     "clangd.arguments": [
         "-log=info",
         "--completion-style=detailed",
@@ -220,7 +173,6 @@
     "shellformat.flag": "-i 2 -bn -sr -ci",
     "remote.SSH.showLoginTerminal": true,
     "remote.SSH.defaultExtensions": [
-        "ccls-project.ccls",
         "eamodio.gitlens",
         "ms-vscode.sublime-keybindings",
         "ryzngard.vscode-header-source",
@@ -230,7 +182,6 @@
         "webfreak.debug",
     ],
     "remote.containers.defaultExtensions": [
-        "ccls-project.ccls",
         "eamodio.gitlens",
         "ms-vscode.sublime-keybindings",
         "ryzngard.vscode-header-source",

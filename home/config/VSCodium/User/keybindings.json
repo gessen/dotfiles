@@ -7,29 +7,5 @@
     {
         "key": "alt+right",
         "command": "workbench.action.navigateForward"
-    },
-    {
-        "key": "ctrl+shift-alt+c",
-        "command": "ccls.call",
-        "args": {
-            "callee": false,
-            "levels": 1
-        }
-    },
-    {
-        "key": "ctrl+shift-alt+b",
-        "command": "ccls.base",
-        "args": {
-            "derived": false,
-            "levels": 3
-        }
-    },
-    {
-        "key": "ctrl+shift-alt+d",
-        "command": "ccls.base",
-        "args": {
-            "derived": true,
-            "levels": 3
-        }
     }
 ]
