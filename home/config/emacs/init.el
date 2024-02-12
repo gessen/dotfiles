@@ -3928,7 +3928,7 @@ a new window."
       (interactive)
       (lsp-clangd-find-other-file t))
 
-    (dolist (mode '(c-mode c++-mode))
+    (dolist (mode '(c-ts-mode c++-ts-mode))
       (set-leader-keys-for-major-mode! mode
         "g a" #'lsp-clangd-find-other-file
         "g A" #'lsp-clangd-find-other-file-other-window
@@ -4078,153 +4078,50 @@ a new window."
 (use-feature! bash-ts-mode
   :mode ("\\.sh\\'"))
 
-;;;; C, C++
+;;;; C
 
-;; Feature `cc-mode' provides major modes for C, C++.
-(use-feature! cc-mode
+;; Feature `c-ts-mode' provides major mode for editing C, powered by
+;; tree-sitter.
+(use-feature! c-ts-mode
   :init
 
-  (defhook! my--cc-mode-setup ()
-    c-mode-common-hook
-    "Set custom settings for C/C++ mode."
+  (defhook! my--c-ts-mode-setup ()
+    c-ts-mode-hook
+    "Set custom settings for `c-ts-mode' mode."
     ;; Launch `lsp-mode'
     (lsp-deferred))
 
-  (dolist (mode '(c-mode c++-mode))
-    (set-prefixes-for-major-mode! mode
-      "g" "goto"
-      "G" "peek")
+  (set-prefixes-for-major-mode! 'c-ts-mode "g" "goto")
 
-    (set-leader-keys-for-major-mode! mode
-      "g a" #'projectile-find-other-file
-      "g A" #'projectile-find-other-file-other-window
-      "G a" #'projectile-find-other-file
-      "G A" #'projectile-find-other-file-other-window))
+  (set-leader-keys-for-major-mode! 'c-ts-mode
+    "g a" #'projectile-find-other-file
+    "g A" #'projectile-find-other-file-other-window)
 
-  :config
+  ;; Launch tree-sitter version of `c-mode' instead.
+  (push '(c-mode . c-ts-mode) major-mode-remap-alist))
 
-  (defadvice! my--c-update-modeline-inhibit (&rest _)
-    :override #'c-update-modeline
-    "Unconditionally inhibit CC submode indicators in the mode lighter.")
+;;;; C++
 
-  ;; Indentation for CC Mode
-  (defconst my-cc-style
-    '((c-recognize-knr-p . nil)
-      (c-basic-offset . 2)
-      (c-tab-always-indent . t)
-      (c-comment-only-line-offset . 0)
-      (comment-column . 40)
-      (c-doc-comment-style . doxygen)
-      (c-indent-comments-syntactically-p . t)
-      (c-indent-comment-alist . ((other . (space . 1))))
-      (c-hanging-braces-alist . ((defun-open before after)
-                                 (defun-close before after)
-                                 (class-open after)
-                                 (class-close before)
-                                 (inexpr-class-open after)
-                                 (inexpr-class-close before)
-                                 (namespace-open after)
-                                 (namespace-close before after)
-                                 (inline-open before after)
-                                 (inline-close before after)
-                                 (block-open after)
-                                 (block-close . c-snug-do-while)
-                                 (extern-lang-open after)
-                                 (extern-lang-close before after)
-                                 (statement-case-open after)
-                                 (substatement-open after)))
-      (c-hanging-colons-alist . ((case-label after)
-                                 (label after)
-                                 (access-label after)
-                                 (member-init-intro)
-                                 (inher-intro)))
-      (c-hanging-semi&comma-criteria
-       . (c-semi&comma-inside-parenlist
-          c-semi&comma-no-newlines-before-nonblanks
-          c-semi&comma-no-newlines-for-oneline-inliners))
-      (c-cleanup-list . (brace-else-brace
-                         brace-elseif-brace
-                         brace-catch-brace
-                         defun-close-semi
-                         list-close-comma
-                         scope-operator))
-      (c-offsets-alist . ((inexpr-class . +)
-                          (inexpr-statement . +)
-                          (lambda-intro-cont . +)
-                          (inlambda . c-lineup-inexpr-block)
-                          (template-args-cont c-lineup-template-args +)
-                          (incomposition . +)
-                          (inmodule . +)
-                          (innamespace . 0)
-                          (inextern-lang . +)
-                          (composition-close . 0)
-                          (module-close . 0)
-                          (namespace-close . 0)
-                          (extern-lang-close . 0)
-                          (composition-open . 0)
-                          (module-open . 0)
-                          (namespace-open . 0)
-                          (extern-lang-open . 0)
-                          (friend . 0)
-                          (cpp-define-intro c-lineup-cpp-define +)
-                          (cpp-macro-cont . +)
-                          (cpp-macro . [0])
-                          (inclass . +)
-                          (stream-op . c-lineup-streamop)
-                          (arglist-cont-nonempty c-lineup-ternary-bodies
-                                                 c-lineup-gcc-asm-reg
-                                                 c-lineup-arglist)
-                          (arglist-cont c-lineup-gcc-asm-reg
-                                        c-lineup-ternary-bodies)
-                          (comment-intro c-lineup-knr-region-comment
-                                         c-lineup-comment)
-                          (catch-clause . 0)
-                          (else-clause . 0)
-                          (do-while-closure . 0)
-                          (access-label . -)
-                          (case-label . 0)
-                          (substatement . +)
-                          (statement-case-intro . +)
-                          (statement . 0)
-                          (brace-entry-open . 0)
-                          (brace-list-entry . c-lineup-under-anchor)
-                          (brace-list-close . 0)
-                          (block-close . 0)
-                          (block-open . 0)
-                          (inher-cont . c-lineup-multi-inher)
-                          (inher-intro . +)
-                          (member-init-cont . c-lineup-multi-inher)
-                          (member-init-intro . +)
-                          (annotation-var-cont . +)
-                          (annotation-top-cont . 0)
-                          (topmost-intro . 0)
-                          (func-decl-cont . +)
-                          (inline-close . 0)
-                          (class-close . 0)
-                          (class-open . 0)
-                          (defun-block-intro . +)
-                          (defun-close . 0)
-                          (defun-open . 0)
-                          (c . c-lineup-C-comments)
-                          (string . c-lineup-dont-change)
-                          (topmost-intro-cont . c-lineup-topmost-intro-cont)
-                          (brace-list-intro . +)
-                          (brace-list-open . 0)
-                          (inline-open . +)
-                          (arglist-close . +)
-                          (arglist-intro . +)
-                          (statement-cont c-lineup-ternary-bodies +)
-                          (statement-case-open . 0)
-                          (label . ++)
-                          (substatement-label . ++)
-                          (substatement-open . +)
-                          (statement-block-intro . +))))
-    "My custom C/C++ programming style.")
+;; Feature `c++-ts-mode' provides major mode for editing C++, powered by
+;; tree-sitter.
+(use-feature! c++-ts-mode
+  :init
 
-  ;; Add custom C/C++ style and set it as default. This style is only used for
-  ;; languages which do not have a more specific style set in `c-default-style'.
-  (c-add-style "mine" my-cc-style)
-  (setf (map-elt c-default-style 'other) "mine"))
+  (defhook! my--c++-ts-mode-setup ()
+    c++-ts-mode-hook
+    "Set custom settings for `c++-ts-mode' mode."
+    ;; Launch `lsp-mode'
+    (lsp-deferred))
+
+  (set-prefixes-for-major-mode! 'c++-ts-mode "g" "goto")
+
+  (set-leader-keys-for-major-mode! 'c++-ts-mode
+    "g a" #'projectile-find-other-file
+    "g A" #'projectile-find-other-file-other-window)
+
+  ;; Launch tree-sitter version of `c++-mode' instead.
+  (push '(c++-mode . c++-ts-mode) major-mode-remap-alist)
+  (push '(c-or-c++-mode . c-or-c++-ts-mode) major-mode-remap-alist))
 
 ;; Package `ccls' is a client for ccls, a C/C++/Objective-C language server
 ;; supporting multi-million line C++ code-bases, powered by libclang. It
@@ -4343,7 +4240,7 @@ ALL when non-nil determines whether words will be pickable."
     (interactive)
     (ccls-inheritance-hierarchy t))
 
-  (dolist (mode '(c-mode c++-mode))
+  (dolist (mode '(c-ts-mode c++-ts-mode))
     (set-prefixes-for-minor-mode! mode
       "g h" "hierarchy"
       "g m" "members"
