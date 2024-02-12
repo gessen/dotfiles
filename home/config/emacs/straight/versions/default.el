@@ -156,7 +156,6 @@
  ("symbol-overlay" . "029c6c3b88d12afd3da8512630b2a439d7eefc0b")
  ("theme-buffet" . "fbf78faccd19937f090eae42938fead2a714f045")
  ("toc-org" . "6d3ae0fc47ce79b1ea06cabe21a3c596395409cd")
- ("toml-mode.el" . "f6c61817b00f9c4a3cab1bae9c309e0fc45cdd06")
  ("transient" . "6872fb84d78938c06969c25dc99204a5c9b1dbc0")
  ("treemacs" . "529876dcc0d2c30667f1697c4eb7a5f137da4c3e")
  ("treemacs-nerd-icons" . "9876cb478145a0ec4e36f64ff6583f3de7126216")

@@ -4683,9 +4683,10 @@ ALL when non-nil determines whether words will be pickable."
 (use-package! ssh-config-mode
   :blackout "SSH-Config")
 
-;; Package `toml-mode' provides a major mode for TOML.
-(use-package! toml-mode
-  :blackout "TOML")
+;; Feature `toml-ts-mode' provides major mode for editing TOML, powered by
+;; tree-sitter
+(use-feature! toml-ts-mode
+  :mode ("\\.toml\\'"))
 
 ;; Package `yaml-mode' provides a major mode for YAML.
 (use-package! yaml-mode)
