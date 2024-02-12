@@ -4,7 +4,6 @@ packages:
   - aspell-en
   - aspell-pl
   - bat
-  - ccls-git
   - clang
   - cmake
   - difftastic
