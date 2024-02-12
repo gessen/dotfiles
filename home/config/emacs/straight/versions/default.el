@@ -153,6 +153,7 @@
  ("transient" . "6872fb84d78938c06969c25dc99204a5c9b1dbc0")
  ("treemacs" . "529876dcc0d2c30667f1697c4eb7a5f137da4c3e")
  ("treemacs-nerd-icons" . "9876cb478145a0ec4e36f64ff6583f3de7126216")
+ ("treesit-auto" . "4225f2245247585d581bffb09225dcb21d443421")
  ("use-package" . "a6e856418d2ebd053b34e0ab2fda328abeba731c")
  ("vertico" . "357c2503a7787193d50dafd8212f2b1cc165ae16")
  ("visual-fill-column" . "db7c7c236555c9c684e1294a277efefdc25fa5c4")

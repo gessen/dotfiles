@@ -4071,6 +4071,17 @@ a new window."
     "t t" #'lsp-treemacs-sync-mode))
 
 ;;; Language support
+;;;; Tree-sitter
+
+;; Package `treesit-auto' automatically install and use tree-sitter major modes
+;; in Emacs 29+.
+(use-package! treesit-auto
+  :commands treesit-auto-install-all
+  :config
+
+  ;; Install grammar only from the following list.
+  (setq treesit-auto-langs '(bash c cpp cmake json rust toml)))
+
 ;;;; Bash
 
 ;; Feature `bash-ts-mode' provides major mode for editing Bash shell scripts,
