@@ -1,7 +1,6 @@
 ---
 vscode_extensions:
   - asabil.meson
-  - ccls-project.ccls
   - eamodio.gitlens
   - foxundermoon.shell-format
   - llvm-vs-code-extensions.vscode-clangd
