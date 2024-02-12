@@ -145,7 +145,6 @@
  ("seq" . "4355cde01767911660f761cf874edb412d06bd7a")
  ("shrink-path.el" . "c14882c8599aec79a6e8ef2d06454254bb3e1e41")
  ("smart-region" . "5a8017fd8e8dc3483865951c4942cab3f96f69f6")
- ("smartparens" . "0778a8a84064cf2bc3a9857bd0e7a4619cc1e5c3")
  ("spacious-padding" . "e817313ee28bac3b2df43ce44e44c7e6a7464b43")
  ("spinner" . "67681b8f1580a7cd7a1aa49d78eaa30d11f7c178")
  ("ssh-config-mode-el" . "d560a0876a93ad4130baf33dae1b9405ad37a405")
