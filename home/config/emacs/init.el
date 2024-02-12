@@ -2714,64 +2714,32 @@ Spell Commands^^            Add To Dictionary^^               Other^^
 
 ;;;; Automatic delimiter pairing
 
-;; Disable showing matching parenthesis, Smartparens will enable that
-;; functionality.
-(setq show-paren-mode nil)
+;; Show the matching paren if it is visible, and the expression otherwise.
+(setq show-paren-style 'mixed)
 
-;; Package `smartparens' provides an API for manipulating paired delimiters of
-;; many different types, as well as interactive commands and key bindings for
-;; operating on paired delimiters at the s-expression level. It provides a
-;; Paredit compatibility layer.
-(use-package! smartparens
-  :demand t
-  :bind (;; Use it to change parenthesis to another type.
-         "M-=" . #'sp-rewrap-sexp)
-  :config
+;; Show parens when point is just inside one. This will only be done when point
+;; isn't also just outside a paren.
+(setq show-paren-when-point-inside-paren t)
 
-  (set-leader-keys!
-    "j s" #'sp-split-sexp
-    "j n" #'sp-newline
-    "t p" #'smartparens-mode
-    "t P" #'smartparens-global-mode
-    "t q" #'smartparens-strict-mode
-    "t Q" #'smartparens-global-strict-mode)
+;; Show parens when point is in the line's periphery. The periphery is at the
+;; beginning or end of a line or in any whitespace there.
+(setq show-paren-when-point-in-periphery t)
 
-  ;; Load the default pair definitions for Smartparens.
-  (require 'smartparens-config)
+;; Show context around the opening paren if it is offscreen. The context is
+;; usually the line that contains the openparen, except if the openparen is on
+;; its own line, in which case the context includes the previous nonblank line.
+;; By default, the context is shown in the echo area.
+(setq show-paren-context-when-offscreen t)
 
-  ;; Load new SublimeText-like smartparens config that does not insert an
-  ;; autopair when the next symbol is a word constituent.
-  (require 'sp-sublimetext-like)
+;; Any matching parenthesis is highlighted in `show-paren-style' after
+;; `show-paren-delay' seconds of Emacs idle time.
+(show-paren-mode +1)
 
-  ;; Enable Smartparens functionality in all buffers.
-  (smartparens-global-mode +1)
-
-  ;; Highlight matching delimiters.
-  (show-smartparens-global-mode +1)
-
-  ;; Prevent all transient highlighting of inserted pairs.
-  (setq sp-highlight-pair-overlay nil)
-  (setq sp-highlight-wrap-overlay nil)
-  (setq sp-highlight-wrap-tag-overlay nil)
-
-  ;; Don't disable autoskip when point moves backwards. This lets you open a
-  ;; sexp, type some things, delete some things, etc., and then type over the
-  ;; closing delimiter as long as you didn't leave the sexp entirely.
-  (setq sp-cancel-autoskip-on-backward-movement nil)
-
-  ;; Make C-k kill the sexp following point in Lisp modes, instead of just the
-  ;; current line.
-  (keymap-set smartparens-mode-map "<remap> <kill-line>"
-              '(menu-item "" nil
-                          :filter (lambda (&optional _)
-                                    (when (apply #'derived-mode-p sp-lisp-modes)
-                                      #'sp-kill-hybrid-sexp))))
-
-  ;; Quiet some silly messages.
-  (dolist (key '(:unmatched-expression :no-matching-tag))
-    (setf (cdr (assq key sp-message-alist)) nil))
-
-  :blackout t)
+;; Typing an open parenthesis automatically inserts the corresponding closing
+;; parenthesis, and vice versa. (Likewise for brackets, etc.). If the region is
+;; active, the parentheses (brackets, etc.) are inserted around the region
+;; instead.
+(electric-pair-mode +1)
 
 ;; Package `embrace' modifies pairs based on `expand-region'. It's heavily
 ;; inspired by `evil-surround' but instead of using `evil' and its text objects,
@@ -4574,11 +4542,7 @@ ALL when non-nil determines whether words will be pickable."
     "Set custom settings for `rustic-mode'."
     ;; Rust uses (by default) column limit of 100.
     (setq-local fill-column 100
-                column-enforce-column fill-column)
-    ;; After pressing `newline' with "{|}", move the closing brace to the next
-    ;; line and indent cursor. This mimics behaviour in `c++-mode'.
-    (sp-with-modes '(rustic-mode)
-      (sp-local-pair "{" nil :post-handlers '(("||\n[i]" "RET")))))
+                column-enforce-column fill-column))
 
   (set-prefixes-for-major-mode! 'rustic-mode
     "=" "format"
@@ -5730,10 +5694,6 @@ possibly new window."
 ;; Allow you to resize frames however you want, not just in whole columns.
 (setq frame-resize-pixelwise t)
 
-;; Don't blink the cursor on the opening paren when you insert a closing paren,
-;; as we already have superior handling of that from Smartparens.
-(setq blink-matching-paren nil)
-
 ;; Don't suggest shorter ways to type commands in M-x, since they don't apply
 ;; when using Vertico.
 (setq suggest-key-bindings 0)
@@ -5829,8 +5789,8 @@ possibly new window."
         '(;; Make the mode line borderless
           (border-mode-line-active unspecified)
           (border-mode-line-inactive unspecified)
-          ;; Make matching delimiters produced by `show-paren-mode' or
-          ;; `show-smartparens-mode' much more prominent.
+          ;; Make matching delimiters produced by `show-paren-mode' much more
+          ;; prominent.
           (bg-paren-match bg-magenta-intense)
           (underline-paren-match fg-main)))
 
@@ -5847,8 +5807,8 @@ possibly new window."
   :config
 
   (setq ef-themes-common-palette-overrides
-        '(;; Make matching delimiters produced by `show-paren-mode' or
-          ;; `show-smartparens-mode' much more prominent.
+        '(;; Make matching delimiters produced by `show-paren-mode' much more
+          ;; prominent.
           (bg-paren bg-magenta-intense))))
 
 ;; Package `theme-buffet' arranges to automatically change themes during
