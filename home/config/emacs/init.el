@@ -4076,6 +4076,13 @@ a new window."
     "t t" #'lsp-treemacs-sync-mode))
 
 ;;; Language support
+;;;; Bash
+
+;; Feature `bash-ts-mode' provides major mode for editing Bash shell scripts,
+;; powered by tree-sitter.
+(use-feature! bash-ts-mode
+  :mode ("\\.sh\\'"))
+
 ;;;; C, C++
 
 ;; Feature `cc-mode' provides major modes for C, C++.
@@ -4604,24 +4611,25 @@ ALL when non-nil determines whether words will be pickable."
     (flymake-mode +1)
     (flyspell-prog-mode))
 
-  (set-prefixes-for-major-mode! 'sh-mode "i" "insert")
+  (dolist (mode '(bash-ts-mode sh-mode))
+    (set-prefixes-for-major-mode! mode "i" "insert")
 
-  (set-leader-keys-for-major-mode! 'sh-mode
-    "\\"  #'sh-backslash-region
-    "i c" #'sh-case
-    "i e" #'sh-indexed-loop
-    "i f" #'sh-function
-    "i g" #'sh-while-getopts
-    "i i" #'sh-if
-    "i o" #'sh-for
-    "i r" #'sh-repeat
-    "i s" #'sh-select
-    "i u" #'sh-until
-    "i w" #'sh-while
-    "s"   #'sh-set-shell)
+    (set-leader-keys-for-major-mode! mode
+      "\\"  #'sh-backslash-region
+      "i c" #'sh-case
+      "i e" #'sh-indexed-loop
+      "i f" #'sh-function
+      "i g" #'sh-while-getopts
+      "i i" #'sh-if
+      "i o" #'sh-for
+      "i r" #'sh-repeat
+      "i s" #'sh-select
+      "i u" #'sh-until
+      "i w" #'sh-while
+      "s"   #'sh-set-shell))
 
-  ;; Add dotfiles versions of Bash and Zsh.
-  :mode ("\\(bash\\|zsh\\)rc\\'" . sh-mode)
+  ;; Add dotfiles versions of Zsh.
+  :mode ("zshrc\\'" . sh-mode)
 
   :config
 
@@ -4634,11 +4642,12 @@ ALL when non-nil determines whether words will be pickable."
 (use-package! shfmt
   :init
 
-  (set-prefixes-for-major-mode! 'sh-mode "=" "format")
+  (dolist (mode '(bash-ts-mode sh-mode))
+    (set-prefixes-for-major-mode! mode "=" "format")
 
-  (set-leader-keys-for-major-mode! 'sh-mode
-    "= =" #'shfmt-buffer
-    "= r" #'shfmt-region)
+    (set-leader-keys-for-major-mode! mode
+      "= =" #'shfmt-buffer
+      "= r" #'shfmt-region))
 
   :config
 
