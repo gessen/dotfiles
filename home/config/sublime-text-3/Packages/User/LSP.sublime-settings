@@ -11,65 +11,6 @@
       "auto_complete_selector": "punctuation.accessor | (meta.preprocessor.include string - punctuation.definition.string.end)",
       "enabled": true,
     },
-    "ccls": {
-      "command": [
-        "ccls",
-        "-log-file=/tmp/ccls.log",
-        "-v=1"
-      ],
-      "selector": "source.c | source.c++ | source.objc | source.objc++",
-      "auto_complete_selector": "punctuation.accessor | (meta.preprocessor.include string - punctuation.definition.string.end)",
-      "initializationOptions": {
-        "cache": {
-          "directory": ".cache/ccls",
-        },
-        "clang": {
-          "extraArgs": [
-            "-Weverything",
-            "-Wno-c++98-compat",
-            "-Wno-c++98-compat-pedantic",
-            "-Wno-covered-switch-default",
-            "-Wno-global-constructors",
-            "-Wno-exit-time-destructors",
-            "-Wno-documentation",
-            "-Wno-padded",
-            "-Wno-unneeded-member-function",
-            "-Wno-unused-member-function",
-            "-Wno-language-extension-token",
-            "-Wno-gnu-zero-variadic-macro-arguments",
-            "-Wno-gnu-statement-expression",
-            "-Wno-unused-macros",
-            "-Wno-weak-vtables",
-            "-Wno-ctad-maybe-unsupported",
-            "-Wno-error"
-          ],
-          "excludeArgs": [
-            "-fconserve-stack",
-            "-fmacro-prefix-map",
-            "-fmerge-constants",
-            "-fno-var-tracking-assignments",
-            "-fstack-usage",
-            "-mabi=lp64"
-          ],
-        },
-        "codeLens": {
-          "localVariables": false,
-        },
-        "completion": {
-          "caseSensitivity": 1,
-          "detailedLabel": true,
-          "duplicateOptional": false,
-          "include": {
-            "maxPathSize": 30,
-          },
-        },
-        "index": {
-          "blacklist": [".*CMakeFiles.*"],
-          "maxInitializerLines": 15,
-        },
-      },
-      "enabled": false,
-    },
     "rust-analyzer": {
       "command": [
         "rust-analyzer",
