@@ -40,7 +40,6 @@
  ("elisp-lint" . "c5765abf75fd1ad22505b349ae1e6be5303426c2")
  ("elisp-refs" . "541a064c3ce27867872cf708354a65d83baf2a6d")
  ("emacs-async" . "d604187c3c8a3290e78c00b4532b83d8d908b5c3")
- ("emacs-ccls" . "dd33da8ed74ea3936c1ac969fe1be02879825e86")
  ("emacs-corfu-terminal" . "501548c3d51f926c687e8cd838c5865ec45d03cc")
  ("emacs-devdocs-browser" . "afc460e687bec4eb947ab85d207778fc3b9b3bbc")
  ("emacs-fasd" . "c1d92553f33ebb018135c698db1a6d7f86731a26")
