@@ -5716,6 +5716,9 @@ possibly new window."
 ;; Decrease the frequency of UI updates when Emacs is idle.
 (setq idle-update-delay 1)
 
+;; Defer fontification after 0.05s of being idle.
+(setq jit-lock-defer-time 0.05)
+
 ;; Reduce rendering/line scan work for Emacs by not rendering cursors or regions
 ;; in non-focused windows.
 (setq-default cursor-in-non-selected-windows nil)
