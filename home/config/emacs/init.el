@@ -4666,14 +4666,10 @@ ALL when non-nil determines whether words will be pickable."
 ;; .gitignore files.
 (use-package! git-modes)
 
-;; Package `json-mode' provides a major mode for JSON.
-(use-package! json-mode
-  :init
-
-  (defhook! my--json-mode-setup ()
-    json-mode-hook
-    "Set custom settings for `json-mode'."
-    (setq js-indent-level 2)))
+;; Feature `json-ts-mode' provides major mode for editing JSON, powered by
+;; tree-sitter.
+(use-feature! json-ts-mode
+  :mode ("\\.json\\'"))
 
 ;; Package `pkgbuild-mode' provides a major mode for PKGBUILD files used by Arch
 ;; Linux and derivatives.

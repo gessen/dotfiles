@@ -87,8 +87,6 @@
  ("ibuffer-projectile" . "710ecac1578273bf31debe52870f5844472e3428")
  ("iedit" . "27c61866b1b9b8d77629ac702e5f48e67dfe0d3b")
  ("jeison" . "19a51770f24eaa7b538c7be6a8a5c25d154b641f")
- ("json-mode" . "a93a0c76784376fbb9105719f25c7489991056a1")
- ("json-snatcher" . "b28d1c0670636da6db508d03872d96ffddbc10f2")
  ("keycast" . "bfc1f93269e54e82ca06effe7bab0bacbcc0f6ea")
  ("kkp" . "cd4b9eb31fcd0393ea5614608e18e20dc3dc95e8")
  ("let-alist" . "f8e2c18f51ce1d632fbf37d2b0ceceb77a19f419")
