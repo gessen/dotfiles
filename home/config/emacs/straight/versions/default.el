@@ -12,8 +12,6 @@
  ("centered-cursor-mode.el" . "67ef719e685407dbc455c7430765e4e685fd95a9")
  ("cfrs" . "f3a21f237b2a54e6b9f8a420a9da42b4f0a63121")
  ("clipetty" . "01b39044b9b65fa4ea7d3166f8b1ffab6f740362")
- ("cmake" . "c51953981ce846f01d152689839db816a6a0e6af")
- ("cmake-font-lock" . "a6038e916bcca807ae695f7d7e5c300c3f38f415")
  ("column-enforce-mode" . "14a7622f2268890e33536ccd29510024d51ee96f")
  ("comment-dwim-2" . "69415caa1a381063d3e794912dfe88f672854ab0")
  ("compat" . "605f224633eb28efbe62252605515ce3d557e19f")

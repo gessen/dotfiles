@@ -4434,24 +4434,10 @@ ALL when non-nil determines whether words will be pickable."
 
 ;;;; CMake
 
-;; Package `cmake-font-lock' brings advanced syntax coloring support for CMake
-;; scripts. The major feature of this package is to highlighting function
-;; arguments according to their use. This package is aware of all built-in CMake
-;; functions. In addition, it allows you to add function signatures for your own
-;; functions.
-(use-package! cmake-font-lock)
-
-;; Package `cmake-mode' provides a major mode with syntax highlighting and
-;; indentation for CMakeLists.txt and *.cmake source files.
-(use-package! cmake-mode
-  :mode ("\\.cmake\(.in\)?\\'")
-  :init
-
-  (defhook! my--cmake-mode-setup ()
-    cmake-mode-hook
-    "Set custom settings for `cmake-mode'."
-    ;; It's highly annoying with CMake.
-    (electric-indent-mode -1)))
+;; Feature `cmake-ts-mode' provides major mode for editing CMake files, powered
+;; by tree-sitter.
+(use-feature! cmake-ts-mode
+  :mode ("\\(?:CMakeLists\\.txt\\|\\.cmake\\)\\'"))
 
 ;;;; Markdown
 
