@@ -922,11 +922,6 @@ window instead."
           helpful-mode
           flymake-diagnostics-buffer-mode
           flymake-project-diagnostics-mode
-          rustic-compilation-mode
-          rustic-cargo-clippy-mode
-          rustic-cargo-run-mode
-          rustic-cargo-test-mode
-          rustic-macro-expansion-mode
           "^\\*eshell.*\\*$" eshell-mode
           "^\\*shell.*\\*$"  shell-mode
           "^\\*term.*\\*$"  term-mode
@@ -3951,7 +3946,7 @@ a new window."
   (use-feature! lsp-rust
     :config
 
-    (set-leader-keys-for-major-mode! 'rustic-mode
+    (set-leader-keys-for-major-mode! 'rust-ts-mode
       ;; Code actions
       "a e" #'lsp-rust-analyzer-expand-macro
       "a j" #'lsp-rust-analyzer-join-lines
@@ -3963,7 +3958,7 @@ a new window."
       "s R" #'lsp-rust-analyzer-reload-workspace)
 
     (with-eval-after-load 'lsp-treemacs
-      (set-leader-keys-for-major-mode! 'rustic-mode
+      (set-leader-keys-for-major-mode! 'rust-ts-mode
         "g c" #'lsp-treemacs-call-hierarchy
         "G c" #'lsp-treemacs-call-hierarchy))
 
@@ -4529,73 +4524,20 @@ ALL when non-nil determines whether words will be pickable."
 
 ;;;; Rust
 
-;; Package `rustic' implements a major-mode for editing Rust source code. It
-;; also provides additional features:
-;; - rust-analyzer configuration
-;; - cargo popup
-;; - multiline error parsing
-;; - translation of ANSI control sequences through xterm-color
-;; - async org babel
-;; - custom compilation process
-;; - rustfmt errors in a rust compilation mode
-;; - automatic rust-analyzer configuration with `lsp-mode'
-(use-package! rustic
+;; Feature `rust-ts-mode' provides major mode for editing Rust, powered by
+;; tree-sitter.
+(use-feature! rust-ts-mode
   :init
 
-  ;; Disable default keymap, we have our own.
-  (setq rustic-mode-map (make-sparse-keymap))
-
-  (defhook! my--rustic-mode-setup ()
-    rustic-mode-hook
-    "Set custom settings for `rustic-mode'."
+  (defhook! my--rust-ts-mode-setup ()
+    rust-ts-mode-hook
+    "Set custom settings for `rust-ts-mode'."
     ;; Rust uses (by default) column limit of 100.
     (setq-local fill-column 100
-                column-enforce-column fill-column))
+                column-enforce-column fill-column)
+    (lsp-deferred))
 
-  (set-prefixes-for-major-mode! 'rustic-mode
-    "=" "format"
-    "b" "build"
-    "c" "cargo"
-    "e" "edit"
-    "o" "open")
-
-  (set-leader-keys-for-major-mode! 'rustic-mode
-    ;; Format
-    "= ;" #'rustic-docstring-dwim
-
-    ;; Build
-    "b b" #'rustic-cargo-build
-    "b c" #'rustic-compile
-    "b d" #'rustic-cargo-doc
-    "b e" #'rustic-cargo-clean
-    "b f" #'rustic-format-buffer
-    "b F" #'rustic-cargo-fmt
-    "b k" #'rustic-cargo-check
-    "b n" #'rustic-cargo-outdated
-    "b p" #'rustic-popup
-    "b r" #'rustic-cargo-run
-    "b t" #'rustic-cargo-test
-    "b T" #'rustic-cargo-current-test
-
-    ;; Cargo
-    "c b" #'rustic-cargo-bench
-    "c c" #'rustic-cargo-clean
-    "c d" #'rustic-cargo-doc
-    "c f" #'rustic-cargo-clippy-fix
-    "c i" #'rustic-cargo-init
-    "c I" #'rustic-cargo-install
-    "c k" #'rustic-cargo-clippy
-    "c n" #'rustic-cargo-new
-
-    ;; Edit
-    "e a" #'rustic-cargo-add
-    "e d" #'rustic-cargo-add-missing-dependencies
-    "e r" #'rustic-cargo-rm
-    "e u" #'rustic-cargo-upgrade
-    "e U" #'rustic-cargo-update
-
-    ;; Open
-    "o c" #'rustic-open-dependency-file))
+  :mode ("\\.rs\\'"))
 
 ;;;; Shell
 

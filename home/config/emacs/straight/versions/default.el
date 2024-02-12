@@ -135,8 +135,6 @@
  ("pulsar" . "99123e6b95d99f225f0a7ac0510d6f7f648db276")
  ("rainbow-delimiters" . "f40ece58df8b2f0fb6c8576b527755a552a5e763")
  ("ranger.el" . "2498519cb21dcd5791d240607a72a204d1761668")
- ("rust-mode" . "9c26dc1195ec05309ee15c014631fb9abd6cf5d2")
- ("rustic" . "39423d1cf4fa054c36bf9577356451f4c06ee148")
  ("s.el" . "dda84d38fffdaf0c9b12837b504b402af910d01d")
  ("seq" . "4355cde01767911660f761cf874edb412d06bd7a")
  ("shrink-path.el" . "c14882c8599aec79a6e8ef2d06454254bb3e1e41")
