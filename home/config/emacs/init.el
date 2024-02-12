@@ -5590,7 +5590,7 @@ possibly new window."
   (set-leader-keys!
     "b c" #'switch-to-compilation-buffer
     "c b" #'switch-to-compilation-buffer
-    "c C" #'compile
+    "c c" #'compile
     "c k" #'kill-compilation
     "c r" #'recompile)
 
