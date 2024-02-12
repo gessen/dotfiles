@@ -152,6 +152,7 @@
  ("string-inflection" . "50ad54970b3cc79b6b83979bde9889ad9a9e1a9c")
  ("substitute" . "6c92210671abd2c04078db473e00bd34b484d3d7")
  ("sudo-edit" . "74eb1e6986461baed9a9269566ff838530b4379b")
+ ("surround" . "5c6e4ba9a4540fbcebfe6d21363179a15bc4ee9e")
  ("symbol-overlay" . "029c6c3b88d12afd3da8512630b2a439d7eefc0b")
  ("theme-buffet" . "fbf78faccd19937f090eae42938fead2a714f045")
  ("toc-org" . "6d3ae0fc47ce79b1ea06cabe21a3c596395409cd")

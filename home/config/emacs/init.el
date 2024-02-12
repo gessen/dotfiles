@@ -2745,8 +2745,7 @@ Spell Commands^^            Add To Dictionary^^               Other^^
 ;; inspired by `evil-surround' but instead of using `evil' and its text objects,
 ;; this package relies on another package `expand-region'.
 (use-package! embrace
-  :bind (("M-+" . #'embrace-commander)
-         ("C-," . #'embrace-commander))
+  :bind ("M-+" . #'embrace-commander)
   :config
 
   (defun embrace-buffer-p ()
@@ -2754,6 +2753,22 @@ Spell Commands^^            Add To Dictionary^^               Other^^
     (and (get-buffer "*embrace-help*")
          (get-buffer-window "*embrace-help*" 'visible)))
   (push 'embrace-buffer-p golden-ratio-inhibit-functions))
+
+;; Package `surround' inserts, changes, deletes and marks surrounding pairs of
+;; quotes, braces, etc.
+(use-package surround
+  :init
+
+  (defvar-keymap surround-map
+    :doc "Keymap for all interactive `surround' commands."
+    "c" #'surround-change
+    "d" #'surround-delete
+    "i" #'surround-insert
+    "k" #'surround-kill
+    "m" #'surround-mark)
+
+  (keymap-global-set "M-=" surround-map)
+  (keymap-global-set "C-," surround-map))
 
 ;;;; Snippet expansion
 
