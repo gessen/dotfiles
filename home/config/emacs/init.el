@@ -3688,6 +3688,23 @@ defeats the purpose of `corfu-prescient'."
 ;;; Language support
 ;;;; Tree-sitter
 
+;; Feature `treesit' provides tree-sitter integration for Emacs. It contains
+;; convenient functions that are more idiomatic and flexible than the exposed C
+;; API of tree-sitter. It also contains frameworks for integrating tree-sitter
+;; with font-lock, indentation, activating and deactivating tree-sitter,
+;; debugging tree-sitter, etc.
+(use-feature! treesit
+  :init
+
+  ;; Decoration level to be used by tree-sitter fontifications. Level 1 usually
+  ;; contains only comments and definitions. Level 2 usually adds keywords,
+  ;; strings, data types, etc. Level 3 usually represents full-blown
+  ;; fontifications, including assignments, constants, numbers and literals,
+  ;; etc. Level 4 adds everything else that can be fontified: delimiters,
+  ;; operators, brackets, punctuation, all functions, properties, variables,
+  ;; etc.
+  (setq treesit-font-lock-level 4))
+
 ;; Package `treesit-auto' automatically install and use tree-sitter major modes
 ;; in Emacs 29+.
 (use-package! treesit-auto
