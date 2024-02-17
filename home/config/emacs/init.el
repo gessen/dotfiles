@@ -5242,6 +5242,11 @@ possibly new window."
   (send-string-to-terminal "\e]112\a" terminal))
 (add-to-list 'delete-terminal-functions #'my--reset-cursor-color-in-terminal)
 
+;; Make both function calls and variable references italic, both of these are
+;; not modified by `modus-themes' and `ef-themes'.
+(set-face-attribute 'font-lock-function-call-face nil :slant 'italic)
+(set-face-attribute 'font-lock-variable-use-face nil :slant 'italic)
+
 ;; Package `modus-themes' is a pack of themes that conform with the highest
 ;; standard for colour-contrast accessibility between background and foreground
 ;; values (WCAG AAA).
