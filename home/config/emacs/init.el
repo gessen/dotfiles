@@ -4380,6 +4380,9 @@ unhelpful."
   :after org
   :config
 
+  ;; Show edit buffer in the current window, keeping all windows.
+  (setq org-src-window-setup 'current-window)
+
   ;; Preserve leading whitespace characters in source code blocks on export, and
   ;; when switching between the Org buffer and the language mode edit buffer.
   (setq org-src-preserve-indentation t))
