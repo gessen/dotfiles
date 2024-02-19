@@ -20,6 +20,10 @@
       tags: [os, os-packages]
       when: with_packages | default(False)
 
+    - role: os-rust
+      tags: [os, os-rust]
+      when: with_rust | default(False)
+
     - role: os-shell
       tags: [os, os-shell]
       when: with_packages | default(False)
@@ -27,7 +31,3 @@
     - role: os-kitty
       tags: [os, os-kitty]
       when: with_packages | default(False)
-
-    - role: dev-rust
-      tags: [dev, dev-rust]
-      when: with_rust | default(False)

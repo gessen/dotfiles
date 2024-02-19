@@ -7,4 +7,4 @@ dotfiles_dst: '{{ home_dir }}'
 dotfiles_distro_src: '{{ dotfiles_src }}/{{ ansible_os_family | lower }}'
 
 with_packages: True
-with_rust: False
+with_rust: True
