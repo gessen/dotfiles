@@ -8,5 +8,4 @@ dotfiles_distro_src: '{{ dotfiles_src }}/{{ ansible_os_family | lower }}'
 
 with_packages: True
 with_sublime_text: True
-with_vscode_extensions: True
 with_rust: False
