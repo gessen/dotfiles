@@ -1,4 +1,16 @@
 ---
+packages_asdeps:
+  - atool
+  - graphviz
+  - highlight
+  - hunspell
+  - llvm
+  - ninja
+  - p7zip
+  - perl-term-readkey
+  - python-pygments
+  - unrar
+
 packages:
   - aspell
   - aspell-en
@@ -22,7 +34,6 @@ packages:
   - git
   - git-delta
   - htop
-  - hunspell
   - hunspell-en_us
   - hunspell-pl
   - keepassxc
@@ -33,7 +44,6 @@ packages:
   - meson
   - mpv
   - ncdu
-  - ninja
   - openssh
   - pacman-contrib
   - plantuml
@@ -58,33 +68,7 @@ packages:
   - yt-dlp
   - zsh-completions
 
-packages_asdeps:
-  - atool
-  - graphviz
-  - highlight
-  - llvm
-  - p7zip
-  - perl-term-readkey
-  - python-pygments
-  - unrar
-
-packages_aur:
-  - dropbox
-  - emacs-lsp-booster-git
-  - git-completion
-  - mkinitcpio-firmware
-  - mpv-thumbnail-script
-  - pandoc-bin
-  - shellcheck-bin
-
 packages_ignore:
-
-packages_own:
-  - name: tig-completion
-    files:
-      - PKGBUILD
-      - .SRCINFO
-      - completion.patch
 
 reflector_options:
   - regexp: '^#?[ ]*--country'

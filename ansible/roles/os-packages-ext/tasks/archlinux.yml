@@ -1,0 +1,40 @@
+---
+- name: Install AUR packages
+  command: 'paru -S --noconfirm --needed {{ package }}'
+  loop: '{{ packages_aur | default([], true) }}'
+  loop_control:
+    loop_var: package
+  when: packages_aur is defined
+  register: paru_output
+  changed_when: '"is up to date" not in paru_output.stdout'
+
+- block:
+  - name: Create folders for own recipes
+    file:
+      path: '{{ aur_dst }}/{{ package.name }}'
+      state: directory
+    loop: '{{ packages_own | default([], true) }}'
+    loop_control:
+      loop_var: package
+
+  - name: Symlink own recipes
+    file:
+      path: '{{ aur_dst }}/{{ package.0.name }}/{{ package.1 }}'
+      src: '{{ aur_src }}/{{ package.0.name }}/{{ package.1 }}'
+      state: link
+      force: yes
+    loop: '{{ packages_own | subelements("files", skip_missing=True) }}'
+    loop_control:
+      loop_var: package
+
+  - name: Install own packages
+    command: 'makepkg -si --noconfirm --needed'
+    args:
+      chdir: '{{ aur_dst }}/{{ package.name }}'
+    loop: '{{ packages_own | default([], true) }}'
+    loop_control:
+      loop_var: package
+    register: makepkg_output
+    changed_when: '"there is nothing to do" not in makepkg_output.stdout'
+
+  when: packages_own is defined and packages_own

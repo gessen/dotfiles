@@ -1,0 +1,16 @@
+---
+packages_aur:
+  - dropbox
+  - emacs-lsp-booster-git
+  - git-completion
+  - mkinitcpio-firmware
+  - mpv-thumbnail-script
+  - pandoc-bin
+  - shellcheck-bin
+
+packages_own:
+  - name: tig-completion
+    files:
+      - PKGBUILD
+      - .SRCINFO
+      - completion.patch
