@@ -76,8 +76,6 @@ packages_aur:
   - mpv-thumbnail-script
   - pandoc-bin
   - shellcheck-bin
-  - vscodium-bin
-  - vscodium-bin-marketplace
 
 packages_ignore:
 
