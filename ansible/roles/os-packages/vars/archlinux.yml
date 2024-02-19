@@ -64,6 +64,7 @@ packages_asdeps:
 
 packages_aur:
   - dropbox
+  - emacs-lsp-booster-git
   - git-completion
   - mkinitcpio-firmware
   - mpv-thumbnail-script
@@ -75,10 +76,6 @@ packages_aur:
 packages_ignore:
 
 packages_own:
-  - name: emacs-lsp-booster
-    files:
-      - PKGBUILD
-      - .SRCINFO
   - name: tig-completion
     files:
       - PKGBUILD
