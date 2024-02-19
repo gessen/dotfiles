@@ -28,10 +28,6 @@
       tags: [os, os-kitty]
       when: with_packages | default(False)
 
-    - role: dev-sublime-text
-      tags: [dev, dev-sublime-text]
-      when: with_sublime_text | default(False)
-
     - role: dev-rust
       tags: [dev, dev-rust]
       when: with_rust | default(False)
