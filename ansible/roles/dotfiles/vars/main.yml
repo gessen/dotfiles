@@ -26,8 +26,6 @@ dotfiles:
   - config/ripgrep/config
   - config/sccache/config
   - config/sheldon/plugins.toml
-  - config/sublime-text-3/Packages/FileIcons
-  - config/sublime-text-3/Packages/User
   - config/tig/config
   - config/tmux/tmux.conf
   - local/share/cargo/config.toml
