@@ -4,6 +4,7 @@ packages:
   - aspell-en
   - aspell-pl
   - bat
+  - calibre
   - clang
   - cmake
   - difftastic
@@ -21,9 +22,11 @@ packages:
   - git
   - git-delta
   - htop
+  - hunspell
+  - hunspell-en_us
+  - hunspell-pl
   - keepassxc
   - kitty
-  - librsync
   - libvterm
   - lld
   - lsd
@@ -48,8 +51,9 @@ packages:
   - tig
   - tmux
   - tree
-  - ttf-hack
+  - ttf-jetbrains-mono
   - ttf-nerd-fonts-symbols
+  - workrave
   - xdg-user-dirs
   - yt-dlp
   - zsh-completions
@@ -59,8 +63,10 @@ packages_asdeps:
   - graphviz
   - highlight
   - llvm
+  - p7zip
   - perl-term-readkey
   - python-pygments
+  - unrar
 
 packages_aur:
   - dropbox
