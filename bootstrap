@@ -1,8 +1,5 @@
 #!/bin/sh
 
-set -o errexit
-set -o nounset
-
 if [ -f /etc/os-release ]; then
   . /etc/os-release
   if [ -z "${ID_LIKE-}" ]; then
@@ -21,7 +18,7 @@ if [ -f /etc/os-release ]; then
   esac
 fi
 
-export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
+source home/zprofile
 
 echo ""
 echo "To install everything run:"

@@ -24,6 +24,10 @@
       tags: [os, os-rust]
       when: with_rust | default(False)
 
+    - role: os-packages-ext
+      tags: [os, os-packages-ext]
+      when: with_packages | default(False)
+
     - role: os-shell
       tags: [os, os-shell]
       when: with_packages | default(False)
