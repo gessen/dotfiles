@@ -1,6 +1,6 @@
 ---
 vscode_extensions:
-  - asabil.meson
+  - mesonbuild.mesonbuild
   - eamodio.gitlens
   - foxundermoon.shell-format
   - llvm-vs-code-extensions.vscode-clangd
