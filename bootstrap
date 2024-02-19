@@ -21,6 +21,8 @@ if [ -f /etc/os-release ]; then
   esac
 fi
 
+export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
+
 echo ""
 echo "To install everything run:"
 echo "$ ansible-playbook ansible/playbook.yml --ask-become-pass"
