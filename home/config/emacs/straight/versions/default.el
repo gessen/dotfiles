@@ -103,6 +103,7 @@
  ("nerd-icons-corfu" . "7077bb76fefc15aed967476406a19dc5c2500b3c")
  ("nerd-icons-dired" . "c1c73488630cc1d19ce1677359f614122ae4c1b9")
  ("nerd-icons.el" . "d53c5a1e0e8837735310d9ebff53d072a947872a")
+ ("nix-ts-mode" . "2dddc6e9ca33be211675afca3896fd661fc38a0c")
  ("nongnu-elpa" . "49de48e15a2e23a52a45f151005bd333a1b6d4b2")
  ("orderless" . "b24748093b00b37c3a572c4909f61c08fa27504f")
  ("org" . "d57d3bd9bbf6ceb5ee046ff42af0b49b84c05a6c")
