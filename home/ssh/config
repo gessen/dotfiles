@@ -1,7 +1,17 @@
+Include gitsource-config
+Include ghost-config
+Include local-config
+Include vm-config
+
 Host *
+    AddKeysToAgent yes
     Compression yes
     ControlMaster auto
     ControlPath ~/.ssh/master-%r@%h:%p
     ControlPersist 600
     ServerAliveInterval 60
     ServerAliveCountMax 480
+    HostKeyAlgorithms +ssh-dss,ssh-rsa
+    HostbasedAcceptedAlgorithms +ssh-rsa
+    PubkeyAcceptedAlgorithms +ssh-rsa
+    PubkeyAcceptedKeyTypes +ssh-rsa
