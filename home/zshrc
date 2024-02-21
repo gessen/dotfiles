@@ -942,9 +942,6 @@ export NINJA_STATUS="[%s/%f/%t] (j%r/%e) "
 
 ## Kitty
 
-# Ensures that terminfo is uploaded.
-alias ssh='kitty +kitten ssh'
-
 # Nicer scp/rsync.
 alias transfer='kitty +kitten transfer'
 
