@@ -1,10 +1,11 @@
 local wezterm = require("wezterm")
-local config = wezterm.config_builder()
+local config = {}
 local act = wezterm.action
 
-config.term = "wezterm"
+config.check_for_updates = false
+-- config.term = "wezterm"
 config.font = wezterm.font("JetBrains Mono")
-config.font_size = 17.0
+config.font_size = 23.0
 config.harfbuzz_features = { "calt=0", "clig=0", "liga=0" }
 config.window_frame = {
    font = wezterm.font("JetBrains Mono", { weight = "Bold" }),
@@ -14,8 +15,10 @@ config.tab_bar_at_bottom = true
 config.tab_max_width = 60
 config.switch_to_last_active_tab_when_closing_tab = true
 
-config.window_background_opacity = 0.9
+config.window_background_opacity = 1.0
 config.window_close_confirmation = "NeverPrompt"
+config.send_composed_key_when_left_alt_is_pressed = false
+config.send_composed_key_when_right_alt_is_pressed = false
 
 config.default_cursor_style = "BlinkingBar"
 config.animation_fps = 10
@@ -43,10 +46,12 @@ local process_icons = {
    ["clang++"] = wezterm.nerdfonts.seti_cpp,
    ["cargo"] = wezterm.nerdfonts.seti_rust,
    ["rustc"] = wezterm.nerdfonts.seti_rust,
+   ["ruby"] = wezterm.nerdfonts.fae_ruby,
    ["sudo"] = wezterm.nerdfonts.fa_hashtag,
    ["tmux"] = wezterm.nerdfonts.cod_terminal_tmux,
    ["git"] = wezterm.nerdfonts.dev_git,
    ["htop"] = wezterm.nerdfonts.md_chart_donut_variant,
+   ["sql2"] = wezterm.nerdfonts.dev_sqllite,
    ["wget"] = wezterm.nerdfonts.md_arrow_down_box,
    ["curl"] = wezterm.nerdfonts.md_arrow_down_box,
    ["docker"] = wezterm.nerdfonts.linux_docker,
@@ -141,6 +146,9 @@ config.keys = {
    { key = "p", mods = "LEADER", action = act.ActivatePaneDirection("Prev") },
    { key = "x", mods = "LEADER", action = act.CloseCurrentPane({ confirm = true }) },
    { key = "z", mods = "LEADER", action = act.TogglePaneZoomState },
+
+   { key = "q", mods = "CTRL", action = act.SendKey({ key = "q", mods = "CTRL" }) },
+   { key = "/", mods = "CTRL", action = act.SendKey({ key = "/", mods = "CTRL" }) },
 }
 
 -- local theme = require("themes.modus-vivendi")
