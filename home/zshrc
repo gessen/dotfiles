@@ -28,10 +28,20 @@ fi
 ZSH_CACHE_DIR="${XDG_CACHE_HOME}/zsh"
 mkdir -p "${ZSH_CACHE_DIR}"
 
+## Nix
+if [[ -f "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh" ]]; then
+  source "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh"
+fi
+source "${HOME}/.nix-profile/etc/profile.d/hm-session-vars.sh"
+export NIX_PATH="${HOME}/.nix-defexpr/channels"
+
 ## Completion
 
 # Load all stock functions to be called.
 autoload -U compaudit compinit bashcompinit zrecompile
+
+# Add nix-installed autocompletions.
+fpath=("${HOME}/.nix-profile/share/zsh/site-functions" $fpath)
 
 # Set completion dump to XDG cache dir.
 ZSH_COMPDUMP="${ZSH_CACHE_DIR}/zcompdump-${ZSH_VERSION}"
@@ -76,7 +86,9 @@ zstyle ":completion:*" special-dirs true
 zstyle ":completion:*" squeeze-slashes true
 
 # Default coloring for GNU-based ls.
-source <(dircolors --sh)
+if whence dircolors > /dev/null; then
+  source <(dircolors --sh)
+fi
 
 # Colorize completion items based on $LS_COLORS.
 zstyle ":completion:*" list-colors "${(s.:.)LS_COLORS}"
@@ -137,8 +149,8 @@ bashcompinit
 
 ### Fzf
 
-source "/usr/share/fzf/completion.zsh"
-source "/usr/share/fzf/key-bindings.zsh"
+source "${HOME}/.nix-profile/share/fzf/completion.zsh"
+source "${HOME}/.nix-profile/share/fzf/key-bindings.zsh"
 
 # Set fd as the default source for fzf.
 export FZF_DEFAULT_COMMAND="fd \
