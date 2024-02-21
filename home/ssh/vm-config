@@ -1,0 +1,7 @@
+Host vm
+    User jswierk
+    HostName muc-lhvpwd.munich.corp.akamai.com
+
+Host vm-ip
+    User jswierk
+    HostName 100.78.0.30
