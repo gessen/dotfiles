@@ -428,11 +428,6 @@ alias cat='bat'
 
 ## Emacs
 
-# Set both EDITOR and VISUAL to emacsclient with autostarted server.
-export EDITOR="emacsclient --tty"
-# export EDITOR="helix"
-export VISUAL="$EDITOR"
-
 # emacsclient starts emacs in daemon mode if it can't connect to it.
 export ALTERNATE_EDITOR=""
 
@@ -516,8 +511,9 @@ function rgd {
 
 ## Helix
 
-# Use shorter command.
-alias hx='helix'
+# Set both EDITOR and VISUAL to helix.
+export EDITOR="helix"
+export VISUAL="$EDITOR"
 
 ## VSCodium
 
@@ -931,7 +927,7 @@ alias tkss='tmux kill-session -t'
 ## CMake
 
 # By default, use nproc number of threads.
-export CMAKE_BUILD_PARALLEL_LEVEL=$(nproc)
+export CMAKE_BUILD_PARALLEL_LEVEL=$(nproc 2>/dev/null || sysctl -n hw.ncpu)
 
 # Generates compile_commands.json by default.
 export CMAKE_EXPORT_COMPILE_COMMANDS=ON
