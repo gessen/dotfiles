@@ -597,7 +597,7 @@ anything that can be a key's definition."
 ;; from the TERM variable.
 (use-package! kkp
   :init
-
+  (setq kkp-terminal-query-timeout 1)
   (global-kkp-mode +1))
 
 ;;;; Encryption
@@ -1911,6 +1911,9 @@ possibly new window."
     (if arg
         (switch-to-buffer-other-window (current-buffer))
       (switch-to-buffer (current-buffer)))))
+
+(bind-key "<home>" #'move-beginning-of-line)
+(bind-key "<end>"  #'move-end-of-line)
 
 (set-leader-keys!
   "b m" #'switch-to-messages-buffer
@@ -4534,8 +4537,10 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
   ;;   - append indicator (one of */=>@|) to entries
   ;;   - print sizes like 1K 234M 2G etc
   ;;   - group directories before files
-  (setq dired-listing-switches
-        "-AlvFh --group-directories-first --time-style=long-iso")
+  (if (string= system-type "darwin")
+      (setq dired-listing-switches "-AlvFh")
+    (setq dired-listing-switches
+          "-AlvFh --group-directories-first --time-style=long-iso"))
 
   ;; Try to guess a default target directory. This means: if there is a `dired'
   ;; buffer displayed in some window, use its current directory, instead of this
@@ -4550,6 +4555,10 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
 
   ;; Hide free space label at the top
   (setq dired-free-space nil)
+
+  ;; On MacOS, ls doesn't support --dired option.
+  (when (string= system-type "darwin")
+    (setq dired-use-ls-dired nil))
 
   ;; Compress with Zstandard by default
   (setq dired-compress-file-default-suffix ".zst"
