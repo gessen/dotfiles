@@ -5537,6 +5537,14 @@ possibly new window."
 
 ;;; Closing
 
+;; Package `breadcrumb' provide `project' and `imenu'-based breadcrumb paths
+;; displayed either on header line or mode line.
+(use-package! breadcrumb
+  :demand t
+  :config
+
+  (breadcrumb-mode +1))
+
 ;; Prune the build cache for straight.el - this will prevent it from growing too
 ;; large.
 (straight-prune-build-cache)
