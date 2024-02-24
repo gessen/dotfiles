@@ -3715,7 +3715,7 @@ defeats the purpose of `corfu-prescient'."
   :config
 
   ;; Install grammar only from the following list.
-  (setq treesit-auto-langs '(bash c cpp cmake json rust toml)))
+  (setq treesit-auto-langs '(bash c cpp cmake dockerfile json rust toml)))
 
 ;;;; Bash
 
@@ -3785,6 +3785,13 @@ defeats the purpose of `corfu-prescient'."
 ;; by tree-sitter.
 (use-feature! cmake-ts-mode
   :mode ("\\(?:CMakeLists\\.txt\\|\\.cmake\\)\\'"))
+
+;;;; Dockerfile
+
+;; Feature `dockerfile-ts-mode' provides major mode for Dockerfile, powered by
+;; tree-sitter.
+(use-feature! dockerfile-ts-mode
+  :mode ("\\(?:Dockerfile\\(?:\\..*\\)?\\|\\.[Dd]ockerfile\\)\\'"))
 
 ;;;; Markdown
 
