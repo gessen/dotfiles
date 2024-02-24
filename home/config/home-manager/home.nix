@@ -53,8 +53,10 @@ in
       zellij
       zoxide
       zstd
+      extraPackages.emacs-lsp-booster
       extraPackages.git-completion
       extraPackages.osc52
+      extraPackages.stormcloud-docker
       extraPackages.tig-completion
     ];
 
