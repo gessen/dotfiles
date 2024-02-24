@@ -5415,11 +5415,21 @@ possibly new window."
 ;; and a nice integration with the Emacs environment, without sacrificing
 ;; customizability.
 (use-package! centaur-tabs
-  :demand t
   :init
 
   ;; Display an icon from `nerd-icons' alongside the tab name.
   (setq centaur-tabs-set-icons t)
+
+  (set-leader-keys!
+    "T d" #'centaur-tabs-open-directory-in-external-application
+    "T f" #'centaur-tabs-extract-window-to-new-frame
+    "T k" #'centaur-tabs-kill-other-buffers-in-current-group
+    "T n" #'centaur-tabs-forward
+    "T N" #'centaur-tabs-forward-group
+    "T o" #'centaur-tabs-open-in-external-application
+    "T p" #'centaur-tabs-backward
+    "T P" #'centaur-tabs-backward-group
+    "T T" #'centaur-tabs-mode)
 
   :config
 
@@ -5463,24 +5473,12 @@ possibly new window."
   ;; Draw the underline at the same place as the descent line.
   (setq x-underline-at-descent-line t)
 
-  (centaur-tabs-mode +1)
-
   ;; Group tabs by `projectile' project.
   (centaur-tabs-group-by-projectile-project)
 
   ;; Make the headline face match the centaur-tabs-default face. This makes the
   ;; tab bar have an uniform appearance
   (centaur-tabs-headline-match)
-
-  (set-leader-keys!
-    "T d" #'centaur-tabs-open-directory-in-external-application
-    "T f" #'centaur-tabs-extract-window-to-new-frame
-    "T k" #'centaur-tabs-kill-other-buffers-in-current-group
-    "T n" #'centaur-tabs-forward
-    "T N" #'centaur-tabs-forward-group
-    "T o" #'centaur-tabs-open-in-external-application
-    "T p" #'centaur-tabs-backward
-    "T P" #'centaur-tabs-backward-group)
 
   :bind ( :map centaur-tabs-mode-map
           ("C-<prior>" . #'centaur-tabs-backward)
