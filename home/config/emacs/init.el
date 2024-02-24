@@ -3867,6 +3867,25 @@ defeats the purpose of `corfu-prescient'."
    :command (list plantuml-exec "-headless" "-syntax")
    :regexps ((error bol "ERROR" "\n" line "\n" (message) eol))))
 
+;;;; Ruby
+
+;; Feature `ruby-ts-mode' provides major mode for Ruby, powered by tree-sitter.
+(use-feature! ruby-ts-mode
+  :init
+
+  (defhook! my--ruby-ts-mode-setup ()
+    ruby-ts-mode-hook
+    "Set custom settings for `ruby-ts-mode'."
+    (setq-local fill-column 120
+                column-enforce-column fill-column)
+    (column-enforce-mode -1)
+    (display-fill-column-indicator-mode -1))
+
+  ;; Launch tree-sitter version of `ruby-mode' instead.
+  (push '(ruby-mode . ruby-ts-mode) major-mode-remap-alist)
+
+  (setq ruby-indent-level 4))
+
 ;;;; Rust
 
 ;; Feature `rust-ts-mode' provides major mode for editing Rust, powered by
