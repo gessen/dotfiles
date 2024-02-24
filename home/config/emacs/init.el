@@ -5351,38 +5351,16 @@ possibly new window."
 
 ;;;; Modeline
 
-;; Package `doom-modeline' offers a fancy and fast mode-line inspired by
-;; minimalism design. It's integrated into Doom Emacs.
-(use-package! doom-modeline
+;; Package `mood-line' is a lightweight, drop-in replacement for the default
+;; Emacs mode line configuration.
+(use-package! mood-line
   :demand t
-  :init
-
-  ;; Use unicode as a fallback (instead of ASCII) when not using icons. Needs to
-  ;; be set before loading `doom-modeline', otherwise it would complain when
-  ;; used with Flymake.
-  (setq doom-modeline-unicode-fallback t)
-
   :config
 
-  ;; Show total number of lines after the current cursor position.
-  (setq doom-modeline-total-line-number t)
+  ;; Use more fancier unicode glyphs.
+  (setq mood-line-glyph-alist mood-line-glyphs-unicode)
 
-  ;; Display minor modes in modeline, with `minions-mode' they won't be visible
-  ;; anyway but could be quickly looked at by disabling `minions-mode'.
-  (setq doom-modeline-minor-modes t)
-
-  ;; We do not use any modal editing so its icon is redundant.
-  (setq doom-modeline-modal nil)
-  (setq doom-modeline-modal-icon nil)
-
-  ;; Redesign modeline to have much less information from the default one.
-  (doom-modeline-def-modeline 'main
-    '(eldoc bar window-number matches buffer-info remote-host buffer-position
-            selection-info)
-    '(misc-info grip debug lsp minor-modes indent-info buffer-encoding
-                major-mode process vcs checker))
-
-  (doom-modeline-mode +1))
+  (mood-line-mode +1))
 
 ;; Package `hide-mode-line' provides a minor mode that hides (or masks) the
 ;; modeline in your current buffer. It can be used to toggle an alternative
