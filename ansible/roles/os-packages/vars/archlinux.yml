@@ -66,6 +66,7 @@ packages:
   - ttf-nerd-fonts-symbols
   - workrave
   - xdg-user-dirs
+  - yazi
   - yt-dlp
   - zsh-completions
 
