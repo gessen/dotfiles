@@ -31,6 +31,7 @@ dotfiles:
   - config/sheldon/plugins.toml
   - config/tig/config
   - config/tmux/tmux.conf
+  - config/yazi/yazi.toml
   - local/share/cargo/config.toml
   - ssh/config
   - zprofile
