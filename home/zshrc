@@ -467,6 +467,11 @@ function rgd {
   rg --json --context=3 "$@" | delta
 }
 
+## Helix
+
+# Use shorter command.
+alias hx='helix'
+
 ## VSCodium
 
 # Use original code command with vscodium and set extensions directory to
