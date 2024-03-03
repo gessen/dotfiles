@@ -133,6 +133,7 @@ bashcompinit
 
 ### Fzf
 
+source "/usr/share/fzf/completion.zsh"
 source "/usr/share/fzf/key-bindings.zsh"
 
 # Set fd as the default source for fzf.
