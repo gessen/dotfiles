@@ -4058,6 +4058,9 @@ defeats the purpose of `corfu-prescient'."
   ;; responses are in 800k - 3M range.
   (setq read-process-output-max (* 1024 1024))
 
+  ;; Inhibit logging a JSONRPC-related events.
+  (fset #'jsonrpc--log-event #'ignore)
+
   :config
 
   (set-prefixes-for-minor-mode! 'eglot--managed-mode
