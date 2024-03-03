@@ -521,6 +521,15 @@ setopt HIST_VERIFY
 # appended to the history file
 setopt SHARE_HISTORY
 
+# [Up] and [Down] cycles through history based on characters already typed on
+# the line.
+autoload -U up-line-or-beginning-search
+autoload -U down-line-or-beginning-search
+zle -N up-line-or-beginning-search
+zle -N down-line-or-beginning-search
+bindkey "^[[A" up-line-or-beginning-search
+bindkey "^[[B" down-line-or-beginning-search
+
 # [PageUp] and [PageDown] for navigating history.
 bindkey "^[[5~" up-line-or-history
 bindkey "^[[6~" down-line-or-history
