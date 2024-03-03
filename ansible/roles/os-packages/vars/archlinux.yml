@@ -68,6 +68,7 @@ packages:
   - xdg-user-dirs
   - yazi
   - yt-dlp
+  - zoxide
   - zsh-completions
 
 packages_ignore:
