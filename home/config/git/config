@@ -80,6 +80,8 @@
 [pull]
 	rebase = true
 [push]
+	autosetupremote = true
+	default = current
 	followtags = true
 [credential]
 	helper = cache --timeout 3600
