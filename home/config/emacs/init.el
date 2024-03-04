@@ -582,23 +582,11 @@ anything that can be a key's definition."
 
 ;;;; Keyboard integration
 
-;; Package `kpp' provides support for the Kitty Keyboard Protocol. KKP defines
-;; an alternative way to handle keyboard input for programs running in the
-;; terminal. This allows, if the terminal (and intermediaries such as terminal
-;; multiplexers) support the protocol as well, the transmission of more detailed
-;; information about a key event from the terminal to Emacs, e.g., it transmits
-;; "<tab>" and "C-i" differently. Currently, there exists another solution which
-;; solves the same problem, xterm’s "modifyOtherKeys", which is already
-;; supported by Emacs (and activated by default if the terminal supports it).
-;; KKP has the advantage of supporting more keys (e.g., "<menu>" or
-;; "<Scroll_Lock>"), more key combinations (e.g., "C-M-S-z") and more modifiers,
-;; i.e., the Hyper and Super keys. It can also dynamically detect if a terminal
-;; supports the protocol, whereas Emacs has to deduce "modifyOtherKeys" support
-;; from the TERM variable.
-(use-package! kkp
+(use-package! term-keys
+  :straight (:host github :repo "CyberShadow/term-keys")
   :init
-  (setq kkp-terminal-query-timeout 1)
-  (global-kkp-mode +1))
+
+  (term-keys-mode +1))
 
 ;;;; Encryption
 

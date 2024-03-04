@@ -11,7 +11,3 @@ Host *
     ControlPersist 600
     ServerAliveInterval 60
     ServerAliveCountMax 480
-    HostKeyAlgorithms +ssh-dss,ssh-rsa
-    HostbasedAcceptedAlgorithms +ssh-rsa
-    PubkeyAcceptedAlgorithms +ssh-rsa
-    PubkeyAcceptedKeyTypes +ssh-rsa

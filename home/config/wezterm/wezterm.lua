@@ -123,7 +123,7 @@ wezterm.on("update-right-status", function(window, pane)
 end)
 
 config.enable_kitty_keyboard = true
-config.leader = { key = "S", mods = "CTRL", timeout_milliseconds = 3000 }
+config.leader = { key = "A", mods = "SHIFT|CTRL", timeout_milliseconds = 3000 }
 config.keys = {
    { key = "0", mods = "CTRL", action = "DisableDefaultAssignment" },
    { key = "-", mods = "CTRL", action = "DisableDefaultAssignment" },
