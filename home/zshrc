@@ -685,8 +685,6 @@ alias gbg='git branch -vv | grep ": gone\]"'
 alias gbm='git branch --move'
 alias gbnm='git branch --no-merged'
 alias gbr='git branch --remote'
-alias gbso='git branch --set-upstream-to=origin/$(git_current_branch)'
-alias gbsu='git branch --set-upstream-to=upstream/$(git_current_branch)'
 
 function gbda() {
   git branch --no-color --merged \
