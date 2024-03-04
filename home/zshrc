@@ -901,6 +901,19 @@ alias gwtrm='git worktree remove'
 
 alias tia='tig --all'
 
+function gitui-widget() {
+  gitui
+
+  local fn
+	for fn (chpwd $chpwd_functions precmd $precmd_functions); do
+		(( $+functions[$fn] )) && $fn
+	done
+	zle reset-prompt
+}
+
+zle -N gitui-widget
+bindkey "^[g" gitui-widget
+
 ## Tmux
 
 # Create new tmux session or switch to existing one. Works from within tmux too.
