@@ -796,12 +796,6 @@ alias glrum='git pull --rebase upstream $(git_master_branch)'
 alias gp='git push'
 alias gpd='git push --dry-run'
 alias gpf='git push --force-with-lease --force-if-includes'
-alias gpsop='git push --set-upstream origin $(git_current_branch)'
-alias gpsopf='git push --set-upstream origin $(git_current_branch) \
-  --force-with-lease --force-if-includes'
-alias gpsup='git push --set-upstream upstream $(git_current_branch)'
-alias gpsupf='git push --set-upstream upstream $(git_current_branch) \
-  --force-with-lease --force-if-includes'
 alias gpv='git push --verbose'
 alias gpo='git push origin'
 alias gpoat='git push origin --all && git push origin --tags'
