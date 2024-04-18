@@ -297,6 +297,18 @@ function zz() {
     || return 1
 }
 
+### Zoxide
+zoxide init zsh --cmd cd --hook prompt |> "${ZSH_CACHE_DIR}/zoxide-init-cache"
+source "${ZSH_CACHE_DIR}/zoxide-init-cache"
+
+# Import fasd database if zoxide db does not exist or sometimes synchronize it.
+if [[ ! -f "${XDG_DATA_HOME}/zoxide/db.zo" ]]; then
+  zoxide import --from=z "${_FASD_DATA}"
+elif ((RANDOM % 10 == 0)); then
+  rm -f "${XDG_DATA_HOME}/zoxide/db.zo"
+  zoxide import --from=z "${_FASD_DATA}"
+fi
+
 ### Ranger
 
 # Allows ranger to change cwd either normally or with in new window or pane if
@@ -318,7 +330,7 @@ function ranger() {
   if cwd="$(cat -- "${tempfile}")" \
     && [[ -n "${cwd}" ]] \
     && [[ "${cwd}" != "${PWD}" ]]; then
-    cd -- "${cwd}" || return
+    builtin cd -- "${cwd}" || return
   fi
   command rm -f -- "${tempfile}" 2> /dev/null
 }
