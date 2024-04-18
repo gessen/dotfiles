@@ -3,6 +3,12 @@ export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
 export XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
 
+# Input Method framework.
+export GTK_IM_MODULE=fcitx
+export QT_IM_MODULE=fcitx
+export XMODIFIERS=@im=fcitx
+export GLFW_IM_MODULE=ibus
+
 # Partial XDG support that needs some help.
 export ANSIBLE_HOME="${XDG_CONFIG_HOME}/ansible"
 export ASPELL_CONF="home-dir ${XDG_CONFIG_HOME}/aspell/; per-conf aspell.conf"
