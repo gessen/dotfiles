@@ -3921,7 +3921,6 @@ defeats the purpose of `corfu-prescient'."
             :inlayHints ( :closureReturnTypeHints (:enable "always")
                           :lifetimeElisionHints (:enable "skip_trivial"))
             :lens (:enable :json-false)
-            :procMacro (:enable t)
             :check (:command "clippy")))))
 
     (with-eval-after-load 'eglot-x
