@@ -4940,6 +4940,17 @@ current theme. This will also disable line numbers and decorations."
               "--features=colors-dark"
             "--features=colors-light") args))
 
+  (defun magit-delta-toggle ()
+    "Toggles `magit-delta-mode' and refreshes Magit."
+    (interactive)
+    (magit-delta-mode
+     (if magit-delta-mode -1 +1))
+    (magit-refresh))
+
+  (transient-append-suffix
+    'magit-diff '(-1 -1 -1)
+    '("l" "Toggle magit-delta" magit-delta-toggle))
+
   (magit-delta-mode +1)
 
   :blackout t)
