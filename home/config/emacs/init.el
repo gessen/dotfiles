@@ -3918,6 +3918,7 @@ defeats the purpose of `corfu-prescient'."
      '(rust-ts-mode
        . ("rust-analyzer" :initializationOptions
           ( :diagnostics (:experimental (:enable t))
+            :completion (:postfix (:enable :json-false))
             :inlayHints ( :closureReturnTypeHints (:enable "always")
                           :lifetimeElisionHints (:enable "skip_trivial"))
             :lens (:enable :json-false)
