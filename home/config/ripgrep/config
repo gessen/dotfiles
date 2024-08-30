@@ -5,7 +5,7 @@
 --follow
 
 # Don't let ripgrep vomit really long lines to my terminal, and show a preview
---max-columns=150
+--max-columns=300
 --max-columns-preview
 
 # Configure color settings and styles
