@@ -111,3 +111,5 @@
 	fixup = !GIT_SEQUENCE_EDITOR=true git rebase -i
 [include]
 	path = config.local
+[fetch]
+	showforcedupdates = true
