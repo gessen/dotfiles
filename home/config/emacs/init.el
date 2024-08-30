@@ -3709,7 +3709,8 @@ defeats the purpose of `corfu-prescient'."
   :config
 
   ;; Install grammar only from the following list.
-  (setq treesit-auto-langs '(bash c cpp cmake dockerfile json rust toml)))
+  (setq treesit-auto-langs
+        '(bash c cpp cmake dockerfile json python rust toml)))
 
 ;;;; Bash
 
@@ -3867,6 +3868,27 @@ defeats the purpose of `corfu-prescient'."
    :write-type 'pipe
    :command (list plantuml-exec "-headless" "-syntax")
    :regexps ((error bol "ERROR" "\n" line "\n" (message) eol))))
+
+;;;; Python
+
+;; Feature `python-ts-mode' provides major mode for Python, powered by
+;; tree-sitter.
+(use-feature! python-ts-mode
+  :init
+
+  (defhook! my--python-ts-mode-setup ()
+    python-ts-mode-hook
+    "Set custom settings for `python-ts-mode'."
+    (setq-local fill-column 100
+                column-enforce-column fill-column)
+    (column-enforce-mode -1)
+    (display-fill-column-indicator-mode -1))
+
+  ;; Launch tree-sitter version of `python-mode' instead.
+  (push '(python-mode . python-ts-mode) major-mode-remap-alist)
+
+  (set-prefixes-for-major-mode! 'python-ts-mode "s" "session")
+  (set-leader-keys-for-major-mode! 'python-ts-mode "s s" #'eglot))
 
 ;;;; Rust
 
