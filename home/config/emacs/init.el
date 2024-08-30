@@ -2436,9 +2436,6 @@ jump to the position before `recenter' was called."
   :bind (([remap query-replace-regexp] . #'vr/query-replace-literal))
   :config
 
-  ;; Use Emacs-style regular expressions by default, instead of Python-style.
-  (setq vr/engine 'emacs)
-
   (defun vr/query-replace-literal ()
     "Do a literal query-replace using `visual-regexp'."
     (interactive)
