@@ -1292,7 +1292,7 @@ window instead."
    'meson '("meson.build")
    :project-file "meson.build"
    :compilation-dir "build"
-   :configure "meson %s --prefix=/usr"
+   :configure "meson setup %s --prefix=/usr"
    :compile "meson compile"
    :test "meson test"
    :install "meson install"
