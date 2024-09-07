@@ -2444,7 +2444,7 @@ jump to the position before `recenter' was called."
 
 ;; Package `wgrep' allows you to edit a grep buffer and apply those changes to
 ;; the file buffer interactively.
-(use-package wgrep
+(use-package! wgrep
   :commands wgrep-change-to-wgrep-mode
   :bind ( :map grep-mode-map
           ("C-c C-e" . #'wgrep-change-to-wgrep-mode))
@@ -2748,7 +2748,7 @@ Spell Commands^^            Add To Dictionary^^               Other^^
 
 ;; Package `surround' inserts, changes, deletes and marks surrounding pairs of
 ;; quotes, braces, etc.
-(use-package surround
+(use-package! surround
   :init
 
   (defvar-keymap surround-map
@@ -4159,7 +4159,7 @@ defeats the purpose of `corfu-prescient'."
 
 ;; Package `eglot-x' adds support for some of Language Server Protocol
 ;; extensions.
-(use-package eglot-x
+(use-package! eglot-x
   :straight (:host github :repo "nemethf/eglot-x")
   :demand t
   :after eglot
