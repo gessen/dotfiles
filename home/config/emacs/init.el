@@ -1212,8 +1212,11 @@ window instead."
 
   (add-to-list 'consult-dir-sources 'consult-dir--source-fasd t)
 
+  ;; Use `consult-fd' for finding.
+  (setopt consult-dir-jump-file-command 'consult-fd)
+
   ;; Use projectile backend.
-  (setq consult-dir-project-list-function #'consult-dir-projectile-dirs))
+  (setopt consult-dir-project-list-function #'consult-dir-projectile-dirs))
 
 ;; Package `projectile' keeps track of a "project" list, which is automatically
 ;; added to as you visit Git repositories, Node.js projects, etc. It then
@@ -3127,17 +3130,20 @@ completing-read prompter."
   :demand t
   :config
 
-  ;; Rely on `orderless' solely for completions.
-  (setq completion-styles '(orderless))
+  ;; Rely on `orderless' for completions with `basic' fallback in order to
+  ;; ensure that completion commands which rely on dynamic completion tables,
+  ;; e.g., `completion-table-dynamic' or `completion-table-in-turn', work
+  ;; correctly.
+  (setopt completion-styles '(orderless basic))
   (setq completion-category-defaults nil)
 
   ;; Modify default dispatch list to use \"?\" for fuzzy matching.
-  (setq orderless-affix-dispatch-alist
-        '((?% . char-fold-to-regexp)
-          (?! . orderless-without-literal)
-          (?, . orderless-initialism)
-          (?= . orderless-literal)
-          (?? . orderless-flex))))
+  (setopt orderless-affix-dispatch-alist
+          '((?% . char-fold-to-regexp)
+            (?! . orderless-without-literal)
+            (?, . orderless-initialism)
+            (?= . orderless-literal)
+            (?? . orderless-flex))))
 
 ;; Package `prescient' is a library for intelligent sorting and filtering in
 ;; various contexts.
@@ -3375,15 +3381,6 @@ completing-read prompter."
   :straight (:files (:defaults "extensions/*"))
   :init
 
-  (defhook! my--corfu-enable-in-minibuffer ()
-    minibuffer-setup-hook
-    "Enable Corfu in the minibuffer."
-    (when (local-variable-p 'completion-at-point-functions)
-      ;; Disable automatic echo and popup.
-      (setq-local corfu-echo-delay nil
-                  corfu-popupinfo-delay nil)
-      (corfu-mode +1)))
-
   (set-leader-keys!
     "t a" #'corfu-mode
     "t A" #'global-corfu-mode)
@@ -3420,24 +3417,15 @@ defeats the purpose of `corfu-prescient'."
           (funcall corfu-sort-function candidates)
         candidates)))
 
-  ;; Enable auto completion without explicit keybinding.
-  ;; (setq corfu-auto t)
-
   ;; Enable cycling for `corfu-next' and `corfu-previous'.
-  (setq corfu-cycle t)
+  (setopt corfu-cycle t)
 
   ;; Always select the prompt, rather than the valid candidate. This means that
   ;; immediate `corfu-insert' will not change the buffer.
-  (setq corfu-preselect 'prompt)
-
-  ;; Slightly lower delay for auto completion.
-  (setq corfu-auto-delay 0.1)
-
-  ;; Displays completions when you have typed two characters, instead of three.
-  (setq corfu-auto-prefix 2)
+  (setopt corfu-preselect 'prompt)
 
   ;; Sort candidates after completion backend pre-sorts them.
-  (setq corfu-sort-override-function #'my--corfu-sort)
+  (setopt corfu-sort-override-function #'my--corfu-sort)
 
   (global-corfu-mode +1)
 
@@ -3447,7 +3435,7 @@ defeats the purpose of `corfu-prescient'."
     :config
 
     ;; Show documentation string immediately.
-    (setq corfu-echo-delay 0)
+    (setopt corfu-echo-delay 0)
 
     (corfu-echo-mode +1))
 
@@ -3459,8 +3447,8 @@ defeats the purpose of `corfu-prescient'."
     :demand t
     :config
 
-    ;; Start indexing from 0.
-    (setq corfu-indexed-start 1)
+    ;; Start indexing from 1.
+    (setopt corfu-indexed-start 1)
 
     (corfu-indexed-mode +1))
 
@@ -3504,7 +3492,7 @@ defeats the purpose of `corfu-prescient'."
   :config
 
   ;; Let `orderless' filter candidates.
-  (setq corfu-prescient-enable-filtering nil)
+  (setopt corfu-prescient-enable-filtering nil)
 
   ;; Use `prescient' for Corfu menus.
   (corfu-prescient-mode +1))
@@ -4953,11 +4941,7 @@ Goto^^              Actions^^         Other^^
   (setq magit-save-repository-buffers nil)
 
   ;; Use absolute dates when showing logs.
-  (setq magit-log-margin '(t "%d-%m-%Y %H:%M " magit-log-margin-width t 18))
-
-  (transient-append-suffix
-    'magit-fetch "-t"
-    '("-u" "Unshallow" "--unshallow")))
+  (setq magit-log-margin '(t "%d-%m-%Y %H:%M " magit-log-margin-width t 18)))
 
 ;; Package 'magit-delta' integrates Delta (https://github.com/dandavison/delta)
 ;; with Magit, so that diffs in Magit are displayed with color highlighting
@@ -5388,7 +5372,7 @@ possibly new window."
     '(eldoc bar window-number matches buffer-info remote-host buffer-position
             selection-info)
     '(misc-info grip debug lsp minor-modes indent-info buffer-encoding
-                major-mode process vcs checker))
+                major-mode process vcs check))
 
   (doom-modeline-mode +1))
 
