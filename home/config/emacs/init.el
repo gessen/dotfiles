@@ -4149,9 +4149,6 @@ defeats the purpose of `corfu-prescient'."
   ;; Increase the idle time after Eglot will notify servers of any changes.
   (setq eglot-send-changes-idle-time 1.0)
 
-  ;; Disable on-type-formatting from all servers.
-  (setq eglot-ignored-server-capabilities '(:documentOnTypeFormattingProvider))
-
   ;; Disable Eglot events buffer, increase it only when debugging is needed.
   (setq eglot-events-buffer-config '(:size 0)))
 
