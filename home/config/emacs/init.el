@@ -5020,6 +5020,7 @@ current theme. This will also disable line numbers and decorations."
 ;;;; External commands
 
 (set-leader-keys! "!" (cons "shell cmd" #'shell-command))
+(set-leader-keys! "&" (cons "async shell cmd" #'async-shell-command))
 
 ;; Feature `compile' provides a way to run a shell command from Emacs and view
 ;; the output in real time, with errors and warnings highlighted and
