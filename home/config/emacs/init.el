@@ -1660,6 +1660,37 @@ window instead."
 
 ;;;; Selection
 
+(defun set-mark-command-dwim ()
+  "Call the mark command you want (Do What I Mean).
+If you call this command multiple times at the same position, it
+expands selected region.
+Else, if you move from the mark and call this command, it select
+the region rectangular.
+Else, if you move from the mark and call this command at same
+column as mark, it add cursor to each line."
+  (interactive)
+  (cond
+   ;; Region does not exist - call `set-mark-command'
+   ((not (region-active-p))
+    (setq this-command 'set-mark-command)
+    (call-interactively 'set-mark-command))
+   ;; Region exists and is a single line - call `expreg-expand'
+   ((= (line-number-at-pos) (line-number-at-pos (mark)))
+    (call-interactively 'expreg-expand))
+   ;; Region exists and is a multi line - either call `mc/edit-lines' or
+   ;; `rectangle-mark-mode'
+   (t
+    (let ((column-of-mark
+           (save-excursion
+             (goto-char (mark))
+             (current-column))))
+      (if (eq column-of-mark (current-column))
+          (call-interactively 'mc/edit-lines)
+        (call-interactively 'rectangle-mark-mode))))))
+
+;; Overwrite default `set-mark-command' with dwim version.
+(keymap-global-set "<remap> <set-mark-command>" #'set-mark-command-dwim)
+
 (set-leader-keys! "b a" #'mark-whole-buffer)
 
 ;; Package `easy-kill-extras' contains extra functions for `easy-kill' and
@@ -1667,40 +1698,16 @@ window instead."
 (use-package! easy-kill-extras
   :bind ([remap mark-word] . #'easy-mark-word))
 
-;; Package `expand-region' increases the selected region by semantic units. Just
-;; keep pressing the key until it selects what you want.
-(use-package! expand-region
-  :init
-
-  (set-leader-keys! "V" (cons "expand region" #'er/expand-region))
-
+;; Package `expreg' increases selected region by semantic units.
+(use-package! expreg
+  :bind ("C-=" . #'expreg-expand)
   :config
 
-  ;; Use subword expressions, i.e in PascalCase treat each "word" separately.
-  (setq expand-region-subword-enabled t)
-
-  :bind ("C-=" . #'er/expand-region))
-
-;; Package `smart-region' guesses what you want to select by one command:
-;;
-;; - If you call this command multiple times at the same position, it expands
-;;   the selected region (with `er/expand-region').
-;;
-;; - Else, if you move from the mark and call this command, it selects the
-;;   region rectangular (with `rectangle-mark-mode').
-;;
-;; - Else, if you move from the mark and call this command at the same column as
-;;   mark, it adds a cursor to each line (with `mc/edit-lines').
-(use-package! smart-region
-  :bind ([remap set-mark-command] . #'smart-region)
-
-  :config
-
-  ;; Revert the behaviour of `smart-region' that blacklists itself as
-  ;; `mc/cmds-to-run-once'.
-  (add-to-list 'mc/cmds-to-run-for-all 'smart-region)
-  (setq mc/cmds-to-run-once (delq 'smart-region mc/cmds-to-run-once))
-  (mc/save-lists))
+  (defvar-keymap expreg-repeat-map
+    :doc "Support Expreg based selection with repeats."
+    :repeat t
+    "="   #'expreg-expand
+    "-"   #'expreg-contract))
 
 ;;;; Multiple selection
 
@@ -1747,10 +1754,6 @@ window instead."
 
     ;; Do not litter `user-emacs-directory' with settings.
     (setq mc/list-file (expand-file-name "mc-lists.el" my-data-dir))
-
-    ;; Load settings earlier as `smart-region` saves this file before actually
-    ;; loading it. This results in constantly cleaned settings.
-    (mc/load-lists)
 
     ;; Do not leave `multiple-cursors-mode' with RET.
     (keymap-unset mc/keymap "<return>")
