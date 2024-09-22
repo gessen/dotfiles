@@ -24,7 +24,6 @@
  ("consult-ls-git" . "b1ca94f7c43cbd3811d09a0c9ab04f67f6318e95")
  ("consult-yasnippet" . "834d39acfe8a7d2c304afbe4d649b9372118c756")
  ("corfu" . "9affbbb03b4e3d03d520c5f82377057e8df8aaa9")
- ("ctrlf" . "9b4cf6c79a961f2bfbb949805aa300fcf1eb40a6")
  ("dash.el" . "1de9dcb83eacfb162b6d9a118a4770b1281bcd84")
  ("deadgrep" . "0bf2601ce1d52187b0c589657f7179de5a98dd75")
  ("dired-copy-paste" . "aefb5597e65bc1a7b771c2c82961f5a10b5f424b")
