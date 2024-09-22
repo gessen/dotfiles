@@ -902,6 +902,11 @@ window instead."
 
   :blackout t)
 
+;; Package `nerd-icons-ibuffer' provides icons for IBuffer that work in GUI
+;; and in terminal.
+(use-package! nerd-icons-ibuffer
+  :hook (ibuffer-mode-hook . nerd-icons-ibuffer-mode))
+
 ;; Package `popper' is a minor-mode to tame the flood of ephemeral windows Emacs
 ;; produces, while still keeping them within arm's reach. Designate any buffer
 ;; to "popup" status, and it will stay out of your way. Dismiss or summon it
