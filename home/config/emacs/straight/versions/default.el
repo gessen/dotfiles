@@ -137,7 +137,6 @@
  ("projectile" . "002e52769e5fda5e03fb9069ae02b2d3763c92e8")
  ("pulsar" . "e9591e2324f3ca0de1576741e2185c35aed73ff0")
  ("rainbow-delimiters" . "f40ece58df8b2f0fb6c8576b527755a552a5e763")
- ("ranger.el" . "2498519cb21dcd5791d240607a72a204d1761668")
  ("s.el" . "dda84d38fffdaf0c9b12837b504b402af910d01d")
  ("seq" . "da86da9bf111f68fb81efd466d76d53af5aebc00")
  ("shrink-path.el" . "c14882c8599aec79a6e8ef2d06454254bb3e1e41")
