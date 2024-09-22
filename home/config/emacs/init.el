@@ -2101,8 +2101,8 @@ possibly new window."
 ;; switch between various positions on the current line (particularly, to move
 ;; to the beginning/end of code, line or comment).
 (use-package! mwim
-  :bind (("C-a" . #'mwim-beginning-of-code-or-line)
-         ("C-e" . #'mwim-end-of-line-or-code)
+  :bind (("C-a" . #'mwim-beginning)
+         ("C-e" . #'mwim-end)
          ;; Not really using `forward-sentence' and `backward-sentence'.
          ("M-a" . #'mwim-beginning)
          ("M-e" . #'mwim-end)))
@@ -2286,7 +2286,7 @@ will not refresh `column-number-mode."
   (with-eval-after-load 'consult
     (add-hook 'consult-after-jump-hook #'pulsar-pulse-line))
 
-  ;; Pulse a line when jumping with `flymake' and `golden-ration-scroll-screen'.
+  ;; Pulse a line when jumping with `flymake' and `golden-ratio-scroll-screen'.
   (dolist (func '(flymake-goto-next-error
                   flymake-goto-prev-error
                   golden-ratio-scroll-screen-down
@@ -2354,43 +2354,55 @@ will not refresh `column-number-mode."
 
 ;;;; Find and replace
 
-;; Package `ctrlf' provides a replacement for `isearch' that is more similar to
-;; the tried-and-true text search interfaces in other programs.
-(use-package! ctrlf
-  :commands ctrlf-mode
-  :init
-
-  (defun ctrlf-yank-word-or-char ()
-    "Pull next character or word from buffer into search string."
-    (interactive)
-    (let ((input (field-string (point-max))) yank)
-      (when (or ctrlf--match-bounds (= (length input) 0))
-        (with-current-buffer (window-buffer (minibuffer-selected-window))
-          (setq yank (buffer-substring-no-properties
-                      (or (and ctrlf--match-bounds
-                               (cdr ctrlf--match-bounds))
-                          ctrlf--current-starting-point)
-                      (progn (forward-word) (point)))))
-        (goto-char (field-end (point-max)))
-        (insert yank))))
-
-  (ctrlf-mode +1)
-
-  :bind ( :map ctrlf-minibuffer-mode-map
-          ("C-w" . #'ctrlf-yank-word-or-char))
+;; Feature `isearch' is the principal search command in Emacs and it is
+;; incremental: it begins searching as soon as you type the first character of
+;; the search string. As you type in the search string, Emacs shows you where
+;; the string (as you have typed it so far) would be found. When you have typed
+;; enough characters to identify the place you want, you can stop. Depending on
+;; what you plan to do next, you may or may not need to terminate the search
+;; explicitly with RET.
+(use-feature! isearch
+  :bind (;; Swap literal and regexp searches
+         ("C-s"   . #'isearch-forward-regexp)
+         ("C-r"   . #'isearch-backward-regexp)
+         ("C-M-s" . #'isearch-forward)
+         ("C-M-r" . #'isearch-backward))
   :config
 
-  (defadvice! my--ctrlf-keep-position ()
-    :after #'ctrlf--finalize
-    "Restore original buffer's `window-start' just before exiting
-minibuffer. If `ctrlf-auto-recenter' is nil and the buffer is
-recentered with `recenter', after exiting minibuffer, it would
-jump to the position before `recenter' was called."
-    (set-window-start (get-buffer-window) ctrlf--final-window-start))
+  (defvar-keymap isearch-repeat-map
+    :doc "Support Isearch based navigation with repeats."
+    :repeat t
+    "s" #'isearch-repeat-forward
+    "r" #'isearch-repeat-backward
+    "l" #'recenter-top-bottom)
 
-  ;; Switch literal/regexp default keybindings to regexp/fuzzy-regexp.
-  (setq ctrlf-default-search-style 'regexp)
-  (setq ctrlf-alternate-search-style 'fuzzy-regexp))
+  ;; Show match numbers in the search prompt.
+  (setopt isearch-lazy-count t)
+
+  ;; Increase the history size for literal searches.
+  (setopt search-ring-max 100)
+
+  ;; Increase the history size for regexp searches.
+  (setopt regexp-search-ring-max 100)
+
+  ;; Allow unlimited scrolling during incremental search.
+  (setopt isearch-allow-scroll t)
+
+  ;; Allow movement between isearch matches by cursor motion commands.
+  (setopt isearch-allow-motion t)
+
+  ;; Make motion keys yank text to the search string while moving the cursor.
+  (setopt isearch-yank-on-move t)
+
+  ;; Integrate `golden-ratio-scroll-screen' with Isearch.
+  (dolist (fn '(golden-ratio-scroll-screen-down
+                golden-ratio-scroll-screen-up))
+    (put fn #'isearch-scroll t))
+
+  (put 'golden-ratio-scroll-screen-down 'isearch-motion
+       (cons (lambda () (goto-char (window-start)) (recenter -1 t)) 'backward))
+  (put 'golden-ratio-scroll-screen-up 'isearch-motion
+       (cons (lambda () (goto-char (window-end)) (recenter 0 t)) 'forward)))
 
 ;; Package `deadgrep' is the fast, beautiful text search with the help of
 ;; ripgrep.
