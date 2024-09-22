@@ -3757,6 +3757,19 @@ defeats the purpose of `corfu-prescient'."
     (setq-local completion-at-point-functions
                 (list (cape-capf-buster #'eglot-completion-at-point))))
 
+  (defun my--c-ts-mode-indent-style ()
+    "Override the built-in BSD indentation style with some additional rules."
+    `(
+      ;; Align function arguments with the offset.
+      ((match nil "argument_list") parent-bol c-ts-mode-indent-offset)
+      ;; Same for parameters.
+      ((match nil "parameter_list") parent-bol c-ts-mode-indent-offset)
+      ;; Do not indent inside namespaces.
+      ((n-p-gp nil nil "namespace_definition") grand-parent 0)
+      ;; Append to BSD style
+      ,@(alist-get 'bsd (c-ts-mode--indent-styles 'cpp))))
+  (setopt c-ts-mode-indent-style #'my--c-ts-mode-indent-style)
+
   (set-prefixes-for-major-mode! 'c++-ts-mode
     "g" "goto"
     "s" "session")
