@@ -1962,7 +1962,7 @@ possibly new window."
 ;; Open buffers visiting read-only files in `view-mode'.
 (setq view-read-only t)
 
-(set-leader-keys! "w r" #'view-mode)
+(set-leader-keys! "b v" #'view-mode)
 
 ;; Feature `bookmark' provides a way to mark places in a buffer. Some other
 ;; packages use this package
