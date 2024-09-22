@@ -1,8 +1,6 @@
 ---
 packages_asdeps:
-  - atool
   - graphviz
-  - highlight
   - hunspell
   - llvm
   - ninja
@@ -48,7 +46,6 @@ packages:
   - pacman-contrib
   - plantuml
   - qbittorrent
-  - ranger
   - reflector
   - ripgrep
   - rsync
@@ -66,6 +63,7 @@ packages:
   - ttf-nerd-fonts-symbols-mono
   - workrave
   - xdg-user-dirs
+  - yazi
   - yt-dlp
   - zoxide
   - zsh-completions
