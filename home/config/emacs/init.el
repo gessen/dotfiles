@@ -5428,7 +5428,7 @@ possibly new window."
                                            "*straight"
                                            "*temp"
                                            "*tramp"
-                                           "*which"))
+                                           " *which"))
 
   ;; Change tabs style to have a bit of border between tabs.
   (setopt centaur-tabs-style "alternate")
