@@ -2766,14 +2766,19 @@ Spell Commands^^            Add To Dictionary^^               Other^^
 
   (defvar-keymap surround-map
     :doc "Keymap for all interactive `surround' commands."
-    "c" #'surround-change
-    "d" #'surround-delete
-    "i" #'surround-insert
-    "k" #'surround-kill
-    "m" #'surround-mark)
+    "c"   #'surround-change
+    "d"   #'surround-delete
+    "i"   #'surround-insert
+    "k"   #'surround-kill
+    "K"   #'surround-kill-outer
+    "m"   #'surround-mark
+    "M"   #'surround-mark-outer
+    "["   #'surround-mark
+    "]"   #'surround-mark-outer
+    "M-[" #'surround-mark
+    "M-]" #'surround-mark-outer)
 
-  (keymap-global-set "M-=" surround-map)
-  (keymap-global-set "C-," surround-map))
+  (keymap-global-set "M-[" surround-map))
 
 ;;;; Snippet expansion
 
