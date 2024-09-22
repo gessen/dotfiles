@@ -6,6 +6,7 @@
  ("avy" . "be612110cb116a38b8603df367942e2bb3d9bdbe")
  ("beginend" . "26d6142ceaf7c58705281852410b61ddc0d780ee")
  ("blackout" . "7707211370f03f03a2f74df15f42ac24a1e99300")
+ ("breadcrumb" . "6273c633c0ff6dba083278ddc5da6b0e7b25f7b1")
  ("browse-at-remote" . "76aa27dfd469fcae75ed7031bb73830831aaccbf")
  ("cape" . "a687fbeddc0f1dcdc7e4c2d2a69c96243587317d")
  ("centaur-tabs" . "0bb1aa18d475319df85f192dce3327802866c3c3")

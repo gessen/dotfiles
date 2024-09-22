@@ -3329,6 +3329,14 @@ completing-read prompter."
   :hook (eval-expression-minibuffer-setup-hook . eldoc-mode)
   :blackout t)
 
+;; Package `breadcrumb' provide `project' and `imenu'-based breadcrumb paths
+;; displayed either on header line or mode line.
+(use-package! breadcrumb
+  :demand t
+  :config
+
+  (breadcrumb-mode +1))
+
 ;;;; Autocompletion
 
 ;; Enable indentation and completion using the TAB key. `completion-at-point' is
