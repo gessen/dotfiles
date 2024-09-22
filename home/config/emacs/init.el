@@ -296,6 +296,7 @@ NAME and ARGS are as in `use-package'."
   "w" `("windows" . ,(make-sparse-keymap))
   "x" `("text" . ,(make-sparse-keymap))
   "z" `("zoom" . ,(make-sparse-keymap))
+  "p m" `("manage" . ,(make-sparse-keymap))
   "t h" `("highlight" . ,(make-sparse-keymap)))
 
 (defconst my-leader-key "M-m"
@@ -769,19 +770,6 @@ window instead."
 
   :bind ([remap list-buffers] . #'ibuffer-other-window))
 
-;; Package `ibuffer-projectile' adds functionality to `ibuffer' for grouping
-;; buffers by their Projectile root directory.
-(use-package! ibuffer-projectile
-  :init
-
-  (defhook! my--ibuffer-group-by-projects ()
-    ibuffer-hook
-    "Group buffers by projects."
-    (ibuffer-projectile-set-filter-groups)
-    (ibuffer-projectile-set-filter-groups)
-    (unless (eq ibuffer-sorting-mode 'alphabetic)
-      (ibuffer-do-sort-by-alphabetic))))
-
 ;; Feature `windmove' provides keybindings S-left, S-right, S-up, and S-down to
 ;; move between windows. This is much more convenient and efficient than using
 ;; the default binding, C-x o, to cycle through all of them in an essentially
@@ -902,6 +890,22 @@ window instead."
 
   :blackout t)
 
+;; Package `ibuffer-project' provides IBuffer filtering and sorting functions to
+;; group buffers by function or regexp applied to `default-directory'. By
+;; default buffers are grouped by `project-current' or by `default-directory'.
+(use-package! ibuffer-project
+  :init
+
+  (defhook! my--ibuffer-group-by-projects ()
+    ibuffer-hook
+    "Group buffers by projects."
+    (setq ibuffer-filter-groups (ibuffer-project-generate-filter-groups)))
+
+  :config
+
+  ;; Avoid calculating project root each time by caching it.
+  (setopt ibuffer-project-use-cache t))
+
 ;; Package `nerd-icons-ibuffer' provides icons for IBuffer that work in GUI
 ;; and in terminal.
 (use-package! nerd-icons-ibuffer
@@ -914,7 +918,6 @@ window instead."
 ;; relevant to your current buffer. Useful for many things, including toggling
 ;; display of REPLs, documentation, compilation or shell output, etc.
 (use-package! popper
-  :after projectile
   :init
 
   ;; Treat help, compilation and terminal modes as popups.
@@ -941,8 +944,8 @@ window instead."
 
   :config
 
-  ;; Group popups by projectile buffers.
-  (setq popper-group-function 'popper-group-by-projectile))
+  ;; Group popups by project.el buffers.
+  (setq popper-group-function 'popper-group-by-project))
 
 ;; Package `winum' helps with navigating windows and frames using numbers. It is
 ;; an extended and actively maintained version of the `window-numbering'
@@ -1012,7 +1015,6 @@ window instead."
           (delete-file filename)
           (kill-buffer)
           (recentf-remove-if-non-kept filename)
-          (call-interactively #'projectile-invalidate-cache)
           (message "File '%s' deleted" filename)))))
 
 (defun open-in-external-app ()
@@ -1091,15 +1093,82 @@ window instead."
     (interactive)
     (set-buffer-file-coding-system 'undecided-dos nil)))
 
-;; Feature `project' provides simple operations on the current project. We use
-;; `projectile' instead as it provides more functionality, but `project' may
-;; still be used by some packages, although `projectile' is integrated into
-;; `project' via the `project-find-functions' hook.
+;; Feature `project' provides simple operations on the current project. It
+;; contains generic infrastructure for dealing with projects, some utility
+;; functions, and commands using that infrastructure. The goal is to make it
+;; easier for Lisp programs to operate on the current project, without having to
+;; know which package handles detection of that project type, parsing its config
+;; files, etc.
 (use-feature! project
   :config
 
+  (defun project-vterm ()
+    "Start Vterm in the current project's root directory.
+If a buffer already exists for running Vterm in the project's
+root, switch to it. Otherwise, create a new vterm buffer."
+    (interactive)
+    (let ((default-directory (project-root (project-current t))))
+      (vterm)))
+
+  ;; Mark C++-based projects without any supported version control as projects.
+  (setopt project-vc-extra-root-markers '("compile_commands.json"
+                                          ".dir-locals.el"))
+
+  ;; Use `ibuffer' for `project-list-buffers'.
+  (setopt project-buffers-viewer 'project-list-buffers-ibuffer)
+
+  ;; Show list of buffers to kill before killing project buffers.
+  (setopt project-kill-buffers-display-buffer-list t)
+
+  ;; Prefix compilation buffers with project name.
+  (setopt project-compilation-buffer-name-function
+          #'project-prefixed-buffer-name)
+
+  ;; Include Dired, Magit and Vterm.
+  (setopt project-switch-commands
+          '((project-find-file "Find file" ?f)
+            (project-find-regexp "Find regexp" ?g)
+            (project-find-dir "Find directory" ?d)
+            (project-dired "Dired" ?D)
+            (magit-project-status "Magit" ?m)
+            (project-vc-dir "VC-Dir" ?v)
+            (project-vterm "Term" ?s)
+            (project-eshell "Eshell" ?e)
+            (project-any-command "Other" ?o)))
+
   ;; Do not litter `user-emacs-directory' with Project persistent history.
-  (setq project-list-file (expand-file-name "projects" my-cache-dir)))
+  (setopt project-list-file (expand-file-name "projects.el" my-cache-dir))
+
+  (set-leader-keys!
+    "p !" #'project-shell-command
+    "p %" #'project-query-replace-regexp
+    "p &" #'project-async-shell-command
+    "p /" #'project-search
+    "p b" #'project-switch-to-buffer
+    "p B" #'project-display-buffer
+    "p c" #'project-compile
+    "p C" #'project-recompile ;; r?
+    "p d" #'project-find-dir
+    "p D" #'project-dired
+    "p e" #'project-eshell
+    "p f" #'project-find-file
+    "p F" #'project-or-external-find-file
+    "p g" #'project-find-regexp
+    "p G" #'project-or-external-find-regexp
+    "p k" #'project-kill-buffers
+    "p l" #'project-list-buffers
+    "p o" #'project-any-command
+    "p p" #'project-switch-project
+    "p s" #'project-vterm
+    "p v" #'project-vc-dir
+    "p x" #'project-execute-extended-command
+
+    "p m f" #'project-forget-project
+    "p m F" #'project-forget-projects-under
+    "p m z" #'project-forget-zombie-projects
+    "p m r" #'project-remember-projects-under
+
+    "F p" #'project-display-buffer-other-frame))
 
 ;; Feature `recentf' maintains a menu for visiting files that were operated on
 ;; recently. The recent files list is automatically saved across Emacs sessions.
@@ -1187,8 +1256,7 @@ window instead."
 
 ;; Package `consult-dir' implements commands to easily switch between "active"
 ;; directories. The directory candidates are collected from user bookmarks,
-;; projectile project roots (if available), project.el project roots and recentf
-;; file locations.
+;; project.el project roots and recentf file locations.
 (use-package! consult-dir
   :after vertico
   :init
@@ -1218,97 +1286,7 @@ window instead."
   (add-to-list 'consult-dir-sources 'consult-dir--source-fasd t)
 
   ;; Use `consult-fd' for finding.
-  (setopt consult-dir-jump-file-command 'consult-fd)
-
-  ;; Use projectile backend.
-  (setopt consult-dir-project-list-function #'consult-dir-projectile-dirs))
-
-;; Package `projectile' keeps track of a "project" list, which is automatically
-;; added to as you visit Git repositories, Node.js projects, etc. It then
-;; provides commands for quickly navigating between and within these projects.
-(use-package! projectile
-  :defer 1
-  :commands (projectile-register-project-type)
-  :init
-
-  (set-leader-keys!
-    "p !" #'projectile-run-shell-command-in-root
-    "p &" #'projectile-run-async-shell-command-in-root
-    "p %" #'projectile-replace-regexp
-    "p ?" #'projectile-find-references
-    "p a" #'projectile-toggle-between-implementation-and-test
-    "p b" #'projectile-switch-to-buffer
-    "p c" #'projectile-compile-project
-    "p C" #'projectile-configure-project
-    "p d" #'projectile-find-dir
-    "p D" #'projectile-dired
-    "p e" #'projectile-edit-dir-locals
-    "p f" #'projectile-find-file
-    "p F" #'projectile-find-file-in-known-projects
-    "p g" #'projectile-grep
-    "p i" #'projectile-install-project
-    "p I" #'projectile-invalidate-cache
-    "p k" #'projectile-kill-buffers
-    "p p" #'projectile-switch-project
-    "p P" #'projectile-package-project
-    "p r" #'projectile-recentf
-    "p R" #'projectile-replace
-    "p s" #'projectile-run-vterm
-    "p t" #'projectile-test-project)
-
-  :config
-
-  ;; When switching projects, give the option to choose what to do. This is a
-  ;; way better interface than having to remember ahead of time to use a prefix
-  ;; argument on `projectile-switch-project'.
-  (setq projectile-switch-project-action 'projectile-commander)
-
-  ;; Use Vertico via `completing-read'.
-  (setq projectile-completion-system 'default)
-
-  ;; Sort files by recently active buffers first, then recently opened files.
-  (setq projectile-sort-order 'recently-active)
-
-  ;; Use git-grep underhood `projectile-grep' when possible.
-  (setq projectile-use-git-grep t)
-
-  ;; Do not litter `user-emacs-directory' with projectile persistent files.
-  (setq projectile-cache-file (expand-file-name "projectile.el" my-cache-dir)
-        projectile-known-projects-file (expand-file-name
-                                        "projectile-bookmarks.el"
-                                        my-cache-dir))
-
-  ;; Ignore `straight' repos when opening them.
-  (setq projectile-ignored-projects (list (expand-file-name
-                                           "straight/"
-                                           user-emacs-directory)))
-
-  ;; Register CMake project type.
-  (projectile-register-project-type
-   'cmake '("CMakeLists.txt")
-   :project-file "CMakeLists.txt"
-   :compilation-dir "build"
-   :configure (string-join '("cmake %s -B%s"
-                             "-DCMAKE_INSTALL_PREFIX=/usr") " ")
-   :compile "cmake --build ."
-   :test "cmake --build . && ctest --output-on-failure"
-   :install "cmake --build . --target install"
-   :package "cmake --build . --target package")
-
-  ;; Register meson project type.
-  (projectile-register-project-type
-   'meson '("meson.build")
-   :project-file "meson.build"
-   :compilation-dir "build"
-   :configure "meson setup %s --prefix=/usr"
-   :compile "meson compile"
-   :test "meson test"
-   :install "meson install"
-   :package "meson dist")
-
-  (projectile-mode +1)
-
-  :blackout t)
+  (setopt consult-dir-jump-file-command 'consult-fd))
 
 ;; Package `sudo-edit' allows to open files as another user, by default "root".
 (use-package! sudo-edit
@@ -1346,6 +1324,10 @@ window instead."
                                           "treemacs-last-error-persist.el"
                                           my-cache-dir))
 
+  (set-leader-keys!
+    "p m a" #'treemacs-add-and-display-current-project-exclusively
+    "p m A" #'treemacs-add-and-display-current-project)
+
   :bind ("M-0" . #'treemacs-select-window)
 
   :config
@@ -1361,12 +1343,7 @@ window instead."
 
   (with-eval-after-load 'ace-window
     ;; Let `ace-window' consider treemacs as normal window.
-    (setq aw-ignored-buffers (delq 'treemacs-mode aw-ignored-buffers)))
-
-  (with-eval-after-load 'projectile
-    ;; Force loading `treemacs-projectile' package if `treemacs' wasn't loaded
-    ;; by it via `treemacs-projectile' function.
-    (require 'treemacs-projectile)))
+    (setq aw-ignored-buffers (delq 'treemacs-mode aw-ignored-buffers))))
 
 ;; Package `treemacs-nerd-icons' provides icons for Treemacs that work in GUI
 ;; and in terminal.
@@ -1376,12 +1353,6 @@ window instead."
   :config
 
   (treemacs-load-theme "nerd-icons"))
-
-;; Package `treemacs-projectile' brings Projectile integration for Treemacs.
-(use-package! treemacs-projectile
-  :init
-
-  (set-leader-keys! "p T" #'treemacs-projectile))
 
 ;;; Saving files
 
@@ -3058,11 +3029,7 @@ point. "
    consult-bookmark consult-recent-file
    consult--source-bookmark consult--source-recent-file
    consult--source-project-recent-file
-   :preview-key "M-.")
-
-  ;; Configure a function which returns the project root directory
-  (with-eval-after-load 'projectile
-    (setq consult-project-function (lambda (_) (projectile-project-root)))))
+   :preview-key "M-."))
 
 ;; Package `embark' provides a sort of right-click contextual menu for Emacs,
 ;; accessed through the `embark-act' command (which you should bind to a
@@ -3762,14 +3729,8 @@ defeats the purpose of `corfu-prescient'."
     (setq-local completion-at-point-functions
                 (list (cape-capf-buster #'eglot-completion-at-point))))
 
-  (set-prefixes-for-major-mode! 'c-ts-mode
-    "g" "goto"
-    "s" "session")
-
-  (set-leader-keys-for-major-mode! 'c-ts-mode
-    "g a" #'projectile-find-other-file
-    "g A" #'projectile-find-other-file-other-window
-    "s s" #'eglot)
+  (set-prefixes-for-major-mode! 'c-ts-mode "s" "session")
+  (set-leader-keys-for-major-mode! 'c-ts-mode "s s" #'eglot)
 
   ;; Launch tree-sitter version of `c-mode' instead.
   (push '(c-mode . c-ts-mode) major-mode-remap-alist))
@@ -3802,14 +3763,8 @@ defeats the purpose of `corfu-prescient'."
       ,@(alist-get 'bsd (c-ts-mode--indent-styles 'cpp))))
   (setopt c-ts-mode-indent-style #'my--c-ts-mode-indent-style)
 
-  (set-prefixes-for-major-mode! 'c++-ts-mode
-    "g" "goto"
-    "s" "session")
-
-  (set-leader-keys-for-major-mode! 'c++-ts-mode
-    "g a" #'projectile-find-other-file
-    "g A" #'projectile-find-other-file-other-window
-    "s s" #'eglot)
+  (set-prefixes-for-major-mode! 'c++-ts-mode "s" "session")
+  (set-leader-keys-for-major-mode! 'c++-ts-mode "s s" #'eglot)
 
   ;; Launch tree-sitter version of `c++-mode' instead.
   (push '(c++-mode . c++-ts-mode) major-mode-remap-alist)
@@ -4742,16 +4697,6 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
 
 ;;;; Version control
 
-;; Feature `vc-hooks' provides hooks for the Emacs VC package. We don't use VC,
-;; because Magit is superior in pretty much every way.
-(use-feature! vc-hooks
-  :config
-
-  ;; Disable VC. This improves performance and disables some annoying warning
-  ;; messages and prompts, especially regarding symlinks. See
-  ;; <https://stackoverflow.com/a/6190338/3538165>.
-  (setq vc-handled-backends nil))
-
 ;; Package `browse-at-remote' easily opens target page on github/gitlab (or
 ;; bitbucket) from Emacs by calling `browse-at-remote` function. Support Dired
 ;; buffers and opens them in tree mode at destination.
@@ -5031,6 +4976,15 @@ current theme. This will also disable line numbers and decorations."
   (transient-bind-q-to-quit))
 
 ;;;; Terminal emulator
+
+;; Feature `eshell' is a shell-like command interpreter implemented in Emacs
+;; Lisp. It invokes no external processes except for those requested by the
+;; user.
+(use-feature! eshell
+  :config
+
+  ;; Do not litter `user-emacs-directory' with Eshell data.
+  (setopt eshell-directory-name (expand-file-name "eshell" my-cache-dir)))
 
 ;; Package `vterm' is fully-fledged terminal emulator based on an external
 ;; library (libvterm) loaded as a dynamic module. As a result of using compiled
@@ -5456,54 +5410,51 @@ possibly new window."
   :init
 
   ;; Display an icon from `nerd-icons' alongside the tab name.
-  (setq centaur-tabs-set-icons t)
+  (setopt centaur-tabs-set-icons t)
 
   :config
 
   ;; Customise which buffers are hidden.
-  (setq centaur-tabs-excluded-prefixes '("*Async-native-compile-log"
-                                         "*Compile-Log*"
-                                         "*ediff"
-                                         "*Ediff"
-                                         "*Flymake"
-                                         "*help"
-                                         "*Help"
-                                         "*helpful"
-                                         "*Mini"
-                                         "*straight"
-                                         "*temp"
-                                         "*tramp"
-                                         "*which"))
+  (setopt centaur-tabs-excluded-prefixes '("*Async-native-compile-log"
+                                           "*Compile-Log*"
+                                           "*ediff"
+                                           "*Ediff"
+                                           "*Flymake"
+                                           "*help"
+                                           "*Help"
+                                           "*helpful"
+                                           "*Mini"
+                                           "*straight"
+                                           "*temp"
+                                           "*tramp"
+                                           "*which"))
 
   ;; Change tabs style to have a bit of border between tabs.
-  (setq centaur-tabs-style "alternate")
+  (setopt centaur-tabs-style "alternate")
 
   ;; Increase the height by about 50%.
-  (setq centaur-tabs-height 32)
+  (setopt centaur-tabs-height 32)
 
   ;; Display a marker when the buffer is modified.
-  (setq centaur-tabs-set-modified-marker t)
+  (setopt centaur-tabs-set-modified-marker t)
 
   ;; Display the bar under the currently selected tab.
-  (setq centaur-tabs-set-bar 'under)
+  (setopt centaur-tabs-set-bar 'under)
 
   ;; Show the buttons for backward/forward tabs.
-  (setq centaur-tabs-show-navigation-buttons t)
+  (setopt centaur-tabs-show-navigation-buttons t)
 
   ;; Gray out icons for unselected buffers.
-  (setq centaur-tabs-gray-out-icons 'buffer)
+  (setopt centaur-tabs-gray-out-icons 'buffer)
 
   ;; Add a count of the current tab position in the total number of tabs in the
   ;; current window
-  (setq centaur-tabs-show-count t)
+  (setopt centaur-tabs-show-count t)
 
   ;; Draw the underline at the same place as the descent line.
-  (setq x-underline-at-descent-line t)
+  (setopt x-underline-at-descent-line t)
 
   (centaur-tabs-mode +1)
-
-  ;; Group tabs by `projectile' project.
-  (centaur-tabs-group-by-projectile-project)
 
   ;; Make the headline face match the centaur-tabs-default face. This makes the
   ;; tab bar have an uniform appearance
