@@ -4174,10 +4174,13 @@ defeats the purpose of `corfu-prescient'."
     "t i" #'eglot-inlay-hints-mode)
 
   ;; Increase the idle time after Eglot will notify servers of any changes.
-  (setq eglot-send-changes-idle-time 1.0)
+  (setopt eglot-send-changes-idle-time 1.0)
+
+  ;; Activate Eglot in referenced non-project files.
+  (setopt eglot-extend-to-xref t)
 
   ;; Disable Eglot events buffer, increase it only when debugging is needed.
-  (setq eglot-events-buffer-config '(:size 0)))
+  (setopt eglot-events-buffer-config '(:size 0)))
 
 ;; Package `eglot-booster' enables Eglot to use emacs-lsp-booster which is a
 ;; rust-based wrapper program which substantially speeds up Emacs interactions
