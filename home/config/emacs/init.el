@@ -2736,19 +2736,6 @@ Spell Commands^^            Add To Dictionary^^               Other^^
 ;; instead.
 (electric-pair-mode +1)
 
-;; Package `embrace' modifies pairs based on `expand-region'. It's heavily
-;; inspired by `evil-surround' but instead of using `evil' and its text objects,
-;; this package relies on another package `expand-region'.
-(use-package! embrace
-  :bind ("M-+" . #'embrace-commander)
-  :config
-
-  (defun embrace-buffer-p ()
-    "Check whether the visible buffer is a part of `embrace'."
-    (and (get-buffer "*embrace-help*")
-         (get-buffer-window "*embrace-help*" 'visible)))
-  (push 'embrace-buffer-p golden-ratio-inhibit-functions))
-
 ;; Package `surround' inserts, changes, deletes and marks surrounding pairs of
 ;; quotes, braces, etc.
 (use-package! surround

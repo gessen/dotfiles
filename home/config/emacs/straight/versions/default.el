@@ -58,7 +58,6 @@
  ("emacs-winum" . "c5455e866e8a5f7eab6a7263e2057aff5f1118b9")
  ("emacsmirror-mirror" . "832ccb6f3c511152a003b8b3ceab11bf22920d7b")
  ("embark" . "718f0f293440b2d5e951c6c4a88ee548180af016")
- ("embrace.el" . "c7e748603151d7d91c237fd2d9cdf56e9f3b1ea8")
  ("esup" . "4b49c8d599d4cc0fbf994e9e54a9c78e5ab62a5f")
  ("expand-region.el" . "541d971f7c77ca5c0f66c88bcbfeb0d165883023")
  ("external-completion" . "69f06e1eff72df60bb10153169edc859f27f58f2")
