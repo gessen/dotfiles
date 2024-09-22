@@ -4686,41 +4686,6 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
   :hook (dired-mode-hook . nerd-icons-dired-mode)
   :blackout t)
 
-;;;;; Ranger
-
-;; Package `ranger' is a derived major mode that runs within Dired emulating
-;; many of the features of ranger <https://github.com/hut/ranger>. This minor
-;; mode shows a stack of the parent directories and updates the parent buffers
-;; while navigating the file system. The preview window takes some of the ideas
-;; from Peep-Dired <https://github.com/asok/peep-dired> to display previews for
-;; selected files in the primary dired buffer. This package tries its best to
-;; make a seamless user experience from ranger created for python.
-(use-package! ranger
-  :commands (deer-jump-other-window
-             ranger-up-directory)
-
-  :init
-
-  ;; Remove `C-p' key binding that switches from `dired-mode' to `deer-mode'.
-  (remove-hook 'dired-mode-hook 'ranger-set-dired-key)
-
-  ;; We define it to satisfy byte-compiler - this does not work with :defines
-  ;; as it has to be defined as nil
-  (defvar ranger-was-ranger nil)
-
-  (set-leader-keys!
-    "a r" #'ranger
-    "a R" #'deer
-    "j r" #'deer
-    "j R" #'deer-jump-other-window)
-
-  :bind ( :map ranger-mode-map
-          ("-" . #'ranger-up-directory))
-
-  :config
-  (with-eval-after-load 'golden-ratio
-    (push "ranger-mode" golden-ratio-exclude-modes)))
-
 ;;;; Processes
 
 (set-leader-keys! "a p" #'list-processes)
