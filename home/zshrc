@@ -196,7 +196,7 @@ bindkey "^[^H" run-help
 bindkey "^[H" backward-kill-word
 bindkey "^[h" backward-kill-word
 
-# Edit the current command line in $EDITOR with [C-x C-c].
+# Edit the current command line in $EDITOR with [C-x C-e].
 autoload -U edit-command-line
 zle -N edit-command-line
 bindkey "^X^E" edit-command-line
@@ -309,24 +309,15 @@ elif ((RANDOM % 10 == 0)); then
   zoxide import --from=z "${_FASD_DATA}"
 fi
 
-### Ranger
+### Yazi
 
-# Allows ranger to change cwd either normally or with in new window or pane if
-# inside tmux.
-function ranger() {
+# Allows yazi to change cwd.
+function ya() {
   local tempfile
   local IFS=$'\t\n'
-  tempfile="$(mktemp -t ranger-cwd.XXXXXX)"
-  local ranger_cmd=(
-    command
-    ranger
-    --cmd="map Qq chain shell echo %d > ${tempfile}; quitall"
-    --cmd="map Qs chain shell echo %d > ${tempfile}; shell tmux split-window -h"
-    --cmd="map Qv chain shell echo %d > ${tempfile}; shell tmux split-window -v"
-    --cmd="map Qw chain shell echo %d > ${tempfile}; shell tmux new-window"
-  )
+  tempfile="$(mktemp -t yazi-cwd.XXXXX)"
 
-  "${ranger_cmd[@]}" "$@"
+  yazi "$@" --cwd-file="${tempfile}"
   if cwd="$(cat -- "${tempfile}")" \
     && [[ -n "${cwd}" ]] \
     && [[ "${cwd}" != "${PWD}" ]]; then
@@ -334,6 +325,20 @@ function ranger() {
   fi
   command rm -f -- "${tempfile}" 2> /dev/null
 }
+
+# Bind [M-y] to yazi.
+function ya-widget() {
+  ya
+
+  local fn
+	for fn (chpwd $chpwd_functions precmd $precmd_functions); do
+		(( $+functions[$fn] )) && $fn
+	done
+	zle reset-prompt
+}
+
+zle -N ya-widget
+bindkey "^[y" ya-widget
 
 ## Paging
 
