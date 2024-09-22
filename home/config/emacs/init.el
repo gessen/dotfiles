@@ -2895,6 +2895,12 @@ Spell Commands^^            Add To Dictionary^^               Other^^
   ;; Disable default keymap with TAB expansion.
   (setq yas-minor-mode-map (make-sparse-keymap))
 
+  ;; Save yasnippets in persistent location outside `user-emacs-directory'.
+  (let ((yas-snippet-dir (expand-file-name "snippets" my-data-dir)))
+    (unless (file-directory-p yas-snippet-dir)
+      (make-directory yas-snippet-dir t))
+    (setopt yas-snippet-dirs (list yas-snippet-dir)))
+
   :config
 
   (defadvice! my--yas-reload-all-inhibit-messages
@@ -2911,18 +2917,12 @@ Spell Commands^^            Add To Dictionary^^               Other^^
 
   ;; Allow stacked expansions (snippets inside snippets). Otherwise
   ;; ‘yas-next-field-or-maybe-expand’ just moves on to the next field
-  (setq yas-triggers-in-field t)
+  (setopt yas-triggers-in-field t)
 
   ;; Insert region contents when selected as snippet's $0 field.
-  (setq yas-wrap-around-region t)
+  (setopt yas-wrap-around-region t)
 
-  ;; Save yasnippets in persistent location outside `user-emacs-directory'.
-  (let ((yas-snippet-dir (expand-file-name "snippets" my-data-dir)))
-    (unless (file-directory-p yas-snippet-dir)
-      (make-directory yas-snippet-dir t))
-    (setq yas-snippet-dirs (list yas-snippet-dir)))
-
-  ;; Enale snippets everywhere
+  ;; Enable snippets everywhere
   (yas-global-mode +1)
 
   :blackout (yas-minor-mode . t))
