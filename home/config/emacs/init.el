@@ -4620,6 +4620,19 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
           ("C-c C-c" . #'dired-copy-paste-do-copy)
           ("C-c C-y" . #'dired-copy-paste-do-paste)))
 
+;; Package `dired-hist' is a minor mode for Emacs that keeps track of visited
+;; dired buffers and lets you go back and forwards across them. This is similar
+;; to the facility provided in other Emacs major modes, such as Info, help and
+;; EWW.
+(use-package! dired-hist
+  :after dired
+  :commands (dired-hist-go-back
+             dired-hist-go-forward)
+  :hook (dired-mode-hook . dired-hist-mode)
+  :bind ( :map dired-mode-map
+          ("l" . #'dired-hist-go-back)
+          ("r" . #'dired-hist-go-forward)))
+
 ;; Package `dired-subtree' defines function `dired-subtree-insert' which inserts
 ;; the subdirectory directly below its line in the original listing, and indents
 ;; the listing of subdirectory to resemble a tree-like structure. The tree

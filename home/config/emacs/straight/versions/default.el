@@ -29,6 +29,7 @@
  ("deadgrep" . "0bf2601ce1d52187b0c589657f7179de5a98dd75")
  ("dired-copy-paste" . "aefb5597e65bc1a7b771c2c82961f5a10b5f424b")
  ("dired-hacks" . "e9e408e8571aee5574ca0a431ef15cac5a3585d4")
+ ("dired-hist" . "bcbfa60e2de0d86a38740d72bea7e4f25ccc35c8")
  ("diredfl" . "bca8f0f7b3e9e46b9c7692275ced8c1d59e0d208")
  ("doom-modeline" . "a69f02d4e3733a3e0773c6a725eb09ecd646eaa3")
  ("drag-stuff.el" . "6d06d846cd37c052d79acd0f372c13006aa7e7c8")
