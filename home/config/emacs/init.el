@@ -5471,6 +5471,14 @@ possibly new window."
     "T p" #'centaur-tabs-backward
     "T P" #'centaur-tabs-backward-group)
 
+  (defvar-keymap centaur-tabs-repeat-map
+    :doc "Support Centaur Tabs based navigation with repeats."
+    :repeat t
+    "n" #'centaur-tabs-forward
+    "N" #'centaur-tabs-forward-group
+    "p" #'centaur-tabs-backward
+    "P" #'centaur-tabs-backward-group)
+
   :bind ( :map centaur-tabs-mode-map
           ("C-<prior>" . #'centaur-tabs-backward)
           ("C-<next>"  . #'centaur-tabs-forward)
