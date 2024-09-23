@@ -1794,69 +1794,6 @@ column as mark, it add cursor to each line."
     "s r x" #'clear-rectangle
     "s r y" #'yank-rectangle))
 
-;;;; Folding
-
-;; Package `origami' is a text folding minor mode for Emacs. With this minor
-;; mode enabled, you can collapse and expand regions of text. The actual buffer
-;; contents are never changed in any way. This works by using overlays to affect
-;; how the buffer is presented. This also means that all of your usual editing
-;; commands should work with folded regions. For example killing and yanking
-;; folded text works as you would expect. There are many commands provided to
-;; make expanding and collapsing text convenient.
-(use-package! origami
-  :commands (origami-close-all-nodes
-             origami-close-node
-             origami-close-node-recursively
-             origami-forward-toggle-node
-             origami-open-all-nodes
-             origami-open-node
-             origami-open-node-recursively
-             origami-next-fold
-             origami-previous-fold
-             origami-recursively-toggle-node
-             origami-show-only-node
-             origami-redo
-             origami-reset
-             origami-toggle-all-nodes
-             origami-undo)
-  :init
-
-  (defhydra hydra-origami (:color pink :hint nil)
-    "
-Close^^           Open^^            Toggle^^         Goto^^         Other^^
------^^---------- ----^^----------- ------^^-------- ----^^-------- -----^^---------
-[_c_] at point    [_o_] at point    [_a_] at point   [_n_] next     [_s_] single out
-[_C_] recursively [_O_] recursively [_A_] all        [_p_] previous [_R_] reset
-[_m_] all         [_r_] all         [_TAB_] like org ^^             [_q_] quit
-"
-    ("a" origami-forward-toggle-node)
-    ("A" origami-toggle-all-nodes)
-    ("c" origami-close-node)
-    ("C" origami-close-node-recursively)
-    ("o" origami-open-node)
-    ("O" origami-open-node-recursively)
-    ("r" origami-open-all-nodes)
-    ("m" origami-close-all-nodes)
-    ("n" origami-next-fold)
-    ("p" origami-previous-fold)
-    ("s" origami-show-only-node)
-    ("<tab>" origami-recursively-toggle-node)
-    ("TAB" origami-recursively-toggle-node)
-    ("u" origami-undo)
-    ("d" origami-redo)
-    ("R" origami-reset)
-    ("q" nil :exit t)
-    ("C-g" nil :exit t))
-
-  (set-leader-keys! "l" (cons "fold" #'hydra-origami/body))
-
-  :hook (prog-mode-hook . origami-mode)
-
-  :config
-
-  ;; Highlight the line the fold start on.
-  (setq origami-show-fold-header t))
-
 ;;;; Undo/redo
 
 (set-leader-keys!

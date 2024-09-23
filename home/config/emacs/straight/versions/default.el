@@ -117,7 +117,6 @@
  ("org-modern" . "bb048dcbcaae19762f0c1097d27027695512fb7b")
  ("org-reveal" . "f55c851bf6aeb1bb2a7f6cf0f2b7bd0e79c4a5a0")
  ("org-sticky-header" . "697875935b04b25c8229b9155a1ea0cab3ebe629")
- ("origami.el" . "e558710a975e8511b9386edc81cd6bdd0a5bda74")
  ("ox-pandoc" . "34e6ea97b586e20529d07158a73af3cf33cdd1d5")
  ("package-lint" . "18fd746ff95847b063aa466edbff881756efa331")
  ("parent-mode" . "fbd49857ab2e4cd0c5611c0cc83f93711657b298")
