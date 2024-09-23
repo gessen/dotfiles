@@ -1,0 +1,21 @@
+gui:
+  scrollHeight: 10
+  mouseEvents: false
+  nerdFontsVersion: "3"
+
+git:
+  paging:
+    colorArg: always
+    externalDiffCommand: "difft --color=always"
+
+os:
+  edit: "emacsclient --tty {{filename}}"
+  editAtLine: "emacsclient --tty +{{line}} {{filename}}"
+
+disableStartupPopups: true
+promptToReturnFromSubprocess: false
+
+keybinding:
+  universal:
+    nextScreenMode: "="
+    prevScreenMode: "-"

@@ -18,13 +18,13 @@ dotfiles:
   - config/keepassxc/keepassxc.ini
   - config/kitty/kitty.conf
   - config/kitty/themes
+  - config/lazygit/config.yml
   - config/lsd/config.yaml
   - config/mpv/input.conf
   - config/mpv/mpv.conf
   - config/ripgrep/config
   - config/sccache/config
   - config/sheldon/plugins.toml
-  - config/tig/config
   - config/tmux/tmux.conf
   - config/yazi/yazi.toml
   - local/share/cargo/config.toml
@@ -34,4 +34,3 @@ dotfiles:
 
 dotdirs:
   - local/share/gdb
-  - local/share/tig

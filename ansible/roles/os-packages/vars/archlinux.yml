@@ -36,6 +36,7 @@ packages:
   - hunspell-pl
   - keepassxc
   - kitty
+  - lazygit
   - libvterm
   - lld
   - lsd
@@ -55,7 +56,6 @@ packages:
   - sheldon
   - shfmt
   - signal-desktop
-  - tig
   - tmux
   - tree
   - ttf-jetbrains-mono

@@ -850,7 +850,23 @@ alias gwtls='git worktree list'
 alias gwtmv='git worktree move'
 alias gwtrm='git worktree remove'
 
-alias tia='tig --all'
+## Lazygit
+
+alias lgit='lazygit'
+alias lg='lazygit log'
+
+function lazygit-widget() {
+  lazygit log
+
+  local fn
+	for fn (chpwd $chpwd_functions precmd $precmd_functions); do
+		(( $+functions[$fn] )) && $fn
+	done
+	zle reset-prompt
+}
+
+zle -N lazygit-widget
+bindkey "^[g" lazygit-widget
 
 ## Tmux
 
