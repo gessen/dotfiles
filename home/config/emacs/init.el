@@ -4812,16 +4812,14 @@ Goto^^              Actions^^         Other^^
   (set-leader-keys!
     "g b" #'magit-blame
     "g c" #'magit-clone
-    "g d" #'magit-diff
+    "g d" #'magit-diff-buffer-file
+    "g D" #'magit-diff
     "g F" #'magit-find-file
-    "g g" #'magit-dispatch
-    "g G" #'magit-file-dispatch
+    "g g" #'magit-file-dispatch
+    "g G" #'magit-dispatch
     "g i" #'magit-init
     "g l" #'magit-log-buffer-file
-    "g L" #'magit-list-repositories
-    "g s" #'magit-status
-    "g S" #'magit-stage-file
-    "g U" #'magit-unstage-file)
+    "g s" #'magit-status)
 
   ;; Suppress the message we get about "Turning on magit-auto-revert-mode" when
   ;; loading Magit.
