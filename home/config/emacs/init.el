@@ -4665,38 +4665,6 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
 
   (set-leader-keys! "g f" #'consult-ls-git))
 
-;; Package `git-commit' assists the user in writing good Git commit messages.
-;; While Git allows for the message to be provided on the command line, it is
-;; preferable to tell Git to create the commit without actually passing it a
-;; message. Git then invokes the `$GIT_EDITOR' (or if that is undefined
-;; `$EDITOR') asking the user to provide the message by editing the file
-;; ".git/COMMIT_EDITMSG" (or another file in that directory, e.g.
-;; ".git/MERGE_MSG" for merge commits).
-(use-package! git-commit
-  :config
-
-  (defhook! my--git-commit-mode-setup ()
-    git-commit-mode-hook
-    "Set custom settings for `git-commit-mode'."
-    (setq-local fill-column 72
-                column-enforce-column fill-column)
-    (display-fill-column-indicator-mode +1)
-    (column-enforce-mode +1))
-
-  ;; Make overlong summary with the same face as `column-enforce-mode'.
-  (set-face-attribute 'git-commit-overlong-summary nil :underline t)
-
-  ;; List of checks performed by `git-commit'.
-  (setq git-commit-style-convention-checks '(non-empty-second-line
-                                             overlong-summary-line))
-
-  ;; Column beyond which characters in the summary lines are highlighted.
-  (setq git-commit-summary-max-length 50)
-
-  ;; Use a local message ring so that every repository gets its own commit
-  ;; message ring.
-  (setq git-commit-use-local-message-ring t))
-
 ;; Package `git-gutter' is a port of Sublime Text plugin GitGutter.
 (use-package! git-gutter
   :defer 5
@@ -4797,6 +4765,38 @@ Goto^^              Actions^^         Other^^
 (use-package! magit
   :defer 2
   :init
+
+  ;; Feature `git-commit' assists the user in writing good Git commit messages.
+  ;; While Git allows for the message to be provided on the command line, it is
+  ;; preferable to tell Git to create the commit without actually passing it a
+  ;; message. Git then invokes the `$GIT_EDITOR' (or if that is undefined
+  ;; `$EDITOR') asking the user to provide the message by editing the file
+  ;; ".git/COMMIT_EDITMSG" (or another file in that directory, e.g.
+  ;; ".git/MERGE_MSG" for merge commits).
+  (use-feature! git-commit
+    :config
+
+    (defhook! my--git-commit-mode-setup ()
+      git-commit-mode-hook
+      "Set custom settings for `git-commit-mode'."
+      (setq-local fill-column 72
+                  column-enforce-column fill-column)
+      (display-fill-column-indicator-mode +1)
+      (column-enforce-mode +1))
+
+    ;; Make overlong summary with the same face as `column-enforce-mode'.
+    (set-face-attribute 'git-commit-overlong-summary nil :underline t)
+
+    ;; List of checks performed by `git-commit'.
+    (setq git-commit-style-convention-checks '(non-empty-second-line
+                                               overlong-summary-line))
+
+    ;; Column beyond which characters in the summary lines are highlighted.
+    (setq git-commit-summary-max-length 50)
+
+    ;; Use a local message ring so that every repository gets its own commit
+    ;; message ring.
+    (setq git-commit-use-local-message-ring t))
 
   (defadvice! my--magit-list-refs-sorted (fn &optional namespaces format sortby)
     :around #'magit-list-refs
