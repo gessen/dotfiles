@@ -384,9 +384,6 @@ LESS="--shift 5 $LESS"
 LESS="--squeeze-blank-lines $LESS"
 export LESS
 
-# Do not save less search history in ~/.lesshst.
-export LESSHISTFILE="-"
-
 ### Bat
 
 # Use bat as MANPAGER.
@@ -400,7 +397,6 @@ alias cat='bat'
 
 # Set both EDITOR and VISUAL to emacsclient with autostarted server.
 export EDITOR="emacsclient --tty"
-# export EDITOR="helix"
 export VISUAL="$EDITOR"
 
 # emacsclient starts emacs in daemon mode if it can't connect to it.
@@ -484,12 +480,6 @@ function rgd {
   if [[ "$#" == 0 ]]; then return 1; fi
   rg --json --context=3 "$@" | delta
 }
-
-## VSCodium
-
-# Use original code command with vscodium and set extensions directory to
-# conform to XDG.
-alias code='vscodium --extensions-dir ${XDG_DATA_HOME}/vscode'
 
 ## Expansion and Globbing
 
