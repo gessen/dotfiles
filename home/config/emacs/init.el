@@ -6,13 +6,10 @@
 
 ;;; Code:
 
-;; Produce backtrace when error occurs
-;; (setq debug-on-error t)
-
-(defvar my-minimum-emacs-version "29.1"
+(defconst my-minimum-emacs-version "30.0"
   "This Emacs configuration does not support any Emacs version below this.")
 
-;; Make sure we are running a modern enough Emacs, otherwise abort init
+;; Make sure we are running a modern enough Emacs, otherwise abort init.
 (when (version< emacs-version my-minimum-emacs-version)
   (error (concat "This Emacs configuration requires at least Emacs %s, "
                  "but you are running Emacs %s")
@@ -739,7 +736,7 @@ window instead."
   "w x" #'kill-buffer-and-window)
 
 ;; Overwrite default `delete-other-windows' maximize-buffer
-(keymap-global-set "C-x 1" #'maximize-buffer)
+(keymap-global-set "<remap> <delete-other-windows>" #'maximize-buffer)
 
 ;; Shorter binding to `kill-current-buffer', overwrites `quoted-insert'.
 (keymap-global-set "C-q" #'kill-current-buffer)
@@ -1202,8 +1199,7 @@ root, switch to it. Otherwise, create a new vterm buffer."
 ;; later (even during a different Emacs session) automatically moves point to
 ;; the saved position, when the file is first found.
 (use-feature! saveplace
-  :demand t
-  :config
+  :init
 
   (defadvice! my--save-place-quickly-and-silently
       (save-place-alist-to-file &rest args)
@@ -1578,6 +1574,9 @@ root, switch to it. Otherwise, create a new vterm buffer."
 ;; twice, you won't have to use M-y twice to get past it to older entries in the
 ;; kill ring.
 (setq kill-do-not-save-duplicates t)
+
+;; Remove indentation from text saved to the kill ring.
+(kill-ring-deindent-mode +1)
 
 ;; Feature `delsel' provides an alternative behaviour for certain actions when
 ;; you have a selection active. Namely: if you start typing when you have
@@ -2591,6 +2590,7 @@ Spell Commands^^            Add To Dictionary^^               Other^^
     "k r s" #'kmacro-swap-ring
     "k k"   #'kmacro-start-macro-or-insert-counter
     "k K"   #'kmacro-end-or-call-macro
+    "k l"   #'list-keyboard-macros
     "k v"   #'kmacro-view-macro-repeat))
 
 ;;; Electricity: automatic things
@@ -4501,6 +4501,10 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
   ;; buffer displayed in some window, use its current directory, instead of this
   ;; `dired' buffer’s current directory.
   (setq dired-dwim-target t)
+
+  ;; Skip empty lines when moving in Dired buffers and don't move up/down if the
+  ;; current line is the first/last visible line.
+  (setq dired-movement-style 'bounded)
 
   ;; Instantly revert Dired buffers on re-visiting them, with no message.
   (setq dired-auto-revert-buffer t)
