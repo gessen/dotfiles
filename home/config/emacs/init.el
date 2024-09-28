@@ -720,7 +720,6 @@ window instead."
 (set-leader-keys!
   "b d" #'kill-current-buffer
   "b x" #'kill-buffer-and-window
-  "F B" #'display-buffer-other-frame
   "w 0" #'delete-window
   "w 1" #'split-window-single
   "w 2" #'split-window-double
@@ -1054,6 +1053,7 @@ window instead."
   "f s"   #'save-buffer
   "f S"   #'save-some-buffers
   "F f"   #'find-file-other-frame
+  "T f"   #'find-file-other-tab
   "w f"   #'find-file-other-window)
 
 ;; Feature `files-x' extends file handling with local persistent variables.
@@ -2907,7 +2907,6 @@ point. "
     "b B" #'consult-buffer-other-window
     "b f" #'consult-focus-lines
     "b k" #'consult-keep-lines
-    "b t" #'consult-buffer-other-tab
     "F b" #'consult-buffer-other-frame
     "f b" #'consult-bookmark
     "f F" #'consult-fd
@@ -2920,7 +2919,8 @@ point. "
     "r r" #'consult-register
     "r s" #'consult-register-store
     "r y" #'consult-yank-replace
-    "t T" #'consult-theme)
+    "t T" #'consult-theme
+    "T b" #'consult-buffer-other-tab)
 
   ;; Narrow and widen selection with "[".
   (setq consult-narrow-key "[")
@@ -4467,12 +4467,10 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
   (set-leader-keys!
     "a d" #'dired
     "a D" #'dired-other-window
-    "f j" #'dired-jump
-    "f J" #'dired-jump-other-window
-    "F O" #'dired-other-frame
+    "F d" #'dired-other-frame
     "j d" #'dired-jump
     "j D" #'dired-jump-other-window
-    "w O" #'dired-other-window)
+    "T d" #'dired-other-tab)
 
   :hook (dired-mode-hook . dired-hide-details-mode)
 
@@ -5340,91 +5338,61 @@ possibly new window."
 
 ;;;; Tabs
 
-;; Package `centaur-tabs' is an Emacs plugin aiming to become an aesthetic,
-;; modern looking tabs plugin. This package offers tabs with a wide range of
-;; customization options, both aesthetical and functional, implementing them
-;; trying to follow the Emacs philosophy packing them with useful keybindings
-;; and a nice integration with the Emacs environment, without sacrificing
-;; customizability.
-(use-package! centaur-tabs
-  :demand t
+;; Feature `tab-bar' display a Tab Bar at the top of each frame. The Tab Bar is
+;; a row of tabs—buttons that you can click to switch between window
+;; configurations. Each tab on the Tab Bar represents a named persistent window
+;; configuration of its frame, i.e., how that frame is partitioned into windows
+;; and which buffer is displayed in each window. The tab’s name is composed from
+;; the list of names of buffers shown in windows of that window configuration.
+;; Clicking on the tab switches to the window configuration recorded by the tab;
+;; it is a configuration of windows and buffers which was previously used in the
+;; frame when that tab was the current tab.
+(use-feature! tab-bar
   :init
 
-  ;; Display an icon from `nerd-icons' alongside the tab name.
-  (setopt centaur-tabs-set-icons t)
+  (set-leader-keys!
+    "F d" #'tab-close
+    "F D" #'tab-close-other
+    "T m" #'tab-move
+    "T n" #'tab-new
+    "T o" #'tab-next
+    "T O" #'tab-previous
+    "T r" #'tab-rename
+    "T s" #'tab-switch
+    "T T" #'other-tab-prefix)
 
   :config
 
-  ;; Customise which buffers are hidden.
-  (setopt centaur-tabs-excluded-prefixes '("*Async-native-compile-log"
-                                           "*Compile-Log*"
-                                           "*ediff"
-                                           "*Ediff"
-                                           "*Flymake"
-                                           "*help"
-                                           "*Help"
-                                           "*helpful"
-                                           "*Mini"
-                                           "*straight"
-                                           "*temp"
-                                           "*tramp"
-                                           " *which"))
+  ;; Hide the tab bar when it has only one tab, and show it again once more tabs
+  ;; are created.
+  (setopt tab-bar-show 1)
 
-  ;; Change tabs style to have a bit of border between tabs.
-  (setopt centaur-tabs-style "alternate")
+  ;; Truncate buffer's name to avoid very long tabs.
+  (setopt tab-bar-tab-name-function #'tab-bar-tab-name-truncated))
 
-  ;; Increase the height by about 50%.
-  (setopt centaur-tabs-height 32)
+;; Feature `tab-line' displays a tab line on the top screen line of each window.
+;; The Tab Line shows special buttons for each buffer that was displayed in a
+;; window, and allows switching to any of these buffers by clicking the
+;; corresponding button. Clicking on the '+' icon adds a new buffer to the
+;; window-local tab line of buffers, and clicking on the 'x' icon of a tab
+;; deletes it. The mouse wheel on the tab line scrolls the tabs horizontally.
+(use-feature! tab-line
+  :demand t
+  :bind ( :map tab-line-mode-map
+          ("C-<prior>" . #'tab-line-switch-to-prev-tab)
+          ("C-<next>"  . #'tab-line-switch-to-next-tab))
+  :config
 
-  ;; Display a marker when the buffer is modified.
-  (setopt centaur-tabs-set-modified-marker t)
+  ;; Group buffers by mode name.
+  (setopt tab-line-tabs-function #'tab-line-tabs-buffer-groups)
 
-  ;; Display the bar under the currently selected tab.
-  (setopt centaur-tabs-set-bar 'under)
+  ;; Upon closing a tab kill the tab's buffer.
+  (setopt tab-line-close-tab-function 'kill-buffer)
 
-  ;; Show the buttons for backward/forward tabs.
-  (setopt centaur-tabs-show-navigation-buttons t)
+  ;; Truncate buffer's name to avoid very long tabs.
+  (setopt tab-line-tab-name-function #'tab-line-tab-name-truncated-buffer)
 
-  ;; Gray out icons for unselected buffers.
-  (setopt centaur-tabs-gray-out-icons 'buffer)
-
-  ;; Add a count of the current tab position in the total number of tabs in the
-  ;; current window
-  (setopt centaur-tabs-show-count t)
-
-  ;; Draw the underline at the same place as the descent line.
-  (setopt x-underline-at-descent-line t)
-
-  (centaur-tabs-mode +1)
-
-  ;; Make the headline face match the centaur-tabs-default face. This makes the
-  ;; tab bar have an uniform appearance
-  (centaur-tabs-headline-match)
-
-  (set-leader-keys!
-    "T d" #'centaur-tabs-open-directory-in-external-application
-    "T f" #'centaur-tabs-extract-window-to-new-frame
-    "T k" #'centaur-tabs-kill-other-buffers-in-current-group
-    "T n" #'centaur-tabs-forward
-    "T N" #'centaur-tabs-forward-group
-    "T o" #'centaur-tabs-open-in-external-application
-    "T p" #'centaur-tabs-backward
-    "T P" #'centaur-tabs-backward-group)
-
-  (defvar-keymap centaur-tabs-repeat-map
-    :doc "Support Centaur Tabs based navigation with repeats."
-    :repeat t
-    "n" #'centaur-tabs-forward
-    "N" #'centaur-tabs-forward-group
-    "p" #'centaur-tabs-backward
-    "P" #'centaur-tabs-backward-group)
-
-  :bind ( :map centaur-tabs-mode-map
-          ("C-<prior>" . #'centaur-tabs-backward)
-          ("C-<next>"  . #'centaur-tabs-forward)
-          ("C-<home>"  . #'centaur-tabs-backward-group)
-          ("C-<end>"   . #'centaur-tabs-forward-group)
-          ("M-J"       . #'centaur-tabs-ace-jump)))
+  (global-tab-line-mode +1))
 
 ;;;; Padding
 
