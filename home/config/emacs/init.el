@@ -4985,13 +4985,6 @@ possibly new window."
           (pop-to-buffer next-error-last-buffer))
       (user-error "There is no compilation buffer")))
 
-  (defhook! my--compile-window-colorise-buffer ()
-    compilation-filter-hook
-    "Colorise *compilation* buffer from `compilation-filter-start' to `point'."
-    (let ((buffer-read-only nil))
-      (require 'ansi-color)
-      (ansi-color-apply-on-region compilation-filter-start (point))))
-
   (set-leader-keys!
     "b c" #'switch-to-compilation-buffer
     "c b" #'switch-to-compilation-buffer
@@ -4999,6 +4992,7 @@ possibly new window."
     "c k" #'kill-compilation
     "c r" #'recompile)
 
+  :hook (compilation-filter-hook . ansi-color-compilation-filter)
   :config
 
   ;; Automatically scroll the Compilation buffer as output appears,
