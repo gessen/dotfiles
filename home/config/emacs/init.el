@@ -626,8 +626,11 @@ For details on DATA, CONTEXT, and signal, see
 ;; Simple 'y' or 'n' is enough
 (setq use-short-answers t)
 
+;; When exiting, kill processes without asking.
+(setopt confirm-kill-processes nil)
+
 ;; Prevent Custom from modifying this file.
-(setq custom-file (expand-file-name "custom.el" my-cache-dir))
+(setopt custom-file (expand-file-name "custom.el" my-cache-dir))
 
 ;; Silence Emacs in terminal.
 (setq ring-bell-function #'ignore)
