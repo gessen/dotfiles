@@ -747,6 +747,10 @@ window instead."
   "F n" #'make-frame
   "F o" #'other-frame)
 
+;; Remove `suspend-frame' bindings.
+(keymap-global-unset "C-z")
+(keymap-global-unset "C-x C-z")
+
 ;; Feature `follow' makes two windows, both showing the same buffer, scroll as a
 ;; single tall virtual window. In Follow mode, if you move point outside the
 ;; portion visible in one window and into the portion visible in the other
