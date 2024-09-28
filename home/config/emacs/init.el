@@ -1800,6 +1800,7 @@ column as mark, it add cursor to each line."
   "u r" #'undo-redo
   "u u" #'undo)
 
+(keymap-set undo-repeat-map "/" #'undo)
 (keymap-set undo-repeat-map "r" #'undo-redo)
 
 ;; Feature `warnings' allows us to enable and disable warnings.
