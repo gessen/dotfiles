@@ -1,0 +1,56 @@
+{
+  "theme": {
+    "mode": "system",
+    "light": "One Light",
+    "dark": "One Dark"
+  },
+  "buffer_font_family": "Cascadia Mono",
+  "buffer_font_size": 20,
+  "ui_font_size": 20,
+  "indent_guides": {
+    "enabled": false
+  },
+  "inlay_hints": {
+    "enabled": true
+  },
+  "tabs": {
+    "file_icons": true
+  },
+  "git": {
+    "git_gutter": "tracked_files",
+    "inline_blame": {
+      "enabled": false
+    }
+  },
+  "terminal": {
+    "copy_on_select": true,
+    "cursor_shape": "bar"
+  },
+  "lsp": {
+    "rust-analyzer": {
+      "initialization_options": {
+        "diagnostics": {
+          "experimental": {
+            "enable": true
+          }
+        },
+        "check": {
+          "command": "clippy"
+        },
+        "completion": {
+          "postfix": {
+            "enable": false
+          }
+        },
+        "inlayHints": {
+          "closureReturnTypeHints": {
+            "enable": "always"
+          },
+          "lifetimeElisionHints": {
+            "enable": "skip_trivial"
+          }
+        }
+      }
+    }
+  }
+}

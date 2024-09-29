@@ -483,6 +483,11 @@ function rgd {
 # Use shorter command.
 alias hx='helix'
 
+## Zed
+
+# Use shorter command
+alias zed='zeditor'
+
 ## Expansion and Globbing
 
 # All unquoted arguments of the form "anything=expression" appearing after the

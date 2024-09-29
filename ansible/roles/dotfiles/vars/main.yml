@@ -30,6 +30,7 @@ dotfiles:
   - config/sheldon/plugins.toml
   - config/tmux/tmux.conf
   - config/yazi/yazi.toml
+  - config/zed/settings.json
   - config/zellij/config.kdl
   - local/share/cargo/config.toml
   - ssh/config
