@@ -165,9 +165,6 @@ graphical frame is created."
 ;; slightly less to process at startup.
 (setq command-line-ns-option-alist nil)
 
-;; Hide modeline before updating it
-(setq-default mode-line-format nil)
-
 ;;; Package management
 
 ;; Disable warnings from obsolete advice system. They don't provide useful
@@ -3413,9 +3410,7 @@ defeats the purpose of `corfu-prescient'."
     :demand t
     :bind ( :map corfu-map
             ("C-q" . #'corfu-quick-complete)
-            ("M-q" . #'corfu-quick-insert)))
-
-  :blackout t)
+            ("M-q" . #'corfu-quick-insert))))
 
 ;; Package `corfu-terminal' replaces Corfu's child frames (which are unusuable
 ;; on terminal) with popup/popon which works everywhere.
@@ -3482,6 +3477,9 @@ defeats the purpose of `corfu-prescient'."
     "n" #'flymake-goto-next-error
     "p" #'flymake-goto-prev-error)
 
+  ;; Shorten Flymake lighter.
+  (setopt flymake-mode-line-lighter "")
+
   (set-leader-keys!
     "e ?" #'flymake-running-backends
     "e b" #'flymake-start
@@ -3495,9 +3493,7 @@ defeats the purpose of `corfu-prescient'."
 
   ;; Increase the idle time after Flymake will start a syntax check as 0.5s is
   ;; a bit too naggy.
-  (setq flymake-no-changes-timeout 1.0)
-
-  :blackout t)
+  (setq flymake-no-changes-timeout 1.0))
 
 ;; Feature `consult-flymake' shows Flymake errors, warnings, notifications
 ;; within consult buffer with live preview.
@@ -4183,13 +4179,7 @@ unhelpful."
     "Prevent `auto-fill-mode' from adding indentation to Elisp docstrings."
     (when (and (derived-mode-p #'emacs-lisp-mode)
                (eq (get-text-property (point) 'face) 'font-lock-doc-face))
-      ""))
-
-  :blackout ((lisp-interaction-mode . "Lisp-Interaction")
-             (emacs-lisp-mode . `("ELisp"
-                                  (lexical-binding
-                                   ""
-                                   (:propertize "/d" face warning))))))
+      "")))
 
 ;; Package `macrostep' provides a facility for interactively expanding Elisp
 ;; macros.
@@ -4213,9 +4203,7 @@ unhelpful."
       (byte-compile-file user-init-file)))
 
   ;; Eliminate two warnings that are essentially useless most of the time.
-  (setq byte-compile-warnings '(not make-local noruntime))
-
-  :blackout (emacs-lisp-compilation-mode . "Byte-Compile"))
+  (setq byte-compile-warnings '(not make-local noruntime)))
 
 ;;;;; Emacs Lisp linting
 
@@ -4493,40 +4481,44 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
           ("M-p" . #'dired-prev-subdir))
 
   :config
+
   ;; Switches passed to ls for `dired':
   ;;   - show hidden files
   ;;   - natural sort of (version) numbers within text
   ;;   - append indicator (one of */=>@|) to entries
   ;;   - print sizes like 1K 234M 2G etc
   ;;   - group directories before files
-  (setq dired-listing-switches
-        "-AlvFh --group-directories-first --time-style=long-iso")
+  (setopt dired-listing-switches
+          "-AlvFh --group-directories-first --time-style=long-iso")
+
+  ;; Just show 'Dired' in mode line.
+  (setopt dired-switches-in-mode-line 0)
 
   ;; Try to guess a default target directory. This means: if there is a `dired'
   ;; buffer displayed in some window, use its current directory, instead of this
   ;; `dired' buffer’s current directory.
-  (setq dired-dwim-target t)
+  (setopt dired-dwim-target t)
 
   ;; Skip empty lines when moving in Dired buffers and don't move up/down if the
   ;; current line is the first/last visible line.
-  (setq dired-movement-style 'bounded)
+  (setopt dired-movement-style 'bounded)
 
   ;; Instantly revert Dired buffers on re-visiting them, with no message.
-  (setq dired-auto-revert-buffer t)
+  (setopt dired-auto-revert-buffer t)
 
   ;; Copy directories recursively.
-  (setq dired-recursive-copies 'always)
+  (setopt dired-recursive-copies 'always)
 
   ;; Hide free space label at the top
-  (setq dired-free-space nil)
+  (setopt dired-free-space nil)
 
   ;; Compress with Zstandard by default
-  (setq dired-compress-file-default-suffix ".zst"
-        dired-compress-directory-default-suffix ".tar.zst")
+  (setopt dired-compress-file-default-suffix ".zst"
+          dired-compress-directory-default-suffix ".tar.zst")
 
   ;; Open common video extensions with `shell-command' by default.
-  (setq dired-guess-shell-alist-user
-        '(("\\.\\(mp4\\|webm\\|mkv\\)" (open-in-external-app)))))
+  (setopt dired-guess-shell-alist-user
+          '(("\\.\\(mp4\\|webm\\|mkv\\)" (open-in-external-app)))))
 
 ;; Feature `dired-x' provides extra `dired' functionality.
 (use-feature! dired-x
@@ -5260,44 +5252,12 @@ possibly new window."
 
 ;;;; Modeline
 
-;; Package `doom-modeline' offers a fancy and fast mode-line inspired by
-;; minimalism design. It's integrated into Doom Emacs.
-(use-package! doom-modeline
-  :demand t
-  :init
-
-  ;; Use unicode as a fallback (instead of ASCII) when not using icons. Needs to
-  ;; be set before loading `doom-modeline', otherwise it would complain when
-  ;; used with Flymake.
-  (setq doom-modeline-unicode-fallback t)
-
-  :config
-
-  ;; Show total number of lines after the current cursor position.
-  (setq doom-modeline-total-line-number t)
-
-  ;; Display minor modes in modeline, with `minions-mode' they won't be visible
-  ;; anyway but could be quickly looked at by disabling `minions-mode'.
-  (setq doom-modeline-minor-modes t)
-
-  ;; We do not use any modal editing so its icon is redundant.
-  (setq doom-modeline-modal nil)
-  (setq doom-modeline-modal-icon nil)
-
-  ;; Redesign modeline to have much less information from the default one.
-  (doom-modeline-def-modeline 'main
-    '(eldoc bar window-number matches buffer-info remote-host buffer-position
-            selection-info)
-    '(misc-info grip debug lsp minor-modes indent-info buffer-encoding
-                major-mode process vcs check))
-
-  (doom-modeline-mode +1))
-
 ;; Package `hide-mode-line' provides a minor mode that hides (or masks) the
 ;; modeline in your current buffer. It can be used to toggle an alternative
 ;; modeline, toggle its visibility, or simply disable the modeline in buffers
 ;; where it isn't very useful otherwise.
-(use-package! hide-mode-line)
+(use-package! hide-mode-line
+  :hook (treemacs-mode-hook . hide-mode-line-mode))
 
 ;; Package `keycast' provides two modes that display the current command and its
 ;; key or mouse binding, and update the displayed information once another
@@ -5310,9 +5270,8 @@ possibly new window."
 
   :config
 
-  ;; Configure `keycast-mode-line-mode' to work with `doom-modeline'.
-  (setq keycast-mode-line-insert-after '(:eval (doom-modeline-format--main)))
-  (add-to-list 'global-mode-string '("" keycast-mode-line))
+  ;; Move Keycast display to be the last one in the modeline.
+  (setopt keycast-mode-line-insert-after 'mode-line-misc-info)
 
   ;; Replace typing with a simple message.
   (dolist (input '(self-insert-command
@@ -5332,6 +5291,11 @@ possibly new window."
 (use-package! minions
   :demand t
   :config
+
+  ;; Always show Flymake to see errors/warnings.
+  ;; Always show View Mode to better indicate read-only files.
+  (setopt minions-prominent-modes '(flymake-mode
+                                    view-mode))
 
   (set-leader-keys! "t m" #'minions-mode)
 
