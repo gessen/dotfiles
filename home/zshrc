@@ -478,6 +478,11 @@ function rgd {
   rg --json --context=3 "$@" | delta
 }
 
+## Helix
+
+# Use shorter command.
+alias hx='helix'
+
 ## Expansion and Globbing
 
 # All unquoted arguments of the form "anything=expression" appearing after the

@@ -31,6 +31,7 @@ packages:
   - gdb-dashboard
   - git
   - git-delta
+  - helix
   - htop
   - hunspell-en_us
   - hunspell-pl

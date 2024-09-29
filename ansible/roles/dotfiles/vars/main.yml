@@ -14,6 +14,8 @@ dotfiles:
   - config/git/config
   - config/git/config.local
   - config/git/ignore
+  - config/helix/config.toml
+  - config/helix/languages.toml
   - config/htop/htoprc
   - config/keepassxc/keepassxc.ini
   - config/kitty/kitty.conf
