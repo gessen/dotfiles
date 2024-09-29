@@ -3848,6 +3848,56 @@ defeats the purpose of `corfu-prescient'."
 
   :config
 
+  (defvar rust-compilation-error-regexp
+    (let ((err "^error[^:]*:[^\n]*\n\s*-->\s")
+          (file "\\([^\n]+\\)")
+          (start-line "\\([0-9]+\\)")
+          (start-col  "\\([0-9]+\\)"))
+      (let ((re (concat err file ":" start-line ":" start-col)))
+        (cons re '(1 2 3))))
+    "Specifications for matching rust errors in compilation buffers.")
+
+  (defvar rust-compilation-warning-regexp
+    (let ((warning "^warning:[^\n]*\n\s*-->\s")
+          (file "\\([^\n]+\\)")
+          (start-line "\\([0-9]+\\)")
+          (start-col  "\\([0-9]+\\)"))
+      (let ((re (concat warning file ":" start-line ":" start-col)))
+        (cons re '(1 2 3 1)))) ;; 1 for warning
+    "Specifications for matching rust warnings in compilation buffers.")
+
+  (defvar rust-compilation-info-regexp
+    (let ((file "\\([^\n]+\\)")
+          (start-line "\\([0-9]+\\)")
+          (start-col  "\\([0-9]+\\)"))
+      (let ((re (concat "^ *::: " file ":" start-line ":" start-col)))
+        (cons re '(1 2 3 0)))) ;; 0 for info type
+    "Specifications for matching rust infos in compilation buffers")
+
+  (defvar rust-compilation-panic-regexp
+    (let ((panic "thread '[^']+' panicked at '[^']+', ")
+          (file "\\([^\n]+\\)")
+          (start-line "\\([0-9]+\\)")
+          (start-col  "\\([0-9]+\\)"))
+      (let ((re (concat panic file ":" start-line ":" start-col)))
+        (cons re '(1 2 3))))
+    "Specifications for matching thread panics in compilation buffers.")
+
+  (with-eval-after-load 'compile
+    (add-to-list 'compilation-error-regexp-alist-alist
+                 (cons 'rust-error rust-compilation-error-regexp))
+    (add-to-list 'compilation-error-regexp-alist-alist
+                 (cons 'rust-warning rust-compilation-warning-regexp))
+    (add-to-list 'compilation-error-regexp-alist-alist
+                 (cons 'rust-info rust-compilation-info-regexp))
+    (add-to-list 'compilation-error-regexp-alist-alist
+                 (cons 'rust-panic rust-compilation-panic-regexp))
+
+    (add-to-list 'compilation-error-regexp-alist 'rust-error)
+    (add-to-list 'compilation-error-regexp-alist 'rust-warning)
+    (add-to-list 'compilation-error-regexp-alist 'rust-info)
+    (add-to-list 'compilation-error-regexp-alist 'rust-panic))
+
   (with-eval-after-load 'eglot
     ;; Set additional initialization options for rust-analyzer.
     (add-to-list
