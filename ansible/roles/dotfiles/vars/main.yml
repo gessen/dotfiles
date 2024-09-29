@@ -16,6 +16,7 @@ dotfiles:
   - config/git/ignore
   - config/helix/config.toml
   - config/helix/languages.toml
+  - config/helix/yazi-picker
   - config/htop/htoprc
   - config/keepassxc/keepassxc.ini
   - config/kitty/kitty.conf
@@ -29,6 +30,7 @@ dotfiles:
   - config/sheldon/plugins.toml
   - config/tmux/tmux.conf
   - config/yazi/yazi.toml
+  - config/zellij/config.kdl
   - local/share/cargo/config.toml
   - ssh/config
   - zprofile

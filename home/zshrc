@@ -894,6 +894,25 @@ alias tl='tmux list-sessions'
 alias tksv='tmux kill-server'
 alias tkss='tmux kill-session -t'
 
+
+## Zellij
+
+# Create new zellij session or switch to existing one
+function ze() {
+  if [[ -z "${ZELLIJ}" ]]; then
+    if [[ -n "$1" ]]; then
+      zellij attach --create "$1"
+    else
+      local session
+      session="$(zellij list-sessions --short 2> /dev/null \
+        | fzf --select-1 --exit-0)" \
+        && zellij attach "${session}"
+    fi
+  fi
+}
+
+alias zj='zellij'
+
 ## CMake
 
 # By default, use nproc number of threads.
