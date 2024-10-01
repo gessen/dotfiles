@@ -949,9 +949,6 @@ export CARGO_TERM_COLOR=always
 
 ## Kitty
 
-# Ensures that terminfo is uploaded.
-alias ssh='kitty +kitten ssh'
-
 # Nicer scp/rsync.
 alias transfer='kitty +kitten transfer'
 
