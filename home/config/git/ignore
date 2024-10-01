@@ -92,3 +92,7 @@ CMakeUserPresets.json
 *.tmproj
 *.tmproject
 tmtags/
+
+# Stormcloud cross artifacts
+/target-deploy*/
+/.sccache/
