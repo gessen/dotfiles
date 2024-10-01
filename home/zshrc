@@ -304,6 +304,7 @@ zoxide init zsh --cmd cd --hook prompt |> "${XDG_CACHE_HOME}/zsh/zoxide-init-cac
 source "${XDG_CACHE_HOME}/zsh/zoxide-init-cache"
 
 # Import fasd database if zoxide db does not exist or sometimes synchronize it.
+export _ZO_DATA_DIR="${XDG_DATA_HOME}/zoxide"
 if [[ ! -f "${XDG_DATA_HOME}/zoxide/db.zo" ]]; then
   zoxide import --from=z "${_FASD_DATA}"
 elif ((RANDOM % 10 == 0)); then
