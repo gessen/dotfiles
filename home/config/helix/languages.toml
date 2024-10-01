@@ -2,6 +2,9 @@
 name = "rust"
 text-width = 100
 
+[language-server.rust-analyzer]
+command = "ra-multiplex"
+
 [language-server.rust-analyzer.config]
 check = { command = "clippy" }
 completion = { postfix = { enable = false } }
