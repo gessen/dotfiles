@@ -2,9 +2,8 @@
 [[ "${TERM}" = "dumb" ]] && unsetopt zle && PS1="$ " && return
 
 # Automatic SSH agent.
-
 if ! pgrep -u "${USER}" ssh-agent > /dev/null; then
-  ssh-agent -s > "/tmp/ssh-agent.env"
+  ssh-agent -a "${XDG_RUNTIME_DIR}/ssh_agent" -s > "/tmp/ssh-agent.env"
 fi
 
 if [[ ! "${SSH_AGENT_PID}" ]]; then
@@ -13,8 +12,7 @@ fi
 
 ssh-add -l \
   | grep -q "$(ssh-keygen -lf ${HOME}/.ssh/id_rsa | awk '{print $2}')" \
-  || ssh-add \
-  && which kitten || kitten ssh vm
+  || ssh-add
 
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
