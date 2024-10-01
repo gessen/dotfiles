@@ -8,9 +8,16 @@ git:
     colorArg: always
     externalDiffCommand: "difft --color=always"
 
+  commitPrefix:
+    pattern: "^\\w+\\/(\\w+-\\w+).*"
+    replace: "[$1] "
+
+  branchPrefix: "jswierk/"
+
 os:
-  edit: "emacsclient --tty {{filename}}"
-  editAtLine: "emacsclient --tty +{{line}} {{filename}}"
+  # edit: "emacsclient --tty {{filename}}"
+  # editAtLine: "emacsclient --tty +{{line}} {{filename}}"
+  editPreset: "helix"
 
 disableStartupPopups: true
 promptToReturnFromSubprocess: false

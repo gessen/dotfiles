@@ -40,9 +40,9 @@ enable = true
 [keys.normal]
 esc = ["collapse_selection", "keep_primary_selection"]
 ret = ["move_line_down", "goto_first_nonwhitespace"]
-# W = 'move_next_sub_word_start'
-# B = 'move_prev_sub_word_start'
-# E = 'move_next_sub_word_end'
+W = 'move_next_sub_word_start'
+B = 'move_prev_sub_word_start'
+E = 'move_next_sub_word_end'
 D = "delete_char_backward"
 X = "extend_line_above"
 H = ":toggle lsp.display-inlay-hints"
@@ -89,6 +89,6 @@ j = { k = "normal_mode" }
 
 [keys.select]
 esc = ["collapse_selection", "keep_primary_selection", "normal_mode"]
-# W = 'extend_next_sub_word_start'
-# B = 'extend_prev_sub_word_start'
-# E = 'extend_next_sub_word_end'
+W = 'extend_next_sub_word_start'
+B = 'extend_prev_sub_word_start'
+E = 'extend_next_sub_word_end'
