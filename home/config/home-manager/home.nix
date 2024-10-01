@@ -7,6 +7,12 @@ let
   extraPackages = pkgs.callPackage ./pkgs { };
 in
 {
+  nixpkgs.overlays = [
+    (import (builtins.fetchTarball {
+      url = "https://github.com/nix-community/emacs-overlay/archive/master.tar.gz";
+    }))
+  ];
+
   home = {
     username = "${user}";
     homeDirectory = "${homeDir}";
@@ -14,8 +20,14 @@ in
       aspell
       aspellDicts.en
       bat
+      capnproto
+      cargo-cross
+      clang-tools
+      cmake
       delta
       difftastic
+      emacs-git-nox
+      emacs-lsp-booster
       fasd
       fd
       fzf
@@ -24,19 +36,33 @@ in
       htop
       jq
       lazygit
+      less
       librsync
+      libtool
+      lld
       lsd
+      meson
+      ninja
+      nodejs
       pandoc
       ripgrep
       rsync
+      rust-analyzer
+      sccache
       sheldon
+      tmux
       tree
+      typescript
       unzip
       yazi
+      zellij
       zoxide
       zstd
+      extraPackages.dewploy
       extraPackages.git-completion
       extraPackages.osc52
+      extraPackages.stormcloud-docker
+      extraPackages.stormcloud-docker-alsi22
     ];
 
     # This value determines the Home Manager release that your
@@ -58,8 +84,24 @@ in
         source = "${dotfilesDir}/config/bat";
         recursive = true;
       };
+      ".config/ccache" = {
+        source = "${dotfilesDir}/config/ccache";
+        recursive = true;
+      };
+      ".config/clangd" = {
+        source = "${dotfilesDir}/config/clangd";
+        recursive = true;
+      };
       ".config/emacs" = {
         source = "${dotfilesDir}/config/emacs";
+        recursive = true;
+      };
+      ".config/gdb" = {
+        source = "${dotfilesDir}/config/gdb";
+        recursive = true;
+      };
+      ".config/gdb-dashboard" = {
+        source = "${dotfilesDir}/config/gdb-dashboard";
         recursive = true;
       };
       ".config/git" = {
@@ -90,12 +132,24 @@ in
         source = "${dotfilesDir}/config/nix";
         recursive = true;
       };
+      ".config/ra-multiplex" = {
+        source = "${dotfilesDir}/config/ra-multiplex";
+        recursive = true;
+      };
       ".config/ripgrep" = {
         source = "${dotfilesDir}/config/ripgrep";
         recursive = true;
       };
+      ".config/sccache" = {
+        source = "${dotfilesDir}/config/sccache";
+        recursive = true;
+      };
       ".config/sheldon" = {
         source = "${dotfilesDir}/config/sheldon";
+        recursive = true;
+      };
+      ".config/tmux" = {
+        source = "${dotfilesDir}/config/tmux";
         recursive = true;
       };
       ".config/yazi" = {
@@ -106,12 +160,32 @@ in
         source = "${dotfilesDir}/config/zed";
         recursive = true;
       };
+      ".config/zellij" = {
+        source = "${dotfilesDir}/config/zellij";
+        recursive = true;
+      };
+      ".local/share/cargo/config.toml" = {
+        source = "${dotfilesDir}/local/share/cargo/config.toml";
+      };
       ".ssh" = {
         source = "${dotfilesDir}/ssh";
         recursive = true;
       };
       ".zprofile".source = "${dotfilesDir}/zprofile";
       ".zshrc".source = "${dotfilesDir}/zshrc";
+    };
+  };
+
+  systemd.user.services.ra-mux = {
+    Unit = {
+      Description = "Rust Analyzer multiplex server";
+    };
+    Service = {
+      Type = "simple";
+      ExecStart= "/home/jswierk/.local/share/cargo/bin/ra-multiplex server";
+    };
+    Install = {
+      WantedBy = [ "default.target" ];
     };
   };
 

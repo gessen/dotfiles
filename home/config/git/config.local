@@ -1,3 +1,5 @@
 [user]
 	name = Jacek Swierk
 	email = jswierk@akamai.com
+[scalar]
+	repo = /home/jswierk/Workspace/stormcloud
