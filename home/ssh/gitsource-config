@@ -1,0 +1,3 @@
+Host gitsource
+    Hostname git.source.akamai.com
+    Port 7999
