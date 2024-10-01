@@ -113,3 +113,7 @@
 	path = config.local
 [fetch]
 	showforcedupdates = true
+[scalar]
+	repo = /home/jswierk/Workspace/stormcloud
+[maintenance]
+	repo = /home/jswierk/Workspace/stormcloud
