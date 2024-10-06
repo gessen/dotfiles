@@ -2940,6 +2940,8 @@ point. "
   (advice-add #'register-preview :override #'consult-register-window)
 
   :bind (([remap goto-line] . #'consult-goto-line)
+         ("M-g b"           . #'consult-bookmark)
+         ("M-g M-b"         . #'consult-bookmark)
          ("M-g i"           . #'consult-imenu-multi)
          ("M-g M-i"         . #'consult-imenu-multi)
          ("M-g k"           . #'consult-global-mark)
@@ -2952,6 +2954,8 @@ point. "
          ("M-g M-m"         . #'consult-mark)
          ("M-g o"           . #'consult-outline)
          ("M-g M-o"         . #'consult-outline)
+         ("M-g r"           . #'consult-register)
+         ("M-g M-r"         . #'consult-register)
          ("M-g /"           . #'consult-line-multi)
          ("M-g M-/"         . #'consult-line-multi)
          ([remap yank-pop]  . #'consult-yank-replace)
@@ -2968,7 +2972,7 @@ point. "
    ;; Disable the automatic preview only for commands, where the preview may be
    ;; expensive due to file loading.
    consult-ripgrep consult-git-grep consult-grep
-   consult-bookmark consult-recent-file
+   consult-recent-file
    consult--source-bookmark consult--source-recent-file
    consult--source-project-recent-file
    :preview-key "M-."))
