@@ -942,6 +942,11 @@ export CTEST_PROGRESS_OUTPUT=ON
 # Include the current load to the ninja status.
 export NINJA_STATUS="[%s/%f/%t] (j%r/%e) "
 
+## Cargo
+
+# Force using colored output.
+export CARGO_TERM_COLOR=always
+
 ## Kitty
 
 # Ensures that terminfo is uploaded.
