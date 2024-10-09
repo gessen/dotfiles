@@ -28,6 +28,7 @@ in
       difftastic
       emacs-git-nox
       emacs-lsp-booster
+      eza
       fasd
       fd
       fzf
@@ -40,7 +41,6 @@ in
       librsync
       libtool
       lld
-      lsd
       meson
       ninja
       nodejs
@@ -122,10 +122,6 @@ in
       };
       ".config/lazygit" = {
         source = "${dotfilesDir}/config/lazygit";
-        recursive = true;
-      };
-      ".config/lsd" = {
-        source = "${dotfilesDir}/config/lsd";
         recursive = true;
       };
       ".config/nix" = {
