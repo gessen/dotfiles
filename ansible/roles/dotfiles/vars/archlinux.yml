@@ -6,3 +6,9 @@ dotfiles_distro:
 dotfiles_distro_extra:
   - target: /usr/share/gdb-dashboard/.gdbinit
     src: config/gdb/gdbinit
+  - target: /usr/share/mpv/scripts/uosc
+    src: config/mpv/scripts/uosc
+  - target: /usr/share/mpv/script-opts
+    src: config/mpv/script-opts
+  - target: /usr/share/mpv/fonts
+    src: config/mpv/fonts
