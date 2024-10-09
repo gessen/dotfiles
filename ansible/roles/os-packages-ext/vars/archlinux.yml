@@ -1,10 +1,11 @@
 ---
 packages_aur:
   - dropbox
-  - emacs-lsp-booster-git
+  - emacs-lsp-booster
   - git-completion
   - mkinitcpio-firmware
-  - mpv-thumbnail-script
+  - mpv-thumbfast-git
+  - mpv-uosc
   - pandoc-bin
   - shellcheck-bin
 
