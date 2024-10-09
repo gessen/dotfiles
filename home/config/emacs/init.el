@@ -3235,7 +3235,7 @@ completing-read prompter."
   :config
 
   ;; Don't waste time on searching for other grep-like tools.
-  (setq dumb-jump-prefer-searcher 'rg))
+  (setopt dumb-jump-force-searcher 'rg))
 
 ;; Package `xref' provides a somewhat generic infrastructure for cross
 ;; referencing commands, in particular "find-definition". Some part of the
@@ -3250,12 +3250,11 @@ completing-read prompter."
 
   :config
 
-  ;; Prompt if no identifier is at point. This allows `dumb-jump' to use
-  ;; `xref-find-references.
-  (setq xref-prompt-for-identifier nil)
+  ;; Prompt only if no identifier is at point.
+  (setopt xref-prompt-for-identifier nil)
 
   ;; Use ripgrep for regexp search inside files.
-  (setq xref-search-program 'ripgrep))
+  (setopt xref-search-program 'ripgrep))
 
 ;; Feature `consult-xref' provides Xref integration for Consult.
 (use-feature! consult-xref
