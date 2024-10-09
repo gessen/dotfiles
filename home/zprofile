@@ -5,10 +5,7 @@ export XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
 export XDG_STATE_HOME="${XDG_STATE_HOME:-$HOME/.local/state}"
 
 # Input Method framework.
-export GTK_IM_MODULE=fcitx
-export QT_IM_MODULE=fcitx
 export XMODIFIERS=@im=fcitx
-export GLFW_IM_MODULE=ibus
 
 # Partial XDG support that needs some help.
 export ANSIBLE_HOME="${XDG_CONFIG_HOME}/ansible"
