@@ -35,6 +35,7 @@ in
       git
       helix
       htop
+      jless
       jq
       lazygit
       less
