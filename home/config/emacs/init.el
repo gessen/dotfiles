@@ -3684,14 +3684,6 @@ defeats the purpose of `corfu-prescient'."
 (use-feature! c-ts-mode
   :init
 
-  (defhook! my--c-ts-mode-setup ()
-    eglot-managed-mode-hook
-    "Set custom settings for `eglot--managed-mode'."
-    ;; Ensure that the completion table is refreshed on every change to the
-    ;; buffer.
-    (setq-local completion-at-point-functions
-                (list (cape-capf-buster #'eglot-completion-at-point))))
-
   (set-prefixes-for-major-mode! 'c-ts-mode "s" "session")
   (set-leader-keys-for-major-mode! 'c-ts-mode "s s" #'eglot)
 
@@ -3704,14 +3696,6 @@ defeats the purpose of `corfu-prescient'."
 ;; tree-sitter.
 (use-feature! c++-ts-mode
   :init
-
-  (defhook! my--c++-ts-mode-setup ()
-    eglot-managed-mode-hook
-    "Set custom settings for `eglot--managed-mode'."
-    ;; Ensure that the completion table is refreshed on every change to the
-    ;; buffer.
-    (setq-local completion-at-point-functions
-                (list (cape-capf-buster #'eglot-completion-at-point))))
 
   (defun my--c-ts-mode-indent-style ()
     "Override the built-in BSD indentation style with some additional rules."
@@ -4145,6 +4129,10 @@ defeats the purpose of `corfu-prescient'."
 
     ;; Toggle
     "t i" #'eglot-inlay-hints-mode)
+
+  ;; Filter list of possible completions with Orderless.
+  (setopt completion-category-overrides '((eglot (styles orderless))
+                                          (eglot-capf (styles orderless))))
 
   ;; Increase the idle time after Eglot will notify servers of any changes.
   (setopt eglot-send-changes-idle-time 1.0)
