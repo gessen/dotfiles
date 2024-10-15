@@ -926,6 +926,7 @@ window instead."
           "Output\\*$"
           "^\\*eldoc.*\\*$"
           compilation-mode
+          "\\*devdocs.*\\*$" devdocs-mode
           help-mode
           helpful-mode
           flymake-diagnostics-buffer-mode
@@ -3525,38 +3526,23 @@ defeats the purpose of `corfu-prescient'."
 
 ;;;; Online documentation
 
-;; Package `devdocs-browser' allows to browse API documentations provided by
-;; devdocs.io inside Emacs using EWW, with improved formatting, including
-;; highlighted code blocks and extra commands like "jump to other sections" or
-;; "open in default browser". You can manage (install, upgrade, uninstall, etc.)
-;; docsets and optionally download full content for offline usage.
-(use-package! devdocs-browser
+;; Package `devdocs' is a documentation viewer for Emacs similar to the built-in
+;; Info browser, but geared towards documentation distributed by the DevDocs
+;; website. Currently, this covers over 500 versions of 188 different software
+;; components.
+(use-package! devdocs
   :init
 
-  (set-prefixes!
-    "d"   "devdocs"
-    "d u" "update")
-
+  (set-prefixes! "d" "devdocs")
   (set-leader-keys!
-    "d d" #'devdocs-browser-open
-    "d D" #'devdocs-browser-open-in
-    "d i" #'devdocs-browser-install-doc
-    "d r" #'devdocs-browser-uninstall-doc
-
-    "d u u" #'devdocs-browser-update-metadata
-    "d u g" #'devdocs-browser-upgrade-doc
-    "d u G" #'devdocs-browser-upgrade-all-docs)
+    "d d" #'devdocs-lookup
+    "d i" #'devdocs-install
+    "d u" #'devdocs-delete)
 
   :config
 
-  (set-prefixes! "d o" "offline")
-
-  (set-leader-keys!
-    "d o d" #'devdocs-browser-download-offline-data
-    "d o r" #'devdocs-browser-remove-offline-data)
-
-  ;; Do not litter `user-emacs-directory' with offline data.
-  (setq devdocs-browser-cache-directory my-cache-dir))
+  ;; Do not litter `user-emacs-directory' with devdocs data.
+  (setopt devdocs-data-dir (expand-file-name "devdocs" my-cache-dir)))
 
 ;;;; Diff/Merge handling
 
@@ -3677,6 +3663,12 @@ defeats the purpose of `corfu-prescient'."
 ;; tree-sitter.
 (use-feature! c++-ts-mode
   :init
+
+  (defhook! my--c++-ts-mode-setup ()
+    c++-ts-mode-hook
+    "Set custom settings for `c++-ts-mode'."
+    ;; Select C++ documents when inside `c++-ts-mode' buffers.
+    (setq-local devdocs-current-docs '("cpp")))
 
   (defun my--c-ts-mode-indent-style ()
     "Override the built-in BSD indentation style with some additional rules."
@@ -3826,7 +3818,9 @@ defeats the purpose of `corfu-prescient'."
     "Set custom settings for `rust-ts-mode'."
     ;; Rust uses (by default) column limit of 100.
     (setq-local fill-column 100
-                column-enforce-column fill-column))
+                column-enforce-column fill-column)
+    ;; Select Rust documents when inside `rust-ts-mode' buffers.
+    (setq-local devdocs-current-docs '("rust")))
 
   (set-prefixes-for-major-mode! 'rust-ts-mode "s" "session")
   (set-leader-keys-for-major-mode! 'rust-ts-mode "s s" #'eglot)
