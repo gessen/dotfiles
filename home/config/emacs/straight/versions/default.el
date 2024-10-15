@@ -149,6 +149,7 @@
  ("treemacs" . "2377d231bcb4ff6841cbf6a7c1e4b6747e26ddd0")
  ("treemacs-nerd-icons" . "9876cb478145a0ec4e36f64ff6583f3de7126216")
  ("treesit-auto" . "016bd286a1ba4628f833a626f8b9d497882ecdf3")
+ ("treesit-fold" . "11add1f4ac7f7956dc5aae98571605d27a1773e2")
  ("use-package" . "a6e856418d2ebd053b34e0ab2fda328abeba731c")
  ("vertico" . "b8c9e39dbc39d2c4cd4e116c4bc6f835ed2f114b")
  ("visual-fill-column" . "e04d3521b6dc2435de4c4a4b9cac5feb194f0d5b")

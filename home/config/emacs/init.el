@@ -1817,6 +1817,33 @@ column as mark, it add cursor to each line."
     "s r x" #'clear-rectangle
     "s r y" #'yank-rectangle))
 
+;;;; Folding
+
+;; Package `treesit-fold' provides a code-folding mechanism based on tree-sitter
+;; library.
+(use-package! treesit-fold
+  :init
+
+  (defhydra hydra-treesit-fold (:color pink :hint nil)
+    "
+Close^^        Open^^            Toggle^^       Other^^
+-----^^------- -----^^---------- ------^^------ -----^^---
+[_c_] at point [_o_] at point    [_t_] at point [_q_] quit
+[_C_] all      [_O_] recursively
+^^             [_r_] all
+"
+    ("c" treesit-fold-close)
+    ("C" treesit-fold-close-all)
+    ("o" treesit-fold-open)
+    ("O" treesit-fold-open-recursively)
+    ("r" treesit-fold-open-all)
+    ("t" treesit-fold-toggle)
+    ("q" nil :exit t)
+    ("C-g" nil :exit t))
+  (set-leader-keys! "l" (cons "fold" #'hydra-treesit-fold/body))
+
+  :blackout t)
+
 ;;;; Undo/redo
 
 (set-leader-keys!
@@ -3687,7 +3714,10 @@ defeats the purpose of `corfu-prescient'."
     c++-ts-mode-hook
     "Set custom settings for `c++-ts-mode'."
     ;; Select C++ documents when inside `c++-ts-mode' buffers.
-    (setq-local devdocs-current-docs '("cpp")))
+    (setq-local devdocs-current-docs '("cpp"))
+    ;; Enable tree-sitter based folding.
+    (treesit-fold-mode +1)
+    (treesit-fold-line-comment-mode +1))
 
   (defun my--c-ts-mode-indent-style ()
     "Override the built-in BSD indentation style with some additional rules."
@@ -3839,7 +3869,10 @@ defeats the purpose of `corfu-prescient'."
     (setq-local fill-column 100
                 column-enforce-column fill-column)
     ;; Select Rust documents when inside `rust-ts-mode' buffers.
-    (setq-local devdocs-current-docs '("rust")))
+    (setq-local devdocs-current-docs '("rust"))
+    ;; Enable tree-sitter based folding.
+    (treesit-fold-mode +1)
+    (treesit-fold-line-comment-mode +1))
 
   (set-prefixes-for-major-mode! 'rust-ts-mode "s" "session")
   (set-leader-keys-for-major-mode! 'rust-ts-mode "s s" #'eglot)
