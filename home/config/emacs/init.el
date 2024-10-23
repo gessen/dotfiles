@@ -5004,6 +5004,16 @@ current theme. This will also disable line numbers and decorations."
              recompile)
   :init
 
+  (defadvice! my--compilation-read-command (command)
+    :override
+    #'compilation-read-command
+    "Overwrite `compilation-read-command' to use `completing-read'."
+    (completing-read "Compile command: " compile-history
+                     nil nil command
+                     (if (equal (car compile-history) command)
+                         '(compile-history . 1)
+                       'compile-history)))
+
   (defun switch-to-compilation-buffer (&optional arg)
     "Go to the last compilation buffer.
 If prefix argument ARG is given, switch to it in an other,
