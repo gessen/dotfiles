@@ -39,6 +39,7 @@
  ("eglot-booster" . "3f9159a8b7fe87e2f01280a2c4c98ca6dab49d13")
  ("eglot-x" . "ee39a0edd43431eee899fc7787d936731c157689")
  ("el-get" . "cc6a66360cad66d51b4dbb66ed910f3d638503be")
+ ("eglot-semantic-tokens" . "fcb25e048bff2b9fa0a70b85d4d07951aa6e1022")
  ("eldoc" . "91a8ae2fa66ac09f45337f9eca6c7aa643a063f4")
  ("elisp-lint" . "c5765abf75fd1ad22505b349ae1e6be5303426c2")
  ("elisp-refs" . "541a064c3ce27867872cf708354a65d83baf2a6d")
