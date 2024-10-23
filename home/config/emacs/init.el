@@ -4129,6 +4129,20 @@ defeats the purpose of `corfu-prescient'."
 
   (eglot-booster-mode +1))
 
+;; Package `eglot-semantic-tokens' provides support for semantic highlighting.
+(use-package! eglot-semantic-tokens
+  :straight (:host codeberg :repo "eownerdead/eglot-semantic-tokens")
+  :demand t
+  :after eglot
+  :hook (eglot-managed-mode-hook . eglot--semantic-tokens-mode)
+  :config
+
+  ;; Enable semantic tokens.
+  (setopt eglot-enable-semantic-tokens t)
+
+  (set-leader-keys-for-minor-mode! 'eglot--managed-mode
+    "t s" (cons "eglot-semantic-tokens-mode" #'eglot--semantic-tokens-mode)))
+
 ;; Package `eglot-x' adds support for some of Language Server Protocol
 ;; extensions.
 (use-package! eglot-x
