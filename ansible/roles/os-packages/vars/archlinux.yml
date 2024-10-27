@@ -37,9 +37,9 @@ packages:
   - keepassxc
   - kitty
   - libvterm
-  - lld
   - lsd
   - meson
+  - mold
   - mpv
   - ncdu
   - openssh
