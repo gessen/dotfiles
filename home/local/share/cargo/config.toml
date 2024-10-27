@@ -1,2 +1,7 @@
 [build]
+rustflags = [
+  "-C", "link-arg=-fuse-ld=mold",
+  "-C", "link-arg=-Wl,--separate-debug-file",
+  "-C", "link-arg=-Wl,--compress-debug-sections=zstd",
+]
 rustc-wrapper = "sccache"
