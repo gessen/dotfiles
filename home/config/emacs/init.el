@@ -3260,7 +3260,7 @@ completing-read prompter."
 ;; Feature `consult-xref' provides Xref integration for Consult.
 (use-feature! consult-xref
   :demand t
-  :after (consult xref)
+  :after xref
   :config
 
   ;; Use `consult' completion with preview.
