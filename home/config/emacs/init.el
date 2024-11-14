@@ -4751,7 +4751,15 @@ Goto^^              Actions^^         Other^^
     (require 'git-gutter)
     (remove-hook 'find-file-hook #'my--git-gutter-load))
 
+  :bind (("M-g M-n" . #'git-gutter:next-hunk)
+         ("M-g M-p" . #'git-gutter:previous-hunk))
   :config
+
+  (defvar-keymap git-gutter-repeat-map
+    :doc "Support GitGutter based navigation with repeats."
+    :repeat t
+    "n" #'git-gutter:next-hunk
+    "p" #'git-gutter:previous-hunk)
 
   (set-face-attribute 'git-gutter:modified nil :foreground "yellow")
 
