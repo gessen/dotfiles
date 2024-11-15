@@ -55,7 +55,6 @@ packages:
   - shfmt
   - signal-desktop
   - tig
-  - tmux
   - tree
   - ttf-jetbrains-mono
   - ttf-nerd-fonts-symbols
