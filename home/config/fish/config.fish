@@ -209,6 +209,7 @@ abbr -a mgg emacsclient --create-frame --no-wait --eval '"(magit-status)"'
 
 abbr -a e emacs
 abbr -a hx helix
+abbr -a zed zeditor
 
 ## History
 

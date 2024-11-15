@@ -339,6 +339,7 @@ alias mgg='ecg --eval "(magit-status)"'
 
 alias e='emacs'
 alias hx='helix'
+alias zed='zeditor'
 
 ## Expansion and Globbing
 
