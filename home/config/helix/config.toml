@@ -78,6 +78,10 @@ k = "jump_forward"
 [keys.normal.space]
 F = "file_picker_in_current_buffer_directory"
 
+[keys.normal.backspace]
+g = ":sh zellij run -cf -x 10% -y 10% --width 80% --height 80% -- gitui"
+f = ":sh zellij run -cf -x 10% -y 10% --width 80% --height 80% -- bash ~/.config/helix/yazi-picker"
+
 [keys.insert]
 esc = ["collapse_selection", "normal_mode"]
 j = { k = "normal_mode" }
