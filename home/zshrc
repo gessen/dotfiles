@@ -157,10 +157,6 @@ export FZF_CTRL_T_COMMAND="${FZF_DEFAULT_COMMAND}"
 export FZF_ALT_C_COMMAND="${FZF_DEFAULT_COMMAND} --type directory"
 export FZF_ALT_C_OPTS="--preview 'tree -C {} | head -200'"
 
-# Open all fzf commands in tmux popup.
-export FZF_TMUX=1
-export FZF_TMUX_OPTS="-p80%,60%"
-
 ## Command line navigation
 
 # [Home], [End], [Delete] behaves as expected.
@@ -789,40 +785,6 @@ alias gwtrm='git worktree remove'
 
 alias tia='tig --all'
 
-## Tmux
-
-# Create new tmux session or switch to existing one. Works from within tmux too.
-function tm() {
-  [[ -n "${TMUX}" ]] && change="switch-client" || change="attach-session"
-  if [[ -n "$1" ]]; then
-    tmux "${change}" -t "$1" 2> /dev/null \
-      || (tmux new-session -d -s "$1" && tmux "${change}" -t "$1")
-    return
-  fi
-  local session
-  session="$(tmux list-sessions -F "#{session_name}" 2> /dev/null \
-    | fzf --select-1 --exit-0)" \
-    && tmux "${change}" -t "${session}"
-}
-
-# Open gdb within 2 tmux panes.
-function gdb-tmux() {
-  local id
-  local tty
-  id="$(tmux split-pane -hPF "#D" "tail -f /dev/null")"
-  tmux last-pane
-  tty="$(tmux display-message -p -t "${id}" '#{pane_tty}')"
-  gdb -ex "dashboard -output ${tty}" "$@"
-  tmux kill-pane -t "${id}"
-}
-
-alias ta='tmux attach -t'
-alias tad='tmux attach -d -t'
-alias ts='tmux new-session -s'
-alias tl='tmux list-sessions'
-alias tksv='tmux kill-server'
-alias tkss='tmux kill-session -t'
-
 ## CMake
 
 # By default, use nproc number of threads.
@@ -872,9 +834,6 @@ bindkey "^[[1;4D" insert-cycledleft
 bindkey "^[[1;4C" insert-cycledright
 
 ### Fzf-Tab
-
-# Use tmux popups instead.
-zstyle ":fzf-tab:*" fzf-command ftb-tmux-popup
 
 # Switches group using F1 and F2.
 zstyle ":fzf-tab:*" switch-group F1 F2
