@@ -45,7 +45,6 @@
  ("elisp-refs" . "541a064c3ce27867872cf708354a65d83baf2a6d")
  ("emacs-async" . "43f97d7e689eea65043ded1464747a2f3ce7661c")
  ("emacs-corfu-terminal" . "501548c3d51f926c687e8cd838c5865ec45d03cc")
- ("emacs-fasd" . "c1d92553f33ebb018135c698db1a6d7f86731a26")
  ("emacs-hide-mode-line" . "ddd154f1e04d666cd004bf8212ead8684429350d")
  ("emacs-htmlize" . "8e3841c837b4b78bd72ad7f0436e919f39315a46")
  ("emacs-ibuffer-project" . "9002abd9cb4c8753fe4f6c522d9407b4d52e7873")

@@ -1262,18 +1262,18 @@ root, switch to it. Otherwise, create a new vterm buffer."
   :after vertico
   :init
 
-  (defun consult-dir--fasd-dirs ()
-    "Return list of fasd dirs."
-    (split-string (shell-command-to-string "fasd -ld") "\n" t))
+  (defun consult-dir--zoxide-dirs ()
+    "Return list of zoxide dirs."
+    (split-string (shell-command-to-string "zoxide query --list") "\n" t))
 
-  (defvar consult-dir--source-fasd
-    `( :name     "Fasd dirs"
-       :narrow   ?f
+  (defvar consult-dir--source-zoxide
+    `( :name     "Zoxide dirs"
+       :narrow   ?z
        :category file
        :face     consult-file
        :history  file-name-history
-       :enabled  ,(lambda () (executable-find "fasd"))
-       :items    ,#'consult-dir--fasd-dirs)
+       :enabled  ,(lambda () (executable-find "zoxide"))
+       :items    ,#'consult-dir--zoxide-dirs)
     "Fasd directory source for `consult-dir'.")
 
   (set-leader-keys! "f d" #'consult-dir)
@@ -1284,7 +1284,7 @@ root, switch to it. Otherwise, create a new vterm buffer."
 
   :config
 
-  (add-to-list 'consult-dir-sources 'consult-dir--source-fasd t)
+  (add-to-list 'consult-dir-sources 'consult-dir--source-zoxide t)
 
   ;; Use `consult-fd' for finding.
   (setopt consult-dir-jump-file-command 'consult-fd))
@@ -4635,14 +4635,6 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
 ;; `dired'.
 (use-package! diredfl
   :hook (dired-mode-hook . diredfl-mode))
-
-;; Package `fasd' hooks into to `find-file-hook' to add all visited files and
-;; directories to `fasd' database.
-(use-package! fasd
-  :demand t
-  :config
-
-  (global-fasd-mode +1))
 
 ;; Package `fd-dired' provides a dired-mode interface for fd's result. Same
 ;; functionality as `find-dired' and `find-grep-dired', use fd and rg instead.

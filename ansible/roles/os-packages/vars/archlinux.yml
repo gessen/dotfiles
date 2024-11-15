@@ -22,7 +22,6 @@ packages:
   - dos2unix
   - doxygen
   - emacs-nativecomp
-  - fasd
   - fd
   - firefox
   - fzf
