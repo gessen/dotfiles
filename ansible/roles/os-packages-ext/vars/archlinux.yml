@@ -8,6 +8,7 @@ packages_aur:
   - mpv-uosc
   - pandoc-bin
   - shellcheck-bin
+  - ttf-intel-one-mono
 
 packages_own:
   - name: tig-completion
