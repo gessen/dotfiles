@@ -65,6 +65,7 @@ packages:
   - xdg-user-dirs
   - yazi
   - yt-dlp
+  - zellij
   - zoxide
   - zsh-completions
 

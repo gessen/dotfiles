@@ -585,6 +585,25 @@ anything that can be a key's definition."
 (use-package! kkp
   :init
 
+  (setq kkp-active-enhancements '(disambiguate-escape-codes))
+
+  (defvar keymap-translation-keys
+    '(("M-S-a" . "M-A") ("M-S-b" . "M-B") ("M-S-c" . "M-C") ("M-S-d" . "M-D")
+      ("M-S-e" . "M-E") ("M-S-f" . "M-F") ("M-S-g" . "M-G") ("M-S-h" . "M-H")
+      ("M-S-i" . "M-I") ("M-S-j" . "M-J") ("M-S-k" . "M-K") ("M-S-l" . "M-L")
+      ("M-S-m" . "M-M") ("M-S-n" . "M-N") ("M-S-o" . "M-O") ("M-S-p" . "M-P")
+      ("M-S-q" . "M-Q") ("M-S-r" . "M-R") ("M-S-s" . "M-S") ("M-S-t" . "M-T")
+      ("M-S-u" . "M-U") ("M-S-v" . "M-V") ("M-S-w" . "M-W") ("M-S-x" . "M-X")
+      ("M-S-y" . "M-Y") ("M-S-z" . "M-Z") ("M-S-`" . "M-~") ("M-S-1" . "M-!")
+      ("M-S-2" . "M-@") ("M-S-3" . "M-#") ("M-S-4" . "M-$") ("M-S-5" . "M-%")
+      ("M-S-6" . "M-^") ("M-S-7" . "M-&") ("M-S-8" . "M-*") ("M-S-9" . "M-(")
+      ("M-S-0" . "M-)") ("M-S--" . "M-_") ("M-S-=" . "M-+") ("M-S-[" . "M-{")
+      ("M-S-]" . "M-}") ("M-S-\\" . "M-|") ("M-S-;" . "M-:") ("M-S-'" . "M-\"")
+      ("M-S-," . "M-<") ("M-S-." . "M->") ("M-S-/" . "M-?")))
+
+  (dolist (keys keymap-translation-keys)
+    (keymap-set key-translation-map (car keys) (cdr keys)))
+
   (global-kkp-mode +1))
 
 ;;;; Encryption
