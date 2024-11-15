@@ -32,6 +32,7 @@ dotfiles:
   - config/sccache/config
   - config/sheldon/plugins.toml
   - config/yazi/yazi.toml
+  - config/zed/settings.json
   - config/zellij/config.kdl
   - local/share/cargo/config.toml
   - ssh/config

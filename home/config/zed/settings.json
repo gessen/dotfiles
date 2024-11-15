@@ -1,0 +1,77 @@
+{
+  "theme": {
+    "mode": "system",
+    "light": "One Light",
+    "dark": "One Dark"
+  },
+  "buffer_font_family": "Intel One Mono",
+  "buffer_font_size": 16,
+  "ui_font_size": 18,
+  "active_pane_modifiers": {
+    "inactive_opacity": 0.9
+  },
+  "vim_mode": true,
+  "indent_guides": {
+    "enabled": false
+  },
+  "search": {
+    "regex": true
+  },
+  "inlay_hints": {
+    "enabled": true
+  },
+  "project_panel": {
+    "show_diagnostics": "errors"
+  },
+  "collaboration_panel": {
+    "button": false
+  },
+  "chat_panel": {
+    "button": false
+  },
+  "tabs": {
+    "file_icons": true
+  },
+  "telemetry": {
+    "metrics": true
+  },
+  "git": {
+    "inline_blame": {
+      "enabled": false
+    }
+  },
+  "terminal": {
+    "copy_on_select": true,
+    "cursor_shape": "bar"
+  },
+  "lsp": {
+    "rust-analyzer": {
+      "initialization_options": {
+        "diagnostics": {
+          "experimental": {
+            "enable": true
+          }
+        },
+        "check": {
+          "command": "clippy"
+        },
+        "completion": {
+          "postfix": {
+            "enable": false
+          }
+        },
+        "inlayHints": {
+          "closureReturnTypeHints": {
+            "enable": "always"
+          },
+          "lifetimeElisionHints": {
+            "enable": "skip_trivial"
+          }
+        }
+      }
+    }
+  },
+  "vim": {
+    "use_smartcase_fine": true
+  }
+}
