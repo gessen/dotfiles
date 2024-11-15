@@ -1,7 +1,7 @@
-# Help Tramp and Eshell.
+# Help Tramp and Eshell
 [[ "${TERM}" = "dumb" ]] && unsetopt zle && PS1="$ " && return
 
-# Automatic SSH agent.
+# Automatic SSH agent
 
 if ! pgrep -u "${USER}" ssh-agent > /dev/null; then
   ssh-agent -s > "/tmp/ssh-agent.env"
@@ -11,53 +11,54 @@ if [[ ! "${SSH_AGENT_PID}" ]]; then
   source "/tmp/ssh-agent.env" >/dev/null
 fi
 
+# Create cache directory
+zsh_cache_dir="${HOME}/.cache/zsh"
+[[ ! -d "${zsh_cache_dir}" ]] && mkdir -p "${zsh_cache_dir}"
+
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
+# confirmations, etc.) must go above this block; everything else may go below
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
 ## Completion
 
-# Set cache for various plugins to XDG cache dir.
-mkdir -p "${XDG_CACHE_HOME}/zsh"
-
-# Load all stock functions to be called.
+# Load all stock functions to be called
 autoload -U compaudit compinit bashcompinit zrecompile
 
-# Set completion dump to XDG cache dir.
-ZSH_COMPDUMP="${XDG_CACHE_HOME}/zsh/zcompdump-${ZSH_VERSION}"
+# Set completion dump to cache dir
+ZSH_COMPDUMP="${zsh_cache_dir}/zcompdump-${ZSH_VERSION}"
 
-# Load completions from all directories.
+# Load completions from all directories
 compinit -i -d "${ZSH_COMPDUMP}"
 
-# zcompile the completion dump file if the .zwc is older or missing.
+# zcompile the completion dump file if the .zwc is older or missing
 if command mkdir "${ZSH_COMPDUMP}.lock" 2> /dev/null; then
   zrecompile -q -p "${ZSH_COMPDUMP}"
   command rm -rf "${ZSH_COMPDUMP}.lock"
 fi
 
 # Characters in this variable are considered part of a word. Leaving it empty
-# will cause ZSH to treat most special characters as word delimiters.
+# will cause ZSH to treat most special characters as word delimiters
 WORDCHARS=""
 
 # If a completion is performed with the cursor within a word, and a full
 # completion is inserted, the cursor is moved to the end of the word. That is,
 # the cursor is moved to the end of the word if either a single match is
-# inserted or menu completion is performed.
+# inserted or menu completion is performed
 setopt ALWAYS_TO_END
 
-# The cursor stays and completion is done from both ends.
+# The cursor stays and completion is done from both ends
 setopt COMPLETE_IN_WORD
 
-# [S-Tab] moves through the completion menu backwards.
+# [S-Tab] moves through the completion menu backwards
 bindkey "^[[Z" reverse-menu-complete
 
-# Highlight possible choices in the completion menu.
+# Highlight possible choices in the completion menu
 zstyle ":completion:*" menu select
 
-# Case and hyphen insensitive, partial-word and substring completion.
+# Case and hyphen insensitive, partial-word and substring completion
 zstyle ":completion:*" matcher-list \
   "m:{[:lower:][:upper:]-_}={[:upper:][:lower:]_-}" "r:|=*" "l:|=* r:|=*"
 
@@ -65,50 +66,50 @@ zstyle ":completion:*" matcher-list \
 zstyle ":completion:*" special-dirs true
 
 # By default, the completion system will expand // to /*/. Instead, squeeze
-# slashes to /.
+# slashes to /
 zstyle ":completion:*" squeeze-slashes true
 
-# Default coloring for GNU-based ls.
+# Default coloring for GNU-based ls
 source <(dircolors --sh)
 
-# Colorize completion items based on $LS_COLORS.
+# Colorize completion items based on $LS_COLORS
 zstyle ":completion:*" list-colors "${(s.:.)LS_COLORS}"
 
-# Colorize completion items for kill command completion.
+# Colorize completion items for kill command completion
 zstyle ":completion:*:*:kill:*:processes" list-colors \
   "=(#b) #([0-9]#) ([0-9a-z-]#)*=01;34=0=01"
 
-# Use better list than the default one for the processes completion.
+# Use better list than the default one for the processes completion
 zstyle ":completion:*:*:*:*:processes" command \
   "ps -u ${USERNAME} -o pid,user,comm -w -w"
 
-# Prints the type of the completion.
-# zstyle ":completion:*:descriptions" format "%B%F{green}--- %d ---%f%b"
+# Print the type of the completion
 zstyle ":completion:*:descriptions" format "[%d]"
 
-# Prints the possible corrections with more details.
+# Print the possible corrections with more details
 zstyle ":completion:*:corrections" format \
   "%B%F{yellow}!-- %d (errors: %e) --!%f%b"
 
-# Show warning message when no completion is possible.
+# Show warning message when no completion is possible
 zstyle ":completion:*:warnings" format "%F{red}No matches for:%f %B%d%b"
 
-# Group the different type of matches under their descriptions.
+# Group the different type of matches under their descriptions
 zstyle ":completion:*" group-name ""
 
-# Activates approximate completion, but only after regular completion.
+# Activate approximate completion, but only after regular completion
 zstyle ":completion:::::" completer _complete _approximate
-# Allows one error per 3 character typed.
+
+# Allow one error per 3 character typed
 zstyle ":completion:*:approximate:*" max-errors \
   'reply=( $(( ($#PREFIX+$#SUFFIX)/3 )) numeric )'
 
-# Activates the completion caching layer for any completions which use it via
-# the _store_cache, _retrieve_cache and _cache_invalid functions.
+# Activate the completion caching layer for any completions which use it via the
+# _store_cache, _retrieve_cache and _cache_invalid functions
 zstyle ":completion:*" use-cache yes
-zstyle ":completion:*" cache-path "${XDG_CACHE_HOME}/zsh"
+zstyle ":completion:*" cache-path "${zsh_cache_dir}"
 
 # Don't complete uninteresting users, e.g. for SSH command unless it's actually
-# typed.
+# typed
 zstyle ":completion:*:*:*:users" ignored-patterns \
   avahi bin daemon dbus ftp mail nobody polkitd sddm "systemd-*" tss usbmux \
   uuidd
@@ -120,57 +121,27 @@ function expand-or-complete-with-dots() {
   zle expand-or-complete
   zle redisplay
 }
-# Create a user-defined widget.
+
 zle -N expand-or-complete-with-dots
-# Bind the widget, i.e. the function as the default tab completion widget.
 bindkey "^I" expand-or-complete-with-dots
 
-# Load bash completion functions.
+# Load bash completion functions
 bashcompinit
 
-### Fzf
+## Command line
 
-source "/usr/share/fzf/completion.zsh"
-source "/usr/share/fzf/key-bindings.zsh"
-
-# Set fd as the default source for fzf.
-export FZF_DEFAULT_COMMAND="fd \
---hidden \
---follow \
---exclude='.git/' \
-"
-
-# Default fzf options.
-export FZF_DEFAULT_OPTS=" \
---height=60% \
---bind alt-p:preview-up,alt-n:preview-down \
---bind ctrl-alt-p:preview-half-page-up,ctrl-alt-n:preview-half-page-down \
---bind alt-up:preview-half-page-up,alt-down:preview-half-page-down \
---bind ctrl-v:half-page-down,alt-v:half-page-up \
---bind alt-a:select-all,ctrl-alt-a:deselect-all,alt-t:toggle-all \
-"
-
-# Paste selected files and directories onto the command line with [C-t].
-export FZF_CTRL_T_COMMAND="${FZF_DEFAULT_COMMAND}"
-
-# Change directory with preview with [M-c].
-export FZF_ALT_C_COMMAND="${FZF_DEFAULT_COMMAND} --type directory"
-export FZF_ALT_C_OPTS="--preview 'tree -C {} | head -200'"
-
-## Command line navigation
-
-# [Home], [End], [Delete] behaves as expected.
+# [Home], [End], [Delete] behaves as expected
 bindkey "^[[H" beginning-of-line
 bindkey "^[[F" end-of-line
 bindkey "^[[1~" beginning-of-line
 bindkey "^[[4~" end-of-line
 bindkey "^[[3~" delete-char
 
-# Use [M-a] and [M-e] for the same effect as [C-a] and [C-e] respectively.
+# Use [M-a] and [M-e] for the same effect as [C-a] and [C-e] respectively
 bindkey "^[a" beginning-of-line
 bindkey "^[e" end-of-line
 
-# Quickly jump to n-th arguments by pressing [M-number].
+# Quickly jump to n-th arguments by pressing [M-number]
 bindkey "^[1" beginning-of-line
 bindkey -s "^[2" "^A^[f"
 bindkey -s "^[3" "^A^[f^[f"
@@ -181,39 +152,61 @@ bindkey -s "^[7" "^A^[f^[f^[f^[f^[f^[f"
 bindkey -s "^[8" "^A^[f^[f^[f^[f^[f^[f^[f"
 bindkey -s "^[9" "^A^[f^[f^[f^[f^[f^[f^[f^[f"
 
-# Use [C-u] to kill a whole line backwards.
+# Use [C-u] to kill a whole line backwards
 bindkey "^U" backward-kill-line
 
-# Swap [M-h] with [C-M-h].
+# Swap [M-h] with [C-M-h]
 bindkey "^[^H" run-help
 bindkey "^[H" backward-kill-word
 bindkey "^[h" backward-kill-word
 
-# Edit the current command line in $EDITOR with [C-x C-e].
+# Edit the current command line in $EDITOR with [C-x C-e]
 autoload -U edit-command-line
 zle -N edit-command-line
 bindkey "^X^E" edit-command-line
 
-# Copy previous word with [M-m].
+# Copy previous word with [M-m]
 bindkey "^[m" copy-prev-shell-word
 
 alias fu='sudo !!'
 
-## Files and Directories management
+## Files and directories
 
 # If a command is issued that can’t be executed as a normal command, and the
-# command is the name of a directory, perform the cd command to that directory.
+# command is the name of a directory, perform the cd command to that directory
 setopt AUTO_CD
 
-# Make cd push the old directory onto the directory stack.
+# Make cd push the old directory onto the directory stack
 setopt AUTO_PUSHD
 
-# Don’t push multiple copies of the same directory onto the directory stack.
+# Don’t push multiple copies of the same directory onto the directory stack
 setopt PUSHD_IGNORE_DUPS
 
 # Exchanges the meanings of "+" and "-" when used with a number to specify a
-# directory in the stack.
+# directory in the stack
 setopt PUSHD_MINUS
+
+# Backup files
+function bak() {
+  for f in "$@"; do
+    if [[ ! -e "${f}" ]]; then
+      echo "No such file or directory: ${f}"
+      continue
+    fi
+    f=$(echo "${f}" | sed "s|/*$||")
+    if [[ -d "${f}" ]]; then
+      echo rsync --archive --compress "${f}/" "${f}".bak
+    else
+      echo rsync --archive --compress "${f}" "${f}".bak
+    fi
+  done
+}
+
+# mkdir + cd
+function mkcd() {
+  mkdir -p "$@" && cd "${@:$#}" || return
+}
+compdef _mkdir mkcd
 
 alias -g ...='../..'
 alias -g ....='../../..'
@@ -231,153 +224,57 @@ alias 7='cd -7'
 alias 8='cd -8'
 alias 9='cd -9'
 
-alias md='mkdir -p'
-alias rd='rmdir'
-
-# Human readable outputs by default.
+# Human readable outputs by default
 alias du='du --max-depth=1 --human-readable'
 alias df='df --human-readable'
 alias free='free --human'
 
-# mkdir + cd
-function mkcd() {
-  mkdir -p "$@" && cd "${@:$#}" || return
-}
-compdef _mkdir mkcd
-
-alias rsync-copy='rsync --archive --compress -hhh --progress'
-alias rsync-move='rsync-copy --remove-source-files'
-alias rsync-update='rsync-copy --update'
-alias rsync-synchronize='rsync-update --delete'
-alias cpv='rsync-copy'
-
-### Lsd
-alias ls='lsd'
-alias ll='ls --long'
-alias la='ll --almost-all'
-alias l='la --git'
-
-### Zoxide
-
-if (( ${+commands[zoxide]} )); then
-  zoxide_init="${XDG_CACHE_HOME}/zsh/zoxide-init.zsh"
-  if [[ "${commands[zoxide]}" -nt "${zoxide_init}" \
-          || ! -s "${zoxide_init}" ]]; then
-    zoxide init zsh --cmd cd --hook prompt >| "${zoxide_init}"
-  fi
-  source "${zoxide_init}"
-  unset zoxide_init
-fi
-
-### Yazi
-
-# Allows yazi to change cwd.
-function ya() {
-  local tempfile
-  local IFS=$'\t\n'
-  tempfile="$(mktemp -t yazi-cwd.XXXXX)"
-
-  yazi "$@" --cwd-file="${tempfile}"
-  if cwd="$(cat -- "${tempfile}")" \
-    && [[ -n "${cwd}" ]] \
-    && [[ "${cwd}" != "${PWD}" ]]; then
-    builtin cd -- "${cwd}" || return
-  fi
-  command rm -f -- "${tempfile}" 2> /dev/null
-}
-
-# Bind [M-y] to yazi.
-function ya-widget() {
-  ya
-
-  local fn
-	for fn (chpwd $chpwd_functions precmd $precmd_functions); do
-		(( $+functions[$fn] )) && $fn
-	done
-	zle reset-prompt
-}
-
-zle -N ya-widget
-bindkey "^[y" ya-widget
-
 ## Paging
 
-# Causes less to automatically exit the second time it reaches end-of-file.
+# Automatically exit the second time it reaches end-of-file
 LESS="--quit-at-eof"
 
-# Causes less to automatically exit if the entire file can be displayed on the
-# first screen.
+# Automatically exit if the entire file can be displayed on the first screen
 LESS="--quit-if-one-screen $LESS"
 
-# Causes searches to ignore case; that is, uppercase and lowercase are
-# considered identical. This option is ignored if any uppercase letters appear
-# in the search pattern.
+# Ignore case in searches; that is, uppercase and lowercase are considered
+# identical. This option is ignored if any uppercase letters appear in the
+# search pattern
 LESS="--ignore-case $LESS"
 
-# Causes less to prompt verbosely with the percent into the file.
+# Prompt verbosely with the percent into the file
 LESS="--LONG-PROMPT $LESS"
 
-# Causes "raw" control characters to be displayed. The default is to display
-# control characters using the caret notation.
+# Display "raw" control characters. The default is to display control characters
+# using the caret notation
 LESS="--RAW-CONTROL-CHARS $LESS"
 
-# Disables sending the termcap initialization and deinitialization strings to
-# the terminal. This is sometimes desirable if the deinitialization string does
-# something unnecessary, like clearing the screen.
+# Disable sending the termcap initialization and deinitialization strings to the
+# terminal. This is sometimes desirable if the deinitialization string does
+# something unnecessary, like clearing the screen
 LESS="--no-init $LESS"
 
-# Temporarily highlights the first "new" line after a forward movement of a full
+# Temporarily highlight the first "new" line after a forward movement of a full
 # page. The first "new" line is the line immediately following the line
 # previously at the bottom of the screen. Also highlights the target line after
 # a g or p command. The highlight is removed at the next command which causes
-# movement.
+# movement
 LESS="--hilite-unread $LESS"
 
-# Changes the default scrolling window size to WINDOW_SIZE-4 lines.
+# Change the default scrolling window size to WINDOW_SIZE-4 lines
 LESS="--window=-4 $LESS"
 
-# Specifies the default number of positions to scroll horizontally in the
-# RIGHTARROW and LEFTARROW commands.
+# Specify the default number of positions to scroll horizontally in the
+# RIGHTARROW and LEFTARROW commands
 LESS="--shift 5 $LESS"
 
-# Causes consecutive blank lines to be squeezed into a single blank line.
+# Squeeze consecutive blank lines into a single blank line
 LESS="--squeeze-blank-lines $LESS"
 export LESS
 
-### Bat
+## Editors
 
-# Use bat as MANPAGER.
-export MANPAGER="sh -c 'col -b | bat -l man -p'"
-export MANROFFOPT="-c"
-
-# Use bat instead of cat by default.
-alias cat='bat'
-
-# Use bat to colorize help messages
-function help() {
-  if [[ "$#" == 0 ]]; then return 1; fi
-  "$1" --help | bat --plain --language=help
-}
-
-alias -g -- -h='-h 2>&1 | bat -plain --language=help'
-alias -g -- --help='--help 2>&1 | bat --plain --language=help'
-
-## Emacs
-
-# Set both EDITOR and VISUAL to emacsclient with autostarted server.
-export EDITOR="emacsclient --tty"
-export VISUAL="$EDITOR"
-
-# emacsclient starts emacs in daemon mode if it can't connect to it.
-export ALTERNATE_EDITOR=""
-
-alias ec='emacsclient --tty'
-alias ecg='emacsclient --create-frame --no-wait'
-alias mg='ec --eval "(magit-status)"'
-alias mgg='ecg --eval "(magit-status)"'
-alias e='emacs'
-
-# Open the selected files with EDITOR or xdg-open with fd+fzf.
+# Open the selected files with EDITOR or xdg-open with fd+fzf
 function fe() {
   local key
   local -a files
@@ -395,27 +292,27 @@ function fe() {
   fi
 }
 
-# Fuzzy grep open via ripgrep.
+# Fuzzy grep open via ripgrep
 function eg() {
   local file
   local line
   local column
   local -a out
   if [[ "$#" == 0 ]]; then return 1; fi
-  out=(${(f)"$(rg --no-heading --column --line-number --color=always "$@" \
-    | fzf --ansi --select-1 --exit-0 --multi \
-    | awk -F: '{printf "%s:%s:%s\n", $1, $2, $3}')"})
-  if [[ -z ${out} ]]; then return; fi
   if [[ "${EDITOR}" =~ emacs ]]; then
-    for i in {1..$#out}; do
-      IFS=$':' read -r file line column <<< $(echo "${out[$i]}")
-      out[${i}]="+${line}:${column} \"${file}\""
-    done
+    out=(${(f)"$(rg --no-heading --column --line-number --color=always "$@" \
+      | fzf --ansi --select-1 --exit-0 --multi \
+      | awk -F: '{printf "%s:%s:%s\n", $1, $2, $3}')"})
+  else
+    out=(${(f)"$(rg --no-heading --column --line-number --color=always "$@" \
+      | fzf --ansi --select-1 --exit-0 --multi \
+      | awk -F: '{printf "%s:%s:%s\n", $1, $2, $3}')"})
   fi
+  if [[ -z ${out} ]]; then return; fi
   eval "${EDITOR} ${out[@]}"
 }
 
-# Fuzzy grep open with preview via ripgrep.
+# Fuzzy grep open with preview via ripgrep
 function egp() {
   local -a files
   if [[ "$#" == 0 ]]; then return 1; fi
@@ -427,54 +324,63 @@ function egp() {
   [[ -n "${files}" ]] && eval "${EDITOR} ${files[@]}"
 }
 
-# Grep with syntax highlighting.
-function rgd {
-  if [[ "$#" == 0 ]]; then return 1; fi
-  rg --json --context=3 "$@" | delta
-}
+# Set both EDITOR and VISUAL to emacsclient with autostarted server
+export EDITOR="emacsclient --tty"
+export VISUAL="$EDITOR"
+
+# emacsclient starts emacs in daemon mode if it can't connect to it
+export ALTERNATE_EDITOR=""
+
+alias ec='emacsclient --tty'
+alias ecg='emacsclient --create-frame --no-wait'
+alias mg='ec --eval "(magit-status)"'
+alias mgg='ecg --eval "(magit-status)"'
+
+alias e='emacs'
 
 ## Expansion and Globbing
 
 # All unquoted arguments of the form "anything=expression" appearing after the
 # command name have filename expansion, (that is, where expression has a leading
-# "~" or "=") performed on expression as if it were a parameter assignment.
+# "~" or "=") performed on expression as if it were a parameter assignment
 setopt MAGIC_EQUAL_SUBST
 
 ## History
 
-export HISTFILE="${XDG_STATE_HOME}/zsh/history"
+zsh_state_dir="${HOME}/.local/state/zsh"
+export HISTFILE="${zsh_state_dir}/history"
 export HISTSIZE=1000000
 export SAVEHIST=500000
-mkdir -p "${XDG_STATE_HOME}/zsh"
+[[ ! -d "${zsh_state_dir}" ]] && mkdir -p "${zsh_state_dir}"
 
 # Save each command’s beginning timestamp (in seconds since the epoch) and the
-# duration (in seconds) to the history file.
+# duration (in seconds) to the history file
 setopt EXTENDED_HISTORY
 
 # If the history needs to be trimmed to add the current command line, cause the
 # oldest history event that has a duplicate to be lost before losing a unique
-# event from the list.
+# event from the list
 setopt HIST_EXPIRE_DUPS_FIRST
 
 # Do not enter command lines into the history list if they are duplicates of the
-# previous event.
+# previous event
 setopt HIST_IGNORE_DUPS
 
 # Remove command lines from the history list when the first character on the
 # line is a space, or when one of the expanded aliases contains a leading space.
-# Only normal aliases (not global or suffix aliases) have this behavior.
+# Only normal aliases (not global or suffix aliases) have this behavior
 setopt HIST_IGNORE_SPACE
 
-# Remove the history (fc -l) command from the history list when invoked.
+# Remove the history (fc -l) command from the history list when invoked
 setopt HIST_NO_STORE
 
 # Remove superfluous blanks from each command line being added to the history
-# list.
+# list
 setopt HIST_REDUCE_BLANKS
 
 # Whenever the user enters a line with history expansion, don’t execute the line
 # directly; instead, perform history expansion and reload the line into the
-# editing buffer.
+# editing buffer
 setopt HIST_VERIFY
 
 # Import new commands from the history file, and also make typed commands to be
@@ -482,7 +388,7 @@ setopt HIST_VERIFY
 setopt SHARE_HISTORY
 
 # [Up] and [Down] cycles through history based on characters already typed on
-# the line.
+# the line
 autoload -U up-line-or-beginning-search
 autoload -U down-line-or-beginning-search
 zle -N up-line-or-beginning-search
@@ -490,30 +396,31 @@ zle -N down-line-or-beginning-search
 bindkey "^[[A" up-line-or-beginning-search
 bindkey "^[[B" down-line-or-beginning-search
 
-# [PageUp] and [PageDown] for navigating history.
+# [PageUp] and [PageDown] for navigating history
 bindkey "^[[5~" up-line-or-history
 bindkey "^[[6~" down-line-or-history
 
 ## Input/Output
 
 # Output flow control via start/stop characters (usually assigned to ^S/^Q) is
-# disabled in the shell’s editor.
+# disabled in the shell’s editor
 unsetopt FLOW_CONTROL
 
-# Allow comments even in interactive shells.
+# Allow comments even in interactive shells
 setopt INTERACTIVE_COMMENTS
 
-# Do not query the user before executing "rm *" or "rm path/*".
+# Do not query the user before executing "rm *" or "rm path/*"
 setopt RM_STAR_SILENT
 
 ## Job Control
 
-# Print job notifications in the long format by default.
+# Print job notifications in the long format by default
 setopt LONG_LIST_JOBS
 
 ## Git
 
-function git_current_branch() {
+# Print current Git branch
+function git-current-branch() {
   local ref
   ref=$(GIT_OPTIONAL_LOCKS=0 git symbolic-ref --quiet HEAD 2> /dev/null)
   local ret=$?
@@ -525,7 +432,20 @@ function git_current_branch() {
   echo "${ref#refs/heads/}"
 }
 
-function git_develop_branch() {
+# Print Git master branch
+function git-master-branch() {
+  git rev-parse --git-dir &> /dev/null || return
+  local ref
+  for ref in refs/heads/{master,main,trunk}; do
+    if git show-ref --quiet --verify "${ref}"; then
+      echo "${ref#refs/heads/}"
+      return
+    fi
+  done
+}
+
+# Print Git develop branch
+function git-develop-branch() {
   git rev-parse --git-dir &> /dev/null || return
   local branch
   for ref in refs/heads/{dev,devel,develop}; do
@@ -536,15 +456,26 @@ function git_develop_branch() {
   done
 }
 
-function git_master_branch() {
-  git rev-parse --git-dir &> /dev/null || return
-  local ref
-  for ref in refs/heads/{master,main}; do
-    if git show-ref --quiet --verify "${ref}"; then
-      echo "${ref#refs/heads/}"
-      return
-    fi
-  done
+# Commit all changes in Git tree
+function git-wip() {
+  git add --all || return 128
+  git rm $(git ls-files --deleted) 2> /dev/null
+  git commit --no-verify --no-gpg-sign --message "--wip--"
+}
+
+# Reset last commit if it was WIP
+function git-unwip() {
+  git rev-list --max-count=1 --format="%s" HEAD | grep --quiet "\--wip--" \
+  && git reset HEAD~1
+}
+
+# Reset all WIP commits
+function git-unwip-all() {
+  local commit=$(git log --grep="--wip--" --invert-grep --max-count=1 \
+                     --format=format:%H)
+  if [[ "${commit}" != "$(git rev-parse HEAD)" ]]; then
+    git reset "${commit}" || return 1
+  fi
 }
 
 alias ga='git add'
@@ -581,18 +512,12 @@ alias gbm='git branch --move'
 alias gbnm='git branch --no-merged'
 alias gbr='git branch --remote'
 
-function gbda() {
-  git branch --no-color --merged \
-    | grep -vE "^([+*]|\s*($(git_master_branch)|$(git_develop_branch))\s*$)" \
-    | xargs git branch --delete 2>/dev/null
-}
-
 alias gco='git checkout'
 alias gcor='git checkout --recurse-submodules'
 alias gcb='git checkout -b'
 alias gcB='git checkout -B'
-alias gcd='git checkout $(git_develop_branch)'
-alias gcm='git checkout $(git_master_branch)'
+alias gcd='git checkout $(git-develop-branch)'
+alias gcm='git checkout $(git-master-branch)'
 
 alias gcp='git cherry-pick'
 alias gcpa='git cherry-pick --abort'
@@ -666,12 +591,12 @@ alias gignored='git ls-files --others'
 alias gm='git merge'
 alias gma='git merge --abort'
 alias gms='git merge --squash'
-alias gmod='git merge origin/$(git_develop_branch)'
-alias gmom='git merge origin/$(git_master_branch)'
+alias gmod='git merge origin/$(git-develop-branch)'
+alias gmom='git merge origin/$(git-master-branch)'
 alias gmtool='git mergetool'
 alias gmtoolg='git mergetool --gui'
-alias gmud='git merge upstream/$(git_develop_branch)'
-alias gmum='git merge upstream/$(git_master_branch)'
+alias gmud='git merge upstream/$(git-develop-branch)'
+alias gmum='git merge upstream/$(git-master-branch)'
 
 alias gmtl='git mergetool --no-prompt'
 alias gmtlvim='git mergetool --no-prompt --tool=vimdiff'
@@ -681,10 +606,10 @@ alias glr='git pull --rebase'
 alias glrv='git pull --rebase --verbose'
 alias glra='git pull --rebase --autostash'
 alias glrav='git pull --rebase --autostash --verbose'
-alias glrod='git pull --rebase origin $(git_develop_branch)'
-alias glrom='git pull --rebase origin $(git_master_branch)'
-alias glrud='git pull --rebase upstream $(git_develop_branch)'
-alias glrum='git pull --rebase upstream $(git_master_branch)'
+alias glrod='git pull --rebase origin $(git-develop-branch)'
+alias glrom='git pull --rebase origin $(git-master-branch)'
+alias glrud='git pull --rebase upstream $(git-develop-branch)'
+alias glrum='git pull --rebase upstream $(git-master-branch)'
 
 alias gp='git push'
 alias gpd='git push --dry-run'
@@ -703,12 +628,12 @@ alias grbc='git rebase --continue'
 alias grbi='git rebase --interactive'
 alias grbo='git rebase --onto'
 alias grbs='git rebase --skip'
-alias grbd='git rebase $(git_develop_branch)'
-alias grbm='git rebase $(git_master_branch)'
-alias grbod='git rebase origin/$(git_develop_branch)'
-alias grbom='git rebase origin/$(git_master_branch)'
-alias grbud='git rebase upstream/$(git_develop_branch)'
-alias grbum='git rebase upstream/$(git_master_branch)'
+alias grbd='git rebase $(git-develop-branch)'
+alias grbm='git rebase $(git-master-branch)'
+alias grbod='git rebase origin/$(git-develop-branch)'
+alias grbom='git rebase origin/$(git-master-branch)'
+alias grbud='git rebase upstream/$(git-develop-branch)'
+alias grbum='git rebase upstream/$(git-master-branch)'
 
 alias gr='git remote'
 alias gra='git remote add'
@@ -730,25 +655,6 @@ alias gruh='git reset upstream/$(git_current_branch) --hard'
 alias grs='git restore'
 alias grss='git restore --source'
 alias grst='git restore --staged'
-
-function gwip() {
-  git add --all
-  git rm $(git ls-files --deleted) 2> /dev/null
-  git commit --no-verify --no-gpg-sign --message "--wip--"
-}
-
-function gunwip() {
-  git rev-list --max-count=1 --format="%s" HEAD | grep --quiet "\--wip--" \
-    && git reset HEAD~1
-}
-
-function gunwipall() {
-  local commit=$(git log --grep="--wip--" --invert-grep --max-count=1 --format=format:%H)
-
-  if [[ "${commit}" != "$(git rev-parse HEAD)" ]]; then
-    git reset "${commit}" || return 1
-  fi
-}
 
 alias grev='git revert'
 alias grm='git rm'
@@ -774,8 +680,8 @@ alias gsb='git status --short --branch'
 alias gsi='git submodule init'
 alias gsu='git submodule update'
 
-alias gsd='git switch $(git_develop_branch)'
-alias gsm='git switch $(git_master_branch)'
+alias gsd='git switch $(git-develop-branch)'
+alias gsm='git switch $(git-master-branch)'
 alias gsw='git switch'
 alias gswc='git switch --create'
 
@@ -792,106 +698,248 @@ alias gwtls='git worktree list'
 alias gwtmv='git worktree move'
 alias gwtrm='git worktree remove'
 
-alias tia='tig --all'
+alias gwip='git-wip'
+alias gunwip='git-unwip'
+alias gunwipall='git-unwip-all'
+
+## Bat
+
+# Use bat as MANPAGER
+export MANPAGER="sh -c 'col -b | bat -l man -p'"
+export MANROFFOPT="-c"
+
+# Use bat instead of cat by default
+alias cat='bat'
+
+# Use bat to colorize help messages
+function help() {
+  if [[ "$#" == 0 ]]; then return 1; fi
+  "$1" --help | bat --plain --language=help
+}
+
+alias -g -- -h='-h 2>&1 | bat -plain --language=help'
+alias -g -- --help='--help 2>&1 | bat --plain --language=help'
 
 ## CMake
 
-# By default, use nproc number of threads.
+# By default, use nproc number of threads
 export CMAKE_BUILD_PARALLEL_LEVEL=$(nproc)
 
-# Generates compile_commands.json by default.
+# Generates compile_commands.json by default
 export CMAKE_EXPORT_COMPILE_COMMANDS=ON
 
-# Use Ninja by default.
+# Use Ninja by default
 export CMAKE_GENERATOR=Ninja
 
-# Use sccache by default.
+# Use sccache by default
 export CMAKE_C_COMPILER_LAUNCHER="sccache"
 export CMAKE_CXX_COMPILER_LAUNCHER="sccache"
 
-# Output should be logged for failed tests.
+# Output should be logged for failed tests
 export CTEST_OUTPUT_ON_FAILURE=ON
 
-# Report CTest progress by repeatedly updating the same line.
+# Report CTest progress by repeatedly updating the same line
 export CTEST_PROGRESS_OUTPUT=ON
 
-# Include the current load to the ninja status.
-export NINJA_STATUS="[%s/%f/%t] (j%r/%e) "
+## Fzf
+
+# Set fd as the default source for fzf
+export FZF_DEFAULT_COMMAND="fd \
+--hidden \
+--follow \
+--exclude='.git/' \
+"
+
+# Default fzf options
+export FZF_DEFAULT_OPTS=" \
+--height=60% \
+--bind alt-p:preview-up,alt-n:preview-down \
+--bind ctrl-alt-p:preview-half-page-up,ctrl-alt-n:preview-half-page-down \
+--bind alt-up:preview-half-page-up,alt-down:preview-half-page-down \
+--bind ctrl-v:half-page-down,alt-v:half-page-up \
+--bind alt-a:select-all,ctrl-alt-a:deselect-all,alt-t:toggle-all \
+"
+
+# Paste selected files and directories onto the command line with [C-t]
+export FZF_CTRL_T_COMMAND="${FZF_DEFAULT_COMMAND}"
+
+# Change directory with preview with [M-c]
+export FZF_ALT_C_COMMAND="fd \
+--follow \
+--type directory \
+"
+export FZF_ALT_C_OPTS="--preview 'tree -C {} | head -200'"
+
+if (( ${+commands[fzf]} )); then
+  fzf_init="${zsh_cache_dir}/fzf-init.zsh"
+  if [[ "${commands[fzf]}" -nt "${fzf_init}" || ! -s "${fzf_init}" ]]; then
+    fzf --zsh >| "${fzf_init}"
+  fi
+  source "${fzf_init}"
+  unset -v fzf_init
+fi
+
+## Lsd
+
+alias ls='lsd'
+alias ll='ls --long'
+alias la='ll --almost-all'
+alias l='la --git'
 
 ## Kitty
 
-# Ensures that terminfo is uploaded.
+# Ensures that terminfo is uploaded
 alias ssh='kitty +kitten ssh'
 
-# Nicer scp/rsync.
+# Nicer scp/rsync
 alias transfer='kitty +kitten transfer'
+
+## Ninja
+
+# Include the current load to the ninja status
+export NINJA_STATUS="[%s/%f/%t] (j%r/%e) "
+
+## Ripgrep
+
+# Grep with syntax highlighting.
+function rgd {
+  if [[ "$#" == 0 ]]; then return 1; fi
+  rg --json --context=3 "$@" | delta
+}
+
+## Rsync
+
+alias cpv='rsync-copy'
+alias rsync-copy='rsync --archive --compress -hhh --progress'
+alias rsync-move='rsync-copy --remove-source-files'
+alias rsync-update='rsync-copy --update'
+alias rsync-synchronize='rsync-update --delete'
 
 ## SSH
 
-# Copy current terminfo file to the given host.
+# Copy current terminfo file to the given host
 function ssh-copy-terminfo() {
   if [[ "$#" == 0 ]]; then return 1; fi
   infocmp -a | ssh "$1" tic -x -o \~/.terminfo /dev/stdin
 }
 
+## Tig
+
+alias tia='tig --all'
+
+function tig-widget() {
+  tig
+
+  local fn
+  for fn (chpwd $chpwd_functions precmd $precmd_functions); do
+    (( $+functions[$fn] )) && $fn
+  done
+  zle reset-prompt
+}
+
+zle -N tig-widget
+bindkey "^[g" tig-widget
+
+## Yazi
+
+# Start Yazi but change CWD after exit
+function y() {
+  local tempfile
+  local IFS=$'\t\n'
+  temp="$(mktemp -t yazi-cwd.XXXXX)"
+
+  yazi "$@" --cwd-file="${temp}"
+  if cwd="$(cat -- "${temp}")" \
+    && [[ -n "${cwd}" ]] \
+    && [[ "${cwd}" != "${PWD}" ]]; then
+    builtin cd -- "${cwd}" || return
+  fi
+  command rm -f -- "${temp}" 2> /dev/null
+}
+
+function y-widget() {
+  y
+
+  local fn
+  for fn (chpwd $chpwd_functions precmd $precmd_functions); do
+    (( $+functions[$fn] )) && $fn
+  done
+  zle reset-prompt
+}
+
+zle -N y-widget
+bindkey "^O" y-widget
+
+### Zoxide
+
+if (( ${+commands[zoxide]} )); then
+  zoxide_init="${zsh_cache_dir}/zoxide-init.zsh"
+  if [[ "${commands[zoxide]}" -nt "${zoxide_init}" \
+          || ! -s "${zoxide_init}" ]]; then
+    zoxide init zsh --cmd cd --hook prompt >| "${zoxide_init}"
+  fi
+  source "${zoxide_init}"
+  unset -v zoxide_init
+fi
+
 ## Plugins
 
 ### Dircycle
 
-# Use [M-S-Left] and [M-S-Right] for dircycle.
+# Use [M-S-Left] and [M-S-Right] for dircycle
 bindkey "^[[1;4D" insert-cycledleft
 bindkey "^[[1;4C" insert-cycledright
 
 ### Fzf-Tab
 
-# Switches group using F1 and F2.
+# Switch group using F1 and F2
 zstyle ":fzf-tab:*" switch-group F1 F2
 
-# Disable prefix before colorized completions.
+# Disable prefix before colorized completions
 zstyle ":fzf-tab:*" prefix ""
 
 ### Zsh-Autosuggestion
 
-# Changes to slightly more visible color when highlighting a suggestion.
+# Change to slightly more visible color when highlighting a suggestion
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=60"
 
-# Sets max size of buffer to trigger autosuggestion. This can be useful when
+# Set max size of buffer to trigger autosuggestion. This can be useful when
 # pasting large amount of text in the terminal, to avoid triggering
-# autosuggestion for strings that are too long.
+# autosuggestion for strings that are too long
 ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=40
 
-# Tries to find a suggestion from the history, but, if it can't find a match,
-# will find a suggestion from the completion engine.
+# Try to find a suggestion from the history, but, if it can't find a match, will
+# find a suggestion from the completion engine
 ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 
 ### Theme
 
-# Defines character set used by powerlevel10k.
+# Define character set used by powerlevel10k
 POWERLEVEL9K_MODE=nerdfont-v3
 
-# Default colors of dir segment.
+# Default colors of dir segment
 POWERLEVEL9K_DIR_BACKGROUND=blue
 POWERLEVEL9K_DIR_FOREGROUND=brightwhite
 
 # If directory is too long, shorten some of its segments to the shortest
 # possible unique prefix. The shortened directory can be tab-completed to the
-# original.
+# original
 POWERLEVEL9K_SHORTEN_STRATEGY=truncate_to_unique
 
-# Color of the shortened directory entries.
+# Color of the shortened directory entries
 POWERLEVEL9K_DIR_SHORTENED_FOREGROUND=248
 
 # Shorten directory if it's longer than this even if there is space for it. The
 # value can be either absolute (e.g., '80') or a percentage of terminal width
 # (e.g, '50%'). If empty, directory will be shortened only when prompt doesn't
 # fit or when other parameters demand it. If set to 0, directory will always be
-# shortened to its minimum length.
+# shortened to its minimum length
 POWERLEVEL9K_DIR_MAX_LENGTH=50%
 
-# Display anchor directory segments in bold.
+# Display anchor directory segments in bold
 POWERLEVEL9K_DIR_ANCHOR_BOLD=true
 
-# Don't shorten directories that contain any of these entries.
+# Don't shorten directories that contain any of these entries
 anchors=(
   .git
   .svn
@@ -899,11 +947,11 @@ anchors=(
 POWERLEVEL9K_SHORTEN_FOLDER_MARKER="(${(j:|:)anchors})"
 unset -v anchors
 
-# Colors of writable segment.
+# Colors of writable segment
 POWERLEVEL9K_DIR_WRITABLE_FORBIDDEN_BACKGROUND=red
 POWERLEVEL9K_DIR_WRITABLE_FORBIDDEN_FOREGROUND=white
 
-# Colors of vcs segment that depends on its state.
+# Colors of vcs segment that depends on its state
 POWERLEVEL9K_VCS_CLEAN_BACKGROUND=076
 POWERLEVEL9K_VCS_CLEAN_FOREGROUND=black
 POWERLEVEL9K_VCS_UNTRACKED_BACKGROUND=076
@@ -911,10 +959,10 @@ POWERLEVEL9K_VCS_UNTRACKED_FOREGROUND=black
 POWERLEVEL9K_VCS_MODIFIED_BACKGROUND=220
 POWERLEVEL9K_VCS_MODIFIED_FOREGROUND=black
 
-# Don't show standard Powerline branch icon.
+# Don't show standard Powerline branch icon
 POWERLEVEL9K_HIDE_BRANCH_ICON=true
 
-# Show status of repositories of these types.
+# Show status of repositories of these types
 POWERLEVEL9K_VCS_BACKENDS=(git)
 
 # Enable counters for staged, unstaged, etc.
@@ -925,25 +973,25 @@ POWERLEVEL9K_VCS_CONFLICTED_MAX_NUM=-1
 POWERLEVEL9K_VCS_COMMITS_AHEAD_MAX_NUM=-1
 POWERLEVEL9K_VCS_COMMITS_BEHIND_MAX_NUM=-1
 
-# Don't show status on success.
+# Don't show status on success
 POWERLEVEL9K_STATUS_OK=false
 
-# Colors of error status.
+# Colors of error status
 POWERLEVEL9K_STATUS_ERROR_BACKGROUND=red
 POWERLEVEL9K_STATUS_ERROR_FOREGROUND=226
 
-# Colors of background jobs.
+# Colors of background jobs
 POWERLEVEL9K_BACKGROUND_JOBS_BACKGROUND=black
 POWERLEVEL9K_BACKGROUND_JOBS_FOREGROUND=cyan
 
-# Colors of execution time.
+# Colors of execution time
 POWERLEVEL9K_COMMAND_EXECUTION_TIME_BACKGROUND=245
 POWERLEVEL9K_COMMAND_EXECUTION_TIME_FOREGROUND=black
 
-# Show duration of the last command if it takes at least this many seconds.
+# Show duration of the last command if it takes at least this many seconds
 POWERLEVEL9K_COMMAND_EXECUTION_TIME_THRESHOLD=2
 
-# The list of segments shown on the left.
+# The list of segments shown on the left
 POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
   root_indicator
   dir
@@ -951,23 +999,23 @@ POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
   vcs
 )
 
-# The list of segments shown on the right.
+# The list of segments shown on the right
 POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(
   status
   background_jobs
   command_execution_time
 )
 
-# Add an empty line before each prompt.
+# Add an empty line before each prompt
 POWERLEVEL9K_PROMPT_ADD_NEWLINE=true
 
-# Position prompt on a newline.
+# Position prompt on a newline
 POWERLEVEL9K_PROMPT_ON_NEWLINE=true
 
-# Filler between left and right prompt on the first prompt line.
+# Filler between left and right prompt on the first prompt line
 POWERLEVEL9K_MULTILINE_FIRST_PROMPT_GAP_CHAR=·
 
-# The color of the filler.
+# The color of the filler
 POWERLEVEL9K_MULTILINE_FIRST_PROMPT_GAP_FOREGROUND=244
 
 # Transient prompt works similarly to the builtin transient_rprompt option - it
@@ -976,10 +1024,13 @@ POWERLEVEL9K_MULTILINE_FIRST_PROMPT_GAP_FOREGROUND=244
 #   - always:   Trim down prompt when accepting a command line.
 #   - same-dir: Trim down prompt when accepting a command line unless this is
 #               the first command typed after changing current working
-#               directory.
+#               directory
 POWERLEVEL9K_TRANSIENT_PROMPT=same-dir
 
 ### Sheldon
 
-# Load all plugins.
+# Load all plugins
 eval "$(sheldon source)"
+
+unset -v zsh_cache_dir
+unset -v zsh_state_dir
