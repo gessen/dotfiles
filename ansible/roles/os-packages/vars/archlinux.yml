@@ -34,6 +34,7 @@ packages:
   - gdb-dashboard
   - git
   - git-delta
+  - helix
   - hunspell-en_us
   - hunspell-pl
   - keepassxc

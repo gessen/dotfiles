@@ -338,6 +338,7 @@ alias mg='ec --eval "(magit-status)"'
 alias mgg='ecg --eval "(magit-status)"'
 
 alias e='emacs'
+alias hx='helix'
 
 ## Expansion and Globbing
 
