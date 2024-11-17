@@ -112,7 +112,5 @@
 	added = green bold
 	changed = yellow
 	untracked = red
-[alias]
-	fixup = !GIT_SEQUENCE_EDITOR=true git rebase -i
 [include]
 	path = config.local
