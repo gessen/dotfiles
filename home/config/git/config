@@ -77,6 +77,11 @@
 [interactive]
 	singlekey = true
 	difffilter = delta --color-only
+[fetch]
+	all = true
+	prune = true
+	jobs = 10
+	showforcedupdates = true
 [pull]
 	rebase = true
 [push]
@@ -111,5 +116,3 @@
 	fixup = !GIT_SEQUENCE_EDITOR=true git rebase -i
 [include]
 	path = config.local
-[fetch]
-	showforcedupdates = true
