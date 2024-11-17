@@ -564,8 +564,6 @@ alias gdtool='git difftool'
 alias gdtoolg='git difftool --gui'
 
 alias gf='git fetch'
-alias gfa='git fetch --all --prune --jobs=10'
-alias gfo='git fetch origin'
 
 alias gg='git gui citool'
 alias gga='git gui citool --amend'
