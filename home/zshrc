@@ -672,8 +672,7 @@ alias gsts='git stash show --patch'
 alias gstu='git stash push --include-untracked'
 
 alias gst='git status'
-alias gss='git status --short'
-alias gsb='git status --short --branch'
+alias gsl='git status --long'
 
 alias gsi='git submodule init'
 alias gsu='git submodule update'
