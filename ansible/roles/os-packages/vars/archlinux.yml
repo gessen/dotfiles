@@ -21,6 +21,7 @@ packages:
   - discord
   - dos2unix
   - doxygen
+  - dua-cli
   - emacs-nativecomp
   - fd
   - firefox
@@ -40,7 +41,6 @@ packages:
   - meson
   - mold
   - mpv
-  - ncdu
   - openssh
   - pacman-contrib
   - plantuml
