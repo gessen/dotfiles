@@ -225,7 +225,6 @@ alias 8='cd -8'
 alias 9='cd -9'
 
 # Human readable outputs by default
-alias du='du --max-depth=1 --human-readable'
 alias df='df --human-readable'
 alias free='free --human'
 
@@ -737,6 +736,10 @@ export CTEST_OUTPUT_ON_FAILURE=ON
 
 # Report CTest progress by repeatedly updating the same line
 export CTEST_PROGRESS_OUTPUT=ON
+
+## Dua
+
+alias du='dua'
 
 ## Fzf
 
