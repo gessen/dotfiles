@@ -1,20 +1,23 @@
 [core]
 	pager = delta
 	untrackedcache = true
-[init]
-	defaultbranch = master
-[commit]
-	verbose = true
 [branch]
 	autosetuprebase = always
 	sort = committerdate
-[diff]
-	mnemonicprefix = true
-	algorithm = histogram
-	colormoved = default
-	submodule = log
-	tool = ediffclient
-	guitool = ediffclient-g
+[color]
+	ui = true
+[color "branch"]
+	current = green reverse
+[color "diff"]
+	meta = yellow
+	frag = blue
+	commit = yellow bold
+[color "status"]
+	changed = yellow
+[commit]
+	verbose = true
+[credential]
+	helper = cache --timeout 3600
 [delta]
 	features = colors-dark decorations line-numbers
 	word-diff-regex = "\\S+"
@@ -41,12 +44,29 @@
 	line-numbers-right-style = cyan
 	line-numbers-minus-style = 124
 	line-numbers-plus-style = 28
+[diff]
+	mnemonicprefix = true
+	algorithm = histogram
+	colormoved = default
+	submodule = log
+	tool = ediffclient
+	guitool = ediffclient-g
 [difftool]
 	prompt = false
 [difftool "ediffclient"]
 	cmd = emacsclient --tty --eval \"(ediff-files \\\"$LOCAL\\\" \\\"$REMOTE\\\")\"
 [difftool "ediffclient-g"]
 	cmd = emacsclient --create-frame --eval \"(ediff-files \\\"$LOCAL\\\" \\\"$REMOTE\\\")\"
+[fetch]
+	prune = true
+	all = true
+	showforcedupdates = true
+	parallel = 0
+[init]
+	defaultbranch = master
+[interactive]
+	singlekey = true
+	difffilter = delta --color-only
 [merge]
 	conflictstyle = diff3
 	tool = emergeclient
@@ -63,55 +83,23 @@
     (ediff-merge-files-with-ancestor \\\"$LOCAL\\\" \\\"$REMOTE\\\" \\\"$BASE\\\" nil \\\"$MERGED\\\") \
   (ediff-merge-files \\\"$LOCAL\\\" \\\"$REMOTE\\\" nil \\\"$MERGED\\\"))\"
 	prompt = false
-[rebase]
-	autostash = true
-	autosquash = true
-	abbreviatecommands = true
-	stat = true
-[status]
-	short = true
-	branch = true
-	showstash = true
-	submodulesummary = true
-[rerere]
-	enabled = true
-[interactive]
-	singlekey = true
-	difffilter = delta --color-only
-[fetch]
-	all = true
-	prune = true
-	jobs = 10
-	showforcedupdates = true
 [pull]
 	rebase = true
 [push]
 	autosetupremote = true
 	default = current
 	followtags = true
-[credential]
-	helper = cache --timeout 3600
-[color]
-	ui = true
-[color "diff-highlight"]
-	oldnormal = red bold
-	oldhighlight = red bold 52
-	newnormal = green bold
-	newhighlight = green bold 22
-[color "branch"]
-	current = green reverse
-	local = yellow
-	remote = red
-[color "diff"]
-	meta = yellow
-	frag = magenta bold
-	commit = yellow bold
-	old = red bold
-	new = green bold
-	whitespace = red reverse
-[color "status"]
-	added = green bold
-	changed = yellow
-	untracked = red
+[rebase]
+	stat = true
+	autosquash = true
+	autostash = true
+	abbreviatecommands = true
+[rerere]
+	enabled = true
+[status]
+	short = true
+	branch = true
+	showstash = true
+	submodulesummary = true
 [include]
 	path = config.local
