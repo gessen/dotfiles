@@ -2,13 +2,12 @@
 [[ "${TERM}" = "dumb" ]] && unsetopt zle && PS1="$ " && return
 
 # Automatic SSH agent
-
 if ! pgrep -u "${USER}" ssh-agent > /dev/null; then
-  ssh-agent -s > "/tmp/ssh-agent.env"
+  ssh-agent -s | sed "s|^echo|#echo|" > "/tmp/ssh-agent.sh"
 fi
 
 if [[ ! "${SSH_AGENT_PID}" ]]; then
-  source "/tmp/ssh-agent.env" >/dev/null
+  source "/tmp/ssh-agent.sh"
 fi
 
 # Create cache directory
