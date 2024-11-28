@@ -3259,6 +3259,11 @@ completing-read prompter."
   (setq xref-show-xrefs-function #'consult-xref)
   (setq xref-show-definitions-function #'consult-xref))
 
+;; Package `consult-xref-stack' navigates the Xref stack with Consult.
+(use-package! consult-xref-stack
+  :straight (:host github :repo "brett-lempereur/consult-xref-stack")
+  :bind ("C-," . #'consult-xref-stack-backward))
+
 ;;;; Display contextual metadata
 
 ;; Feature `eldoc' provides a minor mode (enabled by default in Emacs 25) which

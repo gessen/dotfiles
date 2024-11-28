@@ -21,6 +21,7 @@
  ("consult-flyspell" . "7011e6634598530ea2d874e7e7389dc1bb94e1ca")
  ("consult-git-log-grep" . "30dfcad5745a6b9882d94fec75d38c345a1eff89")
  ("consult-ls-git" . "b1ca94f7c43cbd3811d09a0c9ab04f67f6318e95")
+ ("consult-xref-stack" . "aa9bbf7a3ff43353b7c10595b3d13887b213466b")
  ("consult-yasnippet" . "834d39acfe8a7d2c304afbe4d649b9372118c756")
  ("corfu" . "9affbbb03b4e3d03d520c5f82377057e8df8aaa9")
  ("dash.el" . "1de9dcb83eacfb162b6d9a118a4770b1281bcd84")
