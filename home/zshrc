@@ -706,6 +706,17 @@ if (( ${+commands[fzf]} )); then
   unset -v fzf_init
 fi
 
+## Atuin
+
+if (( ${+commands[atuin]} )); then
+  atuin_init="${zsh_cache_dir}/atuin-init.zsh"
+  if [[ "${commands[atuin]}" -nt "${atuin_init}" || ! -s "${atuin_init}" ]]; then
+    atuin init zsh --disable-up-arrow >| "${atuin_init}"
+  fi
+  source "${atuin_init}"
+  unset -v atuin_init
+fi
+
 ## Lsd
 
 alias ls='lsd'
