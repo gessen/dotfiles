@@ -14,6 +14,7 @@ packages:
   - aspell
   - aspell-en
   - aspell-pl
+  - atuin
   - bat
   - btop
   - calibre

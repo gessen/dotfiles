@@ -1,6 +1,7 @@
 ---
 dotfiles:
   - config/aspell/aspell.conf
+  - config/atuin/config.toml
   - config/bat/config
   - config/btop/btop.conf
   - config/ccache/ccache.conf
