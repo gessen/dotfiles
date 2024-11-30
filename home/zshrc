@@ -1,5 +1,8 @@
-# Help Tramp and Eshell
-[[ "${TERM}" = "dumb" ]] && unsetopt zle && PS1="$ " && return
+# Help Emacs
+if [[ "${TERM}" = "dumb" ]]; then
+  unsetopt zle && PS1="$ " && export CARGO_TERM_COLOR=always
+  return
+fi
 
 # Automatic SSH agent
 if ! pgrep -u "${USER}" ssh-agent > /dev/null; then
