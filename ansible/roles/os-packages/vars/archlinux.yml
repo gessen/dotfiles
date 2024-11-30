@@ -7,6 +7,7 @@ packages_asdeps:
   - p7zip
   - perl-term-readkey
   - python-pygments
+  - rocm-smi-lib
   - unrar
 
 packages:
@@ -14,6 +15,7 @@ packages:
   - aspell-en
   - aspell-pl
   - bat
+  - btop
   - calibre
   - clang
   - cmake
@@ -31,7 +33,6 @@ packages:
   - gdb-dashboard
   - git
   - git-delta
-  - htop
   - hunspell-en_us
   - hunspell-pl
   - keepassxc
