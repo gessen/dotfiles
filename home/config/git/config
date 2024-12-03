@@ -69,7 +69,7 @@
 	singlekey = true
 	difffilter = delta --color-only
 [merge]
-	conflictstyle = diff3
+	conflictstyle = zdiff3
 	tool = emergeclient
 	guitool = emergeclient-g
 [mergetool "emergeclient"]
