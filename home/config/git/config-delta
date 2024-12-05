@@ -1,0 +1,27 @@
+[delta]
+	features = modus-vivendi line-numbers decorations
+	word-diff-regex = "\\S+"
+[delta "decorations"]
+	file-style = yellow bold ul
+	file-decoration-style = none
+	commit-decoration-style = yellow bold box
+	hunk-header-style = file line-number syntax
+	hunk-header-decoration-style = blue box ul
+[delta "modus-operandi"]
+	light = true
+	line-numbers-minus-style = "#d84a4f"
+	line-numbers-plus-style = "#6cc06c"
+	minus-style = syntax "#ffd8d5"
+	minus-emph-style = syntax bold "#f3b5af"
+	plus-style = syntax "#c1f2d1"
+	plus-emph-style = syntax bold "#aee5be"
+	map-styles = bold magenta => syntax magenta, bold cyan => syntax cyan
+[delta "modus-vivendi"]
+	dark = true
+	line-numbers-minus-style = "#b81a1f"
+	line-numbers-plus-style = "#237f3f"
+	minus-style = syntax "#4f1119"
+	minus-emph-style = syntax bold "#781a1f"
+	plus-style = syntax "#00381f"
+	plus-emph-style = syntax bold "#034f2f"
+	map-styles = bold magenta => syntax magenta, bold cyan => syntax cyan
