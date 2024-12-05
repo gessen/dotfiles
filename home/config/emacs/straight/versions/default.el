@@ -110,6 +110,7 @@
  ("nerd-icons-dired" . "c1c73488630cc1d19ce1677359f614122ae4c1b9")
  ("nerd-icons-ibuffer" . "16270e898abbba2bd810cbf97f999c6142863101")
  ("nerd-icons.el" . "c3d641d8e14bd11b5f98372da34ee5313636e363")
+ ("nix-ts-mode" . "cea932fd683bfab84234205f5f1d161e29a5adf6")
  ("nongnu-elpa" . "94966229ca17882de6cbc1b709120e19a030d35d")
  ("orderless" . "60da48a698dc502454ac5563fcdecba1fa16fc99")
  ("org" . "9cbf0c99c3d6288d15f31582156ff6f6fb921330")
