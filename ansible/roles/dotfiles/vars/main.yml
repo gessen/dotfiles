@@ -26,7 +26,6 @@ dotfiles:
   - config/ripgrep/config
   - config/sccache/config
   - config/sheldon/plugins.toml
-  - config/tig/config
   - config/yazi/yazi.toml
   - local/share/cargo/config.toml
   - ssh/config
@@ -35,4 +34,3 @@ dotfiles:
 
 dotdirs:
   - local/share/gdb
-  - local/share/tig
