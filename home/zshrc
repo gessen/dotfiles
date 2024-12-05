@@ -29,6 +29,13 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
+## Nix
+if [[ -f "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh" ]]; then
+  source "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh"
+fi
+#source "${HOME}/.nix-profile/etc/profile.d/hm-session-vars.sh"
+#export NIX_PATH="${HOME}/.nix-defexpr/channels"
+
 ## Completion
 
 # Load all stock functions to be called
@@ -36,6 +43,9 @@ autoload -U compaudit compinit bashcompinit zrecompile
 
 # Set completion dump to cache dir
 ZSH_COMPDUMP="${zsh_cache_dir}/zcompdump-${ZSH_VERSION}"
+
+# Add nix-installed autocompletions.
+fpath=("${HOME}/.nix-profile/share/zsh/site-functions" $fpath)
 
 # Load completions from all directories
 compinit -i -d "${ZSH_COMPDUMP}"
@@ -77,7 +87,9 @@ zstyle ":completion:*" special-dirs true
 zstyle ":completion:*" squeeze-slashes true
 
 # Default coloring for GNU-based ls
-source <(dircolors --sh)
+if whence dircolors > /dev/null; then
+  source <(dircolors --sh)
+fi
 
 # Colorize completion items based on $LS_COLORS
 zstyle ":completion:*" list-colors "${(s.:.)LS_COLORS}"
