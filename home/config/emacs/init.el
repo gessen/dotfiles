@@ -604,6 +604,8 @@ anything that can be a key's definition."
   (dolist (keys keymap-translation-keys)
     (keymap-set key-translation-map (car keys) (cdr keys)))
 
+  (setq kkp-terminal-query-timeout 1)
+
   (global-kkp-mode +1))
 
 ;;;; Encryption
@@ -1866,6 +1868,9 @@ possibly new window."
     (if arg
         (switch-to-buffer-other-window (current-buffer))
       (switch-to-buffer (current-buffer)))))
+
+(bind-key "<home>" #'move-beginning-of-line)
+(bind-key "<end>"  #'move-end-of-line)
 
 (set-leader-keys!
   "b m" #'switch-to-messages-buffer
@@ -4558,8 +4563,10 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
   ;;   - append indicator (one of */=>@|) to entries
   ;;   - print sizes like 1K 234M 2G etc
   ;;   - group directories before files
-  (setopt dired-listing-switches
-          "-AlvFh --group-directories-first --time-style=long-iso")
+  (if (string= system-type "darwin")
+      (setopt dired-listing-switches "-AlvFh")
+    (setopt dired-listing-switches
+            "-AlvFh --group-directories-first --time-style=long-iso"))
 
   ;; Just show 'Dired' in mode line.
   (setopt dired-switches-in-mode-line 0)
@@ -4581,6 +4588,10 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
 
   ;; Hide free space label at the top
   (setopt dired-free-space nil)
+
+  ;; On MacOS, ls doesn't support --dired option.
+  (when (string= system-type "darwin")
+    (setq dired-use-ls-dired nil))
 
   ;; Compress with Zstandard by default
   (setopt dired-compress-file-default-suffix ".zst"
