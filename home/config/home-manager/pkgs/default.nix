@@ -10,5 +10,6 @@ with pkgs;
   git-completion = callPackage ./git-completion { };
   osc52 = callPackage ./osc52 { };
   stormcloud-docker = callPackage ./stormcloud-docker { };
+  stormcloud-docker-v2 = callPackage ./stormcloud-docker-v2 { };
   stormcloud-docker-alsi22 = callPackage ./stormcloud-docker-alsi22 { };
 }
