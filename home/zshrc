@@ -38,8 +38,10 @@ fi
 if [[ -f "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh" ]]; then
   source "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh"
 fi
+source "${HOME}/.nix-profile/etc/profile.d/nix.sh"
 #source "${HOME}/.nix-profile/etc/profile.d/hm-session-vars.sh"
 #export NIX_PATH="${HOME}/.nix-defexpr/channels"
+umask 022
 
 ## Completion
 
@@ -119,9 +121,6 @@ zstyle ":completion:*:warnings" format "%F{red}No matches for:%f %B%d%b"
 
 # Group the different type of matches under their descriptions
 zstyle ":completion:*" group-name ""
-
-# Activate approximate completion, but only after regular completion
-zstyle ":completion:::::" completer _complete _approximate
 
 # Allow one error per 3 character typed
 zstyle ":completion:*:approximate:*" max-errors \
@@ -357,6 +356,9 @@ export VISUAL="$EDITOR"
 
 # emacsclient starts emacs in daemon mode if it can't connect to it
 export ALTERNATE_EDITOR=""
+
+# Force Emacs into 24 bits mode
+export COLORTERM=truecolor
 
 alias ec='emacsclient --tty'
 alias ecg='emacsclient --create-frame --no-wait'
@@ -858,6 +860,44 @@ if (( ${+commands[zoxide]} )); then
   source "${zoxide_init}"
   unset -v zoxide_init
 fi
+
+## Cargo
+
+# Add locally installed cargo
+export PATH="${CARGO_HOME}/bin:${PATH}"
+
+## Mise
+
+if (( ${+commands[mise]} )); then
+  mise_init="${zsh_cache_dir}/mise-init.zsh"
+  if [[ "${commands[mise]}" -nt "${mise_init}" \
+          || ! -s "${mise_init}" ]]; then
+    mise activate --shims >| "${mise_init}"
+  fi
+  source "${mise_init}"
+  unset -v mise_init
+fi
+
+## Stormcloud
+
+# Needed by perforce
+export P4CONFIG=".perforce"
+export P4EDITOR="${EDITOR}"
+
+# Needed by e2e tests
+export EW_ENSURE_AUDIT_PASSING=false
+export EW_ENSURE_NOT_SUSPENDED=false
+export EW_FALLBACK_TO_SSH_BUNDLES=false
+export EW_LOG_LEVEL=0
+
+# Needed by dewploy
+export CROSS_CONFIG="${HOME}/.nix-profile/opt/stormcloud-docker/Cross.toml"
+export GHOST_IP=198.18.132.22
+export STORMCLOUD_BUILD_TYPE=debug
+
+# sql2 with configured networks
+alias esql2="sql2 -q essl.lighthouse.query.akadns.net"
+alias fsql2="sql2 -q freeflow.lighthouse.query.akadns.net"
 
 ## Plugins
 
