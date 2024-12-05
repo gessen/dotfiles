@@ -753,20 +753,10 @@ alias rsync-move='rsync-copy --remove-source-files'
 alias rsync-update='rsync-copy --update'
 alias rsync-synchronize='rsync-update --delete'
 
-## SSH
+## Serie
 
-# Copy current terminfo file to the given host
-function ssh-copy-terminfo() {
-  if [[ "$#" == 0 ]]; then return 1; fi
-  infocmp -a | ssh "$1" tic -x -o \~/.terminfo /dev/stdin
-}
-
-## Tig
-
-alias tia='tig --all'
-
-function tig-widget() {
-  tig
+function serie-widget() {
+  serie -g single -o topo
 
   local fn
   for fn (chpwd $chpwd_functions precmd $precmd_functions); do
@@ -775,8 +765,16 @@ function tig-widget() {
   zle reset-prompt
 }
 
-zle -N tig-widget
-bindkey "^[g" tig-widget
+zle -N serie-widget
+bindkey "^[g" serie-widget
+
+## SSH
+
+# Copy current terminfo file to the given host
+function ssh-copy-terminfo() {
+  if [[ "$#" == 0 ]]; then return 1; fi
+  infocmp -a | ssh "$1" tic -x -o \~/.terminfo /dev/stdin
+}
 
 ## Yazi
 

@@ -23,7 +23,7 @@
       src: '{{ aur_src }}/{{ package.0.name }}/{{ package.1 }}'
       state: link
       force: yes
-    loop: '{{ packages_own | subelements("files", skip_missing=True) }}'
+    loop: '{{ packages_own | default([], true) | subelements("files", skip_missing=True) }}'
     loop_control:
       loop_var: package
 
