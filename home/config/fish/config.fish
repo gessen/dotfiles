@@ -44,6 +44,9 @@ if test $TERM = dumb
     return
 end
 
+# Force same umask as in stormcloud docker
+umask 022
+
 # Disable greeting
 set fish_greeting
 
