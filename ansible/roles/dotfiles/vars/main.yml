@@ -14,7 +14,8 @@ dotfiles:
   - config/gdb-dashboard/config
   - config/git/attributes
   - config/git/config
-  - config/git/config.local
+  - config/git/config-delta
+  - config/git/config-local
   - config/git/ignore
   - config/keepassxc/keepassxc.ini
   - config/kitty/kitty.conf

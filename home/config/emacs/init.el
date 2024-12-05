@@ -4906,8 +4906,8 @@ Goto^^              Actions^^         Other^^
     "Pick proper background and foreground colors based on the
 current theme. This will also disable line numbers and decorations."
     (push (if (eq (frame-parameter nil 'background-mode) 'dark)
-              "--features=colors-dark"
-            "--features=colors-light") args))
+              "--features=modus-vivendi"
+            "--features=modus-operandi") args))
 
   (defun magit-delta-toggle ()
     "Toggles `magit-delta-mode' and refreshes Magit."
