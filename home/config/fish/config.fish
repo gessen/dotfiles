@@ -44,6 +44,11 @@ if test -z "$SSH_AGENT_PID"
     source "/tmp/ssh-agent.fish"
 end
 
+ssh-add -l | grep -q (ssh-keygen -lf $HOME/.ssh/id_rsa | awk '{print $2}')
+or ssh-add
+and which kitten > /dev/null
+and kitten ssh vm
+
 ## Command line
 
 function copy-prev-shell-word -d "Copy previous word"

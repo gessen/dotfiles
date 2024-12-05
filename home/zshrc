@@ -13,6 +13,11 @@ if [[ ! "${SSH_AGENT_PID}" ]]; then
   source "/tmp/ssh-agent.sh"
 fi
 
+ssh-add -l \
+  | grep -q "$(ssh-keygen -lf ${HOME}/.ssh/id_rsa | awk '{print $2}')" \
+  || ssh-add \
+  && which kitten > /dev/null && kitten ssh vm
+
 # Create cache directory
 zsh_cache_dir="${HOME}/.cache/zsh"
 [[ ! -d "${zsh_cache_dir}" ]] && mkdir -p "${zsh_cache_dir}"
