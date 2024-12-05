@@ -891,7 +891,7 @@ ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 POWERLEVEL9K_MODE=nerdfont-v3
 
 # Default colors of dir segment
-POWERLEVEL9K_DIR_BACKGROUND=blue
+POWERLEVEL9K_DIR_BACKGROUND=28
 POWERLEVEL9K_DIR_FOREGROUND=brightwhite
 
 # If directory is too long, shorten some of its segments to the shortest
