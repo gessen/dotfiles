@@ -35,6 +35,7 @@
   "telemetry": {
     "metrics": true
   },
+  "auto_update": false,
   "git": {
     "inline_blame": {
       "enabled": false
@@ -73,5 +74,22 @@
   },
   "vim": {
     "use_smartcase_fine": true
-  }
+  },
+  "ssh_connections": [
+    {
+      "host": "vm",
+      "projects": [
+        {
+          "paths": [
+            "~/Workspace/sandbox"
+          ]
+        },
+        {
+          "paths": [
+            "~/Workspace/stormcloud"
+          ]
+        }
+      ]
+    }
+  ]
 }
