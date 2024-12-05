@@ -741,9 +741,9 @@ if (( ${+commands[atuin]} )); then
   unset -v atuin_init
 fi
 
-## Lsd
+## Eza
 
-alias ls='lsd'
+alias ls='eza --group-directories-first --time-style relative --icons always'
 alias ll='ls --long'
 alias la='ll --almost-all'
 alias l='la --git'
