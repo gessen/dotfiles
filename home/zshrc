@@ -6,7 +6,8 @@ fi
 
 # Automatic SSH agent
 if ! pgrep -u "${USER}" ssh-agent > /dev/null; then
-  ssh-agent -s | sed "s|^echo|#echo|" > "/tmp/ssh-agent.sh"
+  ssh-agent -s -a "${XDG_RUNTIME_DIR}/ssh_agent" \
+    | sed "s|^echo|#echo|" > "/tmp/ssh-agent.sh"
 fi
 
 if [[ ! "${SSH_AGENT_PID}" ]]; then
@@ -15,8 +16,7 @@ fi
 
 ssh-add -l \
   | grep -q "$(ssh-keygen -lf ${HOME}/.ssh/id_rsa | awk '{print $2}')" \
-  || ssh-add \
-  && which kitten > /dev/null && kitten ssh vm
+  || ssh-add
 
 # Create cache directory
 zsh_cache_dir="${HOME}/.cache/zsh"
