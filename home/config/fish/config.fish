@@ -202,7 +202,7 @@ function egp -d "Open files with EDITOR with fg+fzf with preview"
 end
 
 # Set both EDITOR and VISUAL to emacsclient with autostarted server
-set -gx EDITOR emacsclient --tty
+set -gx EDITOR hx
 set -gx VISUAL $EDITOR
 
 # emacsclient starts emacs in daemon mode if it can't connect to it
@@ -214,8 +214,6 @@ abbr -a mg emacsclient --tty --eval '"(magit-status)"'
 abbr -a mgg emacsclient --create-frame --no-wait --eval '"(magit-status)"'
 
 abbr -a e emacs
-abbr -a hx helix
-abbr -a zed zeditor
 
 ## History
 
@@ -440,7 +438,7 @@ abbr -a --position anywhere -- --help --help 2>&1 '|' bat --plain --language hel
 ## CMake
 
 # By default, use nproc number of threads
-set -gx CMAKE_BUILD_PARALLEL_LEVEL (nproc)
+set -gx CMAKE_BUILD_PARALLEL_LEVEL (nproc 2>/dev/null || sysctl -n hw.ncpu)
 
 # Generates compile_commands.json by default
 set -gx CMAKE_EXPORT_COMPILE_COMMANDS ON
