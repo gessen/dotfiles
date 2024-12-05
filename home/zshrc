@@ -732,9 +732,6 @@ alias l='la --git'
 
 ## Kitty
 
-# Ensures that terminfo is uploaded
-alias ssh='kitty +kitten ssh'
-
 # Nicer scp/rsync
 alias transfer='kitty +kitten transfer'
 
