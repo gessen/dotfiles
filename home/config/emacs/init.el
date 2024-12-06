@@ -3701,6 +3701,11 @@ defeats the purpose of `corfu-prescient'."
 (use-feature! dockerfile-ts-mode
   :mode ("\\(?:Dockerfile\\(?:\\..*\\)?\\|\\.[Dd]ockerfile\\)\\'"))
 
+;;;; Fish
+
+;; Package `fish-mode' provides a major mode for Fish shell scripts.
+(use-package! fish-mode)
+
 ;;;; Markdown
 
 ;; Package `markdown-mode' provides a major mode for Markdown-formatted text.
