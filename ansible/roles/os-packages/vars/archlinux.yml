@@ -59,6 +59,7 @@ packages:
   - tree
   - ttf-nerd-fonts-symbols
   - ttf-nerd-fonts-symbols-mono
+  - wl-clipboard
   - workrave
   - xdg-user-dirs
   - yazi
