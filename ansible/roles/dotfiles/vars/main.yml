@@ -9,6 +9,8 @@ dotfiles:
   - config/emacs/straight/versions/default.el
   - config/emacs/early-init.el
   - config/emacs/init.el
+  - config/fish/config.fish
+  - config/fish/fish_plugins
   - config/gdb/libstdcxx
   - config/gdb/libcxx
   - config/gdb-dashboard/config
@@ -25,12 +27,9 @@ dotfiles:
   - config/mpv/mpv.conf
   - config/ripgrep/config
   - config/sccache/config
-  - config/sheldon/plugins.toml
   - config/yazi/yazi.toml
   - local/share/cargo/config.toml
   - ssh/config
-  - zprofile
-  - zshrc
 
 dotdirs:
   - local/share/gdb
