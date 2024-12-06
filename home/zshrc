@@ -271,6 +271,10 @@ LESS="--shift 5 $LESS"
 
 # Squeeze consecutive blank lines into a single blank line
 LESS="--squeeze-blank-lines $LESS"
+
+# Enable mouse input
+LESS="--mouse --wheel-lines=3 $LESS"
+
 export LESS
 
 ## Editors
