@@ -6,14 +6,14 @@ with pkgs;
 
 rustPlatform.buildRustPackage rec {
   pname = "dewploy";
-  version = "0.9.1";
+  version = "0.10.0";
 
   src = builtins.fetchGit {
     url = "git+ssh://git@github.com/gessen/dewploy.git";
     ref = "develop";
-    rev = "791ff806d050353b36372efc3672cc7d46300fe4";
+    rev = "1044b6f01afc3fe0a1b097638cb70ccd93c19067";
   };
-  cargoHash = "sha256-AVpDP9YSVVmXgZHl3de92Nkh9x9oUR4Qx+hqv1dVzZk=";
+  cargoHash = "sha256-hpW1RbrE/DVwzEXR+lcy7914fllZEut3KV/RQAKDrD8=";
 
   nativeBuildInputs = [ installShellFiles ];
 
