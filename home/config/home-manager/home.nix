@@ -32,6 +32,7 @@ in
       dua
       emacs-unstable-nox
       emacs-lsp-booster
+      eza
       fd
       fzf
       git
@@ -43,7 +44,6 @@ in
       less
       librsync
       libtool
-      lsd
       meson
       mise
       mold
