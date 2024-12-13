@@ -80,3 +80,7 @@
 [include]
 	path = config-delta
 	path = config-local
+[scalar]
+	repo = /home/jswierk/Workspace/stormcloud
+[maintenance]
+	repo = /home/jswierk/Workspace/stormcloud
