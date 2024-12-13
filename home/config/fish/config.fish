@@ -525,9 +525,6 @@ abbr -a l lsd --long --almost-all --git
 
 ## Kitty
 
-# Ensures that terminfo is uploaded
-abbr -a ssh kitty +kitten ssh
-
 # Nicer scp/rsync
 abbr -a transfer kitty +kitten transfer
 
