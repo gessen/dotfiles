@@ -420,6 +420,15 @@ abbr -a gwip git-wip
 abbr -a gunwip git-unwip
 abbr -a gunwipall git-unwip-all
 
+## Jujutsu
+
+abbr -a jc jj commit
+abbr -a jde jj describe
+abbr -a jd jj diff
+abbr -a jlo jj log
+abbr -a jn jj new
+abbr -a jst jj status
+
 ## Bat
 
 # Use bat as MANPAGER
