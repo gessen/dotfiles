@@ -566,6 +566,23 @@ end
 
 bind \co y
 
+## Zellij
+
+function ze -d "Create new Zellij session or switch to existing one"
+    if test -n "$ZELLIJ"
+        return
+    end
+    if test -n "$argv[1]"
+        zellij attach --create $argv[1]
+    else
+        set -f session (zellij list-sessions --short 2>/dev/null \
+            | fzf --layout=reverse --select-1 --exit-0)
+        and zellij attach $session
+    end
+end
+
+abbr -a zj zellij
+
 ## Zoxide
 
 if type -q zoxide
