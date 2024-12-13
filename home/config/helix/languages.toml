@@ -1,0 +1,17 @@
+[[language]]
+name = "rust"
+text-width = 100
+
+[language-server.rust-analyzer.config]
+check = { command = "clippy" }
+completion = { postfix = { enable = false } }
+diagnostics = { experimental = { enable = true } }
+lens = { enable = false }
+
+[language-server.rust-analyzer.config.inlayHints]
+closureReturnTypeHints = { enable = "always" }
+lifetimeElisionHints = { enable = "skip_trivial" }
+
+[[language]]
+name = "cpp"
+auto-format = true
