@@ -1,0 +1,17 @@
+#!/bin/sh
+
+set -o errexit
+set -o nounset
+
+DIR="$( cd "$( dirname "$0" )" && pwd )"
+ln -sfn "${DIR}/home/config/home-manager" "${HOME}/.config/home-manager"
+ln -sfn "${DIR}/home/config/nix" "${HOME}/.config/nix"
+
+NIX_INSTALLER_NO_MODIFY_PROFILE=1
+bash <(curl -L https://nixos.org/nix/install) --no-daemon
+
+. "${HOME}/.nix-profile/etc/profile.d/nix.sh"
+nix-channel --add https://github.com/nix-community/home-manager/archive/master.tar.gz home-manager
+nix-channel --update
+
+nix-shell '<home-manager>' -A install
