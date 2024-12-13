@@ -1,0 +1,9 @@
+[user]
+name = "Jacek Swierk"
+email = "jacek.swierk@gmail.com"
+
+[ui]
+pager = "delta"
+
+[ui.diff]
+format = "git"

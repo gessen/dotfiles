@@ -422,6 +422,28 @@ abbr -a gwip git-wip
 abbr -a gunwip git-unwip
 abbr -a gunwipall git-unwip-all
 
+## Jujutsu
+
+abbr -a jb jj bookmark
+abbr -a jbc jj bookmark create
+abbr -a jbd jj bookmark delete
+abbr -a jbl jj bookmark list
+abbr -a jbr jj bookmark rename
+abbr -a jbs jj bookmark set
+abbr -a jbt jj bookmark track
+
+abbr -a jc jj commit
+abbr -a jci jj commit --interactive
+abbr -a jde jj describe
+
+abbr -a jd jj diff
+
+abbr -a jlo jj log
+
+abbr -a jn jj new
+
+abbr -a jst jj status
+
 ## Bat
 
 # Use bat as MANPAGER
