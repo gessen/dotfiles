@@ -523,7 +523,7 @@ abbr -a transfer kitty +kitten transfer
 ## Ninja
 
 # Include the current load to the ninja status
-set -gx NINJA_STATUS "[%s/%f/%t] (j%r/%e) "
+set -gx NINJA_STATUS "[%s/%f/%t] (j%r/%es/%Es/%P) "
 
 ## Ripgrep
 
