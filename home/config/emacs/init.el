@@ -4184,7 +4184,7 @@ defeats the purpose of `corfu-prescient'."
   :straight (:host codeberg :repo "eownerdead/eglot-semantic-tokens")
   :demand t
   :after eglot
-  :hook (eglot-managed-mode-hook . eglot--semantic-tokens-mode)
+  ;; :hook (eglot-managed-mode-hook . eglot--semantic-tokens-mode)
   :config
 
   ;; Enable semantic tokens.
