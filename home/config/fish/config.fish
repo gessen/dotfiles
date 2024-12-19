@@ -11,12 +11,27 @@ if status is-login
     # Partial XDG support that needs some help
     set -gx ANSIBLE_HOME $xdg_config_home/ansible
     set -gx ASPELL_CONF home-dir "$xdg_config_home/aspell/; per-conf aspell.conf"
+    set -gx BUNDLE_USER_CONFIG "$xdg_config_home/bundle"
+    set -gx BUNDLE_USER_CACHE "$xdg_cache_home/bundle"
+    set -gx BUNDLE_USER_PLUGIN "$xdg_data_home/bundle"
     set -gx CARGO_HOME $xdg_data_home/cargo
+    set -gx DOCKER_CONFIG "$xdg_config_home/docker"
+    set -gx GEM_HOME "$xdg_data_home/gem"
+    set -gx GEM_SPEC_CACHE "$xdg_cache_home/gem"
     set -gx GNUPGHOME $xdg_data_home/gnupg
     set -gx GTK2_RC_FILES $xdg_config_home/gtk-2.0/settings.ini
     set -gx RIPGREP_CONFIG_PATH $xdg_config_home/ripgrep/config
     set -gx RUSTUP_HOME $xdg_data_home/rustup
     set -gx _ZO_DATA_DIR $xdg_data_home/zoxide
+
+    # Needed by cargo to build Stormcloud.
+    set -gx AKAMILL_INSTALL_PATH /opt/akamill
+    set -gx BUILD_OS alsi22
+    set -gx OPENSSL_DIR /opt/akamill
+    set -gx OPENSSL_INSTALL_PATH "$OPENSSL_DIR"
+    set -gx LD_LIBRARY_PATH "$OPENSSL_INSTALL_PATH/lib:$LD_LIBRARY_PATH"
+    set -gx V8_INCLUDE_PATH /usr/local/include
+    set -gx V8_LIBRARY_PATH /usr/local/lib
 
     if ! status is-interactive
         return
@@ -615,6 +630,42 @@ if type -q zoxide
     end
     source $zoxide_init
 end
+
+## Cargo
+
+# Add locally installed cargo
+fish_add_path -P "$CARGO_HOME/bin"
+
+## Mise
+
+if type -q mise
+    set -l mise_init $__fish_cache_dir/mise-init.fish
+    if test (type -p mise) -nt $mise_init; or ! test -s $mise_init
+        mise activate --shims >$mise_init
+    end
+    source $mise_init
+end
+
+## Stormcloud
+
+# Needed by perforce
+set -gx P4CONFIG .perforce
+set -gx P4EDITOR $EDITOR
+
+# Needed by e2e tests
+set -gx EW_ENSURE_AUDIT_PASSING false
+set -gx EW_ENSURE_NOT_SUSPENDED false
+set -gx EW_FALLBACK_TO_SSH_BUNDLES false
+set -gx EW_LOG_LEVEL 0
+
+# Needed by dewploy
+set -gx CROSS_CONFIG "$HOME/.nix-profile/opt/stormcloud-docker/Cross.toml"
+set -gx GHOST_IP 198.18.132.22
+set -gx STORMCLOUD_BUILD_TYPE debug
+
+# sql2 with configured networks
+abbr -a esql2 sql2 -q essl.lighthouse.query.akadns.net
+abbr -a fsql2 sql2 -q freeflow.lighthouse.query.akadns.net
 
 ## Plugins
 
