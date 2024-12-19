@@ -5,8 +5,8 @@
     "dark": "One Dark"
   },
   "buffer_font_family": "Intel One Mono",
-  "buffer_font_size": 16,
-  "ui_font_size": 18,
+  "buffer_font_size": 17,
+  "ui_font_size": 19,
   "active_pane_modifiers": {
     "inactive_opacity": 0.9
   },
@@ -80,14 +80,10 @@
       "host": "vm",
       "projects": [
         {
-          "paths": [
-            "~/Workspace/sandbox"
-          ]
+          "paths": ["~/Workspace/sandbox"]
         },
         {
-          "paths": [
-            "~/Workspace/stormcloud"
-          ]
+          "paths": ["~/Workspace/stormcloud"]
         }
       ]
     }
