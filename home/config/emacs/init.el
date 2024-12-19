@@ -4472,6 +4472,32 @@ unhelpful."
   ;; can be helpful in documents that need "_" frequently in plain text.
   (setq org-export-with-sub-superscripts '{}))
 
+;; Package `ox-jira' plugs into the regular Org Export Engine and transforms Org
+;; files to JIRA markup for pasting into JIRA tickets & comments.
+(use-package! ox-jira
+  :straight (:branch "trunk")
+  :demand t
+  :after ox
+  :config
+
+  (defadvice! my--ox-jira-src-block
+      (src-block _contents info)
+    :override #'ox-jira-src-block
+    "Properly convert language blocks."
+    (when (org-string-nw-p (org-element-property :value src-block))
+      (let* ((lang (org-element-property :language src-block))
+             (lang (pcase lang
+                     ("c++" "c++")
+                     ("sh" "bash")
+                     ("python" "python")
+                     (_ "none")))
+             (code (org-export-format-code-default src-block info))
+             (collapse (if (< (plist-get info :src-collapse-threshold)
+                              (org-count-lines code))
+                           "true" "false")))
+        (format "{code:language=%s|collapse=%s}\n%s{code}"
+                lang collapse code)))))
+
 ;; Package `ox-pandoc' is another exporter for Org Mode that translates Org Mode
 ;; file to various other formats via Pandoc.
 (use-package! ox-pandoc
