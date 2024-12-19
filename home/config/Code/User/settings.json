@@ -1,0 +1,48 @@
+{
+    "editor.cursorBlinking": "smooth",
+    "editor.cursorSmoothCaretAnimation": "on",
+    "editor.cursorSurroundingLines": 10,
+    "editor.cursorWidth": 3,
+    "editor.definitionLinkOpensInPeek": true,
+    "editor.fontFamily": "Intel One Mono",
+    "editor.fontLigatures": false,
+    "editor.fontSize": 17,
+    "editor.guides.bracketPairs": true,
+    "editor.inlayHints.fontSize": 11,
+    "editor.minimap.showSlider": "always",
+    "editor.mouseWheelZoom": true,
+    "editor.rulers": [
+        100
+    ],
+    "editor.smoothScrolling": true,
+    "files.exclude": {
+        "**/.jj": true
+    },
+    "files.insertFinalNewline": true,
+    "files.trimFinalNewlines": true,
+    "files.trimTrailingWhitespace": true,
+    "files.watcherExclude": {
+        "**/.jj": true,
+        "**/target*": true
+    },
+    "diffEditor.experimental.showMoves": true,
+    "diffEditor.experimental.useTrueInlineView": true,
+    "git.allowForcePush": true,
+    "git.alwaysShowStagedChangesResourceGroup": true,
+    "search.smartCase": true,
+    "terminal.integrated.allowChords": false,
+    "terminal.integrated.smoothScrolling": true,
+    "workbench.editor.wrapTabs": true,
+    "workbench.iconTheme": "vscode-great-icons",
+    "workbench.list.smoothScrolling": true,
+    "rust-analyzer.check.command": "clippy",
+    "rust-analyzer.diagnostics.experimental.enable": true,
+    "rust-analyzer.completion.postfix.enable": false,
+    "rust-analyzer.inlayHints.closureReturnTypeHints.enable": "always",
+    "rust-analyzer.inlayHints.lifetimeElisionHints.enable": "skip_trivial",
+    "rust-analyzer.interpret.tests": true,
+    "remote.SSH.useLocalServer": false,
+    "remote.SSH.remotePlatform": {
+        "vm": "linux"
+    }
+}
