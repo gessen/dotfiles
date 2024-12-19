@@ -670,6 +670,26 @@ abbr -a fsql2 sql2 -q freeflow.lighthouse.query.akadns.net
 
 ## Plugins
 
-set hydro_color_pwd $fish_color_cwd
-set hydro_color_git brblue
-set fish_prompt_pwd_dir_length 2
+if type -q tide
+    set -l tide_init $__fish_cache_dir/tide-init.fish
+    if ! test -f $tide_init
+        tide configure --auto \
+            --style=Rainbow \
+            --prompt_colors='True color' \
+            --show_time=No \
+            --rainbow_prompt_separators=Angled \
+            --powerline_prompt_heads=Sharp \
+            --powerline_prompt_tails=Flat \
+            --powerline_prompt_style='Two lines, character' \
+            --prompt_connection=Dotted \
+            --powerline_right_prompt_frame=No \
+            --prompt_connection_andor_frame_color=Darkest \
+            --prompt_spacing=Sparse \
+            --icons='Many icons' \
+            --transient=Yes
+        touch $tide_init
+    end
+    set tide_left_prompt_items pwd git newline character
+    set tide_right_prompt_items status cmd_duration jobs
+end
+
