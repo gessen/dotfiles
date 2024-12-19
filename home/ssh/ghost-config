@@ -1,0 +1,6 @@
+Host *
+    HostKeyAlgorithms +ssh-dss
+
+Host ghost
+    User root
+    HostName 198.18.132.22
