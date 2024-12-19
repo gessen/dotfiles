@@ -212,6 +212,8 @@ abbr -a mgg emacsclient --create-frame --no-wait --eval '"(magit-status)"'
 
 abbr -a e emacs
 
+abbr -a se sudoedit
+
 ## History
 
 abbr -a hm history merge
