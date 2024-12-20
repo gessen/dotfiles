@@ -9,7 +9,7 @@ rustPlatform.buildRustPackage rec {
   version = "0.10.0";
 
   src = builtins.fetchGit {
-    url = "git+ssh://git@github.com/gessen/dewploy.git";
+    url = "https://github.com/gessen/dewploy.git";
     ref = "develop";
     rev = "1044b6f01afc3fe0a1b097638cb70ccd93c19067";
   };
