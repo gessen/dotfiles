@@ -473,8 +473,8 @@ abbr -a cat bat
 
 # Use bat to colorize help messages
 abbr -a help --set-cursor % --help 2>&1 '|' bat --plain --language help
-abbr -a --position anywhere -- -h -h 2>&1 '|' bat --plain --language help
-abbr -a --position anywhere -- --help --help 2>&1 '|' bat --plain --language help
+abbr -a --position anywhere -- -h "-h 2>&1 | bat --plain --language help"
+abbr -a --position anywhere -- --help "--help 2>&1 | bat --plain --language help"
 
 ## CMake
 
