@@ -667,6 +667,29 @@ set -gx CROSS_CONFIG "$HOME/.nix-profile/opt/stormcloud-docker/Cross.toml"
 set -gx GHOST_IP 198.18.132.22
 set -gx STORMCLOUD_BUILD_TYPE debug
 
+function stormcloud-env-start
+    docker run \
+        --name stormcloud-env \
+        --detach \
+        --init \
+        --interactive \
+        --tty \
+        --mount type=bind,src=$SSH_AUTH_SOCK,target=$SSH_AUTH_SOCK \
+        --mount type=bind,src=$HOME/Workspace,target=$HOME/Workspace \
+        --env SSH_AUTH_SOCK \
+        --publish 2222:22 \
+        stormcloud-env:v2
+end
+
+function stormcloud-env-shell
+    docker exec \
+        --interactive \
+        --tty \
+        --env SSH_CONNECTION \
+        stormcloud-env \
+        $SHELL -l
+end
+
 # sql2 with configured networks
 abbr -a esql2 sql2 -q essl.lighthouse.query.akadns.net
 abbr -a fsql2 sql2 -q freeflow.lighthouse.query.akadns.net
