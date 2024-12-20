@@ -679,6 +679,7 @@ function stormcloud-env-start
         --env SSH_AUTH_SOCK \
         --publish 2222:22 \
         stormcloud-env:v2
+    and ssh-keygen -f ~/.ssh/known_hosts -R "[localhost]:2222"
 end
 
 function stormcloud-env-shell

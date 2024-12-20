@@ -121,10 +121,12 @@ RUN export NIX_INSTALLER_NO_MODIFY_PROFILE=1 \
  && curl -sL https://nixos.org/nix/install | sh -s -- --no-daemon \
  && ln -sfn ~/.dotfiles/home/config/home-manager ${HOME}/.config/home-manager \
  && ln -sfn ~/.dotfiles/home/config/nix ${HOME}/.config/nix \
- && . "${HOME}/.nix-profile/etc/profile.d/nix.sh" \
+ && . ~/.nix-profile/etc/profile.d/nix.sh \
  && nix-channel --add https://github.com/nix-community/home-manager/archive/master.tar.gz home-manager \
  && nix-channel --update \
- && nix-shell '<home-manager>' -A install
+ && nix-shell '<home-manager>' -A install \
+ && mkdir ~/.terminfo \
+ && cp -r ~/.nix-profile/share/terminfo/x ~/.terminfo/
 
 RUN export CARGO_HOME=${HOME}/.local/share/cargo \
  && export RUSTUP_HOME=${HOME}/.local/share/rustup \
