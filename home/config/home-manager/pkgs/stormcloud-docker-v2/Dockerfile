@@ -23,7 +23,9 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     libssl-dev \
     libseccomp-dev \
     openssh-client \
+    openssh-server \
     pkg-config \
+    sudo \
     unzip \
     zlib1g-dev \
  && rm -rf /var/lib/apt/lists/* \
@@ -33,7 +35,29 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     --slave   /usr/bin/lld     lld     /usr/bin/lld-19 \
  && update-alternatives \
     --install /usr/bin/gcc gcc /usr/bin/gcc-10 100 \
-    --slave   /usr/bin/g++ g++ /usr/bin/g++-10
+    --slave   /usr/bin/g++ g++ /usr/bin/g++-10 \
+ && service ssh start
+
+ARG USER
+ARG USER_ID
+ARG GROUP_ID
+
+RUN if [ ${USER_ID:-0} -ne 0 ] && [ ${GROUP_ID:-0} -ne 0 ]; then \
+    groupadd --gid ${GROUP_ID} ${USER} \
+ && useradd \
+    --no-log-init \
+    --create-home \
+    --skel /tmp \
+    --uid ${USER_ID} \
+    --gid ${USER} \
+    --shell /usr/bin/fish \
+    ${USER} \
+ && echo "${USER}:123" | chpasswd \
+ && mkdir -p /etc/sudoers.d \
+ && echo "${USER} ALL=(ALL) ALL" >> /etc/sudoers.d/10-${USER} \
+ && mkdir /nix \
+ && chown ${USER} /nix \
+; fi
 
 FROM base AS akamill
 ARG AKAMILL_VERSION=2.6
@@ -73,48 +97,38 @@ RUN mkdir -p /opt/protobuf \
  && unzip /protoc.zip
 
 FROM base
-ARG USER
-ARG USER_ID
-ARG GROUP_ID
-
 COPY --from=akamill /opt/akamill/ /opt/akamill/
 COPY --from=v8 /opt/v8/ /usr/local/
 COPY --from=gn /opt/gn/gn /usr/local/bin/
 COPY --from=protobuf /opt/protobuf/bin /usr/local/bin/
 COPY --from=protobuf /opt/protobuf/include /usr/local/include/
 
-RUN if [ ${USER_ID:-0} -ne 0 ] && [ ${GROUP_ID:-0} -ne 0 ]; then \
-    groupadd --gid ${GROUP_ID} ${USER} \
- && useradd \
-    --no-log-init \
-    --create-home \
-    --skel /tmp \
-    --uid ${USER_ID} \
-    --gid ${USER} \
-    --shell /usr/bin/fish \
-    ${USER} \
- && echo "${USER}:123" | chpasswd \
- && mkdir -p /etc/sudoers.d \
- && echo "${USER} ALL=(ALL) ALL" >> /etc/sudoers.d/10-${USER} \
- && mkdir /nix \
- && chown ${USER} /nix \
-; fi
 USER ${USER}
-ENV USER=${USER} \
+ENV COLORTERM=truecolor \
+    USER=${USER} \
+    SHELL=/usr/bin/fish \
     TERM=xterm-256color
 
 RUN mkdir -p ~/.config \
- && git clone https://github.com/gessen/dotfiles.git ~/.dotfiles --branch=akamai/vm
+ && mkdir -p ~/.config/fish/functions \
+ && mkdir -p ~/.ssh \
+ && ssh-keyscan github.com >> ~/.ssh/known_hosts \
+ && git clone https://github.com/gessen/dotfiles.git ~/.dotfiles --branch=akamai/vm \
+ && FISHER_URL=https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish \
+ && curl -sL $FISHER_URL > ~/.config/fish/functions/fisher.fish
 
-RUN curl -sL https://nixos.org/nix/install | sh -s -- --no-daemon \
+RUN export NIX_INSTALLER_NO_MODIFY_PROFILE=1 \
+ && curl -sL https://nixos.org/nix/install | sh -s -- --no-daemon \
  && ln -sfn ~/.dotfiles/home/config/home-manager ${HOME}/.config/home-manager \
  && ln -sfn ~/.dotfiles/home/config/nix ${HOME}/.config/nix \
  && . "${HOME}/.nix-profile/etc/profile.d/nix.sh" \
  && nix-channel --add https://github.com/nix-community/home-manager/archive/master.tar.gz home-manager \
- && nix-channel --update
- # && nix-shell '<home-manager>' -A install
+ && nix-channel --update \
+ && nix-shell '<home-manager>' -A install
 
-RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs \
+RUN export CARGO_HOME=${HOME}/.local/share/cargo \
+ && export RUSTUP_HOME=${HOME}/.local/share/rustup \
+ && curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs \
     | sh -s -- -y --no-modify-path
 
 WORKDIR /home/${USER}
