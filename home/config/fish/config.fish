@@ -695,4 +695,3 @@ if type -q tide
     set tide_left_prompt_items pwd git newline character
     set tide_right_prompt_items status cmd_duration jobs
 end
-
