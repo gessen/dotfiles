@@ -1016,7 +1016,7 @@ window instead."
   (let* ((filename (if (derived-mode-p 'dired-mode)
                        (dired-get-file-for-visit)
                      (buffer-file-name)))
-         (filepath (expand-file-name (read-file-name "Open file: " filename))))
+         (filepath (expand-file-name filename)))
     (unless (and filepath (file-exists-p filepath))
       (user-error "File '%s' does not exist" filepath))
     (let ((process-connection-type nil))
@@ -1060,6 +1060,7 @@ window instead."
   (set-prefixes! "f v" "variables")
 
   (set-leader-keys!
+    "f v c" #'customize-dirlocals
     "f v d" #'add-dir-local-variable
     "f v f" #'add-file-local-variable
     "f v p" #'add-file-local-variable-prop-line))
@@ -1129,6 +1130,9 @@ root, switch to it. Otherwise, create a new vterm buffer."
             (project-vterm "Term" ?s)
             (project-eshell "Eshell" ?e)
             (project-any-command "Other" ?o)))
+
+  ;; Show current project name and Project menu on the mode line.
+  (setopt project-mode-line t)
 
   ;; Do not litter `user-emacs-directory' with Project persistent history.
   (setopt project-list-file (expand-file-name "projects.el" my-cache-dir))
@@ -1387,11 +1391,6 @@ root, switch to it. Otherwise, create a new vterm buffer."
 
 ;; Rebind `quoted-insert' as C-q will be used by `kill-buffer'
 (keymap-global-set "C-z" #'quoted-insert)
-
-;; Use M-delete and M-backspace to remove word in terminal like in GUI where
-;; they are automatically translated from M-DEL.
-(keymap-global-set "M-<delete>"    #'backward-kill-word)
-(keymap-global-set "M-<backspace>" #'backward-kill-word)
 
 (set-leader-keys!
   "t C-f" #'auto-fill-mode
@@ -3275,6 +3274,11 @@ completing-read prompter."
   (set-leader-keys! "e h" #'eldoc-doc-buffer)
 
   :hook (eval-expression-minibuffer-setup-hook . eldoc-mode)
+  :config
+
+  ;; Decrease the idle time after ElDoc shows documentation at point.
+  (setopt eldoc-idle-delay 0)
+
   :blackout t)
 
 ;; Package `breadcrumb' provide `project' and `imenu'-based breadcrumb paths
@@ -3515,7 +3519,7 @@ defeats the purpose of `corfu-prescient'."
 ;; Package `flymake-popon' shows Flymake diagnostics on cursor hover. This works
 ;; on both graphical and non-graphical displays.
 (use-package! flymake-popon
-  :hook (flymake-mode . flymake-popon-mode)
+  :hook (flymake-mode-hook . flymake-popon-mode)
   :config
 
   ;; Increase the idle timeout from the default of 0.2 seconds.
@@ -4079,12 +4083,14 @@ defeats the purpose of `corfu-prescient'."
     "a w" #'eglot-code-action-rewrite
 
     ;; Goto
+    "g c" #'eglot-show-call-hierarchy
     "g d" #'eglot-find-declaration
     "g e" #'flymake-show-project-diagnostics
     "g g" #'xref-find-definitions
     "g i" #'eglot-find-implementation
     "g r" #'xref-find-references
     "g t" #'eglot-find-typeDefinition
+    "g T" #'eglot-show-type-hierarchy
 
     ;; Help
     "h h" #'eldoc-doc-buffer
@@ -4113,6 +4119,9 @@ defeats the purpose of `corfu-prescient'."
 
   ;; Activate Eglot in referenced non-project files.
   (setopt eglot-extend-to-xref t)
+
+  ;; Indicate that there are code actions available at a point in a mode line.
+  (setopt eglot-code-action-indications '(mode-line))
 
   ;; Disable Eglot events buffer, increase it only when debugging is needed.
   (setopt eglot-events-buffer-config '(:size 0)))
@@ -4812,6 +4821,8 @@ Goto^^              Actions^^         Other^^
   (setq git-timemachine-abbreviation-length 8))
 
 ;; Package `magit' provides a full graphical interface for Git within Emacs.
+;; Disable default keybindings.
+(setq magit-define-global-key-bindings nil)
 (use-package! magit
   :defer 2
   :init
@@ -4842,11 +4853,11 @@ Goto^^              Actions^^         Other^^
                                                overlong-summary-line))
 
     ;; Column beyond which characters in the summary lines are highlighted.
-    (setq git-commit-summary-max-length 50)
+    (setopt git-commit-summary-max-length 50)
 
     ;; Use a local message ring so that every repository gets its own commit
     ;; message ring.
-    (setq git-commit-use-local-message-ring t))
+    (setopt git-commit-use-local-message-ring t))
 
   (defadvice! my--magit-list-refs-sorted (fn &optional namespaces format sortby)
     :around #'magit-list-refs
@@ -4856,8 +4867,8 @@ Goto^^              Actions^^         Other^^
           res
         (prescient-sort res))))
 
-  ;; Disable default keybindings.
-  (setq magit-define-global-key-bindings nil)
+  ;; Suppress messages about updating margins.
+  (advice-add #'magit-margin-set-variable :around #'advice-silence-messages!)
 
   (set-leader-keys!
     "g b" #'magit-blame
@@ -4873,7 +4884,7 @@ Goto^^              Actions^^         Other^^
 
   ;; Suppress the message we get about "Turning on magit-auto-revert-mode" when
   ;; loading Magit.
-  (setq magit-no-message '("Turning on magit-auto-revert-mode..."))
+  (setopt magit-no-message '("Turning on magit-auto-revert-mode..."))
 
   :config
 
@@ -4882,19 +4893,22 @@ Goto^^              Actions^^         Other^^
   ;; it is used instead. Magit seems to be hardcoded to use the latter, so here
   ;; we override it to have more correct behavior.
   (require 'xdg)
-  (setq magit-credential-cache-daemon-socket (expand-file-name
-                                              "git/credential/socket"
-                                              (xdg-cache-home)))
+  (setopt magit-credential-cache-daemon-socket (expand-file-name
+                                                "git/credential/socket"
+                                                (xdg-cache-home)))
 
   ;; Display Magit buffers in the entire frame when displaying a status buffer.
-  (setq magit-display-buffer-function 'magit-display-buffer-fullframe-status-v1)
+  (setopt magit-display-buffer-function 'magit-display-buffer-fullframe-status-v1)
 
   ;; Don't try to save unsaved buffers when using Magit. We know perfectly well
   ;; that we need to save our buffers if we want Magit to see them.
-  (setq magit-save-repository-buffers nil)
+  (setopt magit-save-repository-buffers nil)
+
+  ;; Use `nerd-icons' when formatting lines representing a file.
+  (setopt magit-format-file-function #'magit-format-file-nerd-icons)
 
   ;; Use absolute dates when showing logs.
-  (setq magit-log-margin '(t "%d-%m-%Y %H:%M " magit-log-margin-width t 18)))
+  (setopt magit-log-margin '(t "%d-%m-%Y %H:%M " magit-log-margin-width t 18)))
 
 ;; Package 'magit-delta' integrates Delta (https://github.com/dandavison/delta)
 ;; with Magit, so that diffs in Magit are displayed with color highlighting
