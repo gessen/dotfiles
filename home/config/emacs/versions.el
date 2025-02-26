@@ -124,12 +124,6 @@
                               "*-tests.el" "LICENSE" "README*" "*-pkg.el"))
                    :source #2# :protocol https :inherit t :depth treeless :ref
                    "19a51770f24eaa7b538c7be6a8a5c25d154b641f"))
- (spinner :source #1# :recipe
-          (:package "spinner" :repo
-                    ("https://github.com/Malabarba/spinner.el" . "spinner")
-                    :files ("*" (:exclude ".git")) :source #2# :protocol https
-                    :inherit t :depth treeless :ref
-                    "d4647ae87fb0cd24bc9081a3d287c860ff061c21"))
  (parent-mode :source #1# :recipe
               (:package "parent-mode" :fetcher github :repo "Fanael/parent-mode"
                         :files
@@ -1080,17 +1074,6 @@
                              "*-tests.el" "LICENSE" "README*" "*-pkg.el"))
                   :source #2# :protocol https :inherit t :depth treeless :ref
                   "27c61866b1b9b8d77629ac702e5f48e67dfe0d3b"))
- (deadgrep :source #1# :recipe
-           (:package "deadgrep" :repo "Wilfred/deadgrep" :fetcher github :files
-                     ("*.el" "*.el.in" "dir" "*.info" "*.texi" "*.texinfo"
-                      "doc/dir" "doc/*.info" "doc/*.texi" "doc/*.texinfo"
-                      "lisp/*.el" "docs/dir" "docs/*.info" "docs/*.texi"
-                      "docs/*.texinfo"
-                      (:exclude ".dir-locals.el" "test.el" "tests.el"
-                                "*-test.el" "*-tests.el" "LICENSE" "README*"
-                                "*-pkg.el"))
-                     :source #2# :protocol https :inherit t :depth treeless :ref
-                     "bb555790c6f404572d537e1e4adec8b4ff0515f5"))
  (symbol-overlay :source #1# :recipe
                  (:package "symbol-overlay" :fetcher github :repo
                            "wolray/symbol-overlay" :files

@@ -2315,18 +2315,16 @@ will not refresh `column-number-mode."
   (put 'golden-ratio-scroll-screen-up 'isearch-motion
        (cons (lambda () (goto-char (window-end)) (recenter 0 t)) 'forward)))
 
-;; Package `deadgrep' is the fast, beautiful text search with the help of
-;; ripgrep.
-(use-package! deadgrep
-  :commands deadgrep--arguments
-  :bind ("<f5>" . #'deadgrep)
+;; Feature `grep' provides the Grepping facilities.
+(use-feature! grep
   :config
 
-  ;; Add additional flags to ripgrep.
-  (push "--max-columns-preview" deadgrep-extra-arguments)
-  (push "--max-columns=150" deadgrep-extra-arguments)
-  (push "--follow" deadgrep-extra-arguments)
-  (push "--hidden" deadgrep-extra-arguments))
+  ;; Subdivide grep output into sections, one per file.
+  (setopt grep-use-headings t)
+
+  ;; Use ripgrep instead.
+  (setopt grep-command "rg --no-heading --smart-case --line-number ")
+  (setopt grep-use-null-device nil))
 
 ;; Package `iedit' includes Emacs minor modes based on a API library and allows
 ;; you to edit one occurrence of some text in a buffer (possibly narrowed) or
