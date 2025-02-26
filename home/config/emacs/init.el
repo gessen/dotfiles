@@ -178,66 +178,80 @@ graphical frame is created."
 ;; Define this variable for native compilation disabled Emacs.
 (setq native-comp-jit-compilation-deny-list '())
 
-;;;; straight.el
+;;;; Elpaca
 
-(eval-and-compile
-  ;; Get the latest version of straight.el from the develop branch, rather than
-  ;; the default master which is updated less frequently
-  (setq straight-repository-branch "develop")
-
-  ;; Disable checks for package modifications to save up time during startup
-  (setq straight-check-for-modifications nil)
-
-  ;; Clear out recipe overrides (in case of re-init).
-  (setq straight-recipe-overrides nil))
-
-;; Bootstrap the package manager, straight.el.
-(defvar bootstrap-version)
-(let ((bootstrap-file
-       (expand-file-name "straight/repos/straight.el/bootstrap.el"
-                         user-emacs-directory))
-      (bootstrap-version 5))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-        (url-retrieve-synchronously
-         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-         'silent 'inhibit-cookies)
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
-  (load bootstrap-file nil 'nomessage))
+(defvar elpaca-installer-version 0.10)
+(defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
+(defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
+(defvar elpaca-repos-directory (expand-file-name "repos/" elpaca-directory))
+(defvar elpaca-order '(elpaca :repo "https://github.com/progfolio/elpaca.git"
+                              :ref nil :depth 1 :inherit ignore
+                              :files (:defaults "elpaca-test.el" (:exclude "extensions"))
+                              :build (:not elpaca--activate-package)))
+(let* ((repo  (expand-file-name "elpaca/" elpaca-repos-directory))
+       (build (expand-file-name "elpaca/" elpaca-builds-directory))
+       (order (cdr elpaca-order))
+       (default-directory repo))
+  (add-to-list 'load-path (if (file-exists-p build) build repo))
+  (unless (file-exists-p repo)
+    (make-directory repo t)
+    (when (< emacs-major-version 28) (require 'subr-x))
+    (condition-case-unless-debug err
+        (if-let* ((buffer (pop-to-buffer-same-window "*elpaca-bootstrap*"))
+                  ((zerop (apply #'call-process `("git" nil ,buffer t "clone"
+                                                  ,@(when-let* ((depth (plist-get order :depth)))
+                                                      (list (format "--depth=%d" depth) "--no-single-branch"))
+                                                  ,(plist-get order :repo) ,repo))))
+                  ((zerop (call-process "git" nil buffer t "checkout"
+                                        (or (plist-get order :ref) "--"))))
+                  (emacs (concat invocation-directory invocation-name))
+                  ((zerop (call-process emacs nil buffer nil "-Q" "-L" "." "--batch"
+                                        "--eval" "(byte-recompile-directory \".\" 0 'force)")))
+                  ((require 'elpaca))
+                  ((elpaca-generate-autoloads "elpaca" repo)))
+            (progn (message "%s" (buffer-string)) (kill-buffer buffer))
+          (error "%s" (with-current-buffer buffer (buffer-string))))
+      ((error) (warn "%s" err) (delete-directory repo 'recursive))))
+  (unless (require 'elpaca-autoloads nil t)
+    (require 'elpaca)
+    (elpaca-generate-autoloads "elpaca" repo)
+    (load "./elpaca-autoloads")))
+(add-hook 'after-init-hook #'elpaca-process-queues)
+(elpaca `(,@elpaca-order))
+(setopt elpaca-lock-file (expand-file-name "versions.el" user-emacs-directory))
 
 ;;;; use-package
 
 ;; Package `use-package' provides a handy macro by the same name which is
 ;; essentially a wrapper around `with-eval-after-load' with a lot of handy
 ;; syntactic sugar and useful features.
-(straight-use-package 'use-package)
+(elpaca elpaca-use-package
+  ;; Enable `use-package' :ensure support for Elpaca.
+  (elpaca-use-package-mode))
 
 (eval-and-compile
-  ;; When configuring a feature with `use-package', also tell straight.el to
-  ;; install a package of the same name, unless otherwise specified using the
-  ;; `:straight' keyword.
-  (setq straight-use-package-by-default t)
+  ;; Tell `use-package' to always use `elpaca' unless specified otherwise.
+  (setopt use-package-always-ensure t)
 
   ;; Tell `use-package' to always load features lazily unless told otherwise.
   ;; It's nicer to have this kind of thing be deterministic: if `:demand' is
   ;; present, the loading is eager; otherwise, the loading is lazy.
-  (setq use-package-always-defer t)
+  (setopt use-package-always-defer t)
 
   ;; Do not automatically add -hook prefix to all hooks mentioned in :hook.
   ;; It inhibits a simple introspection of hooks by Emacs.
-  (setq use-package-hook-name-suffix nil))
+  (setopt use-package-hook-name-suffix nil))
 
 ;; Explicitly require `use-package' when compiling to keep Flymake happy.
 (eval-when-compile
   (require 'use-package))
 
 (defmacro use-feature! (name &rest args)
-  "Like `use-package', but with `straight-use-package-by-default' disabled.
+  "Like `use-package', but with Elpaca disabled.
 NAME and ARGS are as in `use-package'."
   (declare (indent defun))
   `(use-package ,name
-     :straight nil
+     :ensure nil
      ,@args))
 
 (defmacro use-package! (name &rest args)
@@ -252,15 +266,8 @@ NAME and ARGS are as in `use-package'."
 ;; includes `use-package' integration. The features are a strict superset of
 ;; those provided by similar packages `diminish', `delight' and `dim'.
 (use-package! blackout
+  :ensure (:wait t)
   :demand t)
-
-;;;; straight.el configuration
-
-;; Feature `straight-x' from package `straight' provides experimental/unstable
-;; extensions to straight.el which are not yet ready for official inclusion.
-(use-feature! straight-x
-  ;; Add an autoload for this extremely useful command.
-  :commands (straight-x-fetch-all))
 
 ;;; Keybindings
 
@@ -493,13 +500,8 @@ anything that can be a key's definition."
 ;; the prefixed binding), all the heads can be called in succession with only a
 ;; short extension - it's like a minor mode that disables itself automagically.
 (use-package! hydra
+  :ensure (:wait t)
   :demand t)
-
-;;; Load some packages early
-(use-package! nerd-icons)
-
-;; `magit' will complain about loading built-in version of `transient'
-(use-package! transient)
 
 ;;; Configure ~/.emacs.d paths
 
@@ -1188,7 +1190,7 @@ root, switch to it. Otherwise, create a new vterm buffer."
         (list
          "COMMIT_EDITMSG\\'"
          my-cache-dir
-         (file-truename (expand-file-name "straight" straight-base-dir))))
+         (file-truename elpaca-directory)))
 
   ;; Suppress messages saying the recentf file was either loaded or saved.
   (dolist (func '(recentf-load-list recentf-save-list))
@@ -3114,7 +3116,7 @@ completing-read prompter."
 ;; Additional enhancements are available as extensions or complementary
 ;; packages.
 (use-package! vertico
-  :straight (:files (:defaults "extensions/*"))
+  :ensure (:files (:defaults "extensions/*"))
   :init
 
   (defadvice! my--vertico-add-history ()
@@ -3212,6 +3214,40 @@ completing-read prompter."
 ;;; IDE features
 ;;;; Definition location
 
+;; Feature `consult-xref' provides Xref integration for Consult.
+(use-feature! consult-xref
+  :demand t
+  :after xref
+  :config
+
+  ;; Use `consult' completion with preview.
+  (setq xref-show-xrefs-function #'consult-xref)
+  (setq xref-show-definitions-function #'consult-xref))
+
+;; Package `xref' provides a somewhat generic infrastructure for cross
+;; referencing commands, in particular "find-definition". Some part of the
+;; functionality must be implemented in a language dependent way and that's done
+;; by defining an xref backend.
+(use-feature! xref
+  :init
+
+  (set-leader-keys!
+    "F ." #'xref-find-definitions-other-frame
+    "w ." #'xref-find-definitions-other-window)
+
+  :config
+
+  ;; Prompt only if no identifier is at point.
+  (setopt xref-prompt-for-identifier nil)
+
+  ;; Use ripgrep for regexp search inside files.
+  (setopt xref-search-program 'ripgrep))
+
+;; Package `consult-xref-stack' navigates the Xref stack with Consult.
+(use-package! consult-xref-stack
+  :ensure (:host github :repo "brett-lempereur/consult-xref-stack")
+  :bind ("C-," . #'consult-xref-stack-backward))
+
 ;; Package `dumb-jump' provides a mechanism to jump to the definitions of
 ;; functions, variables, etc. in a variety of programming languages. The
 ;; advantage of `dumb-jump' is that it doesn't try to be clever, so it "just
@@ -3229,46 +3265,12 @@ completing-read prompter."
   ;; Don't waste time on searching for other grep-like tools.
   (setopt dumb-jump-force-searcher 'rg))
 
-;; Package `xref' provides a somewhat generic infrastructure for cross
-;; referencing commands, in particular "find-definition". Some part of the
-;; functionality must be implemented in a language dependent way and that's done
-;; by defining an xref backend.
-(use-package! xref
-  :init
-
-  (set-leader-keys!
-    "F ." #'xref-find-definitions-other-frame
-    "w ." #'xref-find-definitions-other-window)
-
-  :config
-
-  ;; Prompt only if no identifier is at point.
-  (setopt xref-prompt-for-identifier nil)
-
-  ;; Use ripgrep for regexp search inside files.
-  (setopt xref-search-program 'ripgrep))
-
-;; Feature `consult-xref' provides Xref integration for Consult.
-(use-feature! consult-xref
-  :demand t
-  :after xref
-  :config
-
-  ;; Use `consult' completion with preview.
-  (setq xref-show-xrefs-function #'consult-xref)
-  (setq xref-show-definitions-function #'consult-xref))
-
-;; Package `consult-xref-stack' navigates the Xref stack with Consult.
-(use-package! consult-xref-stack
-  :straight (:host github :repo "brett-lempereur/consult-xref-stack")
-  :bind ("C-," . #'consult-xref-stack-backward))
-
 ;;;; Display contextual metadata
 
 ;; Feature `eldoc' provides a minor mode (enabled by default in Emacs 25) which
 ;; allows function signatures or other metadata to be displayed in the echo
 ;; area.
-(use-package! eldoc
+(use-feature! eldoc
   :init
 
   (set-leader-keys! "e h" #'eldoc-doc-buffer)
@@ -3324,7 +3326,7 @@ completing-read prompter."
 ;; utilities are provided by the Cape package.
 (use-package! corfu
   :defer 0.5
-  :straight (:files (:defaults "extensions/*"))
+  :ensure (:files (:defaults "extensions/*"))
   :init
 
   (set-leader-keys!
@@ -3420,7 +3422,7 @@ defeats the purpose of `corfu-prescient'."
 ;; Package `corfu-terminal' replaces Corfu's child frames (which are unusuable
 ;; on terminal) with popup/popon which works everywhere.
 (use-package! corfu-terminal
-  :straight (:host codeberg :repo "akib/emacs-corfu-terminal")
+  :ensure (:host codeberg :repo "akib/emacs-corfu-terminal")
   :demand t
   :after corfu
   :config
@@ -3455,7 +3457,7 @@ defeats the purpose of `corfu-prescient'."
 ;; Package `flymake' is a minor Emacs mode performing on-the-fly syntax checks.
 ;; Flymake collects diagnostic information for multiple sources, called
 ;; backends, and visually annotates the relevant portions in the buffer.
-(use-package! flymake
+(use-feature! flymake
   :demand t
   :bind ( :map flymake-project-diagnostics-mode-map
           ("RET" . #'flymake-goto-diagnostic)
@@ -4130,7 +4132,7 @@ defeats the purpose of `corfu-prescient'."
 ;; rust-based wrapper program which substantially speeds up Emacs interactions
 ;; with LSP servers
 (use-package! eglot-booster
-  :straight (:host github :repo "jdtsmith/eglot-booster")
+  :ensure (:host github :repo "jdtsmith/eglot-booster")
   :demand t
   :after eglot
   :config
@@ -4139,7 +4141,7 @@ defeats the purpose of `corfu-prescient'."
 
 ;; Package `eglot-semantic-tokens' provides support for semantic highlighting.
 (use-package! eglot-semantic-tokens
-  :straight (:host codeberg :repo "eownerdead/eglot-semantic-tokens")
+  :ensure (:host codeberg :repo "eownerdead/eglot-semantic-tokens")
   :demand t
   :after eglot
   :hook (eglot-managed-mode-hook . eglot--semantic-tokens-mode)
@@ -4154,7 +4156,7 @@ defeats the purpose of `corfu-prescient'."
 ;; Package `eglot-x' adds support for some of Language Server Protocol
 ;; extensions.
 (use-package! eglot-x
-  :straight (:host github :repo "nemethf/eglot-x")
+  :ensure (:host github :repo "nemethf/eglot-x")
   :demand t
   :after eglot
   :config
@@ -4286,7 +4288,7 @@ unhelpful."
 (use-package! org
   ;; We use straight mirror as the official repo does not allow to fetch a
   ;; shallow repo with a frozen git hash.
-  :straight (:host github :repo "emacs-straight/org-mode" :local-repo "org")
+  :ensure (:host github :repo "emacs-straight/org-mode" :local-repo "org")
   :init
 
   (defhook! my--org-mode-setup ()
@@ -4606,7 +4608,7 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
 ;; Package `dired-copy-paste' enables you to cut, copy and paste files and
 ;; directories in Emacs Dired.
 (use-package! dired-copy-paste
-  :straight (:host github :repo "jsilve24/dired-copy-paste")
+  :ensure (:host github :repo "jsilve24/dired-copy-paste")
   :after dired
   :commands (dired-copy-paste-do-cut
              dired-copy-paste-do-copy
@@ -5255,6 +5257,12 @@ possibly new window."
   (send-string-to-terminal "\e]112\a" terminal))
 (add-to-list 'delete-terminal-functions #'my--reset-cursor-color-in-terminal)
 
+(defadvice! my--after-global-kkp-mode (&rest _)
+  :after #'global-kkp-mode
+  "After KKP mode is enabled, ensure that terminal reset is called first
+during teardown."
+  (push 'my--reset-cursor-color-in-terminal delete-terminal-functions))
+
 ;; Make both function calls and variable references italic, both of these are
 ;; not modified by `modus-themes' and `ef-themes'.
 (set-face-attribute 'font-lock-function-call-face nil :slant 'italic)
@@ -5454,15 +5462,6 @@ possibly new window."
     (spacious-padding-mode +1)))
 
 ;;; Closing
-
-;; Prune the build cache for straight.el - this will prevent it from growing too
-;; large.
-(straight-prune-build-cache)
-
-;; Occasionally, prune the build directory as well.
-(unless (bound-and-true-p my--currently-profiling-p)
-  (when (= 0 (random 20))
-    (straight-prune-build-directory)))
 
 ;; Restore default values after startup.
 (dolist (handler file-name-handler-alist)

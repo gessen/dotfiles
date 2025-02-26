@@ -6,9 +6,9 @@ dotfiles:
   - config/btop/btop.conf
   - config/ccache/ccache.conf
   - config/clangd/config.yaml
-  - config/emacs/straight/versions/default.el
   - config/emacs/early-init.el
   - config/emacs/init.el
+  - config/emacs/versions.el
   - config/fish/config.fish
   - config/fish/fish_plugins
   - config/gdb/libstdcxx
