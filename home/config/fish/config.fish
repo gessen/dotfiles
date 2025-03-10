@@ -11,12 +11,27 @@ if status is-login
     # Partial XDG support that needs some help
     set -gx ANSIBLE_HOME $xdg_config_home/ansible
     set -gx ASPELL_CONF home-dir "$xdg_config_home/aspell/; per-conf aspell.conf"
+    set -gx BUNDLE_USER_CONFIG "$xdg_config_home/bundle"
+    set -gx BUNDLE_USER_CACHE "$xdg_cache_home/bundle"
+    set -gx BUNDLE_USER_PLUGIN "$xdg_data_home/bundle"
     set -gx CARGO_HOME $xdg_data_home/cargo
+    set -gx DOCKER_CONFIG "$xdg_config_home/docker"
+    set -gx GEM_HOME "$xdg_data_home/gem"
+    set -gx GEM_SPEC_CACHE "$xdg_cache_home/gem"
     set -gx GNUPGHOME $xdg_data_home/gnupg
     set -gx GTK2_RC_FILES $xdg_config_home/gtk-2.0/settings.ini
     set -gx RIPGREP_CONFIG_PATH $xdg_config_home/ripgrep/config
     set -gx RUSTUP_HOME $xdg_data_home/rustup
     set -gx _ZO_DATA_DIR $xdg_data_home/zoxide
+
+    # Needed by cargo to build Stormcloud.
+    set -gx AKAMILL_INSTALL_PATH /opt/akamill
+    set -gx BUILD_OS alsi22
+    set -gx OPENSSL_DIR /opt/akamill
+    set -gx OPENSSL_INSTALL_PATH "$OPENSSL_DIR"
+    set -gx LD_LIBRARY_PATH "$OPENSSL_INSTALL_PATH/lib:$LD_LIBRARY_PATH"
+    set -gx V8_INCLUDE_PATH /usr/local/include
+    set -gx V8_LIBRARY_PATH /usr/local/lib
 
     if ! status is-interactive
         return
@@ -627,6 +642,67 @@ if type -q zoxide
     end
     source $zoxide_init
 end
+
+## Cargo
+
+# Add locally installed cargo
+fish_add_path -P "$CARGO_HOME/bin"
+
+## Mise
+
+if type -q mise
+    set -l mise_init $__fish_cache_dir/mise-init.fish
+    if test (type -p mise) -nt $mise_init; or ! test -s $mise_init
+        mise activate --shims >$mise_init
+    end
+    source $mise_init
+end
+
+## Stormcloud
+
+# Needed by perforce
+set -gx P4CONFIG .perforce
+set -gx P4EDITOR $EDITOR
+
+# Needed by e2e tests
+set -gx EW_ENSURE_AUDIT_PASSING false
+set -gx EW_ENSURE_NOT_SUSPENDED false
+set -gx EW_FALLBACK_TO_SSH_BUNDLES false
+set -gx EW_LOG_LEVEL 0
+
+# Needed by dewploy
+set -gx CROSS_CONFIG "$HOME/.nix-profile/opt/stormcloud-docker/alsi22/Cross.toml"
+set -gx GHOST_IP 198.18.132.22
+set -gx STORMCLOUD_BUILD_TYPE debug
+
+function update-v8
+    set -f git_url ssh://git@git.source.akamai.com:7999/sources/stormcloud_v8.git
+    set -f v8_dir /tmp/v8-update
+    if not set -q argv[1]
+        set -f branch master
+    else
+        set -f branch $argv[1]
+    end
+    rm -rf "$v8_dir"
+    and mkdir -p "$v8_dir"
+    and git archive --remote=$git_url --format=tar.gz "$branch" v8/include v8-obj-alsi11.tgz \
+        | tar zxf - --directory "$v8_dir"
+    and tar xf "$v8_dir/v8-obj-alsi11.tgz" --directory "$v8_dir" --strip-components=1
+    and cp -rv "$v8_dir/v8/include" /usr/local/
+    and cp -v "$v8_dir/libv8_monolith.a" /usr/local/lib/
+    and rm -rf "$v8_dir"
+end
+
+abbr -a cb cargo build --package
+abbr -a cc cargo check --package
+abbr -a ct cargo nextest run --lib --package
+abbr -a xb cross build --target-dir target-deploy --package
+abbr -a xc cross check --target-dir target-deploy --package
+abbr -a xt cross test --target-dir target-deploy --lib --package
+
+# sql2 with configured networks
+abbr -a esql2 sql2 -q essl.lighthouse.query.akadns.net
+abbr -a fsql2 sql2 -q freeflow.lighthouse.query.akadns.net
 
 ## Plugins
 
