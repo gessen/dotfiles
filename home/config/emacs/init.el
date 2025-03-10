@@ -5320,7 +5320,9 @@ during teardown."
 
   ;; Draw a line below matching characters in completions buffers.
   (setq modus-themes-completions
-        '((matches . (underline)))))
+        '((matches . (underline))))
+
+  (load-theme 'modus-vivendi t))
 
 ;; Package `ef-themes' is a collection of light and dark themes whose goal is to
 ;; provide colorful ("pretty") yet legible options for users who want something
@@ -5334,28 +5336,6 @@ during teardown."
         '(;; Make matching delimiters produced by `show-paren-mode' much more
           ;; prominent.
           (bg-paren bg-magenta-intense))))
-
-;; Package `theme-buffet' arranges to automatically change themes during
-;; specific times of the day or at fixed intervals. The collection of themes is
-;; customisable, with the default options covering the built-in Emacs themes as
-;; well as `modus-themes' and `ef-themes'.
-(use-package! theme-buffet
-  :demand t
-  :config
-
-  ;; Silence messages when changing themes.
-  (dolist (func '(theme-buffet--reload-theme
-                  theme-buffet-timer-hours))
-    (advice-add func :around #'advice-silence-messages!))
-
-  ;; Use Modus and Ef themes when selecting the theme list.
-  (setq theme-buffet-menu 'modus-ef)
-
-  ;; Change a theme every 1 hour.
-  (theme-buffet-timer-hours 1)
-
-  ;; Load a theme from the current time period.
-  (theme-buffet-a-la-carte))
 
 ;;;; Modeline
 
