@@ -6,7 +6,6 @@ user_pref("gfx.webrender.compositor", true);
 user_pref("gfx.webrender.precache-shaders", true);
 
 // Use GPU-accelerated Canvas2D with more memory
-user_pref("gfx.canvas.accelerated.cache-items", 4096);
 user_pref("gfx.canvas.accelerated.cache-size", 512);
 user_pref("gfx.content.skia-font-cache-size", 20);
 
@@ -15,8 +14,8 @@ user_pref("media.ffmpeg.vaapi.enabled", true);
 
 // Disk cache
 
-// Compress cached JavaScript bytecode
-user_pref("browser.cache.jsbc_compression_level", 3);
+// Disable disk cache
+user_pref("browser.cache.disk.enable", false);
 
 // Media cache
 
@@ -35,7 +34,7 @@ user_pref("network.http.max-connections", 1800);
 user_pref("network.http.max-persistent-connections-per-server", 10);
 user_pref("network.http.max-urgent-start-excessive-connections-per-host", 5);
 
-// Increase TLS token caching 
+// Increase TLS token caching
 user_pref("network.ssl_tokens_cache_capacity", 10240);
 
 // Speculative loading
@@ -60,9 +59,6 @@ user_pref("network.predictor.enabled", false);
 // Enable CSS Masonry Layout
 user_pref("layout.css.grid-template-masonry-value.enabled", true);
 
-// Enable Prioritized Task Scheduling API
-user_pref("dom.enable_web_task_scheduling", true);
-
 // Enable HTML Sanitizer API
 user_pref("dom.security.sanitizer.enabled", true);
 
@@ -85,7 +81,7 @@ user_pref("browser.uitour.enabled", false);
 // Tell websites not to sell or share your data
 user_pref("privacy.globalprivacycontrol.enabled", true);
 
-// OSCP & HPKP (HTTP Public Key Pinning)       
+// OSCP & HPKP (HTTP Public Key Pinning)
 
 // Disable OCSP fetching to confirm current validity of certificates
 user_pref("security.OCSP.enabled", 0);
@@ -170,7 +166,7 @@ user_pref("network.auth.subresource-http-auth-allow", 1);
 
 // Prevent password truncation when submitting form data
 user_pref("editor.truncate_user_pastes", false);
- 
+
 // Address & credit card manager
 
 // Disable form autofill
@@ -285,7 +281,8 @@ user_pref("browser.aboutwelcome.enabled", false);
 // Enable Firefox to use userChome, userContent, etc.
 user_pref("toolkit.legacyUserProfileCustomizations.stylesheets", true);
 
-// Prevent private windows being separate from normal windows in taskbar (Windows only)
+// Prevent private windows being separate from normal windows in taskbar
+// (Windows only)
 user_pref("browser.privateWindowSeparation.enabled", false);
 
 // Always use XDG portals for file pickers which will make it use KDE's file
@@ -309,7 +306,8 @@ user_pref("gfx.font_rendering.cleartype_params.force_gdi_classic_max_size", 6);
 user_pref("gfx.font_rendering.cleartype_params.rendering_mode", 5);
 user_pref("gfx.font_rendering.directwrite.use_gdi_table_loading", false);
 
-// Use macOS Appearance Panel text smoothing setting when rendering text (macOS only)
+// Use macOS Appearance Panel text smoothing setting when rendering text (macOS
+// only)
 user_pref("gfx.use_text_smoothing_setting", true);
 
 // URL bar
@@ -363,7 +361,7 @@ user_pref("extensions.pocket.showHome", false);
 
 // Downloads
 
-// Disable adding downloads to the system's "recent documents" list 
+// Disable adding downloads to the system's "recent documents" list
 user_pref("browser.download.manager.addToRecentDocs", false);
 
 // PDF
