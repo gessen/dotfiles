@@ -8,7 +8,7 @@ show_hidden = true
 edit = [
   { run = '$EDITOR "$@"', block = true, for = "unix" },
   { run = 'emacsclient -nw "$@"', block = true, for = "unix" },
-  { run = 'helix "$@"', block = true, for = "unix" },
+  { run = 'hx "$@"', block = true, for = "unix" },
   { run = 'zeditor "$@"', block = true, for = "unix" },
 ]
 play = [
