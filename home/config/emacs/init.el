@@ -3642,7 +3642,7 @@ defeats the purpose of `corfu-prescient'."
 
   ;; Install grammar only from the following list.
   (setq treesit-auto-langs
-        '(bash c cpp cmake dockerfile json nix python rust toml)))
+        '(bash c cpp cmake dockerfile json nix python ruby rust toml)))
 
 ;;;; Bash
 
@@ -3817,6 +3817,28 @@ defeats the purpose of `corfu-prescient'."
 
   (set-prefixes-for-major-mode! 'python-ts-mode "s" "session")
   (set-leader-keys-for-major-mode! 'python-ts-mode "s s" #'eglot))
+
+;;;; Ruby
+
+;; Feature `ruby-ts-mode' provides major mode for Ruby, powered by tree-sitter.
+(use-feature! ruby-ts-mode
+  :init
+
+  (defhook! my--ruby-ts-mode-setup ()
+    ruby-ts-mode-hook
+    "Set custom settings for `ruby-ts-mode'."
+    (setq-local fill-column 120
+                column-enforce-column fill-column)
+    (column-enforce-mode -1)
+    (display-fill-column-indicator-mode -1))
+
+  ;; Launch tree-sitter version of `ruby-mode' instead.
+  (push '(ruby-mode . ruby-ts-mode) major-mode-remap-alist)
+
+  (setq ruby-indent-level 4)
+
+  (set-prefixes-for-major-mode! 'ruby-ts-mode "s" "session")
+  (set-leader-keys-for-major-mode! 'ruby-ts-mode "s s" #'eglot))
 
 ;;;; Rust
 
