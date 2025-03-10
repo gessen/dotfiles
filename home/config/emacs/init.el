@@ -4888,13 +4888,29 @@ Goto^^              Actions^^         Other^^
   (use-feature! git-commit
     :config
 
+    (defun git-commit-extract-ticket-name (branch-name)
+      "Extract ticket name from BRANCH-NAME."
+      (let ((ticket-pattern (concat (user-login-name)
+                                    "/\\([[:alpha:]]+-[[:digit:]]+\\)")))
+        (when (string-match-p ticket-pattern branch-name)
+          (upcase (replace-regexp-in-string ticket-pattern
+                                            "[\\1] " branch-name)))))
+
+    (defun git-commit-insert-ticket-name ()
+      "Insert the ticket name in the commit buffer if feasible."
+      (when-let ((tag (git-commit-extract-ticket-name
+                       (magit-get-current-branch))))
+        (unless (string-search tag (or (git-commit-buffer-message) ""))
+          (insert tag))))
+
     (defhook! my--git-commit-mode-setup ()
       git-commit-mode-hook
       "Set custom settings for `git-commit-mode'."
       (setq-local fill-column 72
                   column-enforce-column fill-column)
       (display-fill-column-indicator-mode +1)
-      (column-enforce-mode +1))
+      (column-enforce-mode +1)
+      (git-commit-insert-ticket-name))
 
     ;; Make overlong summary with the same face as `column-enforce-mode'.
     (set-face-attribute 'git-commit-overlong-summary nil :underline t)
