@@ -47,29 +47,29 @@ end
 ## Command line
 
 function copy-prev-shell-word -d "Copy previous word"
-    set --local cmd (commandline --tokenize)
+    set --local cmd (commandline --tokens-expanded)
     commandline --insert $cmd[-1]
 end
 
 # Use [M-a] and [M-e] for the same effect as [C-a] and [C-e] respectively
-bind \ea beginning-of-line
-bind \ee end-of-line
+bind alt-a beginning-of-line
+bind alt-e end-of-line
 
 # Edit the current command line in $EDITOR with [C-x C-e]
-bind \cx\ce edit_command_buffer
+bind ctrl-x,ctrl-e edit_command_buffer
 
-bind \em copy-prev-shell-word
+bind alt-m copy-prev-shell-word
 
 # Starts pager search mode by default when completing
-bind \t complete-and-search
-bind -k btab complete
+bind tab complete-and-search
+bind shift-tab complete
 
 # Prefix search with [M-S-up] and [M-S-down]
-bind \e\[1\;4A history-prefix-search-backward
-bind \e\[1\;4B history-prefix-search-forward
+bind alt-shift-up history-prefix-search-backward
+bind alt-shift-down history-prefix-search-forward
 
-# TODO
-# bind ctrl-alt-e 'commandline -rt -- (commandline -xt | string escape | string join " ")'
+# Expand current token with [C-M-e]
+bind ctrl-alt-e 'commandline -rt -- (commandline -xt | string escape | string join " ")'
 
 ## Files and directories
 
@@ -494,7 +494,7 @@ if type -q fzf
         fzf --fish >$fzf_init
     end
     source $fzf_init
-    bind -e \cr
+    bind --erase ctrl-r
 end
 
 ## Atuin
@@ -543,7 +543,7 @@ abbr -a rsync-sync $rsync_cp --update --delete
 
 ## Serie
 
-bind \eg 'serie -g single -o topo'
+bind alt-g 'serie -g single -o topo'
 
 ## SSH
 
@@ -563,7 +563,7 @@ function y --wraps yazi -d "Start Yazi but change CWD after exit"
     commandline --function repaint
 end
 
-bind \co y
+bind ctrl-o y
 
 ## Zoxide
 
