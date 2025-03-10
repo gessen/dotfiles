@@ -422,6 +422,57 @@ abbr -a gwip git-wip
 abbr -a gunwip git-unwip
 abbr -a gunwipall git-unwip-all
 
+## Jujutsu
+
+abbr -a jb jj bookmark
+abbr -a jbc jj bookmark create
+abbr -a jbd jj bookmark delete
+abbr -a jbf jj bookmark forget
+abbr -a jbl jj bookmark list
+abbr -a jblt jj bookmark list --tracked
+abbr -a jbm jj bookmark move
+abbr -a jbmf jj bookmark move --allow-backwards
+abbr -a jbr jj bookmark rename
+abbr -a jbs jj bookmark set
+abbr -a jbsf jj bookmark set --allow-backwards
+abbr -a jbt jj bookmark track
+
+abbr -a jc jj commit
+abbr -a jci jj commit --interactive
+abbr -a jde jj describe
+
+abbr -a jd jj diff
+
+abbr -a je jj edit
+
+abbr -a jf jj git fetch
+
+abbr -a jl jj log
+abbr -a jlo jj log -r ::@
+abbr -a jlog jj log -r "'all()'"
+
+abbr -a jn jj new
+
+abbr -a jp jj git push
+abbr -a jpa jj git push --all
+abbr -a jpb jj git push --bookmark
+abbr -a jpt jj git push --tracked
+
+abbr -a jrb jj rebase
+
+abbr -a jrs jj restore
+
+abbr -a jsh jj show
+
+abbr -a jsp jj split
+abbr -a jspf jj split --ignore-immutable
+
+abbr -a jsq jj squash
+abbr -a jsqf jj squash --ignore-immutable
+abbr -a jsqi jj squash --interactive
+
+abbr -a jst jj status
+
 ## Bat
 
 # Use bat as MANPAGER

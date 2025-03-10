@@ -37,6 +37,7 @@ packages:
   - helix
   - hunspell-en_us
   - hunspell-pl
+  - jujutsu
   - keepassxc
   - kitty
   - libvterm

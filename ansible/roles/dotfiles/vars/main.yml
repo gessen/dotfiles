@@ -21,6 +21,7 @@ dotfiles:
   - config/git/ignore
   - config/helix/config.toml
   - config/helix/languages.toml
+  - config/jj/config.toml
   - config/keepassxc/keepassxc.ini
   - config/kitty/kitty.conf
   - config/kitty/themes
