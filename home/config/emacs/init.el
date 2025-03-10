@@ -180,6 +180,7 @@ graphical frame is created."
 
 ;;;; Elpaca
 
+(defvar elpaca-core-date 20250224)
 (defvar elpaca-installer-version 0.10)
 (defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
 (defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
@@ -4057,7 +4058,7 @@ defeats the purpose of `corfu-prescient'."
 ;; refactoring, on-the-fly diagnostics, and more. Eglot itself is completely
 ;; language-agnostic, but it can support any programming language for which
 ;; there is a language server and an Emacs major mode.
-(use-package! eglot
+(use-feature! eglot
   :init
 
   ;; Increase the amount of data which Emacs reads from the process. The Emacs
