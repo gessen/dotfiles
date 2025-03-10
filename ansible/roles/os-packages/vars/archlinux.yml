@@ -65,6 +65,7 @@ packages:
   - xdg-user-dirs
   - yazi
   - yt-dlp
+  - zed
   - zoxide
 
 packages_ignore:

@@ -30,6 +30,7 @@ dotfiles:
   - config/ripgrep/config
   - config/sccache/config
   - config/yazi/yazi.toml
+  - config/zed/settings.json
   - local/share/cargo/config.toml
   - ssh/config
 
