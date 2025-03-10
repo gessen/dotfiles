@@ -1,0 +1,84 @@
+theme = "modus_vivendi"
+
+[editor]
+line-number = "relative"
+cursorline = true
+idle-timeout = 0
+bufferline = "multiple"
+color-modes = true
+auto-format = true
+shell = ["fish", "-c"]
+completion-replace = true
+
+[editor.statusline]
+right = [
+  "diagnostics",
+  "workspace-diagnostics",
+  "selections",
+  "register",
+  "position",
+  "file-encoding",
+  "file-line-ending",
+  "file-type",
+]
+
+[editor.lsp]
+display-messages = true
+display-inlay-hints = true
+
+[editor.cursor-shape]
+insert = "bar"
+select = "underline"
+
+[editor.file-picker]
+hidden = false
+
+[editor.soft-wrap]
+enable = true
+
+[keys.normal]
+esc = ["collapse_selection", "keep_primary_selection"]
+ret = ["move_line_down", "goto_first_nonwhitespace"]
+W = 'move_next_sub_word_start'
+B = 'move_prev_sub_word_start'
+E = 'move_next_sub_word_end'
+D = "delete_char_backward"
+X = "extend_line_above"
+H = ":toggle lsp.display-inlay-hints"
+"A-k" = [
+  "extend_to_line_bounds",
+  "delete_selection",
+  "move_line_up",
+  "paste_before"
+]
+"A-j" = [
+  "extend_to_line_bounds",
+  "delete_selection",
+  "move_line_down",
+  "paste_before"
+]
+
+
+[keys.normal.g]
+q = ":buffer-close"
+j = "jump_backward"
+k = "jump_forward"
+
+[keys.normal."["]
+"[" = "goto_previous_buffer"
+
+[keys.normal."]"]
+"]" = "goto_next_buffer"
+
+[keys.normal.space]
+F = "file_picker_in_current_buffer_directory"
+
+[keys.insert]
+esc = ["collapse_selection", "normal_mode"]
+j = { k = "normal_mode" }
+
+[keys.select]
+esc = ["collapse_selection", "keep_primary_selection", "normal_mode"]
+W = 'extend_next_sub_word_start'
+B = 'extend_prev_sub_word_start'
+E = 'extend_next_sub_word_end'

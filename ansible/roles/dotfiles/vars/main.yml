@@ -19,6 +19,8 @@ dotfiles:
   - config/git/config-delta
   - config/git/config-local
   - config/git/ignore
+  - config/helix/config.toml
+  - config/helix/languages.toml
   - config/keepassxc/keepassxc.ini
   - config/kitty/kitty.conf
   - config/kitty/themes
