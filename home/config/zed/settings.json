@@ -48,6 +48,9 @@
   },
   "lsp": {
     "rust-analyzer": {
+      "binary": {
+        "path": "ra-multiplex"
+      },
       "initialization_options": {
         "check": {
           "command": "clippy"

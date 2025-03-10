@@ -1,0 +1,10 @@
+instance_timeout = false
+pass_environment = [
+  "AKAMILL_INSTALL_PATH",
+  "BUILD_OS",
+  "CARGO_HOME",
+  "OPENSSL_DIR",
+  "OPENSSL_INSTALL_PATH",
+  "PATH",
+  "RUSTUP_HOME"
+]

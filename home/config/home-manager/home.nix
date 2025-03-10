@@ -138,6 +138,10 @@ in
         source = "${dotfilesDir}/config/nix";
         recursive = true;
       };
+      ".config/ra-multiplex" = {
+        source = "${dotfilesDir}/config/ra-multiplex";
+        recursive = true;
+      };
       ".config/ripgrep" = {
         source = "${dotfilesDir}/config/ripgrep";
         recursive = true;
@@ -161,6 +165,19 @@ in
         source = "${dotfilesDir}/ssh";
         recursive = true;
       };
+    };
+  };
+
+  systemd.user.services.ra-mux = {
+    Unit = {
+      Description = "Rust Analyzer multiplex server";
+    };
+    Service = {
+      Type = "simple";
+      ExecStart= "/home/jswierk/.local/share/cargo/bin/ra-multiplex server";
+    };
+    Install = {
+      WantedBy = [ "default.target" ];
     };
   };
 
