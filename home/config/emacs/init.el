@@ -2970,10 +2970,10 @@ point. "
    ;; Disable the automatic preview only for commands, where the preview may be
    ;; expensive due to file loading.
    consult-ripgrep consult-git-grep consult-grep
-   consult-recent-file
-   consult--source-bookmark consult--source-recent-file
-   consult--source-project-recent-file
-   :preview-key "M-."))
+   consult-bookmark consult-recent-file consult-xref
+   consult--source-bookmark consult--source-file-register
+   consult--source-recent-file consult--source-project-recent-file
+   :preview-key '(:debounce 0.4 any)))
 
 ;; Package `embark' provides a sort of right-click contextual menu for Emacs,
 ;; accessed through the `embark-act' command (which you should bind to a
@@ -3189,7 +3189,7 @@ completing-read prompter."
     ;; Configure the display per completion category.
     (setq vertico-multiform-categories
           '((consult-grep buffer)
-            (consult-location buffer)
+            ;; (consult-location buffer)
             (imenu buffer)))
 
     (vertico-multiform-mode +1))
