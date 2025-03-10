@@ -38,7 +38,8 @@ test -d $__fish_cache_dir; or mkdir -p $__fish_cache_dir
 
 # Automatic SSH agent
 if ! pgrep -u "$USER" ssh-agent >/dev/null
-    ssh-agent -c | sed "s|^echo|#echo|" >"/tmp/ssh-agent.fish"
+    ssh-agent -c -a "$XDG_RUNTIME_DIR/ssh_agent" \
+        | sed "s|^echo|#echo|" >"/tmp/ssh-agent.fish"
 end
 
 if test -z "$SSH_AGENT_PID"
@@ -47,8 +48,6 @@ end
 
 ssh-add -l | grep -q (ssh-keygen -lf $HOME/.ssh/id_rsa | awk '{print $2}')
 or ssh-add
-and which kitten > /dev/null
-and kitten ssh vm
 
 ## Command line
 
