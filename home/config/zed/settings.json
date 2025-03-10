@@ -35,6 +35,7 @@
   "telemetry": {
     "metrics": true
   },
+  "auto_update": false,
   "file_scan_exclusions": ["**/.git", "**/.jj", "**/.DS_Store", "**/Thumbs.db"],
   "git": {
     "inline_blame": {
@@ -77,5 +78,18 @@
   },
   "vim": {
     "use_smartcase_fine": true
-  }
+  },
+  "ssh_connections": [
+    {
+      "host": "vm",
+      "projects": [
+        {
+          "paths": ["~/Workspace/sandbox"]
+        },
+        {
+          "paths": ["~/Workspace/stormcloud"]
+        }
+      ]
+    }
+  ]
 }
