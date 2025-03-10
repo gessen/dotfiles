@@ -3641,7 +3641,7 @@ defeats the purpose of `corfu-prescient'."
 
   ;; Install grammar only from the following list.
   (setq treesit-auto-langs
-        '(bash c cpp cmake dockerfile json python rust toml)))
+        '(bash c cpp cmake dockerfile json nix python rust toml)))
 
 ;;;; Bash
 
@@ -3998,6 +3998,11 @@ defeats the purpose of `corfu-prescient'."
 ;; tree-sitter.
 (use-feature! json-ts-mode
   :mode ("\\.json\\'"))
+
+;; Package `nix-ts-mode' provides major mode for editing Nix expressions,
+;; powered by tree-sitter.
+(use-package! nix-ts-mode
+  :mode ("\\.nix\\'"))
 
 ;; Package `pkgbuild-mode' provides a major mode for PKGBUILD files used by Arch
 ;; Linux and derivatives.
