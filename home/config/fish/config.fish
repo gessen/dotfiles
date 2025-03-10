@@ -16,6 +16,7 @@ if status is-login
     set -gx GTK2_RC_FILES $xdg_config_home/gtk-2.0/settings.ini
     set -gx RIPGREP_CONFIG_PATH $xdg_config_home/ripgrep/config
     set -gx RUSTUP_HOME $xdg_data_home/rustup
+    set -gx _ZO_DATA_DIR $xdg_data_home/zoxide
 
     if ! status is-interactive
         return
