@@ -676,6 +676,30 @@ set -gx CROSS_CONFIG "$HOME/.nix-profile/opt/stormcloud-docker/alsi22/Cross.toml
 set -gx GHOST_IP 198.18.132.22
 set -gx STORMCLOUD_BUILD_TYPE debug
 
+function stormcloud-env-start
+    docker run \
+        --name stormcloud-env \
+        --detach \
+        --init \
+        --interactive \
+        --tty \
+        --mount type=bind,src=$SSH_AUTH_SOCK,target=$SSH_AUTH_SOCK \
+        --mount type=bind,src=$HOME/Workspace,target=$HOME/Workspace \
+        --env SSH_AUTH_SOCK \
+        --publish 2222:22 \
+        stormcloud-env-v2:latest
+    and ssh-keygen -f ~/.ssh/known_hosts -R "[localhost]:2222"
+end
+
+function stormcloud-env-shell
+    docker exec \
+        --interactive \
+        --tty \
+        --env SSH_CONNECTION \
+        stormcloud-env \
+        $SHELL -l
+end
+
 function update-v8
     set -f git_url ssh://git@git.source.akamai.com:7999/sources/stormcloud_v8.git
     set -f v8_dir /tmp/v8-update

@@ -65,6 +65,7 @@ in
       extraPackages.dewploy
       extraPackages.osc52
       extraPackages.stormcloud-docker
+      extraPackages.stormcloud-docker-v2
     ];
 
     stateVersion = "24.11";
