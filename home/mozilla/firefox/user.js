@@ -392,6 +392,13 @@ user_pref("dom.disable_window_move_resize", true);
 // Leave the browser window open even after you close the last tab
 user_pref("browser.tabs.closeWindowWithLastTab", false);
 
+// Show sidebar
+user_pref("sidebar.revamp", true);
+user_pref("sidebar.verticalTabs", true);
+
+// Enable tabs groups
+user_pref("browser.tabs.groups.enabled", true);
+
 // Keyboard and shortcuts
 
 // Hide frequent sites on right-click of taskbar icon (Windows only)
