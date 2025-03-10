@@ -10,6 +10,17 @@ pager = "delta"
 [ui.diff]
 format = "git"
 
+[merge-tools.mergiraf]
+program = "mergiraf"
+merge-args = ["merge", "$base", "$left", "$right", "-o", "$output", "-l", "$marker_length", "--fast"]
+merge-conflict-exit-codes = [1]
+
+[merge-tools.ediff]
+program = "sh"
+merge-args = ['-c',
+  'emacsclient -c --eval "(ediff-merge-files-with-ancestor \"$0\" \"$1\" \"$2\" nil \"$3\")"',
+  '$left', '$right', '$base', '$output']
+
 [template-aliases]
 'format_timestamp(ts)' = "ts.ago()"
 
