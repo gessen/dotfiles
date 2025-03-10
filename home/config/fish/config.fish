@@ -578,12 +578,13 @@ if type -q atuin
     source $atuin_init
 end
 
-## Lsd
+## Eza
 
-abbr -a ls lsd
-abbr -a ll lsd --long
-abbr -a la lsd --long --almost-all
-abbr -a l lsd --long --almost-all --git
+set -l eza eza --group-directories-first --time-style relative --icons always
+abbr -a ls $eza
+abbr -a ll $eza --long
+abbr -a la $eza --long --almost-all
+abbr -a l $eza --long --almost-all --git
 
 ## Kitty
 
