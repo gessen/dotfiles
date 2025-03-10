@@ -51,19 +51,6 @@ set fish_greeting
 set -l __fish_cache_dir $HOME/.cache/fish
 test -d $__fish_cache_dir; or mkdir -p $__fish_cache_dir
 
-# Automatic SSH agent
-if ! pgrep -u "$USER" ssh-agent >/dev/null
-    ssh-agent -c -a "$XDG_RUNTIME_DIR/ssh_agent" \
-        | sed "s|^echo|#echo|" >"/tmp/ssh-agent.fish"
-end
-
-if test -z "$SSH_AGENT_PID"
-    source "/tmp/ssh-agent.fish"
-end
-
-ssh-add -l | grep -q (ssh-keygen -lf $HOME/.ssh/id_rsa | awk '{print $2}')
-or ssh-add
-
 ## Command line
 
 function copy-prev-shell-word -d "Copy previous word"
