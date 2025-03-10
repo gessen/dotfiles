@@ -4704,7 +4704,19 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
 
   (set-leader-keys!
     "g r" #'browse-at-remote
-    "g R" #'browse-at-remote-kill))
+    "g R" #'browse-at-remote-kill)
+
+  :config
+
+  ;; Add gitsource to the list of supported domains.
+  (push '(:host "^gitsource$" :type "stash")
+        browse-at-remote-remote-type-regexps)
+
+  (defadvice! my--browse-at-remote--fix-repo-url-stash (args)
+    :filter-args #'browse-at-remote--fix-repo-url-stash
+    "Modify SSH alias into full HTTPS domain."
+    (require 's)
+    (list (s-replace "gitsource" "git.source.akamai.com" (s-join "" args)))))
 
 ;; Package `consult-git-log-grep' provides an interactive way to search the git
 ;; log using `consult'.
