@@ -5437,6 +5437,11 @@ during teardown."
 
   (global-tab-line-mode +1))
 
+;; Package `tabgo' allows the user to switch between tabs in a graphical and
+;; more intuitive way, like Avy.
+(use-package! tabgo
+  :bind ("M-J" . #'tabgo))
+
 ;;;; Padding
 
 ;; Package `spacious-padding' provides a global minor mode to increase the

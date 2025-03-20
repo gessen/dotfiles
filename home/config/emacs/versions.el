@@ -221,6 +221,16 @@
                              :source #2# :protocol https :inherit t :depth
                              treeless :ref
                              "2bfcb8da5f7f08e39c52c889231f2b6f93f10e78"))
+ (tabgo :source #1# :recipe
+        (:package "tabgo" :fetcher github :repo "isamert/tabgo.el" :files
+                  ("*.el" "*.el.in" "dir" "*.info" "*.texi" "*.texinfo"
+                   "doc/dir" "doc/*.info" "doc/*.texi" "doc/*.texinfo"
+                   "lisp/*.el" "docs/dir" "docs/*.info" "docs/*.texi"
+                   "docs/*.texinfo"
+                   (:exclude ".dir-locals.el" "test.el" "tests.el" "*-test.el"
+                             "*-tests.el" "LICENSE" "README*" "*-pkg.el"))
+                  :source "MELPA" :protocol https :inherit t :depth treeless
+                  :ref "23b6397fd61db31689feacb4b7df2b1f64e69572"))
  (minions :source #1# :recipe
           (:package "minions" :fetcher github :repo "tarsius/minions" :files
                     ("*.el" "*.el.in" "dir" "*.info" "*.texi" "*.texinfo"
