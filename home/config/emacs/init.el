@@ -3844,10 +3844,6 @@ defeats the purpose of `corfu-prescient'."
   (set-prefixes-for-major-mode! 'rust-ts-mode "s" "session")
   (set-leader-keys-for-major-mode! 'rust-ts-mode "s s" #'eglot)
 
-  :mode ("\\.rs\\'")
-
-  :config
-
   (defvar rust-compilation-error-regexp
     (let ((err "^error[^:]*:[^\n]*\n\s*-->\s")
           (file "\\([^\n]+\\)")
@@ -3897,6 +3893,9 @@ defeats the purpose of `corfu-prescient'."
     (add-to-list 'compilation-error-regexp-alist 'rust-warning)
     (add-to-list 'compilation-error-regexp-alist 'rust-info)
     (add-to-list 'compilation-error-regexp-alist 'rust-panic))
+
+  :mode ("\\.rs\\'")
+  :config
 
   (with-eval-after-load 'eglot
     ;; Set additional initialization options for rust-analyzer.
