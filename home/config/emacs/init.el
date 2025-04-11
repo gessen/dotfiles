@@ -1327,7 +1327,7 @@ root, switch to it. Otherwise, create a new vterm buffer."
     "p m a" #'treemacs-add-and-display-current-project-exclusively
     "p m A" #'treemacs-add-and-display-current-project)
 
-  :bind ("M-0" . #'treemacs-select-window)
+  :bind ("<f5>" . #'treemacs-select-window)
 
   :config
 
