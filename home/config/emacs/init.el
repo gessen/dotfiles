@@ -2414,137 +2414,43 @@ will not refresh `column-number-mode."
 
 ;;;; Spellchecking
 
-(defun spellchecking-mode ()
-  "Enable command `flyspell-mode' or `flyspell-prog-mode'."
-  (interactive)
-  (if (bound-and-true-p flyspell-mode)
-      (flyspell-mode-off)
-    (if (derived-mode-p 'prog-mode)
-        (flyspell-prog-mode)
-      (flyspell-mode))))
-
-(defun add-word-to-dict-buffer ()
-  "Save word at point as correct in current buffer."
-  (interactive)
-  (add-word-to-dict 'buffer))
-
-(defun add-word-to-dict-session ()
-  "Save word at point as correct in current session."
-  (interactive)
-  (add-word-to-dict 'session))
-
-(defun add-word-to-dict-global ()
-  "Save word at point as a correct word globally."
-  (interactive)
-  (add-word-to-dict 'save))
-
-(defun add-word-to-dict (scope)
-  "Save word at point as a correct word.
-SCOPE can be:
-`buffer' for buffer local,
-`session' to save in current session or
-`save' to save globally."
-  (let ((current-location (point))
-        (word (flyspell-get-word)))
-    (when (consp word)
-      (flyspell-do-correct scope nil (car word) current-location
-                           (cadr word) (caddr word) current-location)
-      (ispell-pdict-save t))))
-
-;; Feature `flyspell' is a minor Emacs mode performing on-the-fly spelling
-;; checking.
-(use-feature! flyspell
-  :if (executable-find "aspell")
-
-  :functions (flyspell-do-correct
-              flyspell-get-word)
-  :commands (flyspell-goto-next-error
-             ispell-init-process)
+;; Package `jinx' is a fast just-in-time spell-checker for Emacs. Jinx
+;; highlights misspelled words in the text of the visible portion of the buffer.
+;; For efficiency, Jinx highlights misspellings lazily, recognizes window
+;; boundaries and text folding, if any. For example, when unfolding or
+;; scrolling, only the newly visible part of the text is checked if it has not
+;; been checked before. Each misspelling can be corrected from a list of
+;; dictionary words presented as a completion menu. Jinx’s high performance and
+;; low resource usage comes from directly calling the API of the Enchant
+;; library. Jinx automatically compiles jinx-mod.c and loads the dynamic module
+;; at startup. By binding directly to the native Enchant API, Jinx avoids slower
+;; inter-process communication. Enchant is used by other text editors and
+;; supports multiple backends like Nuspell, Hunspell and Aspell.
+(use-package! jinx
+  :hook ((text-mode-hook prog-mode-hook conf-mode-hook) . jinx-mode)
   :init
 
-  (set-prefixes! "S a" "add word")
-
   (set-leader-keys!
-    "S a b" #'add-word-to-dict-buffer
-    "S a g" #'add-word-to-dict-global
-    "S a s" #'add-word-to-dict-session
-    "S b"   #'flyspell-buffer
-    "S d"   #'ispell-change-dictionary
-    "S n"   #'flyspell-goto-next-error
-    "S r"   #'flyspell-region
-    "t S"   #'spellchecking-mode)
+    "S a" #'jinx-correct-all
+    "S s" #'jinx-correct
+    "S l" #'jinx-languages)
 
-  ;; Inhibit initial aspell start message.
-  (advice-add #'ispell-init-process :around #'advice-silence-messages!)
-
-  ;; Disable default keymap as its bindings conflict with others and we use
-  ;; hydra anyway.
-  (setq flyspell-mode-map (make-sparse-keymap))
-
-  :hook ((text-mode-hook outline-mode-hook) . flyspell-mode)
+  :bind (("M-$"   . #'jinx-correct)
+         ("C-M-$" . #'jinx-languages))
 
   :config
 
-  ;; With `flyspell-prog-mode', check only comments and docs.
-  (setq flyspell-prog-text-faces (cl-delete 'font-lock-string-face
-                                            flyspell-prog-text-faces))
+  ;; Enable both camelCase and PascalCase everywhere.
+  (setopt jinx-camel-modes t)
 
-  ;; Do not emit messages when checking words.
-  (setq flyspell-issue-message-flag nil)
+  (with-eval-after-load 'vertico-multiform
+    ;; Use the grid display such that more suggestions fit on the screen and
+    ;; enable annotations
+    (add-to-list 'vertico-multiform-categories
+                 '(jinx grid
+                        (vertico-grid-annotate . 20) (vertico-count . 4))))
 
   :blackout t)
-
-;; Package `consult-flyspell' incorporates `flyspell' into `consult'. This
-;; allows to display all misspelled words in the buffer with `consult', jump to
-;; it and optionally apply a function to it.
-(use-package! consult-flyspell
-  :init
-
-  (set-leader-keys! "S S" #'consult-flyspell)
-
-  :config
-
-  ;; Call `flyspell-buffer' before, unless the prefix argument is set.
-  (setq consult-flyspell-always-check-buffer t)
-
-  ;; Apply `flyspell-correct-at-point' directly after selecting candidate and
-  ;; jump back to `consult-flyspell'.
-  (setq consult-flyspell-select-function
-        (lambda () (flyspell-correct-at-point) (consult-flyspell))))
-
-;; Package `flyspell-correct' provides functionality for correcting words via
-;; custom interfaces.
-(use-package! flyspell-correct
-  :init
-
-  (defhydra hydra-flyspell (:color pink :hint nil)
-    "
-Spell Commands^^            Add To Dictionary^^               Other^^
---------------^^----------  -----------------^^-------------  -----^^-----------------
-[_b_] check whole buffer    [_B_] add word to dict (buffer)   [_t_] toggle spell check
-[_r_] check region          [_G_] add word to dict (global)   [_q_] exit
-[_d_] change dictionary     [_S_] add word to dict (session)
-[_n_] next spell error
-[_c_] correct before point
-[_s_] correct at point
-"
-    ("b" flyspell-buffer)
-    ("B" add-word-to-dict-buffer)
-    ("c" flyspell-correct-wrapper)
-    ("d" ispell-change-dictionary)
-    ("G" add-word-to-dict-global)
-    ("n" flyspell-goto-next-error)
-    ("s" flyspell-correct-at-point)
-    ("S" add-word-to-dict-session)
-    ("r" flyspell-region)
-    ("t" spellchecking-mode)
-    ("q" nil :exit t)
-    ("C-g" nil :exit t))
-
-  (set-leader-keys!
-    "S c" #'flyspell-correct-wrapper
-    "S s" #'flyspell-correct-at-point
-    "S ." (cons "spellcheck" #'hydra-flyspell/body)))
 
 ;; Package `powerthesaurus' is an integration with powerthesaurus.org. It helps
 ;; to look up a word in powerthesaurus and either replace or insert selected
@@ -3957,8 +3863,7 @@ defeats the purpose of `corfu-prescient'."
     "Set custom settings for `sh-mode'."
     (setq sh-basic-offset 2)
     ;; Enable syntax checking and spellchecking in comments.
-    (flymake-mode +1)
-    (flyspell-prog-mode))
+    (flymake-mode +1))
 
   (dolist (mode '(bash-ts-mode sh-mode))
     (set-prefixes-for-major-mode! mode "i" "insert")
@@ -5221,7 +5126,8 @@ possibly new window."
     "t n" #'display-line-numbers-mode
     "t N" #'global-display-line-numbers-mode)
 
-  :hook ((prog-mode-hook text-mode-hook) . display-line-numbers-mode))
+  :hook ((text-mode-hook prog-mode-hook conf-mode-hook)
+         . display-line-numbers-mode))
 
 ;; Feature `display-fill-column-indicator' provides a minor mode interface for
 ;; `display-fill-column-indicator'.

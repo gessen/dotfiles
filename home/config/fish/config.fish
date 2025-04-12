@@ -10,7 +10,6 @@ if status is-login
 
     # Partial XDG support that needs some help
     set -gx ANSIBLE_HOME $xdg_config_home/ansible
-    set -gx ASPELL_CONF home-dir "$xdg_config_home/aspell/; per-conf aspell.conf"
     set -gx CARGO_HOME $xdg_data_home/cargo
     set -gx GNUPGHOME $xdg_data_home/gnupg
     set -gx GTK2_RC_FILES $xdg_config_home/gtk-2.0/settings.ini

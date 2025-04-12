@@ -1020,27 +1020,11 @@
                            :source #2# :protocol https :inherit t :depth
                            treeless :ref
                            "4b97797cf789aaba411c61a85fe23474ebc5bedc"))
- (flyspell-correct :source #1# :recipe
-                   (:package "flyspell-correct" :repo
-                             "d12frosted/flyspell-correct" :fetcher github
-                             :files
-                             ("flyspell-correct.el" "flyspell-correct-ido.el")
-                             :source #2# :protocol https :inherit t :depth
-                             treeless :ref
-                             "1e7a5a56362dd875dddf848b9a9e25d1395b9d37"))
- (consult-flyspell :source #1# :recipe
-                   (:package "consult-flyspell" :repo "OlMon/consult-flyspell"
-                             :fetcher gitlab :files
-                             ("*.el" "*.el.in" "dir" "*.info" "*.texi"
-                              "*.texinfo" "doc/dir" "doc/*.info" "doc/*.texi"
-                              "doc/*.texinfo" "lisp/*.el" "docs/dir"
-                              "docs/*.info" "docs/*.texi" "docs/*.texinfo"
-                              (:exclude ".dir-locals.el" "test.el" "tests.el"
-                                        "*-test.el" "*-tests.el" "LICENSE"
-                                        "README*" "*-pkg.el"))
-                             :source #2# :protocol https :inherit t :depth
-                             treeless :ref
-                             "7011e6634598530ea2d874e7e7389dc1bb94e1ca"))
+ (jinx :source #1# :recipe
+       (:package "jinx" :repo "minad/jinx" :files
+                 (:defaults "jinx-mod.c" "emacs-module.h") :fetcher github
+                 :source "MELPA" :protocol https :inherit t :depth treeless :ref
+                 "9c71f2c896c3d004019aa45cff3a54e09f2d5aee"))
  (wgrep :source #1# :recipe
         (:package "wgrep" :fetcher github :repo "mhayashi1120/Emacs-wgrep"
                   :files ("wgrep.el") :source #2# :protocol https :inherit t
