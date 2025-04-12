@@ -1144,10 +1144,8 @@ root, switch to it. Otherwise, create a new vterm buffer."
     "p %" #'project-query-replace-regexp
     "p &" #'project-async-shell-command
     "p /" #'project-search
-    "p b" #'project-switch-to-buffer
     "p B" #'project-display-buffer
     "p c" #'project-compile
-    "p C" #'project-recompile ;; r?
     "p d" #'project-find-dir
     "p D" #'project-dired
     "p e" #'project-eshell
@@ -1159,6 +1157,7 @@ root, switch to it. Otherwise, create a new vterm buffer."
     "p l" #'project-list-buffers
     "p o" #'project-any-command
     "p p" #'project-switch-project
+    "p r" #'project-recompile
     "p s" #'project-vterm
     "p v" #'project-vc-dir
     "p x" #'project-execute-extended-command
@@ -2924,6 +2923,7 @@ point. "
     "j i" #'consult-imenu
     "j I" #'consult-imenu-multi
     "k m" #'consult-kmacro
+    "p b" #'consult-project-buffer
     "r l" #'consult-register-load
     "r r" #'consult-register
     "r s" #'consult-register-store
@@ -2964,10 +2964,16 @@ point. "
          ("M-g /"           . #'consult-line-multi)
          ("M-g M-/"         . #'consult-line-multi)
          ([remap yank-pop]  . #'consult-yank-replace)
+         ("M-s M-h"         . #'consult-isearch-history)
          ("M-s l"           . #'consult-line)
          ("M-s M-l"         . #'consult-line)
          ("M-s ;"           . #'consult-line-symbol-at-point)
-         ("M-s M-;"         . #'consult-line-symbol-at-point))
+         ("M-s M-;"         . #'consult-line-symbol-at-point)
+         :map isearch-mode-map
+         ("M-g l"           . #'consult-line)
+         ("M-g M-l"         . #'consult-line)
+         ("M-s l"           . #'consult-line)
+         ("M-s M-l"         . #'consult-line))
 
   :config
 
