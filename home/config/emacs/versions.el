@@ -833,12 +833,6 @@
                              :source #2# :protocol https :inherit t :depth
                              treeless :ref
                              "55b17ee20a5011c6a9be8beed6a9daf644815b5a"))
- (corfu-prescient :source #1# :recipe
-                  (:package "corfu-prescient" :fetcher github :repo
-                            "radian-software/prescient.el" :files
-                            ("corfu-prescient.el") :source #2# :protocol https
-                            :inherit t :depth treeless :ref
-                            "7dd5b53886146a507f1388e0b61990f9820f9eb1"))
  (corfu-terminal :source #1# :recipe
                  (:package "corfu-terminal" :repo "akib/emacs-corfu-terminal"
                            :files ("*" (:exclude ".git")) :source #2# :protocol
@@ -882,22 +876,11 @@
                               "brett-lempereur/consult-xref-stack" :package
                               "consult-xref-stack" :ref
                               "aa9bbf7a3ff43353b7c10595b3d13887b213466b"))
- (vertico-prescient :source #1# :recipe
-                    (:package "vertico-prescient" :fetcher github :repo
-                              "radian-software/prescient.el" :files
-                              ("vertico-prescient.el") :source #2# :protocol
-                              https :inherit t :depth treeless :ref
-                              "7dd5b53886146a507f1388e0b61990f9820f9eb1"))
  (vertico :source #1# :recipe
           (:package "vertico" :repo "minad/vertico" :files
                     (:defaults "extensions/*") :fetcher github :source #2#
                     :protocol https :inherit t :depth treeless :ref
                     "edee5c68972b9270ac4f23b2c34aa43fe4403d52"))
- (prescient :source #1# :recipe
-            (:package "prescient" :fetcher github :repo
-                      "radian-software/prescient.el" :files ("prescient.el")
-                      :source #2# :protocol https :inherit t :depth treeless
-                      :ref "7dd5b53886146a507f1388e0b61990f9820f9eb1"))
  (orderless :source #1# :recipe
             (:package "orderless" :repo "oantolin/orderless" :fetcher github
                       :files

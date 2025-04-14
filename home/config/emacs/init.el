@@ -3009,29 +3009,6 @@ completing-read prompter."
             (?= . orderless-literal)
             (?? . orderless-flex))))
 
-;; Package `prescient' is a library for intelligent sorting and filtering in
-;; various contexts.
-(use-package! prescient
-  :demand t
-  :config
-
-  ;; Remember usage statistics across Emacs sessions.
-  (prescient-persist-mode +1)
-
-  ;; The default setting seem a little too low.
-  (setq prescient-history-length 1000)
-
-  ;; Sort fully matched candidates before others. Prescient can sort by recency,
-  ;; frequency, and candidate length. With this option, fully matched candidates
-  ;; will be sorted before partially matched candidates, but candidates in each
-  ;; group will still be sorted like normal.
-  (setq prescient-sort-full-matches-first t)
-
-  ;; Do not litter `user-emacs-directory' with persistent prescient file.
-  (setq prescient-save-file (expand-file-name
-                             "prescient-save.el"
-                             my-cache-dir)))
-
 ;; Package `vertico' provides a performant and minimalistic vertical completion
 ;; UI based on the default completion system. The main focus of Vertico is to
 ;; provide a UI which behaves correctly under all circumstances. By reusing the
@@ -3122,19 +3099,6 @@ completing-read prompter."
     :bind ( :map vertico-map
             ("M-i" . #'vertico-quick-insert)
             ("M-j" . #'vertico-quick-exit))))
-
-;; Package `vertico-prescient' provides an interface for using Prescient to
-;; sort and filter candidates in Vertico menus.
-(use-package! vertico-prescient
-  :demand t
-  :after vertico
-  :config
-
-  ;; Let `orderless' filter candidates.
-  (setq vertico-prescient-enable-filtering nil)
-
-  ;; Use `prescient' for Vertico menus.
-  (vertico-prescient-mode +1))
 
 ;;; IDE features
 ;;;; Definition location
@@ -3279,7 +3243,7 @@ completing-read prompter."
   (defun my--corfu-sort (candidates)
     "Sort candidates after completion backend pre-sorts them.
 Most of the completion backends will pre-sort candidates but this
-defeats the purpose of `corfu-prescient'."
+defeats the purpose of `corfu-sort-function'."
     (let ((candidates
            (let ((display-sort-func (corfu--metadata-get
                                      'display-sort-function)))
@@ -3311,6 +3275,13 @@ defeats the purpose of `corfu-prescient'."
     (setopt corfu-echo-delay 0)
 
     (corfu-echo-mode +1))
+
+  ;; Feature `corfu-history' sorts candidates by their history position.
+  (use-feature! corfu-history
+    :demand t
+    :config
+
+    (corfu-history-mode +1))
 
   ;; Feature `corfu-indexed' prefixes candidates with indices if enabled via
   ;; `corfu-indexed-mode'. It allows you to select candidates with prefix
@@ -3354,19 +3325,6 @@ defeats the purpose of `corfu-prescient'."
 
   (without-display-graphic!
     (corfu-terminal-mode +1)))
-
-;; Package `corfu-prescient' provides an interface for using Prescient to
-;; sort and filter candidates in Corfu menus.
-(use-package! corfu-prescient
-  :demand t
-  :after corfu
-  :config
-
-  ;; Let `orderless' filter candidates.
-  (setopt corfu-prescient-enable-filtering nil)
-
-  ;; Use `prescient' for Corfu menus.
-  (corfu-prescient-mode +1))
 
 ;; Package `nerd-icons-corfu' adds icons to completions in Corfu. It uses
 ;; `nerd-icons` under the hood and, as such, works on both GUI and terminal
