@@ -4782,14 +4782,6 @@ Goto^^              Actions^^         Other^^
     ;; message ring.
     (setopt git-commit-use-local-message-ring t))
 
-  (defadvice! my--magit-list-refs-sorted (fn &optional namespaces format sortby)
-    :around #'magit-list-refs
-    "Apply prescient sorting when listing refs."
-    (let ((res (funcall fn namespaces format sortby)))
-      (if (or sortby magit-list-refs-sortby)
-          res
-        (prescient-sort res))))
-
   ;; Suppress messages about updating margins.
   (advice-add #'magit-margin-set-variable :around #'advice-silence-messages!)
 
@@ -4829,6 +4821,9 @@ Goto^^              Actions^^         Other^^
 
   ;; Use `nerd-icons' when formatting lines representing a file.
   (setopt magit-format-file-function #'magit-format-file-nerd-icons)
+
+  ;; Sort refs by their committer dates.
+  (setopt magit-list-refs-sortby '("-committerdate" "-HEAD"))
 
   ;; Use absolute dates when showing logs.
   (setopt magit-log-margin '(t "%d-%m-%Y %H:%M " magit-log-margin-width t 18)))
