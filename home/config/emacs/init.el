@@ -2766,6 +2766,13 @@ will not refresh `column-number-mode."
 ;; in the middle of candidate-selection.
 (setq enable-recursive-minibuffers t)
 
+;; Hide commands in M-x which do not work in the current mode.
+(setopt read-extended-command-predicate #'command-completion-default-include-p)
+
+;; Do not allow the cursor in the minibuffer prompt.
+(setopt minibuffer-prompt-properties
+        '(read-only t cursor-intangible t face minibuffer-prompt))
+
 ;; Feature `savehist' saves minibuffer history to an external file after exit.
 (use-feature! savehist
   :demand t
