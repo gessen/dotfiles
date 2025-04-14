@@ -180,7 +180,7 @@ graphical frame is created."
 
 ;;;; Elpaca
 
-(defvar elpaca-installer-version 0.10)
+(defvar elpaca-installer-version 0.11)
 (defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
 (defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
 (defvar elpaca-repos-directory (expand-file-name "repos/" elpaca-directory))
@@ -195,7 +195,7 @@ graphical frame is created."
   (add-to-list 'load-path (if (file-exists-p build) build repo))
   (unless (file-exists-p repo)
     (make-directory repo t)
-    (when (< emacs-major-version 28) (require 'subr-x))
+    (when (<= emacs-major-version 28) (require 'subr-x))
     (condition-case-unless-debug err
         (if-let* ((buffer (pop-to-buffer-same-window "*elpaca-bootstrap*"))
                   ((zerop (apply #'call-process `("git" nil ,buffer t "clone"
@@ -215,9 +215,11 @@ graphical frame is created."
   (unless (require 'elpaca-autoloads nil t)
     (require 'elpaca)
     (elpaca-generate-autoloads "elpaca" repo)
-    (load "./elpaca-autoloads")))
+    (let ((load-source-file-function nil)) (load "./elpaca-autoloads"))))
 (add-hook 'after-init-hook #'elpaca-process-queues)
 (elpaca `(,@elpaca-order))
+
+;; Use locked packages versions.
 (setopt elpaca-lock-file (expand-file-name "versions.el" user-emacs-directory))
 
 ;;;; use-package
@@ -449,7 +451,7 @@ anything that can be a key's definition."
 
 ;; Package `which-key' displays the key bindings and associated commands
 ;; following the currently-entered key prefix in a popup.
-(use-package! which-key
+(use-feature! which-key
   :demand t
   :config
 
@@ -4201,15 +4203,15 @@ unhelpful."
 ;;; Applications
 ;;;; Organisation
 
+;; Skip building Org manual.
+(setopt elpaca-menu-org-make-manual nil)
+
 ;; Package `org' provides too many features to describe in any reasonable amount
 ;; of space. It is built fundamentally on `outline-mode', and adds TODO states,
 ;; deadlines, properties, priorities, etc. to headings. Then it provides tools
 ;; for interacting with this data, including an agenda view, a time clocker,
 ;; etc.
 (use-package! org
-  ;; We use straight mirror as the official repo does not allow to fetch a
-  ;; shallow repo with a frozen git hash.
-  :ensure (:host github :repo "emacs-straight/org-mode" :local-repo "org")
   :init
 
   (defhook! my--org-mode-setup ()
@@ -5096,9 +5098,6 @@ possibly new window."
 ;; Don't suggest shorter ways to type commands in M-x, since they don't apply
 ;; when using Vertico.
 (setq suggest-key-bindings 0)
-
-;; Decrease the frequency of UI updates when Emacs is idle.
-(setq idle-update-delay 1)
 
 ;; Defer fontification after 0.05s of being idle.
 (setq jit-lock-defer-time 0.05)

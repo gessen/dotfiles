@@ -9,7 +9,7 @@
 
 ;; In Emacs 27+, package initialization occurs before `user-init-file' is
 ;; loaded, but after `early-init-file' - disable this behaviour as we use
-;; `straight'.
+;; `elpaca'.
 (setq package-enable-at-startup nil)
 
 ;; Prefix declarations are unneeded bulk added to our autoloads file. Best we

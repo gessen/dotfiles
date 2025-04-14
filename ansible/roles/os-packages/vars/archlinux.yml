@@ -22,7 +22,7 @@ packages:
   - dos2unix
   - doxygen
   - dua-cli
-  - emacs-nativecomp
+  - emacs
   - fd
   - firefox
   - fzf
