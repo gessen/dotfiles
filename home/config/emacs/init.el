@@ -3723,54 +3723,39 @@ defeats the purpose of `corfu-sort-function'."
   (set-prefixes-for-major-mode! 'rust-ts-mode "s" "session")
   (set-leader-keys-for-major-mode! 'rust-ts-mode "s s" #'eglot)
 
-  (defvar rust-compilation-error-regexp
-    (let ((err "^error[^:]*:[^\n]*\n\s*-->\s")
-          (file "\\([^\n]+\\)")
-          (start-line "\\([0-9]+\\)")
-          (start-col  "\\([0-9]+\\)"))
-      (let ((re (concat err file ":" start-line ":" start-col)))
-        (cons re '(1 2 3))))
-    "Specifications for matching rust errors in compilation buffers.")
-
-  (defvar rust-compilation-warning-regexp
-    (let ((warning "^warning:[^\n]*\n\s*-->\s")
-          (file "\\([^\n]+\\)")
-          (start-line "\\([0-9]+\\)")
-          (start-col  "\\([0-9]+\\)"))
-      (let ((re (concat warning file ":" start-line ":" start-col)))
-        (cons re '(1 2 3 1)))) ;; 1 for warning
-    "Specifications for matching rust warnings in compilation buffers.")
-
-  (defvar rust-compilation-info-regexp
+  (defvar rust-compilation-location
     (let ((file "\\([^\n]+\\)")
           (start-line "\\([0-9]+\\)")
-          (start-col  "\\([0-9]+\\)"))
-      (let ((re (concat "^ *::: " file ":" start-line ":" start-col)))
-        (cons re '(1 2 3 0)))) ;; 0 for info type
-    "Specifications for matching rust infos in compilation buffers")
+          (start-col "\\([0-9]+\\)"))
+      (concat file ":" start-line ":" start-col)))
 
-  (defvar rust-compilation-panic-regexp
-    (let ((panic "thread '[^']+' panicked at '[^']+', ")
-          (file "\\([^\n]+\\)")
-          (start-line "\\([0-9]+\\)")
-          (start-col  "\\([0-9]+\\)"))
-      (let ((re (concat panic file ":" start-line ":" start-col)))
-        (cons re '(1 2 3))))
-    "Specifications for matching thread panics in compilation buffers.")
+  (defvar rust-compilation-regexp
+    (let ((re (concat "^\\(?:error\\|\\(warning\\)\\|\\(note\\)\\)[^\0]+?--> "
+                      rust-compilation-location)))
+      (cons re '(3 4 5 (1 . 2))))
+    "Specifications for matching errors in rustc invocations.")
+
+  (defvar rust-ref-compilation-regexp
+    (let ((re "^\\([0-9]+\\)[[:space:]]*|"))
+      (cons re '(nil 1 nil 0 1)))
+    "Specifications for matching code references in rustc invocations.")
+
+  (defvar rust-panic-compilation-regexp
+   (let ((re (concat "thread '[^']+' panicked at " rust-compilation-location)))
+     (cons re '(1 2 3)))
+   "Specifications for matching panics in rustc invocations.")
 
   (with-eval-after-load 'compile
     (add-to-list 'compilation-error-regexp-alist-alist
-                 (cons 'rust-error rust-compilation-error-regexp))
+                 (cons 'rust rust-compilation-regexp))
     (add-to-list 'compilation-error-regexp-alist-alist
-                 (cons 'rust-warning rust-compilation-warning-regexp))
+                 (cons 'rust-ref rust-ref-compilation-regexp))
     (add-to-list 'compilation-error-regexp-alist-alist
-                 (cons 'rust-info rust-compilation-info-regexp))
-    (add-to-list 'compilation-error-regexp-alist-alist
-                 (cons 'rust-panic rust-compilation-panic-regexp))
+                 (cons 'rust-panic rust-panic-compilation-regexp))
 
-    (add-to-list 'compilation-error-regexp-alist 'rust-error)
-    (add-to-list 'compilation-error-regexp-alist 'rust-warning)
-    (add-to-list 'compilation-error-regexp-alist 'rust-info)
+    ;; `rust-ref' must be added before `rust' as it uses its file source.
+    (add-to-list 'compilation-error-regexp-alist 'rust-ref)
+    (add-to-list 'compilation-error-regexp-alist 'rust)
     (add-to-list 'compilation-error-regexp-alist 'rust-panic))
 
   :mode ("\\.rs\\'")
