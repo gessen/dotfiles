@@ -1297,63 +1297,6 @@ root, switch to it. Otherwise, create a new vterm buffer."
   (with-eval-after-load 'embark
     (keymap-set embark-file-map "s" #'sudo-edit)))
 
-;; Package `treemacs' is a file and project explorer similar to NeoTree or vim’s
-;; NerdTree, but largely inspired by the Project Explorer in Eclipse. It shows
-;; the file system outlines of your projects in a simple tree layout allowing
-;; quick navigation and exploration, while also possessing basic file management
-;; utilities.
-(use-package! treemacs
-  :commands (treemacs-git-mode)
-  :init
-
-  ;; Always find and focus the current file after Treemacs is first initialised.
-  (setq treemacs-follow-after-init t)
-
-  ;; Treemacs will use the `no-other-window' parameter, in practice means that
-  ;; it will become invisible to commands like `other-window'.
-  (setq treemacs-is-never-other-window t)
-
-  ;; Sort files and directories alphabetically but with case insensitive.
-  (setq treemacs-sorting 'alphabetic-case-insensitive-asc)
-
-  ;; Do not litter `user-emacs-directory' with treemacs persistent files.
-  (setq treemacs-persist-file (expand-file-name
-                               "treemacs-persist.el"
-                               my-cache-dir)
-        treemacs-last-error-persist-file (expand-file-name
-                                          "treemacs-last-error-persist.el"
-                                          my-cache-dir))
-
-  (set-leader-keys!
-    "p m a" #'treemacs-add-and-display-current-project-exclusively
-    "p m A" #'treemacs-add-and-display-current-project)
-
-  :bind ("<f5>" . #'treemacs-select-window)
-
-  :config
-
-  ;; Focus currently selected file.
-  (treemacs-follow-mode +1)
-
-  ;; Check files' git status and highlight them accordingly. The simple variant
-  ;; will start a git status process whose output is parsed in elisp. This
-  ;; version is simpler and slightly faster, but incomplete - it will highlight
-  ;; only files, not directories.
-  (treemacs-git-mode 'simple)
-
-  (with-eval-after-load 'ace-window
-    ;; Let `ace-window' consider treemacs as normal window.
-    (setq aw-ignored-buffers (delq 'treemacs-mode aw-ignored-buffers))))
-
-;; Package `treemacs-nerd-icons' provides icons for Treemacs that work in GUI
-;; and in terminal.
-(use-package! treemacs-nerd-icons
-  :after treemacs
-  :demand t
-  :config
-
-  (treemacs-load-theme "nerd-icons"))
-
 ;;; Saving files
 
 ;; Don't make backup files.
@@ -5197,13 +5140,6 @@ during teardown."
   (theme-buffet-a-la-carte))
 
 ;;;; Modeline
-
-;; Package `hide-mode-line' provides a minor mode that hides (or masks) the
-;; modeline in your current buffer. It can be used to toggle an alternative
-;; modeline, toggle its visibility, or simply disable the modeline in buffers
-;; where it isn't very useful otherwise.
-(use-package! hide-mode-line
-  :hook (treemacs-mode-hook . hide-mode-line-mode))
 
 ;; Package `keycast' provides two modes that display the current command and its
 ;; key or mouse binding, and update the displayed information once another

@@ -61,6 +61,15 @@
                               ("dired-hacks-utils.el") :source #2# :protocol
                               https :inherit t :depth treeless :ref
                               "e9e408e8571aee5574ca0a431ef15cac5a3585d4"))
+ (ht :source #1# :recipe
+     (:package "ht" :fetcher github :repo "Wilfred/ht.el" :files
+               ("*.el" "*.el.in" "dir" "*.info" "*.texi" "*.texinfo" "doc/dir"
+                "doc/*.info" "doc/*.texi" "doc/*.texinfo" "lisp/*.el" "docs/dir"
+                "docs/*.info" "docs/*.texi" "docs/*.texinfo"
+                (:exclude ".dir-locals.el" "test.el" "tests.el" "*-test.el"
+                          "*-tests.el" "LICENSE" "README*" "*-pkg.el"))
+               :source #2# :protocol https :inherit t :depth treeless :ref
+               "1c49aad1c820c86f7ee35bf9fff8429502f60fef"))
  (package-lint :source #1# :recipe
                (:package "package-lint" :fetcher github :repo
                          "purcell/package-lint" :files
@@ -115,6 +124,15 @@
                              "*-tests.el" "LICENSE" "README*" "*-pkg.el"))
                   :source #2# :protocol https :inherit t :depth treeless :ref
                   "47ce4bca22b66bd3f49e40af8a359e8cc28146de"))
+ (s :source #1# :recipe
+    (:package "s" :fetcher github :repo "magnars/s.el" :files
+              ("*.el" "*.el.in" "dir" "*.info" "*.texi" "*.texinfo" "doc/dir"
+               "doc/*.info" "doc/*.texi" "doc/*.texinfo" "lisp/*.el" "docs/dir"
+               "docs/*.info" "docs/*.texi" "docs/*.texinfo"
+               (:exclude ".dir-locals.el" "test.el" "tests.el" "*-test.el"
+                         "*-tests.el" "LICENSE" "README*" "*-pkg.el"))
+              :source #2# :protocol https :inherit t :depth treeless :ref
+              "dda84d38fffdaf0c9b12837b504b402af910d01d"))
  (jeison :source #1# :recipe
          (:package "jeison" :repo "SavchenkoValeriy/jeison" :fetcher github
                    :files
@@ -138,6 +156,17 @@
                                    "*-pkg.el"))
                         :source #2# :protocol https :inherit t :depth treeless
                         :ref "fbd49857ab2e4cd0c5611c0cc83f93711657b298"))
+ (posframe :source #1# :recipe
+           (:package "posframe" :fetcher github :repo "tumashu/posframe" :files
+                     ("*.el" "*.el.in" "dir" "*.info" "*.texi" "*.texinfo"
+                      "doc/dir" "doc/*.info" "doc/*.texi" "doc/*.texinfo"
+                      "lisp/*.el" "docs/dir" "docs/*.info" "docs/*.texi"
+                      "docs/*.texinfo"
+                      (:exclude ".dir-locals.el" "test.el" "tests.el"
+                                "*-test.el" "*-tests.el" "LICENSE" "README*"
+                                "*-pkg.el"))
+                     :source #2# :protocol https :inherit t :depth treeless :ref
+                     "12f540c9ad5da09673b2bca1132b41f94c134e82"))
  (frog-menu :source #1# :recipe
             (:package "frog-menu" :repo
                       ("https://github.com/clemera/frog-menu" . "frog-menu")
@@ -156,55 +185,6 @@
                                      "README*" "*-pkg.el"))
                           :source #2# :protocol https :inherit t :depth treeless
                           :ref "8351e2df4fbbeb2a4003f2fb39f46d33803f3dac"))
- (posframe :source #1# :recipe
-           (:package "posframe" :fetcher github :repo "tumashu/posframe" :files
-                     ("*.el" "*.el.in" "dir" "*.info" "*.texi" "*.texinfo"
-                      "doc/dir" "doc/*.info" "doc/*.texi" "doc/*.texinfo"
-                      "lisp/*.el" "docs/dir" "docs/*.info" "docs/*.texi"
-                      "docs/*.texinfo"
-                      (:exclude ".dir-locals.el" "test.el" "tests.el"
-                                "*-test.el" "*-tests.el" "LICENSE" "README*"
-                                "*-pkg.el"))
-                     :source #2# :protocol https :inherit t :depth treeless :ref
-                     "12f540c9ad5da09673b2bca1132b41f94c134e82"))
- (cfrs :source #1# :recipe
-       (:package "cfrs" :repo "Alexander-Miller/cfrs" :fetcher github :files
-                 ("*.el" "*.el.in" "dir" "*.info" "*.texi" "*.texinfo" "doc/dir"
-                  "doc/*.info" "doc/*.texi" "doc/*.texinfo" "lisp/*.el"
-                  "docs/dir" "docs/*.info" "docs/*.texi" "docs/*.texinfo"
-                  (:exclude ".dir-locals.el" "test.el" "tests.el" "*-test.el"
-                            "*-tests.el" "LICENSE" "README*" "*-pkg.el"))
-                 :source #2# :protocol https :inherit t :depth treeless :ref
-                 "f3a21f237b2a54e6b9f8a420a9da42b4f0a63121"))
- (ht :source #1# :recipe
-     (:package "ht" :fetcher github :repo "Wilfred/ht.el" :files
-               ("*.el" "*.el.in" "dir" "*.info" "*.texi" "*.texinfo" "doc/dir"
-                "doc/*.info" "doc/*.texi" "doc/*.texinfo" "lisp/*.el" "docs/dir"
-                "docs/*.info" "docs/*.texi" "docs/*.texinfo"
-                (:exclude ".dir-locals.el" "test.el" "tests.el" "*-test.el"
-                          "*-tests.el" "LICENSE" "README*" "*-pkg.el"))
-               :source #2# :protocol https :inherit t :depth treeless :ref
-               "1c49aad1c820c86f7ee35bf9fff8429502f60fef"))
- (pfuture :source #1# :recipe
-          (:package "pfuture" :repo "Alexander-Miller/pfuture" :fetcher github
-                    :files
-                    ("*.el" "*.el.in" "dir" "*.info" "*.texi" "*.texinfo"
-                     "doc/dir" "doc/*.info" "doc/*.texi" "doc/*.texinfo"
-                     "lisp/*.el" "docs/dir" "docs/*.info" "docs/*.texi"
-                     "docs/*.texinfo"
-                     (:exclude ".dir-locals.el" "test.el" "tests.el" "*-test.el"
-                               "*-tests.el" "LICENSE" "README*" "*-pkg.el"))
-                    :source #2# :protocol https :inherit t :depth treeless :ref
-                    "19b53aebbc0f2da31de6326c495038901bffb73c"))
- (s :source #1# :recipe
-    (:package "s" :fetcher github :repo "magnars/s.el" :files
-              ("*.el" "*.el.in" "dir" "*.info" "*.texi" "*.texinfo" "doc/dir"
-               "doc/*.info" "doc/*.texi" "doc/*.texinfo" "lisp/*.el" "docs/dir"
-               "docs/*.info" "docs/*.texi" "docs/*.texinfo"
-               (:exclude ".dir-locals.el" "test.el" "tests.el" "*-test.el"
-                         "*-tests.el" "LICENSE" "README*" "*-pkg.el"))
-              :source #2# :protocol https :inherit t :depth treeless :ref
-              "dda84d38fffdaf0c9b12837b504b402af910d01d"))
  (dash :source #1# :recipe
        (:package "dash" :fetcher github :repo "magnars/dash.el" :files
                  ("dash.el" "dash.texi") :source #2# :protocol https :inherit t
@@ -253,20 +233,6 @@
                                "*-tests.el" "LICENSE" "README*" "*-pkg.el"))
                     :source #2# :protocol https :inherit t :depth treeless :ref
                     "83216f97b3dd99dbb1d4dbc781e863f205b6d5d9"))
- (hide-mode-line :source #1# :recipe
-                 (:package "hide-mode-line" :repo
-                           "hlissner/emacs-hide-mode-line" :fetcher github
-                           :files
-                           ("*.el" "*.el.in" "dir" "*.info" "*.texi" "*.texinfo"
-                            "doc/dir" "doc/*.info" "doc/*.texi" "doc/*.texinfo"
-                            "lisp/*.el" "docs/dir" "docs/*.info" "docs/*.texi"
-                            "docs/*.texinfo"
-                            (:exclude ".dir-locals.el" "test.el" "tests.el"
-                                      "*-test.el" "*-tests.el" "LICENSE"
-                                      "README*" "*-pkg.el"))
-                           :source #2# :protocol https :inherit t :depth
-                           treeless :ref
-                           "ddd154f1e04d666cd004bf8212ead8684429350d"))
  (theme-buffet :source #1# :recipe
                (:package "theme-buffet" :repo
                          ("https://git.sr.ht/~bboal/theme-buffet"
@@ -1397,27 +1363,6 @@
                            :source #2# :protocol https :inherit t :depth
                            treeless :ref
                            "6ab75d0a690f0080e9b97c730aac817d04144cd0"))
- (treemacs-nerd-icons :source #1# :recipe
-                      (:package "treemacs-nerd-icons" :fetcher github :repo
-                                "rainstormstudio/treemacs-nerd-icons" :files
-                                ("*.el" "*.el.in" "dir" "*.info" "*.texi"
-                                 "*.texinfo" "doc/dir" "doc/*.info" "doc/*.texi"
-                                 "doc/*.texinfo" "lisp/*.el" "docs/dir"
-                                 "docs/*.info" "docs/*.texi" "docs/*.texinfo"
-                                 (:exclude ".dir-locals.el" "test.el" "tests.el"
-                                           "*-test.el" "*-tests.el" "LICENSE"
-                                           "README*" "*-pkg.el"))
-                                :source #2# :protocol https :inherit t :depth
-                                treeless :ref
-                                "eac9fb5d92b8b29e7c4fcf9f3baddb2cb0b04575"))
- (treemacs :source #1# :recipe
-           (:package "treemacs" :fetcher github :repo
-                     "Alexander-Miller/treemacs" :files
-                     (:defaults "Changelog.org" "icons" "src/elisp/treemacs*.el"
-                                "src/scripts/treemacs*.py"
-                                (:exclude "src/extra/*"))
-                     :source #2# :protocol https :inherit t :depth treeless :ref
-                     "96a808f06760ec8c595d27eb5c991ea905c948f6"))
  (sudo-edit :source #1# :recipe
             (:package "sudo-edit" :repo "nflath/sudo-edit" :fetcher github
                       :files
