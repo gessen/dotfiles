@@ -2104,40 +2104,6 @@ will not refresh `column-number-mode."
 
   (global-hl-todo-mode +1))
 
-;; Package `prism' disperses lisp forms (and other languages) into a spectrum of
-;; color by depth.
-(use-package! prism
-  :init
-
-  (set-leader-keys!
-    "t h s" #'prism-mode
-    "t h S" #'prism-whitespace-mode)
-
-  (defun prism-shuffle-colors ()
-    "Shuffle random number of theme faces."
-    (interactive)
-    (prism-set-colors
-     :num 24
-     :colors (let* ((faces (list
-                            'font-lock-regexp-grouping-backslash
-                            'font-lock-regexp-grouping-construct
-                            'font-lock-negation-char-face
-                            'font-lock-preprocessor-face
-                            'font-lock-function-name-face
-                            'font-lock-keyword-face
-                            'font-lock-variable-name-face
-                            'font-lock-warning-face
-                            'font-lock-builtin-face
-                            'font-lock-constant-face
-                            'font-lock-string-face
-                            'font-lock-type-face))
-                    (colors (->> faces
-                                 (--map (face-attribute it :foreground))
-                                 (--remove (eq 'unspecified it))
-                                 -uniq))
-                    (num (max 3 (random (1+ (length colors))))))
-               (prism-shuffle (seq-take colors num))))))
-
 ;; Package `pulsar' temporarily highlights the current line after a given
 ;; function is invoked.
 (use-package! pulsar

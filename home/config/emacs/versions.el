@@ -1054,16 +1054,6 @@
                    ("*" (:exclude ".git" "COPYING" "doclicense.texi")) :source
                    #2# :protocol https :inherit t :depth treeless :ref
                    "77416e6076af7ab3ccfb7a91915dd036ad968155"))
- (prism :source #1# :recipe
-        (:package "prism" :fetcher github :repo "alphapapa/prism.el" :files
-                  ("*.el" "*.el.in" "dir" "*.info" "*.texi" "*.texinfo"
-                   "doc/dir" "doc/*.info" "doc/*.texi" "doc/*.texinfo"
-                   "lisp/*.el" "docs/dir" "docs/*.info" "docs/*.texi"
-                   "docs/*.texinfo"
-                   (:exclude ".dir-locals.el" "test.el" "tests.el" "*-test.el"
-                             "*-tests.el" "LICENSE" "README*" "*-pkg.el"))
-                  :source #2# :protocol https :inherit t :depth treeless :ref
-                  "2fa8eb5a9ca62a548d33befef4517e5d0266eb28"))
  (hl-todo :source #1# :recipe
           (:package "hl-todo" :repo "tarsius/hl-todo" :fetcher github :files
                     ("*.el" "*.el.in" "dir" "*.info" "*.texi" "*.texinfo"
