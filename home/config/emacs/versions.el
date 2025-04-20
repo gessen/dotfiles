@@ -261,15 +261,6 @@
                                     "*-pkg.el"))
                          :source #2# :protocol https :inherit t :depth treeless
                          :ref "cfe8702f56f9c06254d9a8f8996766ffa2c6f609"))
- (esup :source #1# :recipe
-       (:package "esup" :fetcher github :repo "jschaf/esup" :files
-                 ("*.el" "*.el.in" "dir" "*.info" "*.texi" "*.texinfo" "doc/dir"
-                  "doc/*.info" "doc/*.texi" "doc/*.texinfo" "lisp/*.el"
-                  "docs/dir" "docs/*.info" "docs/*.texi" "docs/*.texinfo"
-                  (:exclude ".dir-locals.el" "test.el" "tests.el" "*-test.el"
-                            "*-tests.el" "LICENSE" "README*" "*-pkg.el"))
-                 :source #2# :protocol https :inherit t :depth treeless :ref
-                 "4b49c8d599d4cc0fbf994e9e54a9c78e5ab62a5f"))
  (vterm-toggle :source #1# :recipe
                (:package "vterm-toggle" :fetcher github :repo
                          "jixiuf/vterm-toggle" :files

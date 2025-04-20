@@ -4851,58 +4851,6 @@ possibly new window."
   :bind (("M-g c"   . #'consult-compile-error)
          ("M-g M-c" . #'consult-compile-error)))
 
-;;;; Emacs profiling
-
-;; Package `esup' allows you to run a child Emacs process with special profiling
-;; functionality, and to collect timing results for each form in your init-file.
-(use-package! esup
-  :config
-
-  ;; Work around a bug where esup tries to step into the byte-compiled version
-  ;; of `cl-lib' and fails horribly.
-  (setq esup-depth 0)
-
-  (defadvice! my--esup-unwrap-init-file
-      (esup &optional init-file)
-    :around #'esup
-    "Help `esup' to work with the `user-init-file'."
-    (if init-file
-        (funcall esup init-file)
-      (let ((fname (expand-file-name "esup-init.el" temporary-file-directory)))
-        (with-temp-file fname
-          (print
-           `(progn
-              ;; We need this for `string-trim', but it's not `require'd until
-              ;; the beginning of my-init.el.
-              (require 'subr-x)
-
-              ;; Prevent indentation from being lost in the profiling results.
-              (advice-add #'esup-child-chomp :override #'string-trim)
-
-              ;; Esup does not set `user-init-file'.
-              (setq user-init-file ,user-init-file)
-
-              ;; If there's an error, let me see where it is.
-              (setq debug-on-error t)
-
-              ;; Make it possible to detect whether the init-file is being
-              ;; profiled.
-              (defvar my--currently-profiling-p t)
-
-              ;; Abbreviated (and flattened) version of early-init.el.
-              (setq package-enable-at-startup nil)
-              (setq autoload-compute-prefixes nil)
-              (setq default-frame-alist '((menu-bar-lines . 0)
-                                          (tool-bar-lines . 0)
-                                          (vertical-scroll-bars)))
-              (setq frame-inhibit-implied-resize t))
-           (current-buffer))
-          (insert-file-contents-literally user-init-file)
-          (goto-char (point-max))
-          (print
-           (current-buffer)))
-        (funcall esup fname)))))
-
 ;;; Startup
 
 ;; Disable the *About GNU Emacs* buffer at startup, and go straight for the
