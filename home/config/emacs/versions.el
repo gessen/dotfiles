@@ -1468,18 +1468,6 @@
                   (:defaults (:exclude "lv.el")) :source #2# :protocol https
                   :inherit t :depth treeless :wait t :ref
                   "59a2a45a35027948476d1d7751b0f0215b1e61aa"))
- (blackout :source #1# :recipe
-           (:package "blackout" :fetcher github :repo "radian-software/blackout"
-                     :files
-                     ("*.el" "*.el.in" "dir" "*.info" "*.texi" "*.texinfo"
-                      "doc/dir" "doc/*.info" "doc/*.texi" "doc/*.texinfo"
-                      "lisp/*.el" "docs/dir" "docs/*.info" "docs/*.texi"
-                      "docs/*.texinfo"
-                      (:exclude ".dir-locals.el" "test.el" "tests.el"
-                                "*-test.el" "*-tests.el" "LICENSE" "README*"
-                                "*-pkg.el"))
-                     :source #2# :protocol https :inherit t :depth treeless
-                     :wait t :ref "7707211370f03f03a2f74df15f42ac24a1e99300"))
  (elpaca-use-package :source #1# :recipe
                      (:package "elpaca-use-package" :wait t :repo
                                "https://github.com/progfolio/elpaca.git" :files

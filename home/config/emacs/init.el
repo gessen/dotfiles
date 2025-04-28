@@ -263,14 +263,6 @@ NAME and ARGS are as in `use-package'."
   `(use-package ,name
      ,@args))
 
-;; Package `blackout' provides a convenient function for customizing mode
-;; lighters. It supports both major and minor modes with the same interface, and
-;; includes `use-package' integration. The features are a strict superset of
-;; those provided by similar packages `diminish', `delight' and `dim'.
-(use-package! blackout
-  :ensure (:wait t)
-  :demand t)
-
 ;;; Keybindings
 
 (defvar-keymap my-leader-key-map
@@ -493,9 +485,7 @@ anything that can be a key's definition."
   (setq which-key-sort-order 'which-key-key-order-alpha
         which-key-sort-uppercase-first nil)
 
-  (which-key-mode +1)
-
-  :blackout t)
+  (which-key-mode +1))
 
 ;; Package `hydra' can be used to tie related commands into a family of short
 ;; bindings with a common prefix - a Hydra. Once you summon the Hydra (through
@@ -548,9 +538,7 @@ anything that can be a key's definition."
   :if (not (display-graphic-p))
   :init
 
-  (global-clipetty-mode +1)
-
-  :blackout t)
+  (global-clipetty-mode +1))
 
 ;;;; Mouse integration
 
@@ -754,8 +742,7 @@ window instead."
 ;; parts of one large window.
 (use-feature! follow
   :init
-  (set-leader-keys! "w F" #'follow-mode)
-  :blackout t)
+  (set-leader-keys! "w F" #'follow-mode))
 
 ;; Feature `ibuffer' provides a more modern replacement for the `list-buffers'
 ;; command.
@@ -882,9 +869,7 @@ window instead."
          (get-buffer-window " *which-key*" 'visible)))
   (push 'which-key-buffer-p golden-ratio-inhibit-functions)
 
-  (golden-ratio-mode +1)
-
-  :blackout t)
+  (golden-ratio-mode +1))
 
 ;; Package `ibuffer-project' provides IBuffer filtering and sorting functions to
 ;; group buffers by function or regexp applied to `default-directory'. By
@@ -1367,9 +1352,6 @@ root, switch to it. Otherwise, create a new vterm buffer."
    (set-char-table-range auto-fill-chars c t))
  "!-=+]};:'\",.?")
 
-(blackout #'auto-fill-mode " Ⓕ")
-(blackout #'visual-line-mode)
-
 ;; Feature `whitespace' provides a minor mode for highlighting whitespace in
 ;; various special ways.
 (use-feature! whitespace
@@ -1388,9 +1370,7 @@ root, switch to it. Otherwise, create a new vterm buffer."
   :config
 
   ;; Remove highlighting of too long lines as another package does it better.
-  (setq whitespace-style (delq 'lines whitespace-style))
-
-  :blackout t)
+  (setq whitespace-style (delq 'lines whitespace-style)))
 
 ;; This package provides a replacement for `comment-dwim' called
 ;; `comment-dwim-2', which includes more features and allows you to comment /
@@ -1440,9 +1420,7 @@ root, switch to it. Otherwise, create a new vterm buffer."
   :hook (prog-mode-hook . ws-butler-mode)
 
   :init
-  (set-leader-keys! "t C-w" #'ws-butler-mode)
-
-  :blackout t)
+  (set-leader-keys! "t C-w" #'ws-butler-mode))
 
 ;;;; Indentation
 
@@ -1563,9 +1541,7 @@ root, switch to it. Otherwise, create a new vterm buffer."
   (setq-default hungry-delete-chars-to-skip " \t\f\v")
 
   ;; Enable `hungry-delete-mode' everywhere.
-  (global-hungry-delete-mode +1)
-
-  :blackout t)
+  (global-hungry-delete-mode +1))
 
 ;; Package `zop-to-char' is a visual `zap-to-char' command for Emacs. It works
 ;; in minibuffer and you can change direction with C-b and C-f. You can also use
@@ -1850,9 +1826,7 @@ possibly new window."
     "t c" #'subword-mode
     "t C" #'global-subword-mode)
 
-  (global-subword-mode +1)
-
-  :blackout t)
+  (global-subword-mode +1))
 
 ;; Package `golden-ratio-scroll-screen' scrolls screen down or up and highlights
 ;; current line before or after scrolling. The lines it scrolls is
@@ -1917,13 +1891,7 @@ possibly new window."
   :demand t
   :config
 
-  (beginend-global-mode +1)
-
-  ;; Blackout each of the defined `beginend-modes'.
-  (dolist (mode beginend-modes)
-    (blackout (cdr mode)))
-
-  :blackout beginend-global-mode)
+  (beginend-global-mode +1))
 
 ;; Package `centered-cursor-mode' Makes the cursor stay vertically in a defined
 ;; position, usually centered.
@@ -1937,9 +1905,7 @@ possibly new window."
   :config
 
   ;; Make the end of the file recentered.
-  (setq ccm-recenter-at-end-of-file t)
-
-  :blackout t)
+  (setq ccm-recenter-at-end-of-file t))
 
 ;; Package `frog-jump-buffer allows you to hop to any Emacs buffer in 2-3 key
 ;; strokes. The buffers appear in order of most recent display or selection
@@ -2020,9 +1986,7 @@ will not refresh `column-number-mode."
   ;; Set the column limit with the same limit as `fill-column'.
   (setq column-enforce-column nil)
 
-  :hook (prog-mode-hook . column-enforce-mode)
-
-  :blackout t)
+  :hook (prog-mode-hook . column-enforce-mode))
 
 ;; Package `highlight-indent-guides' highlights indentation levels via
 ;; `font-lock'. Indent widths are dynamically discovered, which means this
@@ -2049,9 +2013,7 @@ will not refresh `column-number-mode."
 
   ;; Calculate reasonable values for the indent guide colors based on the
   ;; current theme's colorscheme, and set them appropriately.
-  (highlight-indent-guides-auto-set-faces)
-
-  :blackout t)
+  (highlight-indent-guides-auto-set-faces))
 
 ;; Package `highlight-numbers' provides syntax highlighting of numeric literals
 ;; in source code, like what many editors provide by default.
@@ -2080,9 +2042,7 @@ will not refresh `column-number-mode."
   (setq highlight-parentheses-colors '("Springgreen3"
                                        "IndianRed1"
                                        "IndianRed3"
-                                       "IndianRed4"))
-
-  :blackout t)
+                                       "IndianRed4")))
 
 ;; Package `hl-todo' highlights TODO and similar keywords in comments and
 ;; strings. also provides commands for moving to the next or previous keyword,
@@ -2359,9 +2319,7 @@ will not refresh `column-number-mode."
     ;; enable annotations
     (add-to-list 'vertico-multiform-categories
                  '(jinx grid
-                        (vertico-grid-annotate . 20) (vertico-count . 4))))
-
-  :blackout t)
+                        (vertico-grid-annotate . 20) (vertico-count . 4)))))
 
 ;; Package `powerthesaurus' is an integration with powerthesaurus.org. It helps
 ;; to look up a word in powerthesaurus and either replace or insert selected
@@ -2477,9 +2435,7 @@ will not refresh `column-number-mode."
     "Inhibit `autorevert' for buffers not displayed in any window."
     (cl-remove-if #'my-autorevert-inhibit-p bufs))
 
-  (global-auto-revert-mode +1)
-
-  :blackout (auto-revert-mode . t))
+  (global-auto-revert-mode +1))
 
 ;;;; Automatic delimiter pairing
 
@@ -2539,9 +2495,7 @@ will not refresh `column-number-mode."
   :config
 
   ;; Do not litter `user-emacs-directory with persistent abbrevs file.
-  (setq abbrev-file-name (expand-file-name "abbrev.el" my-data-dir))
-
-  :blackout t)
+  (setq abbrev-file-name (expand-file-name "abbrev.el" my-data-dir)))
 
 ;; Feature `hippie-exp' allows to expand text while trying various ways to find
 ;; its expansion. Called repeatedly it tries all possible completions in
@@ -2657,9 +2611,7 @@ will not refresh `column-number-mode."
   (setopt yas-wrap-around-region t)
 
   ;; Enable snippets everywhere
-  (yas-global-mode +1)
-
-  :blackout (yas-minor-mode . t))
+  (yas-global-mode +1))
 
 ;; Package `yasnippet-snippets' is the official snippet collection for the
 ;; `yasnippet' package.
@@ -3084,9 +3036,7 @@ completing-read prompter."
   :config
 
   ;; Decrease the idle time after ElDoc shows documentation at point.
-  (setopt eldoc-idle-delay 0)
-
-  :blackout t)
+  (setopt eldoc-idle-delay 0))
 
 ;; Package `breadcrumb' provide `project' and `imenu'-based breadcrumb paths
 ;; displayed either on header line or mode line.
@@ -3529,9 +3479,7 @@ defeats the purpose of `corfu-sort-function'."
 
 ;; Package `markdown-toc' is a simple TOC generator for Markdown file.
 (use-package! markdown-toc
-  :hook ((markdown-mode-hook gfm-mode-hook) . markdown-toc-mode)
-
-  :blackout t)
+  :hook ((markdown-mode-hook gfm-mode-hook) . markdown-toc-mode))
 
 ;; Package `grip-mode' instantly previews GitHub-flavored Markdown/Org using
 ;; grip.
@@ -3783,8 +3731,7 @@ defeats the purpose of `corfu-sort-function'."
 (use-package! pkgbuild-mode)
 
 ;; Package `ssh-config-mode' provides major modes for files in ~/.ssh.
-(use-package! ssh-config-mode
-  :blackout "SSH-Config")
+(use-package! ssh-config-mode)
 
 ;; Feature `toml-ts-mode' provides major mode for editing TOML, powered by
 ;; tree-sitter
@@ -4445,8 +4392,7 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
 
 ;; Package `nerd-icons-dired' shows icons for each file in Dired,
 (use-package! nerd-icons-dired
-  :hook (dired-mode-hook . nerd-icons-dired-mode)
-  :blackout t)
+  :hook (dired-mode-hook . nerd-icons-dired-mode))
 
 ;;;; Processes
 
@@ -4559,9 +4505,7 @@ Goto^^              Actions^^         Other^^
     after-revert-hook
     "Update `git-gutter' after the buffer is autoreverted."
     (when git-gutter-mode
-      (git-gutter)))
-
-  :blackout t)
+      (git-gutter))))
 
 ;; Package `git-messenger' provides a function that when called will pop-up the
 ;; last git commit message for the current line. This uses the git-blame tool
@@ -4715,9 +4659,7 @@ current theme. This will also disable line numbers and decorations."
     'magit-diff '(-1 -1 -1)
     '("l" "Toggle magit-delta" magit-delta-toggle))
 
-  (magit-delta-mode +1)
-
-  :blackout t)
+  (magit-delta-mode +1))
 
 ;; Package `magit-todos' displays keyword entries from source code comments and
 ;; Org files in the Magit status buffer. Activating an item jumps to it in its
