@@ -3665,14 +3665,14 @@ defeats the purpose of `corfu-sort-function'."
 
 ;; Feature `sh-script' provides a major mode for various Shell scripts.
 (use-feature! sh-script
-  :init
+  :hook (sh-mode-hook . flymake-mode)
+  :config
 
-  (defhook! my--sh-mode-setup ()
-    sh-mode-hook
-    "Set custom settings for `sh-mode'."
-    (setq sh-basic-offset 2)
-    ;; Enable syntax checking and spellchecking in comments.
-    (flymake-mode +1))
+  ;; Set the default indentation.
+  (setopt sh-basic-offset 2)
+
+  ;; Always indent relative to the continued line's beginning.
+  (setopt sh-indent-after-continuation 'always)
 
   (dolist (mode '(bash-ts-mode sh-mode))
     (set-prefixes-for-major-mode! mode "i" "insert")
@@ -3691,7 +3691,6 @@ defeats the purpose of `corfu-sort-function'."
       "i w" #'sh-while
       "s"   #'sh-set-shell))
 
-  :config
 
   ;; Silence messages when opening Shell scripts.
   (dolist (func '(sh-set-shell sh-make-vars-local))
