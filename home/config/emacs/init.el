@@ -461,9 +461,6 @@ anything that can be a key's definition."
   ;; active keymaps
   (setq which-key-compute-remaps t)
 
-  ;; Turn off displaying the current prefix sequence.
-  (setq which-key-show-prefix nil)
-
   ;; Echo keystrokes almost instantly. It needs to be less than
   ;; `which-key-idle-delay' or else the keystroke echo will erase the
   ;; `which-key' popup.
