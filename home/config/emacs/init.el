@@ -4633,6 +4633,45 @@ Goto^^              Actions^^         Other^^
                                 'git-timemachine-minibuffer-detail-face)
                     date-full date-relative))))
 
+  (with-eval-after-load 'browse-at-remote
+    (defadvice! my--browse-at-remote-with-git-timemachine (fn)
+      :around #'browse-at-remote-get-url
+      "Allow `browse-at-remote' commands in `git-timemachine' buffers to open
+that file in your browser at the visited revision."
+      (if git-timemachine-mode
+          (let* ((filename (buffer-file-name))
+                 (remote-ref (browse-at-remote--remote-ref filename))
+                 (remote (car remote-ref))
+                 (ref (car git-timemachine-revision))
+                 (relname (f-relative filename (f-expand
+                                                (vc-git-root filename))))
+                 (target-repo (browse-at-remote--get-url-from-remote remote))
+                 (remote-type (browse-at-remote--get-remote-type
+                               (plist-get target-repo :unresolved-host)))
+                 (repo-url (plist-get target-repo :url))
+                 (url-formatter (browse-at-remote--get-formatter 'region-url
+                                                                 remote-type))
+                 (start (and (use-region-p) (min (region-beginning)
+                                                 (region-end))))
+                 (point-end (and (use-region-p) (max (region-beginning)
+                                                     (region-end))))
+                 (end (when point-end (if (eq (char-before point-end) ?\n)
+                                          (- point-end 1)
+                                        point-end)))
+                 (start-line (when start (line-number-at-pos start)))
+                 (end-line (when end (line-number-at-pos end)))
+                 (line
+                  (when browse-at-remote-add-line-number-if-no-region-selected
+                    (line-number-at-pos (point)))))
+            (unless url-formatter
+              (error (format "Origin repo parsing failed: %s" repo-url)))
+
+            (funcall url-formatter repo-url ref relname
+                     (or start-line line)
+                     (when (and end-line (not (equal start-line end-line)))
+                       end-line)))
+        (funcall fn))))
+
   ;; Number of chars from the full sha1 hash to use for abbreviation.
   (setq git-timemachine-abbreviation-length 8))
 
