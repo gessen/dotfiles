@@ -1760,6 +1760,25 @@ column as mark, it add cursor to each line."
   ;; Do not use `keyboard-quit' to disable linear undo/redo behavior.
   (setopt undo-fu-ignore-keyboard-quit t))
 
+;; Package `undo-fu-session' writes undo/redo information upon file save which
+;; is restored where possible when the file is loaded again.
+(use-package! undo-fu-session
+  :demand t
+  :config
+
+  ;; Use zstd as a compression algorithm.
+  (setopt undo-fu-session-compression 'zst)
+
+  ;; Do not litter `user-emacs-directory' with undo history.
+  (setopt undo-fu-session-directory
+          (expand-file-name "undo-session/" my-cache-dir))
+
+  ;; Ignore undo session for the following files.
+  (setopt undo-fu-session-incompatible-files
+          '("\\.gpg$" "/COMMIT_EDITMSG\\'" "/git-rebase-todo\\'"))
+
+  (undo-fu-session-global-mode +1))
+
 ;; Package `vundo' (visual undo) displays the undo history as a tree and lets
 ;; you move in the tree to go back to previous buffer states. To use vundo, type
 ;; M-x vundo RET in the buffer you want to undo. An undo tree buffer should pop
