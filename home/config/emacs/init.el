@@ -4806,15 +4806,22 @@ current theme. This will also disable line numbers and decorations."
   :config
 
   ;; Show all possible options in transient windows.
-  (setq transient-default-level 7)
+  (setopt transient-default-level 7)
+
+  ;; Pop up transient windows at the bottom of the window where it was invoked.
+  (setopt transient-display-buffer-action
+          '(display-buffer-below-selected
+            (dedicated . t)
+            (inhibit-same-window . t))
+          transient-show-during-minibuffer-read t)
 
   ;; Do not litter `user-emacs-directory' with transient files.
-  (setq transient-levels-file (expand-file-name "transient/levels.el"
-                                                my-cache-dir)
-        transient-values-file (expand-file-name "transient/values.el"
-                                                my-cache-dir)
-        transient-history-file (expand-file-name "transient/history.el"
-                                                 my-cache-dir))
+  (setopt transient-levels-file (expand-file-name "transient/levels.el"
+                                                  my-cache-dir)
+          transient-values-file (expand-file-name "transient/values.el"
+                                                  my-cache-dir)
+          transient-history-file (expand-file-name "transient/history.el"
+                                                   my-cache-dir))
 
   (with-eval-after-load 'golden-ratio
     (push "*transient*" golden-ratio-exclude-buffer-names))
