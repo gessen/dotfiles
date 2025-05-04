@@ -3264,20 +3264,6 @@ defeats the purpose of `corfu-sort-function'."
           ("SPC" . #'flymake-show-diagnostic))
   :config
 
-  (defvar-local flymake-old-next-error-function nil
-    "Remember the old `next-error-function'.")
-
-  (defhook! my--flymake-setup ()
-    flymake-mode-hook
-    "Support error navigation with `next-error'."
-    (cond
-     (flymake-mode
-      (setq flymake-old-next-error-function next-error-function)
-      (setq next-error-function #'flymake-goto-next-error))
-     (t
-      (setq next-error-function flymake-old-next-error-function)
-      (setq flymake-old-next-error-function nil))))
-
   (defvar-keymap flymake-repeat-map
     :doc "Support Flymake based navigation with repeats."
     :repeat t
