@@ -4616,6 +4616,23 @@ Goto^^              Actions^^         Other^^
 
   :config
 
+  (defadvice! my--git-timemachine--show-header-line-details (revision)
+    :override #'git-timemachine--show-minibuffer-details
+    "Show revision details in the header-line, instead of the minibuffer."
+    (let* ((date-relative (nth 3 revision))
+           (date-full (nth 4 revision))
+           (author (if git-timemachine-show-author
+                       (concat (nth 6 revision) ": ") ""))
+           (sha-or-subject (if (eq git-timemachine-minibuffer-detail 'commit)
+                               (car revision) (nth 5 revision))))
+      (setq header-line-format
+            (format "%s%s [%s (%s)]"
+                    (propertize author 'face
+                                'git-timemachine-minibuffer-author-face)
+                    (propertize sha-or-subject 'face
+                                'git-timemachine-minibuffer-detail-face)
+                    date-full date-relative))))
+
   ;; Number of chars from the full sha1 hash to use for abbreviation.
   (setq git-timemachine-abbreviation-length 8))
 
