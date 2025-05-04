@@ -1202,6 +1202,17 @@
                   :files ("*" (:exclude ".git" "test")) :source #2# :protocol
                   https :inherit t :depth treeless :ref
                   "b89f719824fe5da0f6a7590fad3ece798fd59909"))
+ (undo-fu :source #1# :recipe
+          (:package "undo-fu" :fetcher codeberg :repo "ideasman42/emacs-undo-fu"
+                    :files
+                    ("*.el" "*.el.in" "dir" "*.info" "*.texi" "*.texinfo"
+                     "doc/dir" "doc/*.info" "doc/*.texi" "doc/*.texinfo"
+                     "lisp/*.el" "docs/dir" "docs/*.info" "docs/*.texi"
+                     "docs/*.texinfo"
+                     (:exclude ".dir-locals.el" "test.el" "tests.el" "*-test.el"
+                               "*-tests.el" "LICENSE" "README*" "*-pkg.el"))
+                    :source #2# :protocol https :inherit t :depth treeless :ref
+                    "399cc12f907f81a709f9014b6fad0205700d5772"))
  (multiple-cursors :source #1# :recipe
                    (:package "multiple-cursors" :fetcher github :repo
                              "magnars/multiple-cursors.el" :files

@@ -1722,13 +1722,6 @@ column as mark, it add cursor to each line."
 
 ;;;; Undo/redo
 
-(set-leader-keys!
-  "u r" #'undo-redo
-  "u u" #'undo)
-
-(keymap-set undo-repeat-map "/" #'undo)
-(keymap-set undo-repeat-map "r" #'undo-redo)
-
 ;; Feature `warnings' allows us to enable and disable warnings.
 (use-feature! warnings
   :config
@@ -1736,6 +1729,36 @@ column as mark, it add cursor to each line."
   ;; Ignore the warning we get when a huge buffer is reverted and the undo
   ;; information is too large to be recorded.
   (push '(undo discard-info) warning-suppress-log-types))
+
+;; Package `undo-fu' provides a light weight wrapper for Emacs built-in undo
+;; system, adding convenient undo/redo without losing access to the full undo
+;; history, allowing you to visit all previous states of the document if you
+;; need.
+(use-package! undo-fu
+  :init
+
+  (set-leader-keys!
+    "u r" #'undo-fu-only-redo
+    "u R" #'undo-fu-only-redo-all
+    "u u" #'undo-fu-only-undo)
+
+  :bind (([remap undo]      . #'undo-fu-only-undo)
+         ([remap undo-redo] . #'undo-fu-only-redo))
+
+  :config
+
+  (defvar-keymap undo-fu-repeat-map
+    :doc "Support `undo-fu' with repeats."
+    :repeat t
+    "r" #'undo-fu-only-redo
+    "u" #'undo-fu-only-undo
+    "/" #'undo-fu-only-undo)
+
+  ;; Use `undo-in-region' when a selection is present.
+  (setopt undo-fu-allow-undo-in-region t)
+
+  ;; Do not use `keyboard-quit' to disable linear undo/redo behavior.
+  (setopt undo-fu-ignore-keyboard-quit t))
 
 ;; Package `vundo' (visual undo) displays the undo history as a tree and lets
 ;; you move in the tree to go back to previous buffer states. To use vundo, type
