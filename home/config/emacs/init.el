@@ -4466,14 +4466,34 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
 ;;;; Version control
 
 ;; Package `browse-at-remote' easily opens target page on github/gitlab (or
-;; bitbucket) from Emacs by calling `browse-at-remote` function. Support Dired
+;; bitbucket) from Emacs by calling `browse-at-remote` function. Supports Dired
 ;; buffers and opens them in tree mode at destination.
 (use-package! browse-at-remote
   :init
 
+  (defun browse-at-remote-dwim (arg)
+    "Call `browse-at-remote' with `browse-at-remote-prefer-symbolic' reversed
+if called with universal argument."
+    (interactive "P")
+    (if arg
+        (let ((browse-at-remote-prefer-symbolic
+               (not browse-at-remote-prefer-symbolic)))
+          (browse-at-remote))
+      (browse-at-remote)))
+
+  (defun browse-at-remote-kill-dwim (arg)
+    "Call `browse-at-remote-kill' with `browse-at-remote-prefer-symbolic'
+reversed if called with universal argument."
+    (interactive "P")
+    (if arg
+        (let ((browse-at-remote-prefer-symbolic
+               (not browse-at-remote-prefer-symbolic)))
+          (browse-at-remote-kill))
+      (browse-at-remote-kill)))
+
   (set-leader-keys!
-    "g r" #'browse-at-remote
-    "g R" #'browse-at-remote-kill))
+    "g r" #'browse-at-remote-dwim
+    "g R" #'browse-at-remote-kill-dwim))
 
 ;; Package `consult-git-log-grep' provides an interactive way to search the git
 ;; log using `consult'.
