@@ -3254,6 +3254,14 @@ defeats the purpose of `corfu-sort-function'."
 
 ;;;; Syntax checking and code linting
 
+;; Display the line in the visited source file 15 lines from the top.
+(setopt next-error-recenter 15)
+
+;; Highlight the current error message in the `next-error' buffer.
+(setopt next-error-message-highlight t)
+
+(set-leader-keys! "e s" #'next-error-select-buffer)
+
 ;; Package `flymake' is a minor Emacs mode performing on-the-fly syntax checks.
 ;; Flymake collects diagnostic information for multiple sources, called
 ;; backends, and visually annotates the relevant portions in the buffer.
@@ -3280,7 +3288,7 @@ defeats the purpose of `corfu-sort-function'."
     "e L" #'flymake-show-project-diagnostics
     "e n" #'flymake-goto-next-error
     "e p" #'flymake-goto-prev-error
-    "e s" #'flymake-switch-to-log-buffer
+    "e S" #'flymake-switch-to-log-buffer
     "e v" #'flymake-reporting-backends
     "t s" #'flymake-mode)
 
