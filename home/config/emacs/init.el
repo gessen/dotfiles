@@ -1208,18 +1208,30 @@ root, switch to it. Otherwise, create a new vterm buffer."
 (use-feature! tramp
   :config
 
-  ;; Use ssh instead of default scp in order to utilize control master.
-  (setq tramp-default-method "ssh")
+  ;; Show only warnings and errors.
+  (setopt tramp-verbose 2)
+
+  ;; Use rsync instead of default scp in order to utilize control master.
+  (setopt tramp-default-method "rsync")
+
+  ;; Use rsync for files above 1 KiB and ssh for smaller files.
+  (setopt tramp-copy-size-limit 1024)
+
+  ;; The default timeout is too long.
+  (setopt tramp-connection-timeout 5)
 
   ;; Let ssh_config define them.
-  (setq tramp-ssh-controlmaster-options "")
+  (setopt tramp-use-connection-share nil)
+
+  ;; Disable file locks for remote files.
+  (setopt remote-file-name-inhibit-locks t)
 
   ;; Do not litter `user-emacs-directory' with tramp files.
-  (setq tramp-auto-save-directory (expand-file-name
-                                   "tramp-auto-save"
-                                   my-cache-dir)
-        tramp-persistency-file-name (expand-file-name "tramp.el" my-cache-dir)
-        tramp-backup-directory-alist backup-directory-alist))
+  (setopt tramp-auto-save-directory (expand-file-name
+                                     "tramp-auto-save"
+                                     my-cache-dir)
+          tramp-persistency-file-name (expand-file-name "tramp.el" my-cache-dir)
+          tramp-backup-directory-alist backup-directory-alist))
 
 ;; Feature `uniquify' replaces Emacs's traditional method for making buffer
 ;; names unique with uniquification that adds parts of the file name until the
