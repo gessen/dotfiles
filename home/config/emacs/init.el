@@ -4610,6 +4610,7 @@ Goto^^              Actions^^         Other^^
     "g t t" #'git-timemachine
     "g t b" #'git-timemachine-switch-branch)
 
+  :hook (git-timemachine-mode-hook . display-line-numbers-mode)
   :bind ( :map git-timemachine-mode-map
           ("C-g" . git-timemachine-quit))
 
