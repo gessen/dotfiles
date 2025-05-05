@@ -4467,6 +4467,15 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
 
 ;;;; Version control
 
+;; Feature `vc' allows you to use a version control system from within Emacs,
+;; integrating the version control operations smoothly with editing. It provides
+;; a uniform interface for common operations in many version control operations.
+(use-feature! vc
+  :init
+
+  ;; Disable almost all VC backends to improve performance.
+  (setopt vc-handled-backends '(Git)))
+
 ;; Package `browse-at-remote' easily opens target page on github/gitlab (or
 ;; bitbucket) from Emacs by calling `browse-at-remote` function. Supports Dired
 ;; buffers and opens them in tree mode at destination.
