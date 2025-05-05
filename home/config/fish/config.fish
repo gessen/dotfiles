@@ -23,7 +23,6 @@ end
 
 # Help Emacs
 if test "$TERM" = dumb
-    set -gx CARGO_TERM_COLOR always
     return
 end
 

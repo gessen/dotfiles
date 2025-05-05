@@ -4921,6 +4921,24 @@ possibly new window."
   :bind (("M-g c"   . #'consult-compile-error)
          ("M-g M-c" . #'consult-compile-error)))
 
+;; Package `fancy-compilation' enhances `compilation-mode' in the following
+;; ways:
+;; - support color output
+;; - support progress updates on a single line (as used by e.g. ninja)
+;; - use scrolling behavior similar to most terminals
+(use-package! fancy-compilation
+  :demand t
+  :after compile
+  :config
+
+  ;; Behave as default `compilation-mode'.
+  (setopt fancy-compilation-override-colors nil
+          fancy-compilation-quiet-prelude nil
+          fancy-compilation-quiet-prolog nil
+          fancy-compilation-scroll-output 'first-error)
+
+  (fancy-compilation-mode +1))
+
 ;;; Startup
 
 ;; Disable the *About GNU Emacs* buffer at startup, and go straight for the
