@@ -1980,7 +1980,15 @@ possibly new window."
 (use-package! goto-chg
   :init
 
-  (set-leader-keys! "j c" #'goto-last-change))
+  (set-leader-keys! "j c" #'goto-last-change)
+
+  :config
+
+  (defvar-keymap goto-chg-repeat-map
+    :doc "Support `goto-chg' based navigation with repeats."
+    :repeat t
+    "c" #'goto-last-change
+    "r" #'goto-last-change-reverse))
 
 ;; Package `mwim' stands for "Move Where I Mean".  It provides commands to
 ;; switch between various positions on the current line (particularly, to move
