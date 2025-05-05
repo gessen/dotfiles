@@ -5266,14 +5266,16 @@ during teardown."
   :bind ("<f7>" . spacious-padding-mode)
   :config
 
-  ;; Keep default settings but lower mode line width
+  ;; Keep default settings but lower mode line width and do not hide border
+  ;; between windows.
   (setq spacious-padding-widths
         '( :internal-border-width 15
            :header-line-width 4
            :mode-line-width 1
            :tab-width 4
-           :right-divider-width 30
-           :scroll-bar-width 8))
+           :right-divider-width 1
+           :scroll-bar-width 8
+           :fringe-width 8))
 
   (with-display-graphic!
     (spacious-padding-mode +1)))
