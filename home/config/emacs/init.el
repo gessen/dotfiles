@@ -178,6 +178,10 @@ graphical frame is created."
 ;; Define this variable for native compilation disabled Emacs.
 (setq native-comp-jit-compilation-deny-list '())
 
+;; Ask whether to terminate asynchronous compilations on exit. This prevents
+;; native compilation from leaving temporary files in /tmp
+(setq native-comp-async-query-on-exit t)
+
 ;;;; Elpaca
 
 (defvar elpaca-installer-version 0.11)
