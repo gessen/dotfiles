@@ -3302,7 +3302,11 @@ defeats the purpose of `corfu-sort-function'."
 
   ;; Increase the idle time after Flymake will start a syntax check as 0.5s is
   ;; a bit too naggy.
-  (setq flymake-no-changes-timeout 1.0))
+  (setopt flymake-no-changes-timeout 1.0)
+
+  ;; Suppress the display of Flymake counters when there are no errors or
+  ;; warnings.
+  (setopt flymake-suppress-zero-counters t))
 
 ;; Feature `consult-flymake' shows Flymake errors, warnings, notifications
 ;; within consult buffer with live preview.
