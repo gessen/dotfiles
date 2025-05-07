@@ -227,6 +227,12 @@ function git-master-branch -d "Print Git master branch"
             return
         end
     end
+    for ref in refs/remotes/origin/{master,main,trunk}
+        if git show-ref --verify --quiet $ref
+            echo $ref | string replace refs/remotes/origin/ ""
+            return
+        end
+    end
 end
 
 function git-develop-branch -d "Print Git develop branch"
@@ -234,6 +240,12 @@ function git-develop-branch -d "Print Git develop branch"
     for ref in refs/heads/{dev,devel,develop}
         if git show-ref --verify --quiet $ref
             echo $ref | string replace refs/heads/ ""
+            return
+        end
+    end
+    for ref in refs/remotes/origin/{dev,devel,develop}
+        if git show-ref --verify --quiet $ref
+            echo $ref | string replace refs/remotes/origin/ ""
             return
         end
     end
