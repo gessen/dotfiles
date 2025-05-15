@@ -3093,9 +3093,12 @@ completing-read prompter."
 (use-feature! eldoc
   :init
 
-  (set-leader-keys! "e h" #'eldoc-doc-buffer)
+  (set-leader-keys!
+    "e h" #'eldoc-doc-buffer
+    "h e" #'eldoc-doc-buffer)
 
   :hook (eval-expression-minibuffer-setup-hook . eldoc-mode)
+  :bind ([remap display-local-help] . #'eldoc-doc-buffer)
   :config
 
   ;; Decrease the idle time after ElDoc shows documentation at point.
