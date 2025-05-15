@@ -711,7 +711,7 @@ window instead."
   "w 3" #'split-window-triple
   "w 4" #'split-window-grid
   "w b" #'switch-to-minibuffer-window
-  "w e" #'balance-windows-area
+  "w e" #'balance-windows
   "w m" #'maximize-buffer
   "w s" #'split-window-below
   "w S" #'split-window-below-and-focus
