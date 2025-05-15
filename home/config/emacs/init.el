@@ -2849,6 +2849,8 @@ point. "
          ("M-s M-a" . #'embark-act)
          ("M-s A"   . #'embark-act-all)
          ("M-s M-A" . #'embark-act-all)
+         ("M-s b"   . #'embark-become)
+         ("M-s M-b" . #'embark-become)
          ("M-s c"   . #'embark-collect)
          ("M-s M-c" . #'embark-collect)
          ("M-s e"   . #'embark-export)
