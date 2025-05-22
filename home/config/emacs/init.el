@@ -4583,7 +4583,9 @@ Goto^^              Actions^^         Other^^
     :doc "Support GitGutter based navigation with repeats."
     :repeat t
     "n" #'git-gutter:next-hunk
-    "p" #'git-gutter:previous-hunk)
+    "p" #'git-gutter:previous-hunk
+    "M-n" #'git-gutter:next-hunk
+    "M-p" #'git-gutter:previous-hunk)
 
   (set-face-attribute 'git-gutter:modified nil :foreground "yellow")
 
