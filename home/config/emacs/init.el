@@ -3784,7 +3784,8 @@ defeats the purpose of `corfu-sort-function'."
 
 ;; Package `git-modes' provides a major mode for .gitattributes, .gitconfig and
 ;; .gitignore files.
-(use-package! git-modes)
+(use-package! git-modes
+  :mode ("/git/config-\\ca*\\'" . gitconfig-mode))
 
 ;; Feature `json-ts-mode' provides major mode for editing JSON, powered by
 ;; tree-sitter.
