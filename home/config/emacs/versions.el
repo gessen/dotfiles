@@ -233,13 +233,18 @@
                                "*-tests.el" "LICENSE" "README*" "*-pkg.el"))
                     :source #2# :protocol https :inherit t :depth treeless :ref
                     "83216f97b3dd99dbb1d4dbc781e863f205b6d5d9"))
- (theme-buffet :source #1# :recipe
-               (:package "theme-buffet" :repo
-                         ("https://git.sr.ht/~bboal/theme-buffet"
-                          . "theme-buffet")
-                         :files ("*" (:exclude ".git")) :source #2# :protocol
-                         https :inherit t :depth treeless :ref
-                         "06f1be349e9c3d124520b18742911307de9abda3"))
+ (circadian :source #1# :recipe
+            (:package "circadian" :fetcher github :repo
+                      "guidoschmidt/circadian.el" :files
+                      ("*.el" "*.el.in" "dir" "*.info" "*.texi" "*.texinfo"
+                       "doc/dir" "doc/*.info" "doc/*.texi" "doc/*.texinfo"
+                       "lisp/*.el" "docs/dir" "docs/*.info" "docs/*.texi"
+                       "docs/*.texinfo"
+                       (:exclude ".dir-locals.el" "test.el" "tests.el"
+                                 "*-test.el" "*-tests.el" "LICENSE" "README*"
+                                 "*-pkg.el"))
+                      :source #2# :protocol https :inherit t :depth treeless
+                      :ref "73fa3fd8b63af04bab877209397e42b83fbb9534"))
  (ef-themes :source #1# :recipe
             (:package "ef-themes" :repo
                       ("https://github.com/protesilaos/ef-themes" . "ef-themes")

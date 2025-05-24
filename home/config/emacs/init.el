@@ -5152,27 +5152,19 @@ during teardown."
           ;; prominent.
           (bg-paren bg-magenta-intense))))
 
-;; Package `theme-buffet' arranges to automatically change themes during
-;; specific times of the day or at fixed intervals. The collection of themes is
-;; customisable, with the default options covering the built-in Emacs themes as
-;; well as `modus-themes' and `ef-themes'.
-(use-package! theme-buffet
+;; Package `circadian' provides a theme-switching for Emacs based on daytime.
+(use-package! circadian
   :demand t
   :config
 
-  ;; Silence messages when changing themes.
-  (dolist (func '(theme-buffet--reload-theme
-                  theme-buffet-timer-hours))
-    (advice-add func :around #'advice-silence-messages!))
+  (setq calendar-latitude 50.064651)
+  (setq calendar-longitude 19.944981)
 
-  ;; Use Modus and Ef themes when selecting the theme list.
-  (setq theme-buffet-menu 'modus-ef)
+  ;; Set Modus themes as light and dark respectively.
+  (setopt circadian-themes '((:sunrise . (modus-operandi modus-operandi-tinted))
+                             (:sunset . (modus-vivendi modus-vivendi-tinted))))
 
-  ;; Change a theme every 1 hour.
-  (theme-buffet-timer-hours 1)
-
-  ;; Load a theme from the current time period.
-  (theme-buffet-a-la-carte))
+  (circadian-setup))
 
 ;;;; Modeline
 
