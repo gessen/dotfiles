@@ -316,12 +316,8 @@ abbr -a gdct git describe --tags '(git rev-list --tags --max-count=1)'
 
 abbr -a gd git diff
 abbr -a gd2 git -c delta.side-by-side=true diff
-abbr -a gdn git -c delta.navigate=true diff
-abbr -a gdn2 git -c delta.navigate=true -c delta.side-by-side=true diff
 abbr -a gds git diff --staged
 abbr -a gds2 git -c delta.side-by-side=true diff --staged
-abbr -a gdsn git -c delta.navigate=true diff --staged
-abbr -a gdsn2 git -c delta.navigate=true -c delta.side-by-side=true diff --staged
 abbr -a gdt git -c diff.external=difft diff
 abbr -a gdst git -c diff.external=difft diff --staged
 abbr -a gdw git diff --word-diff
