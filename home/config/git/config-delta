@@ -3,10 +3,10 @@
 	word-diff-regex = "\\S+"
 [delta "decorations"]
 	file-style = yellow bold ul
-	file-decoration-style = none
+	file-decoration-style = yellow bold ul
 	commit-decoration-style = yellow bold box
 	hunk-header-style = file line-number syntax
-	hunk-header-decoration-style = blue box ul
+	hunk-header-decoration-style = blue box
 [delta "modus-operandi"]
 	light = true
 	line-numbers-minus-style = "#d84a4f"
@@ -15,7 +15,7 @@
 	minus-emph-style = syntax bold "#f3b5af"
 	plus-style = syntax "#c1f2d1"
 	plus-emph-style = syntax bold "#aee5be"
-	map-styles = bold magenta => syntax magenta, bold cyan => syntax cyan
+	map-styles = bold magenta => syntax "#ffddff", bold cyan => syntax "#bfefff"
 [delta "modus-vivendi"]
 	dark = true
 	line-numbers-minus-style = "#b81a1f"
@@ -24,4 +24,4 @@
 	minus-emph-style = syntax bold "#781a1f"
 	plus-style = syntax "#00381f"
 	plus-emph-style = syntax bold "#034f2f"
-	map-styles = bold magenta => syntax magenta, bold cyan => syntax cyan
+	map-styles = bold magenta => syntax "#552f5f", bold cyan => syntax "#004065"
