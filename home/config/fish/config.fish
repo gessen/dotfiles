@@ -513,12 +513,14 @@ if type -q atuin
     source $atuin_init
 end
 
-## Lsd
+## Eza
 
-abbr -a ls lsd
-abbr -a ll lsd --long
-abbr -a la lsd --long --almost-all
-abbr -a l lsd --long --almost-all --git
+if type -q eza
+    alias ls "eza --group-directories-first --time-style relative --icons always"
+    abbr -a ll ls --long
+    abbr -a la ls --long --almost-all
+    abbr -a l ls --long --almost-all --git
+end
 
 ## Kitty
 

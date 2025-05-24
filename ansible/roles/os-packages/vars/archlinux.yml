@@ -23,6 +23,7 @@ packages:
   - doxygen
   - dua-cli
   - emacs
+  - eza
   - fd
   - firefox
   - fzf
@@ -36,7 +37,6 @@ packages:
   - keepassxc
   - kitty
   - libvterm
-  - lsd
   - meson
   - mold
   - mpv
