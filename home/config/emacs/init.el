@@ -4083,7 +4083,7 @@ unhelpful."
 ;; deadlines, properties, priorities, etc. to headings. Then it provides tools
 ;; for interacting with this data, including an agenda view, a time clocker,
 ;; etc.
-(use-package! org
+(use-feature! org
   :init
 
   (defhook! my--org-mode-setup ()

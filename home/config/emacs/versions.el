@@ -547,18 +547,6 @@
                         :files (:defaults) :source #2# :protocol https :inherit
                         t :depth treeless :ref
                         "f1f6b6ec812803ff99693255555a82960fb3545a"))
- (org :source #1# :recipe
-      (:package "org" :repo ("https://git.sr.ht/~bzg/org-mode" . "org")
-                :pre-build
-                (progn
-                  (require 'elpaca-menu-org)
-                  (setq elpaca-menu-org-make-manual nil)
-                  (elpaca-menu-org--build))
-                :autoloads "org-loaddefs.el" :depth treeless :build
-                (:not elpaca--generate-autoloads-async) :files
-                (:defaults ("etc/styles/" "etc/styles/*" "doc/*.texi")) :source
-                #2# :protocol https :inherit t :ref
-                "85ecc551c70d2f5403b9cc6e54db888bc71e92da"))
  (elisp-lint :source #1# :recipe
              (:package "elisp-lint" :fetcher github :repo
                        "gonewest818/elisp-lint" :files
