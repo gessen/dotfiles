@@ -88,7 +88,6 @@ user_pref("security.OCSP.enabled", 0);
 
 // Enable CRLite which covers valid certs, and doesn't fall back to OCSP in
 // mode 2.
-user_pref("security.remote_settings.crlite_filters.enabled", true);
 user_pref("security.pki.crlite_mode", 2);
 
 // HTTP Public Key Pinning (HPKP)
@@ -130,16 +129,15 @@ user_pref("browser.formfill.enable", false);
 user_pref("browser.urlbar.trimHttps", true);
 user_pref("browser.urlbar.untrimOnUserInteraction.featureGate", true);
 
-// Display "Not Secure" text on HTTP sites
-user_pref("security.insecure_connection_text.enabled", true);
-user_pref("security.insecure_connection_text.pbmode.enabled", true);
-
 // Disable search suggestions
 user_pref("browser.search.suggest.enabled", false);
 
 // Enforce Punycode for Internationalized Domain Names to eliminate possible
 // spoofing
 user_pref("network.IDN_show_punycode", true);
+
+// Enable Text Fragments
+user_pref("dom.text_fragments.create_text_fragment.enabled", true);
 
 // Enable HTTPS-only everywhere
 user_pref("dom.security.https_only_mode", true);
@@ -198,6 +196,11 @@ user_pref("media.peerconnection.enabled", false);
 
 // Enable WebRTC Global Mute Toggles
 user_pref("privacy.webrtc.globalMuteToggles", true);
+
+// Geolocation
+
+// Use alternative geolocation service instead of Google
+user_pref("geo.provider.network.url", "https://beacondb.net/v1/geolocate");
 
 // Mozilla
 
@@ -313,7 +316,6 @@ user_pref("gfx.use_text_smoothing_setting", true);
 // URL bar
 
 // Suggest additional options
-user_pref("browser.urlbar.suggest.calculator", true);
 user_pref("browser.urlbar.unitConversion.enabled", true);
 
 // Disable urlbar trending search suggestions
@@ -392,6 +394,13 @@ user_pref("dom.disable_window_move_resize", true);
 // Leave the browser window open even after you close the last tab
 user_pref("browser.tabs.closeWindowWithLastTab", false);
 
+// Show sidebar
+user_pref("sidebar.revamp", true);
+user_pref("sidebar.verticalTabs", true);
+
+// Enable tabs groups
+user_pref("browser.tabs.groups.enabled", true);
+
 // Keyboard and shortcuts
 
 // Hide frequent sites on right-click of taskbar icon (Windows only)
@@ -401,6 +410,9 @@ user_pref("browser.taskbar.lists.frequent.enabled", false);
 
 // Activate autoscroll
 user_pref("general.autoScroll", true);
+
+// Make scrolling feel more smooth
+user_pref("mousewheel.min_line_scroll_amount", 10);
 
 // Smooth scrolling
 user_pref("general.smoothScroll.currentVelocityWeighting", "1");
