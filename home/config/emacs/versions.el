@@ -577,19 +577,6 @@
                       :source "elpaca-menu-lock-file" :protocol https :inherit t
                       :depth treeless :ref
                       "f99010bbeb8b6d8a0819fac0195a2ef0159d08f0"))
- (git-timemachine :source "elpaca-menu-lock-file" :recipe
-                  (:package "git-timemachine" :fetcher codeberg :repo
-                            "pidu/git-timemachine" :files
-                            ("*.el" "*.el.in" "dir" "*.info" "*.texi"
-                             "*.texinfo" "doc/dir" "doc/*.info" "doc/*.texi"
-                             "doc/*.texinfo" "lisp/*.el" "docs/dir"
-                             "docs/*.info" "docs/*.texi" "docs/*.texinfo"
-                             (:exclude ".dir-locals.el" "test.el" "tests.el"
-                                       "*-test.el" "*-tests.el" "LICENSE"
-                                       "README*" "*-pkg.el"))
-                            :source "elpaca-menu-lock-file" :protocol https
-                            :inherit t :depth treeless :ref
-                            "d1346a76122595aeeb7ebb292765841c6cfd417b"))
  (golden-ratio :source "elpaca-menu-lock-file" :recipe
                (:package "golden-ratio" :repo "roman/golden-ratio.el" :fetcher
                          github :files

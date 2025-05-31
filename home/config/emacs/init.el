@@ -4518,7 +4518,46 @@ reversed if called with universal argument."
 
   (set-leader-keys!
     "g r" #'browse-at-remote-dwim
-    "g R" #'browse-at-remote-kill-dwim))
+    "g R" #'browse-at-remote-kill-dwim)
+
+  (with-eval-after-load 'magit
+    (defadvice! my--browse-at-remote-with-magit-blob-mode (fn)
+      :around #'browse-at-remote-get-url
+      "Allow `browse-at-remote' commands in `magit-blob-mode' buffers to open
+that file in your browser at the visited revision."
+      (if magit-blob-mode
+          (let* ((filename magit-buffer-file-name)
+                 (remote-ref (browse-at-remote--remote-ref filename))
+                 (remote (car remote-ref))
+                 (ref magit-buffer-revision)
+                 (relname (f-relative filename (f-expand
+                                                (vc-git-root filename))))
+                 (target-repo (browse-at-remote--get-url-from-remote remote))
+                 (remote-type (browse-at-remote--get-remote-type
+                               (plist-get target-repo :unresolved-host)))
+                 (repo-url (plist-get target-repo :url))
+                 (url-formatter (browse-at-remote--get-formatter 'region-url
+                                                                 remote-type))
+                 (start (and (use-region-p) (min (region-beginning)
+                                                 (region-end))))
+                 (point-end (and (use-region-p) (max (region-beginning)
+                                                     (region-end))))
+                 (end (when point-end (if (eq (char-before point-end) ?\n)
+                                          (- point-end 1)
+                                        point-end)))
+                 (start-line (when start (line-number-at-pos start)))
+                 (end-line (when end (line-number-at-pos end)))
+                 (line
+                  (when browse-at-remote-add-line-number-if-no-region-selected
+                    (line-number-at-pos (point)))))
+            (unless url-formatter
+              (error (format "Origin repo parsing failed: %s" repo-url)))
+
+            (funcall url-formatter repo-url ref relname
+                     (or start-line line)
+                     (when (and end-line (not (equal start-line end-line)))
+                       end-line)))
+        (funcall fn)))))
 
 ;; Package `consult-git-log-grep' provides an interactive way to search the git
 ;; log using `consult'.
@@ -4603,88 +4642,6 @@ Goto^^              Actions^^         Other^^
     "Update `git-gutter' after the buffer is autoreverted."
     (when git-gutter-mode
       (git-gutter))))
-
-;; Package `git-timemachine' allows to browse historic versions of a file under
-;; git control.
-(use-package! git-timemachine
-  :init
-
-  (defhook! my--git-timemachine-inhibit-revert ()
-    before-revert-hook
-    "Inhibit buffer reverts when `git-timemachine-mode' is active."
-    (when (bound-and-true-p git-timemachine-mode)
-      (user-error "Cannot revert the timemachine buffer")))
-
-  (set-prefixes! "g t" "timemachine")
-
-  (set-leader-keys!
-    "g t t" #'git-timemachine
-    "g t b" #'git-timemachine-switch-branch)
-
-  :hook (git-timemachine-mode-hook . display-line-numbers-mode)
-  :bind ( :map git-timemachine-mode-map
-          ("C-g" . git-timemachine-quit))
-
-  :config
-
-  (defadvice! my--git-timemachine--show-header-line-details (revision)
-    :override #'git-timemachine--show-minibuffer-details
-    "Show revision details in the header-line, instead of the minibuffer."
-    (let* ((date-relative (nth 3 revision))
-           (date-full (nth 4 revision))
-           (author (if git-timemachine-show-author
-                       (concat (nth 6 revision) ": ") ""))
-           (sha-or-subject (if (eq git-timemachine-minibuffer-detail 'commit)
-                               (car revision) (nth 5 revision))))
-      (setq header-line-format
-            (format "%s%s [%s (%s)]"
-                    (propertize author 'face
-                                'git-timemachine-minibuffer-author-face)
-                    (propertize sha-or-subject 'face
-                                'git-timemachine-minibuffer-detail-face)
-                    date-full date-relative))))
-
-  (with-eval-after-load 'browse-at-remote
-    (defadvice! my--browse-at-remote-with-git-timemachine (fn)
-      :around #'browse-at-remote-get-url
-      "Allow `browse-at-remote' commands in `git-timemachine' buffers to open
-that file in your browser at the visited revision."
-      (if git-timemachine-mode
-          (let* ((filename (buffer-file-name))
-                 (remote-ref (browse-at-remote--remote-ref filename))
-                 (remote (car remote-ref))
-                 (ref (car git-timemachine-revision))
-                 (relname (f-relative filename (f-expand
-                                                (vc-git-root filename))))
-                 (target-repo (browse-at-remote--get-url-from-remote remote))
-                 (remote-type (browse-at-remote--get-remote-type
-                               (plist-get target-repo :unresolved-host)))
-                 (repo-url (plist-get target-repo :url))
-                 (url-formatter (browse-at-remote--get-formatter 'region-url
-                                                                 remote-type))
-                 (start (and (use-region-p) (min (region-beginning)
-                                                 (region-end))))
-                 (point-end (and (use-region-p) (max (region-beginning)
-                                                     (region-end))))
-                 (end (when point-end (if (eq (char-before point-end) ?\n)
-                                          (- point-end 1)
-                                        point-end)))
-                 (start-line (when start (line-number-at-pos start)))
-                 (end-line (when end (line-number-at-pos end)))
-                 (line
-                  (when browse-at-remote-add-line-number-if-no-region-selected
-                    (line-number-at-pos (point)))))
-            (unless url-formatter
-              (error (format "Origin repo parsing failed: %s" repo-url)))
-
-            (funcall url-formatter repo-url ref relname
-                     (or start-line line)
-                     (when (and end-line (not (equal start-line end-line)))
-                       end-line)))
-        (funcall fn))))
-
-  ;; Number of chars from the full sha1 hash to use for abbreviation.
-  (setq git-timemachine-abbreviation-length 8))
 
 ;; Package `magit' provides a full graphical interface for Git within Emacs.
 ;; Disable default keybindings.
@@ -4805,11 +4762,11 @@ current theme. This will also disable line numbers and decorations."
 (use-package! magit-todos
   :init
 
-  (set-prefixes! "g T" "todos")
+  (set-prefixes! "g t" "todos")
 
   (set-leader-keys!
-    "g T T" #'magit-todos-list
-    "g T m" #'magit-todos-mode))
+    "g t t" #'magit-todos-list
+    "g t m" #'magit-todos-mode))
 
 ;; Package `transient' is the interface used by Magit to display popups.
 (use-package! transient
