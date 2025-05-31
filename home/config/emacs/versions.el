@@ -563,19 +563,6 @@
                        :source "elpaca-menu-lock-file" :protocol https :inherit
                        t :depth treeless :ref
                        "0d8ab98892ee26e2f976883603464d6822189103"))
- (git-messenger :source "elpaca-menu-lock-file" :recipe
-                (:package "git-messenger" :repo "emacsorphanage/git-messenger"
-                          :fetcher github :files
-                          ("*.el" "*.el.in" "dir" "*.info" "*.texi" "*.texinfo"
-                           "doc/dir" "doc/*.info" "doc/*.texi" "doc/*.texinfo"
-                           "lisp/*.el" "docs/dir" "docs/*.info" "docs/*.texi"
-                           "docs/*.texinfo"
-                           (:exclude ".dir-locals.el" "test.el" "tests.el"
-                                     "*-test.el" "*-tests.el" "LICENSE"
-                                     "README*" "*-pkg.el"))
-                          :source "elpaca-menu-lock-file" :protocol https
-                          :inherit t :depth treeless :ref
-                          "eade986ef529aa2dac6944ad61b18de55cee0b76"))
  (git-modes :source "elpaca-menu-lock-file" :recipe
             (:package "git-modes" :fetcher github :repo "magit/git-modes"
                       :old-names

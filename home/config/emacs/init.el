@@ -4604,22 +4604,6 @@ Goto^^              Actions^^         Other^^
     (when git-gutter-mode
       (git-gutter))))
 
-;; Package `git-messenger' provides a function that when called will pop-up the
-;; last git commit message for the current line. This uses the git-blame tool
-;; internally.
-(use-package! git-messenger
-  :init
-
-  (set-leader-keys! "g m" (cons "git-messenger" #'git-messenger:popup-message))
-
-  :config
-
-  ;; Pop up commit ID and author name too.
-  (setq git-messenger:show-detail t)
-
-  ;; Use `magit-show-commit` instead `pop-to-buffer`.
-  (setq git-messenger:use-magit-popup t))
-
 ;; Package `git-timemachine' allows to browse historic versions of a file under
 ;; git control.
 (use-package! git-timemachine
