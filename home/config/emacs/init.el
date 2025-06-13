@@ -3932,6 +3932,9 @@ defeats the purpose of `corfu-sort-function'."
   :after eglot
   :config
 
+  ;; Do not translate JSON into bytecode but still perform I/O buffering."
+  (setopt eglot-booster-io-only t)
+
   (eglot-booster-mode +1))
 
 ;; Package `eglot-semantic-tokens' provides support for semantic highlighting.
