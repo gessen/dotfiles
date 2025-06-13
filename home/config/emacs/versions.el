@@ -828,6 +828,12 @@
                   :source "elpaca-menu-lock-file" :protocol https :inherit t
                   :depth treeless :ref
                   "bf58615a033b8c827bf630962531c67539789215"))
+ (magit-blame-color-by-age :source "elpaca-menu-lock-file" :recipe
+                           (:source "elpaca-menu-lock-file" :protocol https
+                                    :inherit t :depth treeless :host github
+                                    :repo "jdtsmith/magit-blame-color-by-age"
+                                    :package "magit-blame-color-by-age" :ref
+                                    "bfa783ac302c7d599ce8a5f5f9c68046770551f6"))
  (magit-delta :source "elpaca-menu-lock-file" :recipe
               (:package "magit-delta" :fetcher github :repo
                         "dandavison/magit-delta" :files

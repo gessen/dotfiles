@@ -4731,6 +4731,11 @@ Goto^^              Actions^^         Other^^
   ;; Use absolute dates when showing logs.
   (setopt magit-log-margin '(t "%d-%m-%Y %H:%M " magit-log-margin-width t 18)))
 
+;; Package `magit-blame-color-by-age' colors Magit-blame headers by age.
+(use-package! magit-blame-color-by-age
+  :ensure (:host github :repo "jdtsmith/magit-blame-color-by-age")
+  :hook (magit-blame-mode-hook . magit-blame-color-by-age-mode))
+
 ;; Package 'magit-delta' integrates Delta (https://github.com/dandavison/delta)
 ;; with Magit, so that diffs in Magit are displayed with color highlighting
 ;; provided by Delta.
