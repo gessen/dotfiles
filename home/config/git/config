@@ -1,6 +1,5 @@
 [core]
 	pager = delta
-	untrackedcache = true
 [branch]
 	autosetuprebase = always
 	sort = committerdate
@@ -32,11 +31,14 @@
 	cmd = emacsclient --tty --eval \"(ediff-files \\\"$LOCAL\\\" \\\"$REMOTE\\\")\"
 [difftool "ediffclient-g"]
 	cmd = emacsclient --create-frame --eval \"(ediff-files \\\"$LOCAL\\\" \\\"$REMOTE\\\")\"
+[feature]
+	manyfiles = true
 [fetch]
 	prune = true
 	all = true
 	showforcedupdates = true
 	parallel = 0
+	writecommitgraph = true
 [init]
 	defaultbranch = master
 [interactive]
