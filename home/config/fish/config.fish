@@ -428,17 +428,19 @@ abbr -a gunwipall git-unwip-all
 
 ## Bat
 
-# Use bat as MANPAGER
-set -gx MANPAGER "sh -c 'col -bx | bat -l man -p'"
-set -gx MANROFFOPT -c
+if type -q bat
+    # Use bat as MANPAGER
+    set -gx MANPAGER "sh -c 'col -bx | bat -l man -p'"
+    set -gx MANROFFOPT -c
 
-# Use bat instead of cat by default
-abbr -a cat bat
+    # Use bat instead of cat by default
+    abbr -a cat bat
 
-# Use bat to colorize help messages
-abbr -a help --set-cursor % --help 2>&1 '|' bat --plain --language help
-abbr -a --position anywhere -- -h "-h 2>&1 | bat --plain --language help"
-abbr -a --position anywhere -- --help "--help 2>&1 | bat --plain --language help"
+    # Use bat to colorize help messages
+    abbr -a help --set-cursor % --help 2>&1 '|' bat --plain --language help
+    abbr -a --position anywhere -- -h "-h 2>&1 | bat --plain --language help"
+    abbr -a --position anywhere -- --help "--help 2>&1 | bat --plain --language help"
+end
 
 ## CMake
 
@@ -463,7 +465,9 @@ set -gx CTEST_PROGRESS_OUTPUT ON
 
 ## Dua
 
-abbr -a du dua
+if type -q dua
+    abbr -a du dua
+end
 
 ## Fzf
 
@@ -520,15 +524,21 @@ if type -q eza
     abbr -a ll ls --long
     abbr -a la ls --long --almost-all
     abbr -a l ls --long --almost-all --git
+else
+    alias ls "ls --group-directories-first"
+    abbr -a ll ls -l
+    abbr -a la ls -l --almost-all
 end
 
 ## Kitty
 
-# Ensures that terminfo is uploaded
-abbr -a ssh kitty +kitten ssh
+if type -q kitty
+    # Ensures that terminfo is uploaded
+    abbr -a ssh kitty +kitten ssh
 
-# Nicer scp/rsync
-abbr -a transfer kitty +kitten transfer
+    # Nicer scp/rsync
+    abbr -a transfer kitty +kitten transfer
+end
 
 ## Ninja
 
@@ -551,7 +561,9 @@ abbr -a rsync-sync $rsync_cp --update --delete
 
 ## Serie
 
-bind alt-g 'serie -g single -o topo'
+if type -q serie
+    bind alt-g 'serie -g single -o topo'
+end
 
 ## SSH
 
@@ -571,7 +583,9 @@ function y --wraps yazi -d "Start Yazi but change CWD after exit"
     commandline --function repaint
 end
 
-bind ctrl-o y
+if type -q yazi
+    bind ctrl-o y
+end
 
 ## Zoxide
 
