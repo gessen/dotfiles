@@ -1881,6 +1881,14 @@ possibly new window."
   (dolist (func '(bookmark-load bookmark-write-file))
     (advice-add func :around #'advice-silence-messages!)))
 
+;; Feature `register' provides a way to save various useful pieces of buffer
+;; state to named variables.
+(use-feature! register
+  :config
+
+  ;; Show a preview buffer with navigation and highlighting.
+  (setopt register-use-preview t))
+
 ;; Feature `subword' provides a minor mode which causes the `forward-word' and
 ;; `backward-word' commands to stop at capitalization changes within a word, so
 ;; that you can step through the components of PascalCase symbols one at a time.
