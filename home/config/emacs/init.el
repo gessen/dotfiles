@@ -2250,8 +2250,20 @@ will not refresh `column-number-mode."
          ("C-s"   . #'isearch-forward-regexp)
          ("C-r"   . #'isearch-backward-regexp)
          ("C-M-s" . #'isearch-forward)
-         ("C-M-r" . #'isearch-backward))
+         ("C-M-r" . #'isearch-backward)
+         :map isearch-mode-map
+         ("C-g"   . #'isearch-cancel)
+         ("M-w"   . #'isearch-copy-selection))
   :config
+
+  (defun isearch-copy-selection ()
+    "Copy the current Isearch selection to the kill ring."
+    (interactive)
+    (when isearch-other-end
+      (let ((selection (buffer-substring-no-properties
+                        isearch-other-end (point))))
+        (kill-new selection)
+        (isearch-done))))
 
   (defvar-keymap isearch-repeat-map
     :doc "Support Isearch based navigation with repeats."
