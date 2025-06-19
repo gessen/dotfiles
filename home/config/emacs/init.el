@@ -3102,7 +3102,10 @@ completing-read prompter."
   (setopt xref-prompt-for-identifier nil)
 
   ;; Use ripgrep for regexp search inside files.
-  (setopt xref-search-program 'ripgrep))
+  (setopt xref-search-program 'ripgrep)
+
+  ;; Show Eldoc message after Xref commands.
+  (eldoc-add-command-completions "xref-find-" "xref-go-" "xref-goto-"))
 
 ;; Package `consult-xref-stack' navigates the Xref stack with Consult.
 (use-package! consult-xref-stack
