@@ -620,8 +620,9 @@ For details on DATA, CONTEXT, and signal, see
 ;; Silence Emacs in terminal.
 (setq ring-bell-function #'ignore)
 
-;; Disable ESC key as a modifier.
+;; Disable ESC key as a modifier and use better `keyboard-quit' by default.
 (keymap-global-set "<escape>" #'keyboard-escape-quit)
+(keymap-global-set "C-g" #'keyboard-escape-quit)
 
 ;;; Windows management
 
