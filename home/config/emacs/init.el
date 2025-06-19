@@ -935,8 +935,9 @@ window instead."
 
   :config
 
-  ;; Group popups by project.el buffers.
-  (setq popper-group-function 'popper-group-by-project))
+  (with-eval-after-load 'project
+    ;; Group popups by project.el buffers.
+    (setq popper-group-function 'popper-group-by-project)))
 
 ;; Package `winum' helps with navigating windows and frames using numbers. It is
 ;; an extended and actively maintained version of the `window-numbering'
