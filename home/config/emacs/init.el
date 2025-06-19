@@ -754,9 +754,13 @@ window instead."
 (use-feature! ibuffer
   :init
 
-  (set-leader-keys! "b l" #'ibuffer-other-window)
+  (set-leader-keys! "b l" #'ibuffer)
 
-  :bind ([remap list-buffers] . #'ibuffer-other-window))
+  :bind ([remap list-buffers] . #'ibuffer)
+  :config
+
+  ;; Display Ibuffer in another window by default
+  (setopt ibuffer-use-other-window t))
 
 ;; Feature `windmove' provides keybindings S-left, S-right, S-up, and S-down to
 ;; move between windows. This is much more convenient and efficient than using
