@@ -1926,6 +1926,8 @@ possibly new window."
 
   :bind (("M-'"     . #'avy-goto-char)
          ("M-\""    . #'avy-goto-subword-1)
+         ("M-j i"   . #'avy-goto-char-in-line)
+         ("M-j M-i" . #'avy-goto-char-in-line)
          ("M-j j"   . #'avy-goto-char-timer)
          ("M-j M-j" . #'avy-goto-char-timer)
          ("M-j k"   . #'avy-goto-char-2)
@@ -1951,12 +1953,18 @@ possibly new window."
          ("M-j o"   . #'avy-kill-ring-save-whole-line)
          ("M-j M-o" . #'avy-kill-ring-save-whole-line)
          ("M-j p"   . #'avy-kill-ring-save-region)
-         ("M-j M-p" . #'avy-kill-ring-save-region))
+         ("M-j M-p" . #'avy-kill-ring-save-region)
+         :map isearch-mode-map
+         ("M-j j"   . #'avy-isearch)
+         ("M-j M-j" . #'avy-isearch))
 
   :config
 
   ;; Add a gray background during the selection.
-  (setq avy-background t))
+  (setq avy-background t)
+
+  ;; Show Eldoc message after Avy commands.
+  (eldoc-add-command-completions "avy-goto-" "avy-isearch"))
 
 ;; Package `beginend' redefines M-< and M-> for some modes, e.g in `dired-mode'
 ;; M-< goes to first line and in `prog-mode' it goes to the first line after
