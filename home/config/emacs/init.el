@@ -15,6 +15,9 @@
                  "but you are running Emacs %s")
          my-minimum-emacs-version emacs-version))
 
+;; Just log warnings and immediately show errors.
+(setopt warning-minimum-level :error)
+
 ;;; Load built-in utility libraries
 
 (require 'cl-lib)
