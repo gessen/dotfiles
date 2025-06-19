@@ -1604,6 +1604,9 @@ column as mark, it add cursor to each line."
 
 (set-leader-keys! "b a" #'mark-whole-buffer)
 
+;; Repeating `set-mark-command' after popping mark pops it again.
+(setopt set-mark-command-repeat-pop t)
+
 ;; Package `easy-kill-extras' contains extra functions for `easy-kill' and
 ;; `easy-mark'.
 (use-package! easy-kill-extras
