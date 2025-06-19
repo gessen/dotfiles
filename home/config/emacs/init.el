@@ -1872,7 +1872,10 @@ possibly new window."
   :config
 
   ;; Do not litter `user-emacs-directory' with bookmarks file.
-  (setq bookmark-default-file (expand-file-name "bookmarks.el" my-data-dir))
+  (setopt bookmark-default-file (expand-file-name "bookmarks.el" my-data-dir))
+
+  ;; Save bookmarks immediately.
+  (setopt bookmark-save-flag 0)
 
   ;; Suppress messages saying the bookmark file was either loaded or saved.
   (dolist (func '(bookmark-load bookmark-write-file))
