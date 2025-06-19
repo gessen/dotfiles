@@ -3139,7 +3139,7 @@ completing-read prompter."
 
   (set-leader-keys!
     "e h" #'eldoc-doc-buffer
-    "h e" #'eldoc-doc-buffer)
+    "h h" #'eldoc-doc-buffer)
 
   :hook (eval-expression-minibuffer-setup-hook . eldoc-mode)
   :bind ([remap display-local-help] . #'eldoc-doc-buffer)
@@ -3767,6 +3767,7 @@ defeats the purpose of `corfu-sort-function'."
         ;; Help
         "h m" #'eglot-x-view-recursive-memory-layout
         "h t" #'eglot-x-ask-related-tests
+        "h r" #'eglot-x-ask-runnables
 
         ;; Open
         "o d" #'eglot-x-open-external-documentation
@@ -3958,6 +3959,9 @@ defeats the purpose of `corfu-sort-function'."
     ;; Toggle
     "t i" #'eglot-inlay-hints-mode)
 
+  ;; Tree-sitter produces a better Imenu.
+  (setq eglot-stay-out-of '(imenu))
+
   ;; Filter list of possible completions with Orderless.
   (setopt completion-category-overrides '((eglot (styles orderless))
                                           (eglot-capf (styles orderless))))
@@ -3968,11 +3972,14 @@ defeats the purpose of `corfu-sort-function'."
   ;; Activate Eglot in referenced non-project files.
   (setopt eglot-extend-to-xref t)
 
-  ;; Indicate that there are code actions available at a point in a mode line.
-  (setopt eglot-code-action-indications '(mode-line))
+  ;; Do not hint about code actions at point.
+  (setopt eglot-code-action-indications nil)
 
   ;; Disable Eglot events buffer, increase it only when debugging is needed.
-  (setopt eglot-events-buffer-config '(:size 0)))
+  (setopt eglot-events-buffer-config '(:size 0))
+
+  ;; Make the inlay hints a bit smaller.
+  (set-face-attribute 'eglot-inlay-hint-face nil :height 0.7))
 
 ;; Package `eglot-booster' enables Eglot to use emacs-lsp-booster which is a
 ;; rust-based wrapper program which substantially speeds up Emacs interactions
