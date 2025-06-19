@@ -3476,6 +3476,20 @@ defeats the purpose of `corfu-sort-function'."
 
     (push #'ediff-comparison-buffer-p golden-ratio-inhibit-functions)))
 
+;; Feature `smerge-mode' provides a lightweight alternative to Emerge and Ediff.
+(use-feature! smerge-mode
+  :config
+
+  (defvar-keymap smerge-repeat-map
+    :doc "Support SMerge navigation and controls with repeats."
+    :repeat t
+    "n" #'smerge-next
+    "p" #'smerge-prev
+    "u" #'smerge-keep-upper
+    "b" #'smerge-keep-base
+    "l" #'smerge-keep-lower
+    "a" #'smerge-keep-all))
+
 ;;; Language support
 ;;;; Tree-sitter
 
