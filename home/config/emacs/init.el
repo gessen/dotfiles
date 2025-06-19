@@ -3406,6 +3406,15 @@ defeats the purpose of `corfu-sort-function'."
 
 ;;;; Diff/Merge handling
 
+;; Feature `diff-mode' provides support for font-lock, outline, navigation
+;; commands, editing and various conversions as well as jumping to the
+;; corresponding source file.
+(use-feature! diff-mode
+  :config
+
+  ;; Set `diff-mode' buffers as read-only.
+  (setopt diff-default-read-only t))
+
 ;; Feature `ediff' is a comprehensive visual interface to diff & patch.
 (use-feature! ediff
   :init
