@@ -1182,11 +1182,7 @@ root, switch to it. Otherwise, create a new vterm buffer."
   (setq recentf-save-file (expand-file-name "recentf.el" my-cache-dir))
 
   ;; List of regexps and predicates for filenames excluded from the recent list.
-  (setq recentf-exclude
-        (list
-         "COMMIT_EDITMSG\\'"
-         my-cache-dir
-         (file-truename elpaca-directory)))
+  (setopt recentf-exclude (list my-cache-dir (file-truename elpaca-directory)))
 
   ;; Suppress messages saying the recentf file was either loaded or saved.
   (dolist (func '(recentf-load-list recentf-save-list))
