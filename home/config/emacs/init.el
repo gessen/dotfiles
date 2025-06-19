@@ -3706,7 +3706,29 @@ defeats the purpose of `corfu-sort-function'."
     (setq-local fill-column 100
                 column-enforce-column fill-column)
     ;; Select Rust documents when inside `rust-ts-mode' buffers.
-    (setq-local devdocs-current-docs '("rust")))
+    (setq-local devdocs-current-docs '("rust"))
+    ;; Custom Imenu Rust node types
+    (setq-local treesit-simple-imenu-settings
+                '(("Associated Type" "\\`type_item\\'" nil nil)
+                  ("Constant" "\\`const_item\\'" nil nil)
+                  ("Enumeration" "\\`enum_item\\'" nil nil)
+                  ("Function" "\\`function_item\\'" nil nil)
+                  ("Implementation" "\\`impl_item\\'" nil nil)
+                  ("Macro" "\\`macro_definition\\'" nil nil)
+                  ("Module" "\\`mod_item\\'" nil nil)
+                  ("Static" "\\`static_item\\'" nil nil)
+                  ("Struct" "\\`struct_item\\'" nil nil)
+                  ("Trait" "\\`trait_item\\'" nil nil)))
+    ;; Improve the builtin Imenu with additional nodes
+    (setq-local treesit-defun-name-function #'my--rust-ts-mode--defun-name))
+
+  (defun my--rust-ts-mode--defun-name (node)
+    "Return the defun name of NODE.
+Return nil if there is no name or if NODE is not a defun node."
+    (pcase (treesit-node-type node)
+      ((or "const_item" "macro_definition" "trait_item")
+       (treesit-node-text (treesit-node-child-by-field-name node "name") t))
+      (_ (rust-ts-mode--defun-name node))))
 
   (set-prefixes-for-major-mode! 'rust-ts-mode "s" "session")
   (set-leader-keys-for-major-mode! 'rust-ts-mode "s s" #'eglot)
@@ -3748,6 +3770,21 @@ defeats the purpose of `corfu-sort-function'."
 
   :mode ("\\.rs\\'")
   :config
+
+  (with-eval-after-load 'consult-imenu
+    ;; Update `consult-imenu' with the symbol categories for Rust.
+    (add-to-list 'consult-imenu-config
+                 '(rust-ts-mode
+                   :types ((?a "Associated Type" font-lock-type-face)
+                           (?c "Constant" font-lock-constant-face)
+                           (?e "Enumeration" font-lock-type-face)
+                           (?f "Function" font-lock-function-name-face)
+                           (?i "Implementation" font-lock-type-face)
+                           (?M "Macro" font-lock-preprocessor-face)
+                           (?m "Module" font-lock-constant-face)
+                           (?S "Static" font-lock-constant-face)
+                           (?s "Struct" font-lock-type-face)
+                           (?t "Trait" font-lock-type-face)))))
 
   (with-eval-after-load 'eglot
     ;; Set additional initialization options for rust-analyzer.
