@@ -2587,7 +2587,7 @@ will not refresh `column-number-mode."
     "M-[" #'surround-mark
     "M-]" #'surround-mark-outer)
 
-  (keymap-global-set "M-[" surround-map))
+  (keymap-global-set "M-]" surround-map))
 
 ;;;; Snippet expansion
 
