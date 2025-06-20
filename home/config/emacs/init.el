@@ -4593,6 +4593,13 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
 
 ;;;; Version control
 
+;; Feature `log-edit' is used by VC for entering commit messages.
+(use-feature! log-edit
+  :config
+
+  ;; Remove unnecessary hook functions.
+  (setopt log-edit-hook '(log-edit-insert-message-template)))
+
 ;; Feature `vc' allows you to use a version control system from within Emacs,
 ;; integrating the version control operations smoothly with editing. It provides
 ;; a uniform interface for common operations in many version control operations.
@@ -4600,7 +4607,36 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
   :init
 
   ;; Disable almost all VC backends to improve performance.
-  (setopt vc-handled-backends '(Git)))
+  (setopt vc-handled-backends '(Git))
+
+  :bind ( :map vc-prefix-map
+          ("RET" . #'vc-dir-root)
+          ("e"   . #'vc-ediff)
+          ("F"   . #'vc-update)
+          ("k"   . #'vc-revert))
+
+  :config
+
+  ;; Feature `vc-dir' provides a directory status display under VC.
+  (use-feature! vc-dir
+    :bind ( :map vc-dir-mode-map
+            ("M-s" . nil)
+            ("e"   . #'vc-ediff)
+            ("F"   . #'vc-update)
+            ("k"   . #'vc-revert))))
+
+;; Feature `vc-git' contains a VC backend for the git version control system.
+(use-feature! vc-git
+  :bind ( :map vc-dir-git-mode-map
+          ("z a" . #'vc-git-stash-apply)
+          ("z k" . #'vc-git-stash-delete))
+  :config
+
+  ;; Column beyond which characters in the summary lines are highlighted.
+  (setopt vc-git-log-edit-summary-target-len 50)
+
+  ;; Show stat output in git log
+  (setopt vc-git-log-switches '("--stat")))
 
 ;; Package `browse-at-remote' easily opens target page on github/gitlab (or
 ;; bitbucket) from Emacs by calling `browse-at-remote` function. Supports Dired
