@@ -1460,27 +1460,6 @@
                 :branch "externals/vlf" :files ("*" (:exclude ".git")) :source
                 "elpaca-menu-lock-file" :protocol https :inherit t :depth
                 treeless :ref "6192573ee088079bf1f81abc2bf2a370a5a92397"))
- (vterm :source "elpaca-menu-lock-file" :recipe
-        (:package "vterm" :fetcher github :repo "akermu/emacs-libvterm" :files
-                  ("CMakeLists.txt" "elisp.c" "elisp.h" "emacs-module.h" "etc"
-                   "utf8.c" "utf8.h" "vterm.el" "vterm-module.c"
-                   "vterm-module.h")
-                  :source "elpaca-menu-lock-file" :protocol https :inherit t
-                  :depth treeless :ref
-                  "056ad74653704bc353d8ec8ab52ac75267b7d373"))
- (vterm-toggle :source "elpaca-menu-lock-file" :recipe
-               (:package "vterm-toggle" :fetcher github :repo
-                         "jixiuf/vterm-toggle" :files
-                         ("*.el" "*.el.in" "dir" "*.info" "*.texi" "*.texinfo"
-                          "doc/dir" "doc/*.info" "doc/*.texi" "doc/*.texinfo"
-                          "lisp/*.el" "docs/dir" "docs/*.info" "docs/*.texi"
-                          "docs/*.texinfo"
-                          (:exclude ".dir-locals.el" "test.el" "tests.el"
-                                    "*-test.el" "*-tests.el" "LICENSE" "README*"
-                                    "*-pkg.el"))
-                         :source "elpaca-menu-lock-file" :protocol https
-                         :inherit t :depth treeless :ref
-                         "06cb4f3c565e46470a3c4505c11e26066d869715"))
  (vundo :source "elpaca-menu-lock-file" :recipe
         (:package "vundo" :repo ("https://github.com/casouri/vundo" . "vundo")
                   :files ("*" (:exclude ".git" "test")) :source

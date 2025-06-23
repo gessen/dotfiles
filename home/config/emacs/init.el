@@ -923,8 +923,7 @@ window instead."
           flymake-project-diagnostics-mode
           "^\\*eshell.*\\*$" eshell-mode
           "^\\*shell.*\\*$"  shell-mode
-          "^\\*term.*\\*$"  term-mode
-          "^\\*vterm.*\\*$"  vterm-mode))
+          "^\\*term.*\\*$"  term-mode))
 
   (popper-mode +1)
   (popper-echo-mode +1)
@@ -1096,14 +1095,6 @@ window instead."
 (use-feature! project
   :config
 
-  (defun project-vterm ()
-    "Start Vterm in the current project's root directory.
-If a buffer already exists for running Vterm in the project's
-root, switch to it. Otherwise, create a new vterm buffer."
-    (interactive)
-    (let ((default-directory (project-root (project-current t))))
-      (vterm)))
-
   ;; Mark C++-based projects without any supported version control as projects.
   (setopt project-vc-extra-root-markers '("compile_commands.json"
                                           ".dir-locals.el"))
@@ -1118,7 +1109,7 @@ root, switch to it. Otherwise, create a new vterm buffer."
   (setopt project-compilation-buffer-name-function
           #'project-prefixed-buffer-name)
 
-  ;; Include Dired, Magit and Vterm.
+  ;; Include Dired and Magit.
   (setopt project-switch-commands
           '((project-find-file "Find file" ?f)
             (project-find-regexp "Find regexp" ?g)
@@ -1126,7 +1117,6 @@ root, switch to it. Otherwise, create a new vterm buffer."
             (project-dired "Dired" ?D)
             (magit-project-status "Magit" ?m)
             (project-vc-dir "VC-Dir" ?v)
-            (project-vterm "Term" ?s)
             (project-eshell "Eshell" ?e)
             (project-any-command "Other" ?o)))
 
@@ -1155,7 +1145,7 @@ root, switch to it. Otherwise, create a new vterm buffer."
     "p o" #'project-any-command
     "p p" #'project-switch-project
     "p r" #'project-recompile
-    "p s" #'project-vterm
+    "p s" #'project-save-some-buffers
     "p v" #'project-vc-dir
     "p x" #'project-execute-extended-command
 
@@ -4960,37 +4950,6 @@ current theme. This will also disable line numbers and decorations."
 
   ;; Do not litter `user-emacs-directory' with Eshell data.
   (setopt eshell-directory-name (expand-file-name "eshell" my-cache-dir)))
-
-;; Package `vterm' is fully-fledged terminal emulator based on an external
-;; library (libvterm) loaded as a dynamic module. As a result of using compiled
-;; code (instead of elisp), `vterm' is fully capable, fast, and it can
-;; seamlessly handle large outputs.
-(use-package! vterm
-  :commands (vterm
-             vterm-other-window)
-  :init
-
-  (defhook! my--vterm-setup ()
-    vterm-mode-hook
-    "Set custom settings for `vterm-mode'."
-    (setq-local global-hl-line-mode nil))
-
-  (set-leader-keys!
-    "a s" #'vterm
-    "a S" #'vterm-other-window)
-
-  :config
-
-  ;; Kill buffers when the associated process is terminated.
-  (setq vterm-kill-buffer-on-exit t))
-
-;; Package `vterm-toggle' provides a command which toggles between the `vterm'
-;; buffer and whatever buffer you are editing.
-(use-package! vterm-toggle
-  :bind (("<f2>"    . #'vterm-toggle)
-         :map vterm-mode-map
-         ("<f2>"    . #'vterm-toggle)
-         ("C-c C-d" . #'vterm-toggle-insert-cd)))
 
 ;;;; External commands
 
