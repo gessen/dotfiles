@@ -2966,9 +2966,11 @@ completing-read prompter."
   ;; Modify default dispatch list to use \"?\" for fuzzy matching.
   (setopt orderless-affix-dispatch-alist
           '((?% . char-fold-to-regexp)
-            (?! . orderless-without-literal)
+            (?! . orderless-not)
+            (?& . orderless-annotation)
             (?, . orderless-initialism)
             (?= . orderless-literal)
+            (?^ . orderless-literal-prefix)
             (?? . orderless-flex))))
 
 ;; Package `vertico' provides a performant and minimalistic vertical completion
