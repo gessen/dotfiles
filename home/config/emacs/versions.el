@@ -1421,19 +1421,6 @@
                     (:defaults "extensions/*") :fetcher github :source
                     "elpaca-menu-lock-file" :protocol https :inherit t :depth
                     treeless :ref "edee5c68972b9270ac4f23b2c34aa43fe4403d52"))
- (visual-fill-column :source "elpaca-menu-lock-file" :recipe
-                     (:package "visual-fill-column" :fetcher codeberg :repo
-                               "joostkremers/visual-fill-column" :files
-                               ("*.el" "*.el.in" "dir" "*.info" "*.texi"
-                                "*.texinfo" "doc/dir" "doc/*.info" "doc/*.texi"
-                                "doc/*.texinfo" "lisp/*.el" "docs/dir"
-                                "docs/*.info" "docs/*.texi" "docs/*.texinfo"
-                                (:exclude ".dir-locals.el" "test.el" "tests.el"
-                                          "*-test.el" "*-tests.el" "LICENSE"
-                                          "README*" "*-pkg.el"))
-                               :source "elpaca-menu-lock-file" :protocol https
-                               :inherit t :depth treeless :ref
-                               "30fc3e4ea9aa415eccc873e5d7c4f1bbc0491495"))
  (visual-regexp :source "elpaca-menu-lock-file" :recipe
                 (:package "visual-regexp" :repo "benma/visual-regexp.el"
                           :fetcher github :files

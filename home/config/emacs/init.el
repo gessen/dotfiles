@@ -1462,16 +1462,6 @@ window instead."
           ("M-f" . #'indent-rigidly-right-to-tab-stop)
           ("M-b" . #'indent-rigidly-left-to-tab-stop)))
 
-;; Package `visual-fill-column' brings a small minor mode that mimics the effect
-;; of `fill-column' in `visual-line-mode'. Instead of wrapping lines at the
-;; window edge, which is the standard behaviour of `visual-line-mode', it wraps
-;; lines at `fill-column'. If `fill-column' is too large for the window, the
-;; text is wrapped at the window edge.
-(use-package! visual-fill-column
-  :init
-
-  (set-leader-keys! "t C-l" #'visual-fill-column-mode))
-
 ;;;; Kill and yank
 
 (defun copy-buffer-to-clipboard ()
