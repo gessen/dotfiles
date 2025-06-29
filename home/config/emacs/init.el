@@ -1354,6 +1354,9 @@ window instead."
 ;; act on visual lines, not logical lines.
 (global-visual-line-mode +1)
 
+;; Display continuation lines with prefixes from surrounding context
+(global-visual-wrap-prefix-mode)
+
 ;; Trigger auto-fill after punctuation characters, not just whitespace.
 (mapc
  (lambda (c)
