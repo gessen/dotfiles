@@ -1666,8 +1666,11 @@ column as mark, it add cursor to each line."
     ;; Load other `multiple-cursors' libraries.
     (require 'mc-mark-more)
 
+    ;; Automatically matched cursor style with `modus-themes' is invisible.
+    (setopt mc/match-cursor-style nil)
+
     ;; Do not litter `user-emacs-directory' with settings.
-    (setq mc/list-file (expand-file-name "mc-lists.el" my-data-dir))
+    (setopt mc/list-file (expand-file-name "mc-lists.el" my-data-dir))
 
     ;; Do not leave `multiple-cursors-mode' with RET.
     (keymap-unset mc/keymap "<return>")
