@@ -1421,27 +1421,6 @@
                     (:defaults "extensions/*") :fetcher github :source
                     "elpaca-menu-lock-file" :protocol https :inherit t :depth
                     treeless :ref "edee5c68972b9270ac4f23b2c34aa43fe4403d52"))
- (visual-regexp :source "elpaca-menu-lock-file" :recipe
-                (:package "visual-regexp" :repo "benma/visual-regexp.el"
-                          :fetcher github :files
-                          ("*.el" "*.el.in" "dir" "*.info" "*.texi" "*.texinfo"
-                           "doc/dir" "doc/*.info" "doc/*.texi" "doc/*.texinfo"
-                           "lisp/*.el" "docs/dir" "docs/*.info" "docs/*.texi"
-                           "docs/*.texinfo"
-                           (:exclude ".dir-locals.el" "test.el" "tests.el"
-                                     "*-test.el" "*-tests.el" "LICENSE"
-                                     "README*" "*-pkg.el"))
-                          :source "elpaca-menu-lock-file" :protocol https
-                          :inherit t :depth treeless :ref
-                          "48457d42a5e0fe10fa3a9c15854f1f127ade09b5"))
- (visual-regexp-steroids :source "elpaca-menu-lock-file" :recipe
-                         (:package "visual-regexp-steroids" :repo
-                                   "benma/visual-regexp-steroids.el" :fetcher
-                                   github :files
-                                   ("visual-regexp-steroids.el" "regexp.py")
-                                   :source "elpaca-menu-lock-file" :protocol
-                                   https :inherit t :depth treeless :ref
-                                   "a6420b25ec0fbba43bf57875827092e1196d8a9e"))
  (vlf :source "elpaca-menu-lock-file" :recipe
       (:package "vlf" :repo ("https://github.com/emacsmirror/gnu_elpa" . "vlf")
                 :branch "externals/vlf" :files ("*" (:exclude ".git")) :source

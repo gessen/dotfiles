@@ -2330,36 +2330,6 @@ will not refresh `column-number-mode."
     "s <" #'substitute-target-above-point
     "s >" #'substitute-target-below-point))
 
-;; Package `visual-regexp' provides an alternate version of `query-replace'
-;; which highlights matches and replacements as you type.
-(use-package! visual-regexp
-  :init
-
-  (set-leader-keys!
-    "s m" #'vr/mc-mark
-    "v m" #'vr/mc-mark)
-
-  :bind ([remap query-replace] . #'vr/query-replace)
-
-  :config
-
-  ;; Load `visual-regexp-steroids' after loading `visual-regexp'.
-  (use-feature! visual-regexp-steroids
-    :demand t))
-
-;; Package `visual-regexp-steroids' allows `visual-regexp' to use regexp engines
-;; other than Emacs'; for example, Python or Perl regexps.
-(use-package! visual-regexp-steroids
-  :commands vr/query-replace-literal
-  :bind (([remap query-replace-regexp] . #'vr/query-replace-literal))
-  :config
-
-  (defun vr/query-replace-literal ()
-    "Do a literal query-replace using `visual-regexp'."
-    (interactive)
-    (let ((vr/engine 'emacs-plain))
-      (call-interactively #'vr/query-replace))))
-
 ;; Package `wgrep' allows you to edit a grep buffer and apply those changes to
 ;; the file buffer interactively.
 (use-package! wgrep
