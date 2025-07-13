@@ -808,7 +808,8 @@ window instead."
 ;; more, each window will have its first label character highlighted. Once a
 ;; unique label is typed, ace-window will switch to that window.
 (use-package! ace-window
-  :init
+  :demand t
+  :config
 
   (set-leader-keys!
     "w d" #'ace-delete-window
@@ -818,7 +819,11 @@ window instead."
   :bind ("M-o" . #'ace-window)
 
   :config
-  (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
+
+  (setopt aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
+
+  ;; Show the Ace window key in the mode line.
+  (ace-window-display-mode +1))
 
 ;; Package `golden-ratio' automatically resizes Emacs windows to the golden
 ;; ratio. The window that has the main focus will have the perfect size for
