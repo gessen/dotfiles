@@ -4834,7 +4834,12 @@ Goto^^              Actions^^         Other^^
   (setopt magit-list-refs-sortby '("-committerdate" "-HEAD"))
 
   ;; Use absolute dates when showing logs.
-  (setopt magit-log-margin '(t "%d-%m-%Y %H:%M " magit-log-margin-width t 18)))
+  (setopt magit-log-margin '(t "%d-%m-%Y %H:%M " magit-log-margin-width t 18))
+
+  ;; Insert worktrees section (only with more than one worktree) just after the
+  ;; status section.
+  (setcdr magit-status-sections-hook
+          (push 'magit-insert-worktrees (cdr magit-status-sections-hook))))
 
 ;; Package `magit-blame-color-by-age' colors Magit-blame headers by age.
 (use-package! magit-blame-color-by-age
