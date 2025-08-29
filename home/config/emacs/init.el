@@ -5089,10 +5089,10 @@ possibly new window."
 
 ;; Bind keys for font size changes.
 (set-leader-keys!
-  "z =" (cons "text-scale-adjust-increase" #'global-text-scale-adjust)
-  "z +" (cons "text-scale-adjust-increase" #'global-text-scale-adjust)
-  "z -" (cons "text-scale-adjust-decrease" #'global-text-scale-adjust)
-  "z 0" (cons "text-scale-adjust-reset"    #'global-text-scale-adjust))
+  "z =" (cons "text-scale-adjust-increase" #'text-scale-adjust)
+  "z +" (cons "text-scale-adjust-increase" #'text-scale-adjust)
+  "z -" (cons "text-scale-adjust-decrease" #'text-scale-adjust)
+  "z 0" (cons "text-scale-adjust-reset"    #'text-scale-adjust))
 
 ;;;; Theme
 
