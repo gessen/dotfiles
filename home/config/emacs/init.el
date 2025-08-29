@@ -649,11 +649,6 @@ For details on DATA, CONTEXT, and signal, see
   (split-window-right)
   (windmove-right))
 
-(defun split-window-single ()
-  "Set the window layout to a single column."
-  (interactive)
-  (maximize-buffer))
-
 (defun split-window-double (&optional keep)
   "Set the window layout to two columns.
 When called with a prefix argument KEEP it splits the current
@@ -710,7 +705,7 @@ window instead."
   "b d" #'kill-current-buffer
   "b x" #'kill-buffer-and-window
   "w 0" #'delete-window
-  "w 1" #'split-window-single
+  "w 1" #'same-window-prefix
   "w 2" #'split-window-double
   "w 3" #'split-window-triple
   "w 4" #'split-window-grid
@@ -733,6 +728,7 @@ window instead."
 (set-leader-keys!
   "F d" #'delete-frame
   "F D" #'delete-other-frames
+  "F F" #'other-frame-prefix
   "F n" #'make-frame
   "F o" #'other-frame)
 
@@ -811,16 +807,36 @@ window instead."
   :demand t
   :config
 
+  (defun ace-window-prefix ()
+    "Use `ace-window' to display the buffer of the next command.
+The next buffer is the buffer displayed by the next command invoked
+immediately after this command (ignoring reading from the minibuffer).
+Creates a new window before displaying the buffer.
+When `switch-to-buffer-obey-display-actions' is non-nil,
+`switch-to-buffer' commands are also supported."
+    (interactive)
+    (display-buffer-override-next-command
+     (lambda (buffer alist)
+       (let ((alist (append '((inhibit-same-window . t)) alist))
+             window type)
+         (if (setq window (display-buffer-pop-up-window buffer alist))
+             (setq type 'window)
+           (setq window (aw-select (propertize " ACE" 'face
+                                               'mode-line-highlight))
+                 type 'reuse))
+         (cons window type)))
+     nil "[ace-window]")
+    (message "Use `ace-window' to display next command buffer..."))
+
   (set-leader-keys!
     "w d" #'ace-delete-window
     "w D" #'ace-delete-other-windows
     "w M" #'ace-swap-window
-    "w w" #'ace-window)
+    "w w" #'ace-window-prefix)
+
   :bind ("M-o" . #'ace-window)
 
   :config
-
-  (setopt aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
 
   ;; Show the Ace window key in the mode line.
   (ace-window-display-mode +1))
@@ -1051,10 +1067,7 @@ window instead."
   "f m"   #'rename-visited-file
   "f o"   #'open-in-external-app
   "f s"   #'save-buffer
-  "f S"   #'save-some-buffers
-  "F f"   #'find-file-other-frame
-  "T f"   #'find-file-other-tab
-  "w f"   #'find-file-other-window)
+  "f S"   #'save-some-buffers)
 
 ;; Feature `files-x' extends file handling with local persistent variables.
 (use-feature! files-x
@@ -1157,9 +1170,7 @@ window instead."
     "p m f" #'project-forget-project
     "p m F" #'project-forget-projects-under
     "p m z" #'project-forget-zombie-projects
-    "p m r" #'project-remember-projects-under
-
-    "F p" #'project-display-buffer-other-frame))
+    "p m r" #'project-remember-projects-under))
 
 ;; Feature `recentf' maintains a menu for visiting files that were operated on
 ;; recently. The recent files list is automatically saved across Emacs sessions.
@@ -1491,7 +1502,6 @@ window instead."
 
 (set-leader-keys!
   "b i" #'clone-indirect-buffer
-  "b I" #'clone-indirect-buffer-other-window
   "b y" #'copy-clipboard-to-buffer
   "b w" #'copy-buffer-to-clipboard
   "i b" #'insert-buffer)
@@ -2751,10 +2761,8 @@ point. "
     "/"   (cons "search project" #'consult-ripgrep)
     "a m" #'consult-man
     "b b" #'consult-buffer
-    "b B" #'consult-buffer-other-window
     "b f" #'consult-focus-lines
     "b k" #'consult-keep-lines
-    "F b" #'consult-buffer-other-frame
     "f b" #'consult-bookmark
     "f F" #'consult-fd
     "f r" #'consult-recent-file
@@ -2767,8 +2775,7 @@ point. "
     "r r" #'consult-register
     "r s" #'consult-register-store
     "r y" #'consult-yank-replace
-    "t T" #'consult-theme
-    "T b" #'consult-buffer-other-tab)
+    "t T" #'consult-theme)
 
   ;; Narrow and widen selection with "[".
   (setq consult-narrow-key "[")
@@ -3053,12 +3060,6 @@ completing-read prompter."
 ;; functionality must be implemented in a language dependent way and that's done
 ;; by defining an xref backend.
 (use-feature! xref
-  :init
-
-  (set-leader-keys!
-    "F ." #'xref-find-definitions-other-frame
-    "w ." #'xref-find-definitions-other-window)
-
   :config
 
   ;; Prompt only if no identifier is at point.
@@ -4390,11 +4391,7 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
 
   (set-leader-keys!
     "a d" #'dired
-    "a D" #'dired-other-window
-    "F d" #'dired-other-frame
-    "j d" #'dired-jump
-    "j D" #'dired-jump-other-window
-    "T d" #'dired-other-tab)
+    "j d" #'dired-jump)
 
   :hook (dired-mode-hook . dired-hide-details-mode)
 
@@ -5251,8 +5248,8 @@ during teardown."
   :init
 
   (set-leader-keys!
-    "F d" #'tab-close
-    "F D" #'tab-close-other
+    "T d" #'tab-close
+    "T D" #'tab-close-other
     "T m" #'tab-move
     "T n" #'tab-new
     "T o" #'tab-next
