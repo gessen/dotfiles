@@ -3427,10 +3427,13 @@ defeats the purpose of `corfu-sort-function'."
 
   ;; Set split between buffer-A and buffer-B to be horizontally from default
   ;; vertical.
-  (setq ediff-split-window-function 'split-window-horizontally)
+  (setopt ediff-split-window-function 'split-window-horizontally)
 
   ;; Set control panel in the same frame as ediff buffers.
-  (setq ediff-window-setup-function 'ediff-setup-windows-plain)
+  (setopt ediff-window-setup-function 'ediff-setup-windows-plain)
+
+  ;; Prompt to remove unmodified buffers A/B/C at session end.
+  (setopt ediff-keep-variants nil)
 
   ;; Inhibit `golden-ratio' functionality within `ediff' session.
   (with-eval-after-load 'golden-ratio
