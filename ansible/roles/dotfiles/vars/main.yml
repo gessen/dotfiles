@@ -28,6 +28,7 @@ dotfiles:
   - config/sccache/config
   - config/yazi/yazi.toml
   - local/share/cargo/config.toml
+  - local/share/emacs/mc-lists.el
   - ssh/config
 
 dotdirs:
