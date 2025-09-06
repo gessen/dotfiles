@@ -2303,14 +2303,35 @@ will not refresh `column-number-mode."
 
 ;; Feature `grep' provides the Grepping facilities.
 (use-feature! grep
+  :bind (("M-s g"   . #'grep)
+         ("M-s M-g" . #'grep)
+         ("M-s G"   . #'rgrep)
+         ("M-s M-G" . #'rgrep))
   :config
 
   ;; Subdivide grep output into sections, one per file.
   (setopt grep-use-headings t)
 
   ;; Use ripgrep instead.
-  (setopt grep-command "rg --no-heading --smart-case --line-number ")
-  (setopt grep-use-null-device nil))
+  (defvar rg-options "--no-heading --null --regexp")
+  (setopt grep-command (format "rg %s " rg-options))
+  (setopt grep-template (format "rg %s <R> --glob <F>" rg-options))
+  (setopt grep-find-command
+          (format "%s . -type f -print0 | \"%s\" -0 rg %s "
+                  find-program xargs-program rg-options))
+  (setopt grep-find-template
+          (format "%s -H <D> <X> -type f <F> -print0 | \"%s\" -0 rg %s <R>"
+                  find-program xargs-program rg-options))
+
+  ;; Add various aliases for globs.
+  (push '("rust" . "*.rs") grep-files-aliases)
+  (push '("toml" . "*.toml") grep-files-aliases)
+  (push '("yaml" . "*.yml *.yaml") grep-files-aliases)
+
+  ;; Skip various autodetections since ripgrep usage is already hardcoded.
+  (setopt grep-use-null-device nil)
+  (setopt grep-use-null-filename-separator t)
+  (setopt grep-highlight-matches 'auto))
 
 ;; Package `iedit' includes Emacs minor modes based on a API library and allows
 ;; you to edit one occurrence of some text in a buffer (possibly narrowed) or
@@ -2815,6 +2836,8 @@ point. "
          ("M-s M-l"         . #'consult-line)
          ("M-s ;"           . #'consult-line-symbol-at-point)
          ("M-s M-;"         . #'consult-line-symbol-at-point)
+         ("M-s /"           . #'consult-ripgrep)
+         ("M-s M-/"         . #'consult-ripgrep)
          :map isearch-mode-map
          ("M-g l"           . #'consult-line)
          ("M-g M-l"         . #'consult-line)

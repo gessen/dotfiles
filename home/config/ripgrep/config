@@ -7,8 +7,3 @@
 # Don't let ripgrep vomit really long lines to my terminal, and show a preview
 --max-columns=300
 --max-columns-preview
-
-# Configure color settings and styles
---colors=match:bg:0xd3,0x36,0x82
---colors=match:fg:0xff,0xff,0xff
---colors=match:style:nobold
