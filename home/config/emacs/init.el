@@ -288,13 +288,13 @@ NAME and ARGS are as in `use-package'."
   "o" `("org" . ,(make-sparse-keymap))
   "p" `("projects" . ,(make-sparse-keymap))
   "q" `("quit" . ,(make-sparse-keymap))
-  "r" `("registers/rings" . ,(make-sparse-keymap))
+  "r" `("regs/rings" . ,(make-sparse-keymap))
   "s" `("search" . ,(make-sparse-keymap))
   "S" `("spellcheck" . ,(make-sparse-keymap))
   "t" `("toggle" . ,(make-sparse-keymap))
   "T" `("tabs" . ,(make-sparse-keymap))
   "u" `("undo" . ,(make-sparse-keymap))
-  "v" `("multiple cursors" . ,(make-sparse-keymap))
+  "v" `("multiple-cursors" . ,(make-sparse-keymap))
   "w" `("windows" . ,(make-sparse-keymap))
   "x" `("text" . ,(make-sparse-keymap))
   "z" `("zoom" . ,(make-sparse-keymap))
@@ -454,11 +454,35 @@ anything that can be a key's definition."
   :demand t
   :config
 
-  ;; Replace major/minor mode prefix with a single common text.
-  (dolist (key `(,my-major-mode-leader-key-alt
-                 ,my-major-mode-leader-key-alt2))
-    (push `((,(concat "\\`" key "\\'") . nil) . (nil . "major mode"))
-          which-key-replacement-alist))
+  ;; Make various prefixes more readable.
+  (which-key-add-key-based-replacements
+    "C-c"           "mode-and-user"
+    "C-x"           "extra-commands"
+    "C-x 4"         "other-window"
+    "C-x 5"         "other-frame"
+    "C-x 8"         "insert-special"
+    "C-x a"         "abbrev"
+    "C-x n"         "narrow"
+    "C-x p"         "projects"
+    "C-x r"         "reg/rect/bkmks"
+    "C-x t ^"       "detach"
+    "C-x t"         "tab-bar"
+    "C-x v"         "vc"
+    "C-x v b"       "branch"
+    "C-x v M"       "mergebase"
+    "C-x w"         "window-extras"
+    "C-x w ^"       "detach"
+    "C-x x"         "buffer-extras"
+    "C-x C-k"       "kmacro"
+    "C-x C-k C-q"   "counters"
+    "C-x C-k C-r a" "add"
+    "C-x C-k C-r"   "register"
+    "M-g"           "goto"
+    "M-s h"         "highlight"
+    "M-s"           "search"
+
+    my-major-mode-leader-key-alt  "major-mode"
+    my-major-mode-leader-key-alt2 "major-mode")
 
   ;; Allow a key binding to match and be modified by multiple elements in
   ;; `which-key-replacement-alist'
@@ -1960,6 +1984,8 @@ possibly new window."
          ("M-j M-j" . #'avy-isearch))
 
   :config
+
+  (which-key-add-key-based-replacements "M-j" "avy")
 
   ;; Add a gray background during the selection.
   (setq avy-background t)
