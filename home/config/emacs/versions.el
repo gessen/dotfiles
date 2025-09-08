@@ -285,6 +285,17 @@
                     :source "elpaca-menu-lock-file" :protocol https :inherit t
                     :depth treeless :ref
                     "d2214d34cdeb4483a594dd6973fcd095cef4653f"))
+ (diff-hl :source "elpaca-menu-lock-file" :recipe
+          (:package "diff-hl" :fetcher github :repo "dgutov/diff-hl" :files
+                    ("*.el" "*.el.in" "dir" "*.info" "*.texi" "*.texinfo"
+                     "doc/dir" "doc/*.info" "doc/*.texi" "doc/*.texinfo"
+                     "lisp/*.el" "docs/dir" "docs/*.info" "docs/*.texi"
+                     "docs/*.texinfo"
+                     (:exclude ".dir-locals.el" "test.el" "tests.el" "*-test.el"
+                               "*-tests.el" "LICENSE" "README*" "*-pkg.el"))
+                    :source "elpaca-menu-lock-file" :protocol https :inherit t
+                    :depth treeless :ref
+                    "39f076efa85110c4bcc9b73994f30a7d52312c98"))
  (dired-copy-paste :source "elpaca-menu-lock-file" :recipe
                    (:source "elpaca-menu-lock-file" :protocol https :inherit t
                             :depth treeless :host github :repo
@@ -550,19 +561,6 @@
                       :files ("*" (:exclude ".git")) :source
                       "elpaca-menu-lock-file" :protocol https :inherit t :depth
                       treeless :ref "2b8d04c1a03b339e2eaf031eacd0d9d615a21322"))
- (git-gutter :source "elpaca-menu-lock-file" :recipe
-             (:package "git-gutter" :repo "emacsorphanage/git-gutter" :fetcher
-                       github :files
-                       ("*.el" "*.el.in" "dir" "*.info" "*.texi" "*.texinfo"
-                        "doc/dir" "doc/*.info" "doc/*.texi" "doc/*.texinfo"
-                        "lisp/*.el" "docs/dir" "docs/*.info" "docs/*.texi"
-                        "docs/*.texinfo"
-                        (:exclude ".dir-locals.el" "test.el" "tests.el"
-                                  "*-test.el" "*-tests.el" "LICENSE" "README*"
-                                  "*-pkg.el"))
-                       :source "elpaca-menu-lock-file" :protocol https :inherit
-                       t :depth treeless :ref
-                       "0d8ab98892ee26e2f976883603464d6822189103"))
  (git-modes :source "elpaca-menu-lock-file" :recipe
             (:package "git-modes" :fetcher github :repo "magit/git-modes"
                       :old-names

@@ -4740,68 +4740,45 @@ that file in your browser at the visited revision."
 
   (set-leader-keys! "g f" #'consult-ls-git))
 
-;; Package `git-gutter' is a port of Sublime Text plugin GitGutter.
-(use-package! git-gutter
-  :defer 5
-  :commands (git-gutter:next-hunk
-             git-gutter:popup-hunk
-             git-gutter:previous-hunk
-             git-gutter:revert-hunk
-             git-gutter:stage-hunk)
+;; Package `diff-hl' highlights uncommitted changes on the side of the window,
+;; allows you to jump between and revert them selectively. This feature is also
+;; known as "source control gutter indicators". In buffers controlled by Git,
+;; you can stage and unstage the changes.
+(use-package! diff-hl
   :init
 
-  (defhydra hydra-git-gutter (:color pink :hint nil)
-    "
-Goto^^              Actions^^         Other^^
-----^^------------- -------^^-------- -----^^-------
-[_n_] next hunk     [_s_] stage hunk  [_z_] recenter
-[_p_] previous hunk [_r_] revert hunk [_q_] quit
-^^                  [_h_] show hunk
-"
-    ("h" git-gutter:popup-hunk)
-    ("n" git-gutter:next-hunk)
-    ("p" git-gutter:previous-hunk)
-    ("r" git-gutter:revert-hunk)
-    ("s" git-gutter:stage-hunk)
-    ("z" recenter-top-bottom)
-    ("q" nil :quit t)
-    ("C-g" nil :exit t))
+  (set-leader-keys!
+    "g ." #'diff-hl-show-hunk
+    "g n" #'diff-hl-revert-hunk
+    "g S" #'diff-hl-stage-dwim)
 
-  (set-leader-keys! "g ." (cons "git-gutter" #'hydra-git-gutter/body))
+  :hook (((text-mode-hook prog-mode-hook conf-mode-hook) . diff-hl-mode)
+         (vc-dir-mode-hook . diff-hl-dir-mode))
 
-  (defhook! my--git-gutter-load ()
-    find-file-hook
-    "Load `git-gutter' when initially finding a file."
-    (require 'git-gutter)
-    (remove-hook 'find-file-hook #'my--git-gutter-load))
-
-  :bind (("M-g M-n" . #'git-gutter:next-hunk)
-         ("M-g M-p" . #'git-gutter:previous-hunk))
+  :bind (("M-g ]" . #'diff-hl-next-hunk)
+         ("M-g [" . #'diff-hl-previous-hunk))
   :config
 
-  (defvar-keymap git-gutter-repeat-map
-    :doc "Support GitGutter based navigation with repeats."
-    :repeat t
-    "n" #'git-gutter:next-hunk
-    "p" #'git-gutter:previous-hunk
-    "M-n" #'git-gutter:next-hunk
-    "M-p" #'git-gutter:previous-hunk)
+  (with-eval-after-load 'magit
+    (add-hook #'magit-post-refresh-hook #'diff-hl-magit-post-refresh))
 
-  (set-face-attribute 'git-gutter:modified nil :foreground "yellow")
+  ;; Run `diff-hl' updates asynchronously.
+  (setopt diff-hl-update-async t)
 
-  ;; Check git for updates every 2 seconds instead of waiting on buffer save.
-  (setq git-gutter:update-interval 2)
+  ;; Disable `diff-hl' in remote buffers.
+  (setopt diff-hl-disable-on-remote t)
 
-  ;; Hide gutter if there are no changes.
-  (setq git-gutter:hide-gutter t)
+  ;; Inline popup is shown over the hunk, hiding it.
+  (setopt diff-hl-show-hunk-inline-popup-hide-hunk t)
 
-  (global-git-gutter-mode +1)
+  ;; Show both deleted and new lines.
+  (setopt diff-hl-show-hunk-inline-popup-smart-lines nil)
 
-  (defhook! my--git-gutter-after-autorevert ()
-    after-revert-hook
-    "Update `git-gutter' after the buffer is autoreverted."
-    (when git-gutter-mode
-      (git-gutter))))
+  ;; Toggle displaying `diff-hl-mode' highlights on the margin.
+  (diff-hl-margin-mode +1)
+
+  ;; Enable margin to show a popup with vc diffs when clicked.
+  (global-diff-hl-show-hunk-mouse-mode +1))
 
 ;; Package `magit' provides a full graphical interface for Git within Emacs.
 ;; Disable default keybindings.
