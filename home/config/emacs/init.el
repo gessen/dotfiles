@@ -3813,6 +3813,7 @@ Return nil if there is no name or if NODE is not a defun node."
             :inlayHints ( :closureReturnTypeHints (:enable "always")
                           :lifetimeElisionHints (:enable "skip_trivial"))
             :lens (:enable :json-false)
+            :workspace (:symbol (:search (:kind "all_symbols")))
             :check (:command "clippy")))))
 
     (with-eval-after-load 'eglot-x
@@ -3931,6 +3932,7 @@ Return nil if there is no name or if NODE is not a defun node."
 ;; Package `consult-eglot' provides an alternative of the built-in
 ;; `xref-appropos' which provides as you type completion.
 (use-package! consult-eglot
+  :ensure (:files (:defaults "extensions/consult-eglot-embark/*"))
   :demand t
   :after (consult eglot xref)
   :bind ( :map eglot-mode-map
@@ -3945,7 +3947,15 @@ Return nil if there is no name or if NODE is not a defun node."
    ;; Disable the automatic preview where the preview may be expensive due to
    ;; file loading.
    consult-eglot-symbols
-   :preview-key "M-."))
+   :preview-key '(:debounce 0.4 any))
+
+  ;; Feature `consult-eglot-embark' provides Embark goto symbol and export
+  ;; suppport.
+  (use-feature! consult-eglot-embark
+    :demand t
+    :config
+
+    (consult-eglot-embark-mode +1)))
 
 ;; Package `eglot' is the Emacs client for the Language Server Protocol (LSP).
 ;; The name “Eglot” is an acronym that stands for "Emacs Polyglot". Eglot

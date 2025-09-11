@@ -202,13 +202,7 @@
  (consult-eglot :source "elpaca-menu-lock-file" :recipe
                 (:package "consult-eglot" :fetcher github :repo
                           "mohkale/consult-eglot" :files
-                          ("*.el" "*.el.in" "dir" "*.info" "*.texi" "*.texinfo"
-                           "doc/dir" "doc/*.info" "doc/*.texi" "doc/*.texinfo"
-                           "lisp/*.el" "docs/dir" "docs/*.info" "docs/*.texi"
-                           "docs/*.texinfo"
-                           (:exclude ".dir-locals.el" "test.el" "tests.el"
-                                     "*-test.el" "*-tests.el" "LICENSE"
-                                     "README*" "*-pkg.el"))
+                          (:defaults "extensions/consult-eglot-embark/*")
                           :source "elpaca-menu-lock-file" :protocol https
                           :inherit t :depth treeless :ref
                           "b71499f4b93bfea4e2005564c25c5bb0f9e73199"))
