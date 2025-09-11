@@ -2371,7 +2371,10 @@ will not refresh `column-number-mode."
     "s E" #'iedit-rectangle-mode)
 
   :bind ( :map iedit-mode-keymap
-          ("M-'" . #'iedit-show/hide-context-lines)))
+          ("M-'" . #'iedit-show/hide-context-lines)
+          :map isearch-mode-map
+          ("M-s e"   . #'iedit-mode-from-isearch)
+          ("M-s M-e" . #'iedit-mode-from-isearch)))
 
 ;; Package `substitute' is a set of commands that perform text replacement (i)
 ;; throughout the buffer, (ii) limited to the current definition (per
