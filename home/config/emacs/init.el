@@ -2857,12 +2857,16 @@ point. "
          ("M-g M-o"         . #'consult-outline)
          ("M-g r"           . #'consult-register)
          ("M-g M-r"         . #'consult-register)
+         ("M-g R"           . #'consult-grep-match)
+         ("M-g M-R"         . #'consult-grep-match)
          ("M-g /"           . #'consult-line-multi)
          ("M-g M-/"         . #'consult-line-multi)
          ([remap yank-pop]  . #'consult-yank-replace)
          ("M-s M-h"         . #'consult-isearch-history)
          ("M-s l"           . #'consult-line)
          ("M-s M-l"         . #'consult-line)
+         ("M-s r"           . #'consult-grep-match)
+         ("M-s M-r"         . #'consult-grep-match)
          ("M-s ;"           . #'consult-line-symbol-at-point)
          ("M-s M-;"         . #'consult-line-symbol-at-point)
          ("M-s /"           . #'consult-ripgrep)
@@ -2901,6 +2905,9 @@ point. "
 
   ;; Replace the key help with a completing-read interface.
   (setq prefix-help-command #'embark-prefix-help-command)
+
+  ;; Add Embark to the mouse context menu.
+  (add-hook 'context-menu-functions #'embark-context-menu 100)
 
   :bind (("M-n"     . #'embark-next-symbol)
          ("M-p"     . #'embark-previous-symbol)
@@ -5258,9 +5265,15 @@ during teardown."
     (add-to-list 'keycast-substitute-alist `(,input "." "Typing...")))
 
   ;; Don't show various mouse events.
-  (dolist (event '(mouse-event-p
-                   mouse-movement-p
-                   mwheel-scroll))
+  (dolist (event '("<mouse-event>"
+                   "<mouse-movement>"
+                   mouse-set-point
+                   mouse-set-region
+                   mouse-drag-region
+                   "<wheel-down>" "<wheel-up>"
+                   "<double-wheel-down>" "<double-wheel-up>"
+                   "<triple-wheel-down>" "<triple-wheel-up>"
+                   "<mouse-2>"))
     (add-to-list 'keycast-substitute-alist `(,event nil))))
 
 ;; Package `minions' implements a menu that lists enabled minor-modes, as
