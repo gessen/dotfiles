@@ -5250,11 +5250,10 @@ during teardown."
 ;; command is invoked. `keycast-mode' displays the command and event in the
 ;; mode-line and `keycast-log-mode' displays them in a dedicated frame.
 (use-package! keycast
-  :init
+  :demand t
+  :config
 
   (set-leader-keys! "t k" #'keycast-mode-line-mode)
-
-  :config
 
   ;; Move Keycast display to be the last one in the modeline.
   (setopt keycast-mode-line-insert-after 'mode-line-misc-info)
@@ -5274,7 +5273,9 @@ during teardown."
                    "<double-wheel-down>" "<double-wheel-up>"
                    "<triple-wheel-down>" "<triple-wheel-up>"
                    "<mouse-2>"))
-    (add-to-list 'keycast-substitute-alist `(,event nil))))
+    (add-to-list 'keycast-substitute-alist `(,event nil)))
+
+  (keycast-mode-line-mode +1))
 
 ;; Package `minions' implements a menu that lists enabled minor-modes, as
 ;; well as commonly but not currently enabled minor-modes.  It can be used to
