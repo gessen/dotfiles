@@ -650,6 +650,37 @@ For details on DATA, CONTEXT, and signal, see
 
 ;;; Windows management
 
+;; Set custom actions when display certain buffers.
+(setq display-buffer-alist
+      '(;; No window
+        ("\\`\\*Async Shell Command\\*\\'"
+         (display-buffer-no-window))
+        ("\\`\\*\\(Warnings\\|Compile-Log\\|Org Links\\)\\*\\'"
+         (display-buffer-no-window)
+         (allow-no-window . t))
+        ;; Make Helpful behave more similar to builtin Help.
+        ((derived-mode . helpful-mode)
+         (display-buffer-reuse-mode-window display-buffer-pop-up-window)
+         (mode . helpful-mode))
+        ;; Bottom reusable window
+        ((or . ((derived-mode . flymake-diagnostics-buffer-mode)
+                (derived-mode . flymake-project-diagnostics-mode)
+                (derived-mode . occur-mode)
+                (derived-mode . grep-mode)))
+         (display-buffer-reuse-mode-window display-buffer-below-selected)
+         (mode . ( flymake-diagnostics-buffer-mode
+                   flymake-project-diagnostics-mode
+                   occur-mode
+                   grep-mode))
+         (body-function . select-window))
+        ;; Compilation window in fullscreen
+        ((derived-mode . compilation-mode)
+         (display-buffer-full-frame))
+        ;; Select Eldoc window when launching it
+        ("\\*eldoc.*\\*"
+         (display-buffer-reuse-window display-buffer-pop-up-window)
+         (body-function . select-window))))
+
 (defun maximize-buffer ()
   "Maximize buffer, use again to undo it."
   (interactive)
@@ -736,6 +767,7 @@ window instead."
   "w b" #'switch-to-minibuffer-window
   "w e" #'balance-windows
   "w m" #'maximize-buffer
+  "w q" #'kill-buffer-and-window
   "w s" #'split-window-below
   "w S" #'split-window-below-and-focus
   "w v" #'split-window-right
