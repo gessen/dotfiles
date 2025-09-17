@@ -946,43 +946,6 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
 (use-package! nerd-icons-ibuffer
   :hook (ibuffer-mode-hook . nerd-icons-ibuffer-mode))
 
-;; Package `popper' is a minor-mode to tame the flood of ephemeral windows Emacs
-;; produces, while still keeping them within arm's reach. Designate any buffer
-;; to "popup" status, and it will stay out of your way. Dismiss or summon it
-;; easily with one key. Cycle through all your "popups" or just the ones
-;; relevant to your current buffer. Useful for many things, including toggling
-;; display of REPLs, documentation, compilation or shell output, etc.
-(use-package! popper
-  :init
-
-  ;; Treat help, compilation and terminal modes as popups.
-  (setq popper-reference-buffers
-        '("\\*Messages\\*"
-          "Output\\*$"
-          "^\\*eldoc.*\\*$"
-          compilation-mode
-          "\\*devdocs.*\\*$" devdocs-mode
-          help-mode
-          helpful-mode
-          flymake-diagnostics-buffer-mode
-          flymake-project-diagnostics-mode
-          "^\\*eshell.*\\*$" eshell-mode
-          "^\\*shell.*\\*$"  shell-mode
-          "^\\*term.*\\*$"  term-mode))
-
-  (popper-mode +1)
-  (popper-echo-mode +1)
-
-  :bind (("M-`"   . popper-toggle)
-         ("C-`"   . popper-cycle)
-         ("C-M-`" . popper-toggle-type))
-
-  :config
-
-  (with-eval-after-load 'project
-    ;; Group popups by project.el buffers.
-    (setq popper-group-function 'popper-group-by-project)))
-
 ;; Package `winum' helps with navigating windows and frames using numbers. It is
 ;; an extended and actively maintained version of the `window-numbering'
 ;; package. This version brings, among other things, support for number sets

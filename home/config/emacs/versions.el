@@ -1182,17 +1182,6 @@
                   ("*" (:exclude ".git")) :source "elpaca-menu-lock-file"
                   :protocol https :inherit t :depth treeless :ref
                   "bf8174cb7e6e8fe0fe91afe6b01b6562c4dc39da"))
- (popper :source "elpaca-menu-lock-file" :recipe
-         (:package "popper" :fetcher github :repo "karthink/popper" :files
-                   ("*.el" "*.el.in" "dir" "*.info" "*.texi" "*.texinfo"
-                    "doc/dir" "doc/*.info" "doc/*.texi" "doc/*.texinfo"
-                    "lisp/*.el" "docs/dir" "docs/*.info" "docs/*.texi"
-                    "docs/*.texinfo"
-                    (:exclude ".dir-locals.el" "test.el" "tests.el" "*-test.el"
-                              "*-tests.el" "LICENSE" "README*" "*-pkg.el"))
-                   :source "elpaca-menu-lock-file" :protocol https :inherit t
-                   :depth treeless :ref
-                   "49f4904480cf4ca5c6db83fcfa9e6ea8d4567d96"))
  (popup :source "elpaca-menu-lock-file" :recipe
         (:package "popup" :fetcher github :repo "auto-complete/popup-el" :files
                   ("*.el" "*.el.in" "dir" "*.info" "*.texi" "*.texinfo"
