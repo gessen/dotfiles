@@ -1627,27 +1627,27 @@ column as mark, it add cursor to each line."
 ;; Package `easy-kill-extras' contains extra functions for `easy-kill' and
 ;; `easy-mark'.
 (use-package! easy-kill-extras
-  :demand t
-  :after easy-kill
-  :bind ([remap mark-word] . #'easy-mark-word)
-  :config
+  :init
 
-  ;; Add more ways to select with `easy-kill'/`easy-mark'.
-  (require 'extra-things)
-  (push '(?W  WORD " ") easy-kill-alist)
-  (push '(?\' squoted-string "") easy-kill-alist)
-  (push '(?\" dquoted-string "") easy-kill-alist)
-  (push '(?\` bquoted-string "") easy-kill-alist)
-  (push '(?q  quoted-string "") easy-kill-alist)
-  (push '(?Q  quoted-string-universal "") easy-kill-alist)
-  (push '(?\( parentheses-pair-content "\n") easy-kill-alist)
-  (push '(?\) parentheses-pair "\n") easy-kill-alist)
-  (push '(?\[ brackets-pair-content "\n") easy-kill-alist)
-  (push '(?\] brackets-pair "\n") easy-kill-alist)
-  (push '(?{  curlies-pair-content "\n") easy-kill-alist)
-  (push '(?}  curlies-pair "\n") easy-kill-alist)
-  (push '(?<  angles-pair-content "\n") easy-kill-alist)
-  (push '(?>  angles-pair "\n") easy-kill-alist))
+  (with-eval-after-load 'easy-kill
+    ;; Add more ways to select with `easy-kill'/`easy-mark'.
+    (require 'extra-things)
+    (push '(?W  WORD " ") easy-kill-alist)
+    (push '(?\' squoted-string "") easy-kill-alist)
+    (push '(?\" dquoted-string "") easy-kill-alist)
+    (push '(?\` bquoted-string "") easy-kill-alist)
+    (push '(?q  quoted-string "") easy-kill-alist)
+    (push '(?Q  quoted-string-universal "") easy-kill-alist)
+    (push '(?\( parentheses-pair-content "\n") easy-kill-alist)
+    (push '(?\) parentheses-pair "\n") easy-kill-alist)
+    (push '(?\[ brackets-pair-content "\n") easy-kill-alist)
+    (push '(?\] brackets-pair "\n") easy-kill-alist)
+    (push '(?{  curlies-pair-content "\n") easy-kill-alist)
+    (push '(?}  curlies-pair "\n") easy-kill-alist)
+    (push '(?<  angles-pair-content "\n") easy-kill-alist)
+    (push '(?>  angles-pair "\n") easy-kill-alist))
+
+  :bind ([remap mark-word] . #'easy-mark-word))
 
 ;; Package `expreg' increases selected region by semantic units.
 (use-package! expreg
