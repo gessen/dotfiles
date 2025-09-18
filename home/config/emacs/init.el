@@ -3818,6 +3818,8 @@ Return nil if there is no name or if NODE is not a defun node."
             :inlayHints ( :closureReturnTypeHints (:enable "always")
                           :lifetimeElisionHints (:enable "skip_trivial"))
             :lens (:enable :json-false)
+            :rustfmt ( :extraArgs ["+nightly"]
+                       :rangeFormatting (:enable t))
             :workspace (:symbol (:search (:kind "all_symbols")))
             :check (:command "clippy")))))
 
