@@ -5062,14 +5062,22 @@ possibly new window."
 ;; Avoid loading unnecessary `default' library
 (setq inhibit-default-init t)
 
-;; Inhibit displaying instructions on how to exit the client on connection.
-(setq server-client-instructions nil)
-
 ;; Get rid of "For information about GNU Emacs..." message at startup, unless
 ;; we're in a daemon session, where it'll say "Starting Emacs daemon." instead,
 ;; which isn't so bad.
 (unless (daemonp)
   (advice-add #'display-startup-echo-area-message :override #'ignore))
+
+;; Feature `server' allows Emacs to operate as a server for other processes.
+(use-feature! server
+  :defer 1
+  :config
+
+  ;; Inhibit displaying instructions on how to exit the client on connection.
+  (setopt server-client-instructions nil)
+
+  (unless (or (server-running-p) (daemonp))
+    (server-start)))
 
 ;;; Shutdown
 
