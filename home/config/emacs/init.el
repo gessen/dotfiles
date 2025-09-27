@@ -1398,6 +1398,28 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
    (set-char-table-range auto-fill-chars c t))
  "!-=+]};:'\",.?")
 
+;; Feature `outline' `outline' provides major and minor modes for collapsing
+;; sections of a buffer into an outline-like format.
+(use-feature! outline
+  :init
+
+  (set-leader-keys! "t o" #'outline-minor-mode)
+
+  :config
+
+  ;; Show outline clickable buttons in a buffer.
+  (setopt outline-minor-mode-use-buttons t)
+
+  ;; Enable visibility-cycling commands on headings in `outline-minor-mode' with
+  ;; `<tab>' and `S-<tab>'.
+  (setopt outline-minor-mode-cycle t)
+
+  ;; Try to append outline font-lock faces to those of major mode.
+  (setopt outline-minor-mode-highlight 'append)
+
+  ;; Remove default keybinding of `RET'.
+  (keymap-unset outline-overlay-button-map "RET"))
+
 ;; Feature `whitespace' provides a minor mode for highlighting whitespace in
 ;; various special ways.
 (use-feature! whitespace
