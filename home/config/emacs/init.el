@@ -933,16 +933,6 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
                  next-multiframe-window
                  previous-multiframe-window
                  quit-window
-                 winum-select-window-0-or-10
-                 winum-select-window-1
-                 winum-select-window-2
-                 winum-select-window-3
-                 winum-select-window-4
-                 winum-select-window-5
-                 winum-select-window-6
-                 winum-select-window-7
-                 winum-select-window-8
-                 winum-select-window-9
                  windmove-left
                  windmove-right
                  windmove-up
@@ -977,39 +967,6 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
 ;; and in terminal.
 (use-package! nerd-icons-ibuffer
   :hook (ibuffer-mode-hook . nerd-icons-ibuffer-mode))
-
-;; Package `winum' helps with navigating windows and frames using numbers. It is
-;; an extended and actively maintained version of the `window-numbering'
-;; package. This version brings, among other things, support for number sets
-;; across multiple frames, giving the user a smoother experience of multi-screen
-;; Emacs.
-(use-package! winum
-  :demand t
-  :init
-
-  ;; Disable default keymap, it is already taken by built-in Emacs commands.
-  (setq winum-keymap (make-sparse-keymap))
-
-  :bind ( :map winum-keymap
-          ("C-M-1" . #'winum-select-window-1)
-          ("C-M-2" . #'winum-select-window-2)
-          ("C-M-3" . #'winum-select-window-3)
-          ("C-M-4" . #'winum-select-window-4)
-          ("C-M-5" . #'winum-select-window-5)
-          ("C-M-6" . #'winum-select-window-6)
-          ("C-M-7" . #'winum-select-window-7)
-          ("C-M-8" . #'winum-select-window-8)
-          ("C-M-9" . #'winum-select-window-9))
-
-  :config
-
-  ;; Do not assign minibuffer to buffer 0 when it is active
-  (setq winum-auto-assign-0-to-minibuffer nil)
-
-  ;; Avoid modyfing modeline - we're going to do that later
-  (setq winum-auto-setup-mode-line nil)
-
-  (winum-mode +1))
 
 ;;; Files management
 
