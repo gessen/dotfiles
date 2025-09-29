@@ -592,19 +592,6 @@
                       :source "elpaca-menu-lock-file" :protocol https :inherit t
                       :depth treeless :ref
                       "7063d66857023e6c010cecac52de67c0baa77fb7"))
- (golden-ratio :source "elpaca-menu-lock-file" :recipe
-               (:package "golden-ratio" :repo "roman/golden-ratio.el" :fetcher
-                         github :files
-                         ("*.el" "*.el.in" "dir" "*.info" "*.texi" "*.texinfo"
-                          "doc/dir" "doc/*.info" "doc/*.texi" "doc/*.texinfo"
-                          "lisp/*.el" "docs/dir" "docs/*.info" "docs/*.texi"
-                          "docs/*.texinfo"
-                          (:exclude ".dir-locals.el" "test.el" "tests.el"
-                                    "*-test.el" "*-tests.el" "LICENSE" "README*"
-                                    "*-pkg.el"))
-                         :source "elpaca-menu-lock-file" :protocol https
-                         :inherit t :depth treeless :ref
-                         "375c9f287dfad68829582c1e0a67d0c18119dab9"))
  (golden-ratio-scroll-screen :source "elpaca-menu-lock-file" :recipe
                              (:package "golden-ratio-scroll-screen" :repo
                                        "jixiuf/golden-ratio-scroll-screen"

@@ -897,56 +897,6 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
   ;; Show the Ace window key in the mode line.
   (ace-window-display-mode +1))
 
-;; Package `golden-ratio' automatically resizes Emacs windows to the golden
-;; ratio. The window that has the main focus will have the perfect size for
-;; editing, while the ones that are not being actively edited will be re-sized
-;; to a smaller size that doesn't get in the way, but at the same time will be
-;; readable enough to know it's content.
-(use-package! golden-ratio
-  :demand t
-  :config
-  (set-leader-keys! "t g" #'golden-ratio-mode)
-
-  (dolist (mode '("bs-mode"
-                  "calc-mode"
-                  "ediff-mode"
-                  "gud-mode"
-                  "gdb-locals-mode"
-                  "gdb-registers-mode"
-                  "gdb-breakpoints-mode"
-                  "gdb-threads-mode"
-                  "gdb-frames-mode"
-                  "gdb-inferior-io-mode"
-                  "gdb-disassembly-mode"
-                  "gdb-memory-mode"
-                  "speedbar-mode"
-                  "vundo-mode"
-                  "vundo-diff-mode"))
-    (push mode golden-ratio-exclude-modes))
-
-  (dolist (cmd '(ace-window
-                 ace-delete-window
-                 ace-select-window
-                 ace-swap-window
-                 ace-maximize-window
-                 avy-pop-mark
-                 next-multiframe-window
-                 previous-multiframe-window
-                 quit-window
-                 windmove-left
-                 windmove-right
-                 windmove-up
-                 windmove-down))
-    (push cmd golden-ratio-extra-commands))
-
-  (defun which-key-buffer-p ()
-    "Check whether the visible buffer is a part of `which-key'."
-    (and (get-buffer " *which-key*")
-         (get-buffer-window " *which-key*" 'visible)))
-  (push 'which-key-buffer-p golden-ratio-inhibit-functions)
-
-  (golden-ratio-mode +1))
-
 ;; Package `ibuffer-project' provides IBuffer filtering and sorting functions to
 ;; group buffers by function or regexp applied to `default-directory'. By
 ;; default buffers are grouped by `project-current' or by `default-directory'.
@@ -3466,15 +3416,7 @@ defeats the purpose of `corfu-sort-function'."
   (setopt ediff-window-setup-function 'ediff-setup-windows-plain)
 
   ;; Prompt to remove unmodified buffers A/B/C at session end.
-  (setopt ediff-keep-variants nil)
-
-  ;; Inhibit `golden-ratio' functionality within `ediff' session.
-  (with-eval-after-load 'golden-ratio
-    (defun ediff-comparison-buffer-p ()
-      "Check whether this buffer belongs to `ediff' session."
-      ediff-this-buffer-ediff-sessions)
-
-    (push #'ediff-comparison-buffer-p golden-ratio-inhibit-functions)))
+  (setopt ediff-keep-variants nil))
 
 ;; Feature `smerge-mode' provides a lightweight alternative to Emerge and Ediff.
 (use-feature! smerge-mode
@@ -4933,9 +4875,6 @@ current theme. This will also disable line numbers and decorations."
                                                   my-cache-dir)
           transient-history-file (expand-file-name "transient/history.el"
                                                    my-cache-dir))
-
-  (with-eval-after-load 'golden-ratio
-    (push "*transient*" golden-ratio-exclude-buffer-names))
 
   ;; Allow using `q' to quit out of popups, in addition to `C-g'.
   (transient-bind-q-to-quit))
