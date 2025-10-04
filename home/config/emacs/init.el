@@ -299,7 +299,7 @@ NAME and ARGS are as in `use-package'."
   "x" `("text" . ,(make-sparse-keymap))
   "z" `("zoom" . ,(make-sparse-keymap))
   "p m" `("manage" . ,(make-sparse-keymap))
-  "t h" `("highlight" . ,(make-sparse-keymap)))
+  "t H" `("highlight" . ,(make-sparse-keymap)))
 
 (defconst my-leader-key "M-m"
   "The leader key.")
@@ -1305,6 +1305,12 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
    (set-char-table-range auto-fill-chars c t))
  "!-=+]};:'\",.?")
 
+;; Feature `hideshow' selectively display code and comment blocks.
+(use-feature! hideshow
+  :init
+
+  (set-leader-keys! "t h" #'hs-minor-mode))
+
 ;; Feature `outline' `outline' provides major and minor modes for collapsing
 ;; sections of a buffer into an outline-like format.
 (use-feature! outline
@@ -1986,8 +1992,8 @@ possibly new window."
 
 ;; Allow to disable font colouring when needed.
 (set-leader-keys!
-  "t h f" #'font-lock-mode
-  "t h F" #'global-font-lock-mode)
+  "t H f" #'font-lock-mode
+  "t H F" #'global-font-lock-mode)
 
 ;; Feature `hl-line' provides minor mode to highlight, on a suitable terminal,
 ;; the line on which point is. The global mode highlights the current line in
@@ -1999,8 +2005,8 @@ possibly new window."
   :config
 
   (set-leader-keys!
-    "t h l" #'hl-line-mode
-    "t h L" #'global-hl-line-mode)
+    "t H l" #'hl-line-mode
+    "t H L" #'global-hl-line-mode)
 
   (global-hl-line-mode +1))
 
@@ -2038,7 +2044,7 @@ will not refresh `column-number-mode."
 (use-package! highlight-indent-guides
   :init
 
-  (set-leader-keys! "t h i" #'highlight-indent-guides-mode)
+  (set-leader-keys! "t H i" #'highlight-indent-guides-mode)
 
   :config
 
@@ -2061,7 +2067,7 @@ will not refresh `column-number-mode."
 (use-package! highlight-numbers
   :init
 
-  (set-leader-keys! "t h n" #'highlight-numbers-mode)
+  (set-leader-keys! "t H n" #'highlight-numbers-mode)
 
   :hook (prog-mode-hook . highlight-numbers-mode))
 
@@ -2070,8 +2076,8 @@ will not refresh `column-number-mode."
   :init
 
   (set-leader-keys!
-    "t h p" #'highlight-parentheses-mode
-    "t h P" #'global-highlight-parentheses-mode)
+    "t H p" #'highlight-parentheses-mode
+    "t H P" #'global-highlight-parentheses-mode)
 
   :hook (prog-mode-hook . highlight-parentheses-mode)
   :config
@@ -2100,8 +2106,8 @@ will not refresh `column-number-mode."
     "s t n" #'hl-todo-next
     "s t o" #'hl-todo-occur
     "s t p" #'hl-todo-previous
-    "t h t" #'hl-todo-mode
-    "t h T" #'global-hl-todo-mode)
+    "t H t" #'hl-todo-mode
+    "t H T" #'global-hl-todo-mode)
 
   (global-hl-todo-mode +1))
 
@@ -2138,7 +2144,7 @@ will not refresh `column-number-mode."
 (use-package! rainbow-delimiters
   :init
 
-  (set-leader-keys! "t h r" #'rainbow-delimiters-mode)
+  (set-leader-keys! "t H r" #'rainbow-delimiters-mode)
 
   :hook (prog-mode-hook . rainbow-delimiters-mode))
 
