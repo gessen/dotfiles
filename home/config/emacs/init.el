@@ -5069,7 +5069,7 @@ possibly new window."
     "t n" #'display-line-numbers-mode
     "t N" #'global-display-line-numbers-mode)
 
-  :hook ((text-mode-hook prog-mode-hook conf-mode-hook)
+  :hook ((text-mode-hook prog-mode-hook conf-mode-hook dired-mode-hook)
          . display-line-numbers-mode))
 
 ;; Feature `display-fill-column-indicator' provides a minor mode interface for
