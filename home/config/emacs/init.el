@@ -3363,6 +3363,21 @@ defeats the purpose of `corfu-sort-function'."
 ;; commands, editing and various conversions as well as jumping to the
 ;; corresponding source file.
 (use-feature! diff-mode
+  :init
+
+  (set-leader-keys-for-major-mode! 'diff-mode
+    "a" #'diff-apply-hunk
+    "A" #'diff-apply-buffer
+    "e" #'diff-ediff-patch
+    "f" #'next-error-follow-minor-mode
+    "g" #'diff-refresh-hunk
+    "n" #'diff-restrict-view
+    "r" #'diff-reverse-direction
+    "s" #'diff-split-hunk
+    "t" #'diff-test-hunk
+    "u" #'diff-revert-and-kill-hunk
+    "w" #'diff-ignore-whitespace-hunk)
+
   :config
 
   ;; Set `diff-mode' buffers as read-only.
