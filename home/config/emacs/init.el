@@ -5070,7 +5070,12 @@ possibly new window."
     "t N" #'global-display-line-numbers-mode)
 
   :hook ((text-mode-hook prog-mode-hook conf-mode-hook dired-mode-hook)
-         . display-line-numbers-mode))
+         . display-line-numbers-mode)
+
+  :config
+
+  ;; Relative visual line numbers.
+  (setopt display-line-numbers-type 'visual))
 
 ;; Feature `display-fill-column-indicator' provides a minor mode interface for
 ;; `display-fill-column-indicator'.
