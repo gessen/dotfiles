@@ -408,16 +408,6 @@
                              :source "elpaca-menu-lock-file" :protocol https
                              :inherit t :depth treeless :ref
                              "ffc8a332893f26b43eb28ba56a714f875cc14183"))
- (ef-themes :source "elpaca-menu-lock-file" :recipe
-            (:package "ef-themes" :repo
-                      ("https://github.com/protesilaos/ef-themes" . "ef-themes")
-                      :files
-                      ("*"
-                       (:exclude ".git" "COPYING" "doclicense.texi"
-                                 "contrast-ratios.org"))
-                      :source "elpaca-menu-lock-file" :protocol https :inherit t
-                      :depth treeless :ref
-                      "b63e4caf95449bd7f9674db0e418f3d9ccf9e89f"))
  (eglot :source "elpaca-menu-lock-file" :recipe
         (:package "eglot" :repo
                   ("https://github.com/emacs-mirror/emacs" . "eglot") :branch
@@ -951,7 +941,7 @@
                                     "*-pkg.el"))
                          :source "elpaca-menu-lock-file" :protocol https
                          :inherit t :depth treeless :ref
-                         "161792b1b0b7bfacf742662738a5f9c080c946af"))
+                         "a391efc0f8e9f3ab4c932b403948d4b3ed1af040"))
  (multiple-cursors :source "elpaca-menu-lock-file" :recipe
                    (:package "multiple-cursors" :fetcher github :repo
                              "magnars/multiple-cursors.el" :files

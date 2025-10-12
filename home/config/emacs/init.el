@@ -5133,50 +5133,31 @@ possibly new window."
 during teardown."
   (push 'my--reset-cursor-color-in-terminal delete-terminal-functions))
 
-;; Make both function calls and variable references italic, both of these are
-;; not modified by `modus-themes' and `ef-themes'.
-(set-face-attribute 'font-lock-function-call-face nil :slant 'italic)
-(set-face-attribute 'font-lock-variable-use-face nil :slant 'italic)
-
 ;; Package `modus-themes' is a pack of themes that conform with the highest
 ;; standard for colour-contrast accessibility between background and foreground
 ;; values (WCAG AAA).
 (use-package! modus-themes
   :demand t
-  :bind ("<f9>" . modus-themes-select)
+  :bind (("<f9>"   . modus-themes-select)
+         ("M-<f9>" . modus-themes-rotate))
   :config
+
+  ;; Make function calls an references of both variables and properties italic,
+  ;; they are not modified by `modus-themes'.
+  (set-face-attribute 'font-lock-function-call-face nil :slant 'italic)
+  (set-face-attribute 'font-lock-property-use-face nil :slant 'italic)
+  (set-face-attribute 'font-lock-variable-use-face nil :slant 'italic)
 
   ;; Use italic font forms in more code constructs, like comments.
-  (setq modus-themes-italic-constructs t)
-
-  ;; Use a bold typographic weight for text in command prompts, e.g. minibuffer.
-  (setq modus-themes-prompts '(bold))
-
-  (setq modus-themes-common-palette-overrides
-        '(;; Make the mode line borderless
-          (border-mode-line-active unspecified)
-          (border-mode-line-inactive unspecified)
-          ;; Make matching delimiters produced by `show-paren-mode' much more
-          ;; prominent.
-          (bg-paren-match bg-magenta-intense)
-          (underline-paren-match fg-main)))
+  (setopt modus-themes-italic-constructs t)
 
   ;; Draw a line below matching characters in completions buffers.
-  (setq modus-themes-completions
-        '((matches . (underline)))))
+  (setopt modus-themes-completions '((matches . (underline))))
 
-;; Package `ef-themes' is a collection of light and dark themes whose goal is to
-;; provide colorful ("pretty") yet legible options for users who want something
-;; with a bit more flair than the `modus-themes'.
-(use-package! ef-themes
-  :demand t
-  :bind ("<f8>" . ef-themes-select)
-  :config
-
-  (setq ef-themes-common-palette-overrides
-        '(;; Make matching delimiters produced by `show-paren-mode' much more
-          ;; prominent.
-          (bg-paren bg-magenta-intense))))
+  (setopt modus-themes-common-palette-overrides
+          '(;; Make the mode line borderless
+            (border-mode-line-active unspecified)
+            (border-mode-line-inactive unspecified))))
 
 ;; Package `circadian' provides a theme-switching for Emacs based on daytime.
 (use-package! circadian
