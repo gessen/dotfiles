@@ -26,7 +26,5 @@ CompileFlags:
     -fstack-usage,
     -mabi=lp64,
     ]
-InlayHints:
-  BlockEnd: Yes
 Hover:
   ShowAKA: Yes
