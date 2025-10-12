@@ -1764,16 +1764,6 @@ column as mark, it add cursor to each line."
 
 ;;;; Navigation
 
-(defun backward-symbol (arg)
-  "Move point to the previous position that is the end of a symbol.
-A symbol is any sequence of characters that are in either the
-word constituent or symbol constituent syntax class.
-With prefix argument ARG, do it ARG times if positive, or move
-forwards ARG times if negative."
-  (interactive "^p")
-  (let ((arg (or arg 1)))
-    (forward-symbol (- arg))))
-
 (defun new-empty-buffer ()
   "Create a new buffer called \"untitled<n>\"."
   (interactive)
@@ -1796,9 +1786,6 @@ possibly new window."
     (if arg
         (switch-to-buffer-other-window (current-buffer))
       (switch-to-buffer (current-buffer)))))
-
-(keymap-global-set "C-M-f" #'forward-symbol)
-(keymap-global-set "C-M-b" #'backward-symbol)
 
 (set-leader-keys!
   "b m" #'switch-to-messages-buffer
