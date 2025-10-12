@@ -1373,19 +1373,19 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
 [_c_] camelCase  [_s_] snake__case [_k_] elisp-case
 [_p_] PascalCase [_u_] UPPER__CASE [_q_] quit
 "
-    ("c" string-inflection-lower-camelcase)
+    ("c" string-inflection-lower-camel-case)
     ("k" string-inflection-kebab-case)
-    ("p" string-inflection-camelcase)
-    ("s" string-inflection-underscore)
+    ("p" string-inflection-camel-case)
+    ("s" string-inflection-snake-case)
     ("u" string-inflection-upcase)
     ("q" nil :exit t)
     ("C-g" nil :exit t))
 
   (set-leader-keys!
-    "x c" (cons "inflection-camelcase" #'string-inflection-lower-camelcase)
+    "x c" (cons "inflection-camelcase" #'string-inflection-lower-camel-case)
     "x k" (cons "inflection-kebabcase" #'string-inflection-kebab-case)
-    "x p" (cons "inflection-pascalcase" #'string-inflection-camelcase)
-    "x s" (cons "inflection-snakecase" #'string-inflection-underscore)
+    "x p" (cons "inflection-pascalcase" #'string-inflection-camel-case)
+    "x s" (cons "inflection-snakecase" #'string-inflection-snake-case)
     "x u" (cons "inflection-uppercase" #'string-inflection-upcase)
     "x x" (cons "inflections" #'hydra-string-inflection/body))
 
