@@ -4555,6 +4555,13 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
 (use-feature! log-edit
   :config
 
+  (defhook! my--log-edit-mode-setup ()
+    log-edit-mode-hook
+    "Set custom settings for `log-edit-mode'."
+    (setq-local fill-column 72)
+    (auto-fill-mode +1)
+    (display-fill-column-indicator-mode +1))
+
   ;; Remove unnecessary hook functions.
   (setopt log-edit-hook '(log-edit-insert-message-template)))
 
@@ -4748,6 +4755,7 @@ that file in your browser at the visited revision."
       "Set custom settings for `git-commit-mode'."
       (setq-local fill-column 72
                   column-enforce-column fill-column)
+      (auto-fill-mode +1)
       (display-fill-column-indicator-mode +1)
       (column-enforce-mode +1))
 
