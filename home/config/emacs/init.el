@@ -3050,7 +3050,7 @@ completing-read prompter."
 ;; Package `consult-xref-stack' navigates the Xref stack with Consult.
 (use-package! consult-xref-stack
   :ensure (:host github :repo "brett-lempereur/consult-xref-stack")
-  :bind ("C-," . #'consult-xref-stack-backward))
+  :bind ("C-," . #'consult-xref-stack))
 
 ;; Package `dumb-jump' provides a mechanism to jump to the definitions of
 ;; functions, variables, etc. in a variety of programming languages. The
@@ -3970,7 +3970,8 @@ Return nil if there is no name or if NODE is not a defun node."
     "s r" #'eglot-reconnect
 
     ;; Toggle
-    "t i" #'eglot-inlay-hints-mode)
+    "t i" #'eglot-inlay-hints-mode
+    "t s" #'eglot-semantic-tokens-mode)
 
   ;; Tree-sitter produces a better Imenu.
   (setq eglot-stay-out-of '(imenu))
@@ -4007,20 +4008,6 @@ Return nil if there is no name or if NODE is not a defun node."
   (setopt eglot-booster-io-only t)
 
   (eglot-booster-mode +1))
-
-;; Package `eglot-semantic-tokens' provides support for semantic highlighting.
-(use-package! eglot-semantic-tokens
-  :ensure (:host codeberg :repo "eownerdead/eglot-semantic-tokens")
-  :demand t
-  :after eglot
-  :hook (eglot-managed-mode-hook . eglot--semantic-tokens-mode)
-  :config
-
-  ;; Enable semantic tokens.
-  (setopt eglot-enable-semantic-tokens t)
-
-  (set-leader-keys-for-minor-mode! 'eglot--managed-mode
-    "t s" (cons "eglot-semantic-tokens-mode" #'eglot--semantic-tokens-mode)))
 
 ;; Package `eglot-x' adds support for some of Language Server Protocol
 ;; extensions.
