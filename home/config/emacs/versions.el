@@ -326,19 +326,6 @@
                               "elpaca-menu-lock-file" :protocol https :inherit t
                               :depth treeless :ref
                               "de9336f4b47ef901799fe95315fa080fa6d77b48"))
- (dired-hist :source "elpaca-menu-lock-file" :recipe
-             (:package "dired-hist" :fetcher github :repo "Anoncheg1/dired-hist"
-                       :files
-                       ("*.el" "*.el.in" "dir" "*.info" "*.texi" "*.texinfo"
-                        "doc/dir" "doc/*.info" "doc/*.texi" "doc/*.texinfo"
-                        "lisp/*.el" "docs/dir" "docs/*.info" "docs/*.texi"
-                        "docs/*.texinfo"
-                        (:exclude ".dir-locals.el" "test.el" "tests.el"
-                                  "*-test.el" "*-tests.el" "LICENSE" "README*"
-                                  "*-pkg.el"))
-                       :source "elpaca-menu-lock-file" :protocol https :inherit
-                       t :depth treeless :ref
-                       "bcbfa60e2de0d86a38740d72bea7e4f25ccc35c8"))
  (dired-subtree :source "elpaca-menu-lock-file" :recipe
                 (:package "dired-subtree" :fetcher github :repo
                           "Fuco1/dired-hacks" :files ("dired-subtree.el")
