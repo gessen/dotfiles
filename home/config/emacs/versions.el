@@ -1235,15 +1235,6 @@
                   :source "elpaca-menu-lock-file" :protocol https :inherit t
                   :depth treeless :ref
                   "1f838a07b88380b654ef4ae759e73a720db6a166"))
- (spacious-padding :source "elpaca-menu-lock-file" :recipe
-                   (:package "spacious-padding" :repo
-                             ("https://github.com/protesilaos/spacious-padding"
-                              . "spacious-padding")
-                             :files
-                             ("*" (:exclude ".git" "COPYING" "doclicense.texi"))
-                             :source "elpaca-menu-lock-file" :protocol https
-                             :inherit t :depth treeless :ref
-                             "342aeabe0a7e6e0cab75c8f078cd8569f8c3fccb"))
  (ssh-config-mode :source "elpaca-menu-lock-file" :recipe
                   (:package "ssh-config-mode" :fetcher github :repo
                             "peterhoeg/ssh-config-mode-el" :files
