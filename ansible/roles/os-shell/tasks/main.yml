@@ -6,7 +6,7 @@
 
 - name: Set default shell as {{ login_shell }}
   user:
-    name: '{{ ansible_user_id }}'
+    name: '{{ ansible_facts["user_id"] }}'
     shell: '{{ login_shell }}'
   when: login_shell_installed.stat.exists
   become: yes

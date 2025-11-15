@@ -1,10 +1,10 @@
 ---
-home_dir: '{{ ansible_env.HOME }}'
+home_dir: '{{ ansible_facts["env"]["HOME"] }}'
 dotfiles_dir: '{{ home_dir }}/.dotfiles'
 
 dotfiles_src: '{{ dotfiles_dir }}/home'
 dotfiles_dst: '{{ home_dir }}'
-dotfiles_distro_src: '{{ dotfiles_src }}/{{ ansible_os_family | lower }}'
+dotfiles_distro_src: '{{ dotfiles_src }}/{{ ansible_facts["distribution"] | lower }}'
 
 with_packages: True
 with_rust: True

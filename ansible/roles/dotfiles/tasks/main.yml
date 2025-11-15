@@ -31,18 +31,18 @@
 
   when: dotdirs is defined
 
-- name: 'Include distribution specific variables for {{ ansible_distribution }}'
+- name: 'Include distribution specific variables for {{ ansible_facts["distribution"] }}'
   include_vars: '{{ var_file }}'
   with_first_found:
       - files:
-          - "vars/{{ ansible_distribution | lower }}.yml"
-          - "vars/{{ ansible_os_family | lower }}.yml"
+          - 'vars/{{ ansible_facts["distribution"] | lower }}.yml'
+          - 'vars/{{ ansible_facts["os_family"] | lower }}.yml'
         skip: true
   loop_control:
     loop_var: var_file
 
 - block:
-  - name: 'Create folders for config files for {{ ansible_distribution }}'
+  - name: 'Create folders for config files for {{ ansible_facts["distribution"] }}'
     file:
       path: '{{ (dotfiles_dst + "/." + dotfile) | dirname }}'
       state: directory
@@ -50,7 +50,7 @@
     loop_control:
       loop_var: dotfile
 
-  - name: 'Symlink config files for {{ ansible_distribution }}'
+  - name: 'Symlink config files for {{ ansible_facts["distribution"] }}'
     file:
       path: '{{ dotfiles_dst }}/.{{ dotfile }}'
       src: '{{ dotfiles_distro_src }}/{{ dotfile }}'
@@ -63,7 +63,7 @@
   when: dotfiles_distro is defined
 
 - block:
-  - name: 'Create folders for extra config files for {{ ansible_distribution }}'
+  - name: 'Create folders for extra config files for {{ ansible_facts["distribution"] }}'
     file:
       path: '{{ (dotfiles_dst + "/." + dotfile.src) | dirname }}'
       state: directory
@@ -71,7 +71,7 @@
     loop_control:
       loop_var: dotfile
 
-  - name: 'Symlink config files for {{ ansible_distribution }}'
+  - name: 'Symlink config files for {{ ansible_facts["distribution"] }}'
     file:
       path: '{{ dotfiles_dst }}/.{{ dotfile.src }}'
       src: '{{ dotfile.target }}'
