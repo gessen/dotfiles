@@ -25,6 +25,7 @@ dotfiles:
   - config/mpv/input.conf
   - config/mpv/mpv.conf
   - config/ripgrep/config
+  - config/rustfmt/rustfmt.toml
   - config/sccache/config
   - config/yazi/yazi.toml
   - local/share/cargo/config.toml
