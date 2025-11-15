@@ -5117,6 +5117,12 @@ during teardown."
   (set-face-attribute 'font-lock-property-use-face nil :slant 'italic)
   (set-face-attribute 'font-lock-variable-use-face nil :slant 'italic)
 
+  ;; Use only main themes and their tinted versions.
+  (setopt modus-themes-to-rotate '(modus-operandi
+                                   modus-operandi-tinted
+                                   modus-vivendi
+                                   modus-vivendi-tinted))
+
   ;; Use italic font forms in more code constructs, like comments.
   (setopt modus-themes-italic-constructs t)
 
