@@ -5111,11 +5111,19 @@ during teardown."
          ("M-<f9>" . modus-themes-rotate))
   :config
 
-  ;; Make function calls an references of both variables and properties italic,
-  ;; they are not modified by `modus-themes'.
-  (set-face-attribute 'font-lock-function-call-face nil :slant 'italic)
+  ;; Make references of properties italic, they are not modified by
+  ;; `modus-themes'.
   (set-face-attribute 'font-lock-property-use-face nil :slant 'italic)
-  (set-face-attribute 'font-lock-variable-use-face nil :slant 'italic)
+
+  (defun my--modus-custom-faces (theme &rest _)
+    "Custom faces that use Modus colors."
+    (modus-themes-with-colors
+      (custom-set-faces
+       `(eglot-highlight-symbol-face ((,c :background ,bg-cyan-subtle)))
+       ;; Make function calls and references of variables italic.
+       `(font-lock-function-call-face ((,c :slant italic)))
+       `(font-lock-variable-use-face ((,c :slant italic))))))
+  (add-hook 'enable-theme-functions #'my--modus-custom-faces)
 
   ;; Use only main themes and their tinted versions.
   (setopt modus-themes-to-rotate '(modus-operandi
@@ -5123,8 +5131,9 @@ during teardown."
                                    modus-vivendi
                                    modus-vivendi-tinted))
 
-  ;; Use italic font forms in more code constructs, like comments.
-  (setopt modus-themes-italic-constructs t)
+  ;; Use italic and bold font forms in more constructs.
+  (setopt modus-themes-italic-constructs t
+          modus-themes-bold-constructs t)
 
   ;; Draw a line below matching characters in completions buffers.
   (setopt modus-themes-completions '((matches . (underline))))
