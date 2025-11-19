@@ -1,25 +1,76 @@
-if status is-login
-    # Set XDG dir vars locally
-    set -l xdg_config_home $HOME/.config
-    set -l xdg_cache_home $HOME/.cache
-    set -l xdg_data_home $HOME/.local/share
-    set -l xdg_state_home $HOME/.local/state
+## Noninteractive
 
-    # Input Method framework.
-    set -gx XMODIFIERS im=fcit
+# Create cache directory
+set -l __fish_cache_dir $HOME/.cache/fish
+test -d $__fish_cache_dir; or mkdir -p $__fish_cache_dir
 
-    # Partial XDG support that needs some help
-    set -gx ANSIBLE_HOME $xdg_config_home/ansible
-    set -gx CARGO_HOME $xdg_data_home/cargo
-    set -gx GNUPGHOME $xdg_data_home/gnupg
-    set -gx GTK2_RC_FILES $xdg_config_home/gtk-2.0/settings.ini
-    set -gx RIPGREP_CONFIG_PATH $xdg_config_home/ripgrep/config
-    set -gx RUSTUP_HOME $xdg_data_home/rustup
+### XDG
 
-    if ! status is-interactive
-        return
-    end
+# Set XDG dir vars locally
+set -l xdg_config_home $HOME/.config
+set -l xdg_cache_home $HOME/.cache
+set -l xdg_data_home $HOME/.local/share
+set -l xdg_state_home $HOME/.local/state
+
+# Partial XDG support
+set -gx ANSIBLE_HOME $xdg_config_home/ansible
+set -gx CARGO_HOME $xdg_data_home/cargo
+set -gx GNUPGHOME $xdg_data_home/gnupg
+set -gx GTK2_RC_FILES $xdg_config_home/gtk-2.0/settings.ini
+set -gx RIPGREP_CONFIG_PATH $xdg_config_home/ripgrep/config
+set -gx RUSTUP_HOME $xdg_data_home/rustup
+
+### Editor
+
+# Set both EDITOR and VISUAL to emacsclient with autostarted server
+set -gx EDITOR emacsclient --tty
+set -gx VISUAL $EDITOR
+
+# emacsclient starts emacs in daemon mode if it can't connect to it
+set -gx ALTERNATE_EDITOR
+
+### Bat
+
+if type -q bat
+    # Use bat as MANPAGER
+    set -gx MANPAGER "sh -c 'col -bx | bat -l man -p'"
+    set -gx MANROFFOPT -c
 end
+
+### CMake
+
+# By default, use nproc number of threads
+set -gx CMAKE_BUILD_PARALLEL_LEVEL (nproc)
+
+# Generates compile_commands.json by default
+set -gx CMAKE_EXPORT_COMPILE_COMMANDS ON
+
+# Use Ninja by default
+set -gx CMAKE_GENERATOR Ninja
+
+# Use sccache by default
+set -gx CMAKE_C_COMPILER_LAUNCHER sccache
+set -gx CMAKE_CXX_COMPILER_LAUNCHER sccache
+
+# Output should be logged for failed tests
+set -gx CTEST_OUTPUT_ON_FAILURE ON
+
+# Report CTest progress by repeatedly updating the same line
+set -gx CTEST_PROGRESS_OUTPUT ON
+
+### Input Method framework
+set -gx XMODIFIERS im=fcit
+
+### Ninja
+
+# Include the current load to the ninja status
+set -gx NINJA_STATUS "[%s/%f/%t] (j%r/%es/%Es/%P) "
+
+### Early exit
+
+status is-interactive || exit
+
+## Interactive
 
 # Help Emacs
 if test "$TERM" = dumb
@@ -29,20 +80,7 @@ end
 # Disable greeting
 set fish_greeting
 
-# Create cache directory
-set -l __fish_cache_dir $HOME/.cache/fish
-test -d $__fish_cache_dir; or mkdir -p $__fish_cache_dir
-
-# Automatic SSH agent
-if ! pgrep -u "$USER" ssh-agent >/dev/null
-    ssh-agent -c | sed "s|^echo|#echo|" >"/tmp/ssh-agent.fish"
-end
-
-if test -z "$SSH_AGENT_PID"
-    source "/tmp/ssh-agent.fish"
-end
-
-## Command line
+### Command line
 
 function copy-prev-shell-word -d "Copy previous word"
     set --local cmd (commandline --tokens-expanded)
@@ -69,19 +107,19 @@ bind alt-shift-down history-prefix-search-forward
 # Expand current token with [C-M-e]
 bind ctrl-alt-e 'commandline -rt -- (commandline -xt | string escape | string join " ")'
 
-## Files and directories
+### Files and directories
 
 function bak -d "Backup files"
     for f in $argv
-        if not test -e "$f"
+        if not test -e $f
             echo "No such file or directory: $f"
             continue
         end
         set -f f (string replace --regex "/+\$" "" $f)
-        if test -d "$f"
-            rsync --archive --compress "$f/" "$f".bk
+        if test -d $f
+            rsync --archive --compress $f/ $f.bk
         else
-            rsync --archive --compress "$f" "$f".bk
+            rsync --archive --compress $f $f.bk
         end
     end
 end
@@ -95,7 +133,7 @@ end
 abbr -a df df --human-readable
 abbr -a free free --human
 
-## Paging
+### Paging
 
 # Automatically exit the second time it reaches end-of-file
 set -g LESS --quit-at-eof
@@ -142,7 +180,7 @@ set -g LESS --mouse --wheel-lines=3 $LESS
 
 set -gx LESS $LESS
 
-## Editors
+### Editor
 
 function fe -d "Open selected files with EDITOR or xdg-open with fd+fzf"
     set -l out (fd --type file --color=always $argv[1] | \
@@ -150,7 +188,7 @@ function fe -d "Open selected files with EDITOR or xdg-open with fd+fzf"
         --expect=ctrl-o,ctrl-e)
     set -l key $out[1]
     set -l files $out[2..-1]
-    if test -z "$files"
+    if test -z $files
         return
     end
     if test $key = ctrl-o
@@ -196,13 +234,6 @@ function egp -d "Open files with EDITOR with fg+fzf with preview"
     $EDITOR $files
 end
 
-# Set both EDITOR and VISUAL to emacsclient with autostarted server
-set -gx EDITOR emacsclient --tty
-set -gx VISUAL $EDITOR
-
-# emacsclient starts emacs in daemon mode if it can't connect to it
-set -gx ALTERNATE_EDITOR
-
 abbr -a ec emacsclient --tty
 abbr -a ecg emacsclient --create-frame --no-wait
 abbr -a mg emacsclient --tty --eval '"(magit-status)"'
@@ -212,12 +243,12 @@ abbr -a e emacs
 
 abbr -a se sudoedit
 
-## History
+### History
 
 abbr -a hm history merge
 abbr -a hcs history clear-session
 
-## Git
+### Git
 
 function git-master-branch -d "Print Git master branch"
     git rev-parse --git-dir &>/dev/null; or return
@@ -386,6 +417,8 @@ abbr -a grm git rm
 abbr -a grmc git rm --cached
 
 abbr -a gsh git show
+abbr -a gshs git show --stat
+abbr -a gshn git show --no-patch
 
 abbr -a gsta git stash push
 abbr -a gstaa git stash apply
@@ -426,13 +459,9 @@ abbr -a gwip git-wip
 abbr -a gunwip git-unwip
 abbr -a gunwipall git-unwip-all
 
-## Bat
+### Bat
 
 if type -q bat
-    # Use bat as MANPAGER
-    set -gx MANPAGER "sh -c 'col -bx | bat -l man -p'"
-    set -gx MANROFFOPT -c
-
     # Use bat instead of cat by default
     abbr -a cat bat
 
@@ -442,34 +471,13 @@ if type -q bat
     abbr -a --position anywhere -- --help "--help 2>&1 | bat --plain --language help"
 end
 
-## CMake
-
-# By default, use nproc number of threads
-set -gx CMAKE_BUILD_PARALLEL_LEVEL (nproc)
-
-# Generates compile_commands.json by default
-set -gx CMAKE_EXPORT_COMPILE_COMMANDS ON
-
-# Use Ninja by default
-set -gx CMAKE_GENERATOR Ninja
-
-# Use sccache by default
-set -gx CMAKE_C_COMPILER_LAUNCHER sccache
-set -gx CMAKE_CXX_COMPILER_LAUNCHER sccache
-
-# Output should be logged for failed tests
-set -gx CTEST_OUTPUT_ON_FAILURE ON
-
-# Report CTest progress by repeatedly updating the same line
-set -gx CTEST_PROGRESS_OUTPUT ON
-
-## Dua
+### Dua
 
 if type -q dua
     abbr -a du dua
 end
 
-## Fzf
+### Fzf
 
 # Set fd as the default source for fzf
 set -gx FZF_DEFAULT_COMMAND "fd \
@@ -507,7 +515,7 @@ if type -q fzf
     bind --erase ctrl-r
 end
 
-## Atuin
+### Atuin
 
 if type -q atuin
     set -l atuin_init $__fish_cache_dir/atuin-init.fish
@@ -517,7 +525,7 @@ if type -q atuin
     source $atuin_init
 end
 
-## Eza
+### Eza
 
 if type -q eza
     alias ls "eza --group-directories-first --time-style relative --icons always"
@@ -530,7 +538,7 @@ else
     abbr -a la ls -l --almost-all
 end
 
-## Kitty
+### Kitty
 
 if type -q kitty
     # Ensures that terminfo is uploaded
@@ -540,17 +548,12 @@ if type -q kitty
     abbr -a transfer kitty +kitten transfer
 end
 
-## Ninja
-
-# Include the current load to the ninja status
-set -gx NINJA_STATUS "[%s/%f/%t] (j%r/%es/%Es/%P) "
-
-## Ripgrep
+### Ripgrep
 
 # Grep with syntax highlighting
 abbr -a rgd --set-cursor rg --json --context=3 % '|' delta
 
-## Rsync
+### Rsync
 
 set -l rsync_cp rsync --archive --compress -hhh --progress
 abbr -a cpv $rsync_cp
@@ -559,27 +562,36 @@ abbr -a rsync-mv $rsync_cp --remove-source-files
 abbr -a rsync-update $rsync_cp --update
 abbr -a rsync-sync $rsync_cp --update --delete
 
-## Serie
+### Serie
 
 if type -q serie
     bind alt-g 'serie -g single -o topo'
 end
 
-## SSH
+### SSH
+
+# Start SSH agent
+if ! pgrep -u $USER ssh-agent >/dev/null
+    ssh-agent -c | sed "s|^echo|#echo|" >/tmp/ssh-agent.fish
+end
+
+if test -z $SSH_AGENT_PID
+    source "/tmp/ssh-agent.fish"
+end
 
 # Copy current terminfo file to the given host
 abbr -a ssh-copy-terminfo --set-cursor \
-    infocmp -a '|' ssh % tic -x -o '~/.terminfo' /dev/stdin
+    infocmp -a '|' ssh % tic -x -o ~/.terminfo /dev/stdin
 
-## Yazi
+### Yazi
 
 function y --wraps yazi -d "Start Yazi but change CWD after exit"
     set tmp (mktemp -t "yazi-cwd.XXXXXX")
     yazi $argv --cwd-file="$tmp"
-    if set cwd (command cat -- "$tmp"); and test -n "$cwd"; and test "$cwd" != "$PWD"
-        cd -- "$cwd"
+    if set cwd (command cat -- $tmp); and test -n "$cwd"; and test $cwd != $PWD
+        builtin cd -- $cwd
     end
-    command rm -f -- "$tmp"
+    command rm -f -- $tmp
     commandline --function repaint
 end
 
@@ -587,7 +599,7 @@ if type -q yazi
     bind ctrl-o y
 end
 
-## Zoxide
+### Zoxide
 
 if type -q zoxide
     set -l zoxide_init $__fish_cache_dir/zoxide-init.fish
@@ -602,3 +614,7 @@ end
 set hydro_color_pwd $fish_color_cwd
 set hydro_color_git brblue
 set fish_prompt_pwd_dir_length 2
+
+# Local Variables:
+# outline-regexp: "##+ "
+# End:
