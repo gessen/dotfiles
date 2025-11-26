@@ -240,6 +240,7 @@ abbr -a mg emacsclient --tty --eval '"(magit-status)"'
 abbr -a mgg emacsclient --create-frame --no-wait --eval '"(magit-status)"'
 
 abbr -a e emacs
+abbr -a et emacs -nw
 
 abbr -a se sudoedit
 
