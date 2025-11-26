@@ -39,6 +39,8 @@
 	showforcedupdates = true
 	parallel = 0
 	writecommitgraph = true
+[format]
+	pretty = fuller
 [init]
 	defaultbranch = master
 [interactive]
