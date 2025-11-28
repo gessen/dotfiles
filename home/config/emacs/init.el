@@ -5255,8 +5255,10 @@ during teardown."
           ("C-<next>"  . #'tab-line-switch-to-next-tab))
   :config
 
-  ;; Group buffers by mode name.
+  ;; Group buffers by projects.
   (setopt tab-line-tabs-function #'tab-line-tabs-buffer-groups)
+  (setopt tab-line-tabs-buffer-group-function
+          #'tab-line-tabs-buffer-group-by-project)
 
   ;; Upon closing a tab kill the tab's buffer.
   (setopt tab-line-close-tab-function 'kill-buffer)
