@@ -25,7 +25,7 @@
                             (user-size . t)
                             (width . 110)
                             (height . 36)
-                            (font . "monospace-13")))
+                            (font . "monospace-11")))
 
 ;; Set initial frame to be maximized
 ; (setq initial-frame-alist '((fullscreen . maximized)))
