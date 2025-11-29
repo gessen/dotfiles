@@ -1,3 +1,6 @@
+// Increases font cache size to improve performance on text-heavy websites
+user_pref("gfx.content.skia-font-cache-size", 32);
+
 // GFX rendering
 
 // Enable WebRender plus additional features
@@ -6,8 +9,9 @@ user_pref("gfx.webrender.compositor", true);
 user_pref("gfx.webrender.precache-shaders", true);
 
 // Use GPU-accelerated Canvas2D with more memory
-user_pref("gfx.canvas.accelerated.cache-size", 512);
-user_pref("gfx.content.skia-font-cache-size", 20);
+user_pref("gfx.canvas.accelerated.cache-items", 32768);
+user_pref("gfx.canvas.accelerated.cache-size", 4096);
+user_pref("webgl.max-size", 16384);
 
 // Enable hardware acceleration (Linux only)
 user_pref("media.ffmpeg.vaapi.enabled", true);
@@ -20,12 +24,16 @@ user_pref("browser.cache.disk.enable", false);
 // Media cache
 
 // Increase the size of media memory cache
-user_pref("media.memory_cache_max_size", 65536);
+user_pref("media.memory_cache_max_size", 262144);
+user_pref("media.memory_caches_combined_limit_kb", 1048576);
+user_pref("media.cache_readahead_limit", 600);
+user_pref("media.cache_resume_threshold", 300);
 
 // Image cache
 
 // Increase the chunk size for calls to the image decoders
-user_pref("image.mem.decode_bytes_at_a_time", 32768);
+user_pref("image.cache.size", 10485760);
+user_pref("image.mem.decode_bytes_at_a_time", 65536);
 
 // Network
 
@@ -33,15 +41,32 @@ user_pref("image.mem.decode_bytes_at_a_time", 32768);
 user_pref("network.http.max-connections", 1800);
 user_pref("network.http.max-persistent-connections-per-server", 10);
 user_pref("network.http.max-urgent-start-excessive-connections-per-host", 5);
+user_pref("network.http.request.max-start-delay", 5);
+
+// Do not throttle requests
+user_pref("network.http.pacing.requests.enabled", false);
+
+// Increase DNS cache
+user_pref("network.dnsCacheEntries", 10000);
+user_pref("network.dnsCacheExpiration", 3600)
 
 // Increase TLS token caching
 user_pref("network.ssl_tokens_cache_capacity", 10240);
 
 // Speculative loading
 
+// Reduce any potential speculative connections when hovering over new tab
+// thumbnails or starting a URL bar search
+user_pref("network.http.speculative-parallel-limit", 0);
+
 // Disable DNS prefetching for HTMLLinkElement <link rel="dns-prefetch">
 user_pref("network.dns.disablePrefetch", true);
 user_pref("network.dns.disablePrefetchFromHTTPS", true);
+
+// Disable preconnection to the autocomplete URL in the address bar, bookmarks
+// and history
+user_pref("browser.urlbar.speculativeConnect.enabled", false);
+user_pref("browser.places.speculativeConnect.enabled", false);
 
 // Disable DNS prefetching for HTMLAnchorElement (speculative DNS)
 user_pref("dom.prefetch_dns_for_anchor_http_document", false);
@@ -53,14 +78,6 @@ user_pref("network.prefetch-next", false);
 // Disable Network Predictor that trains and uses Firefox's algorithm to preload
 // page resource by tracking past page resources
 user_pref("network.predictor.enabled", false);
-
-// Experimental
-
-// Enable CSS Masonry Layout
-user_pref("layout.css.grid-template-masonry-value.enabled", true);
-
-// Enable HTML Sanitizer API
-user_pref("dom.security.sanitizer.enabled", true);
 
 // Tracking protection
 
@@ -86,12 +103,11 @@ user_pref("privacy.globalprivacycontrol.enabled", true);
 // Disable OCSP fetching to confirm current validity of certificates
 user_pref("security.OCSP.enabled", 0);
 
-// Enable CRLite which covers valid certs, and doesn't fall back to OCSP in
-// mode 2.
-user_pref("security.pki.crlite_mode", 2);
-
 // HTTP Public Key Pinning (HPKP)
 user_pref("security.cert_pinning.enforcement_level", 2);
+
+// Disable CSP Level 2 Reporting
+user_pref("security.csp.reporting.enabled", false);
 
 // SSL and TLS
 
@@ -135,9 +151,6 @@ user_pref("browser.search.suggest.enabled", false);
 // Enforce Punycode for Internationalized Domain Names to eliminate possible
 // spoofing
 user_pref("network.IDN_show_punycode", true);
-
-// Enable Text Fragments
-user_pref("dom.text_fragments.create_text_fragment.enabled", true);
 
 // Enable HTTPS-only everywhere
 user_pref("dom.security.https_only_mode", true);
@@ -207,6 +220,9 @@ user_pref("geo.provider.network.url", "https://beacondb.net/v1/geolocate");
 // Prevent accessibility services from accessing your browser
 user_pref("accessibility.force_disabled", 1);
 
+// Disable metadata caching for installed add-ons
+user_pref("extensions.getAddons.cache.enabled", false);
+
 // Telemetry
 
 // Disable new data submission
@@ -250,15 +266,6 @@ user_pref("app.normandy.api_url", "");
 user_pref("breakpad.reportURL", "");
 user_pref("browser.tabs.crashReporting.sendReport", false);
 
-// Detection
-
-// Disable Captive Portal detection
-user_pref("captivedetect.canonicalURL", "");
-user_pref("network.captive-portal-service.enabled", false);
-
-// Disable Network Connectivity checks
-user_pref("network.connectivity-service.enabled", false);
-
 // Mozilla UI
 
 // Disable about:addons' recommendations pane (uses Google Analytics)
@@ -292,6 +299,15 @@ user_pref("browser.privateWindowSeparation.enabled", false);
 // picker insted of GTK one
 user_pref("widget.use-xdg-desktop-portal.file-picker", 1);
 
+// AI
+
+// Disable AI features
+user_pref("browser.ml.enable", false);
+user_pref("browser.ml.chat.enabled", false);
+user_pref("browser.ml.chat.menu", false);
+user_pref("browser.ml.linkPreview.enabled", false);
+user_pref("browser.tabs.groups.smart.enabled", false);
+
 // Translations
 
 // Do not offer translations for Polish language
@@ -315,9 +331,6 @@ user_pref("gfx.use_text_smoothing_setting", true);
 
 // URL bar
 
-// Suggest additional options
-user_pref("browser.urlbar.unitConversion.enabled", true);
-
 // Disable urlbar trending search suggestions
 user_pref("browser.urlbar.trending.featureGate", false);
 
@@ -333,6 +346,8 @@ user_pref("browser.startup.page", 3);
 user_pref("browser.newtabpage.activity-stream.feeds.topsites", false);
 
 // Disable Sponsored Shortcuts from Home page
+user_pref("browser.newtabpage.activity-stream.showSponsored", false);
+user_pref("browser.newtabpage.activity-stream.showSponsoredCheckboxes", false);
 user_pref("browser.newtabpage.activity-stream.showSponsoredTopSites", false);
 
 // Disable recent pages, bookmarks, downloads and Pocket
@@ -352,14 +367,6 @@ user_pref("browser.newtabpage.activity-stream.default.sites", "");
 
 // Always show bookmarks
 user_pref("browser.toolbars.bookmarks.visibility", "always");
-
-// Pocket
-
-// Disable built-in Pocket extension
-user_pref("extensions.pocket.api"," ");
-user_pref("extensions.pocket.enabled", false);
-user_pref("extensions.pocket.oAuthConsumerKey", " ");
-user_pref("extensions.pocket.showHome", false);
 
 // Downloads
 
