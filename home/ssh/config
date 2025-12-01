@@ -1,3 +1,5 @@
+Include conf.d/*.conf
+
 Host *
     Compression yes
     ControlMaster auto
