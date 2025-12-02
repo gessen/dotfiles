@@ -3986,6 +3986,9 @@ Return nil if there is no name or if NODE is not a defun node."
   ;; Activate Eglot in referenced non-project files.
   (setopt eglot-extend-to-xref t)
 
+  ;; Use *Messages* buffer to show progress.
+  (setopt eglot-report-progress 'messages)
+
   ;; Do not hint about code actions at point.
   (setopt eglot-code-action-indications nil)
 
