@@ -5253,9 +5253,6 @@ during teardown."
 ;; deletes it. The mouse wheel on the tab line scrolls the tabs horizontally.
 (use-feature! tab-line
   :demand t
-  :bind ( :map tab-line-mode-map
-          ("C-<prior>" . #'tab-line-switch-to-prev-tab)
-          ("C-<next>"  . #'tab-line-switch-to-next-tab))
   :config
 
   ;; Group buffers by projects.
