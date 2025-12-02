@@ -1,2 +1,5 @@
+[cache.disk]
+size = 53687091200
+
 [cache.disk.preprocessor_cache_mode]
 use_preprocessor_cache_mode = true
