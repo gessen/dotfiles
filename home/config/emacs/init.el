@@ -3264,11 +3264,8 @@ defeats the purpose of `corfu-sort-function'."
 ;; Package `flymake' is a minor Emacs mode performing on-the-fly syntax checks.
 ;; Flymake collects diagnostic information for multiple sources, called
 ;; backends, and visually annotates the relevant portions in the buffer.
-(use-feature! flymake
+(use-package! flymake
   :demand t
-  :bind ( :map flymake-project-diagnostics-mode-map
-          ("RET" . #'flymake-goto-diagnostic)
-          ("SPC" . #'flymake-show-diagnostic))
   :config
 
   (defvar-keymap flymake-repeat-map
@@ -3279,6 +3276,14 @@ defeats the purpose of `corfu-sort-function'."
 
   ;; Shorten Flymake lighter.
   (setopt flymake-mode-line-lighter "")
+
+  ;; Use full diagnostic text rather than truncated output.
+  (setopt flymake-diagnostic-format-alist
+          '((:help-echo . (origin code message))
+            (:eol . (oneliner))
+            (:eldoc . (origin code message))
+            (:eldoc-echo . (origin code message))
+            (t . (origin code message))))
 
   (set-leader-keys!
     "e ?" #'flymake-running-backends
@@ -4024,6 +4029,12 @@ Return nil if there is no name or if NODE is not a defun node."
   ;; active LSP servers.
   (eglot-x-setup))
 
+;; Package `jsonrpc' implements the JSONRPC 2.0 specification. As the name
+;; suggests, JSONRPC is a generic Remote Procedure Call protocol designed around
+;; JSON objects. This library was originally extracted from Eglot, an Emacs
+;; LSP client.
+(use-package! jsonrpc)
+
 ;;; Introspection
 ;;;; Help
 
@@ -4699,10 +4710,10 @@ that file in your browser at the visited revision."
   (setopt diff-hl-disable-on-remote t)
 
   ;; Inline popup is shown over the hunk, hiding it.
-  (setopt diff-hl-show-hunk-inline-popup-hide-hunk t)
+  (setopt diff-hl-show-hunk-inline-hide-hunk t)
 
   ;; Show both deleted and new lines.
-  (setopt diff-hl-show-hunk-inline-popup-smart-lines nil)
+  (setopt diff-hl-show-hunk-inline-smart-lines nil)
 
   ;; Toggle displaying `diff-hl-mode' highlights on the margin.
   (diff-hl-margin-mode +1)
