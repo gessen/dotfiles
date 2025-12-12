@@ -1147,6 +1147,13 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
 ;; the remote host, whereas tramp.el uses a combination of rsh and rcp or other
 ;; work-alike programs, such as ssh/scp.
 (use-feature! tramp
+  :init
+
+  (set-leader-keys! "f E" #'tramp-revert-buffer-with-sudo)
+
+  (with-eval-after-load 'embark
+    (keymap-set embark-file-map "s" #'tramp-revert-buffer-with-sudo))
+
   :config
 
   ;; Show only warnings and errors.
@@ -1222,15 +1229,6 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
 
   ;; Use `consult-fd' for finding.
   (setopt consult-dir-jump-file-command 'consult-fd))
-
-;; Package `sudo-edit' allows to open files as another user, by default "root".
-(use-package! sudo-edit
-  :init
-
-  (set-leader-keys! "f E" #'sudo-edit)
-
-  (with-eval-after-load 'embark
-    (keymap-set embark-file-map "s" #'sudo-edit)))
 
 ;;; Saving files
 
