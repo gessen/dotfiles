@@ -1938,22 +1938,6 @@ possibly new window."
 
   :bind ("C-o" . #'frog-jump-buffer))
 
-;; Package `goto-chg' allows to go to the point of the most recent edit in the
-;; buffer. When repeated, go to the second most recent edit, etc. It works by
-;; looking into buffer-undo-list to find points of edit.
-(use-package! goto-chg
-  :init
-
-  (set-leader-keys! "j c" #'goto-last-change)
-
-  :config
-
-  (defvar-keymap goto-chg-repeat-map
-    :doc "Support `goto-chg' based navigation with repeats."
-    :repeat t
-    "c" #'goto-last-change
-    "r" #'goto-last-change-reverse))
-
 ;; Package `mwim' stands for "Move Where I Mean".  It provides commands to
 ;; switch between various positions on the current line (particularly, to move
 ;; to the beginning/end of code, line or comment).

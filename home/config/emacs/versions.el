@@ -563,19 +563,6 @@
                                        :source "elpaca-menu-lock-file" :protocol
                                        https :inherit t :depth treeless :ref
                                        "60eb00ed7e51c0875a38cff25c9a87fe79296484"))
- (goto-chg :source "elpaca-menu-lock-file" :recipe
-           (:package "goto-chg" :repo "emacs-evil/goto-chg" :fetcher github
-                     :files
-                     ("*.el" "*.el.in" "dir" "*.info" "*.texi" "*.texinfo"
-                      "doc/dir" "doc/*.info" "doc/*.texi" "doc/*.texinfo"
-                      "lisp/*.el" "docs/dir" "docs/*.info" "docs/*.texi"
-                      "docs/*.texinfo"
-                      (:exclude ".dir-locals.el" "test.el" "tests.el"
-                                "*-test.el" "*-tests.el" "LICENSE" "README*"
-                                "*-pkg.el"))
-                     :source "elpaca-menu-lock-file" :protocol https :inherit t
-                     :depth treeless :ref
-                     "72f556524b88e9d30dc7fc5b0dc32078c166fda7"))
  (grip-mode :source "elpaca-menu-lock-file" :recipe
             (:package "grip-mode" :repo "seagle0128/grip-mode" :fetcher github
                       :files
