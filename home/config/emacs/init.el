@@ -1595,15 +1595,6 @@ column as mark, it add cursor to each line."
 
 ;;;; Multiple selection
 
-;; Package `ace-mc' allows you to quickly add and remove `multiple-cursors' mode
-;; cursors using `ace-jump'.
-(use-package! ace-mc
-  :init
-
-  (set-leader-keys!
-    "v j" #'ace-mc-add-multiple-cursors
-    "v J" #'ace-mc-add-single-cursor))
-
 ;; Package `multiple-cursors' implements multiple cursors for Emacs in a similar
 ;; way in other text editors.
 (use-package! multiple-cursors

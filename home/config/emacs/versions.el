@@ -1,28 +1,4 @@
-((ace-jump-mode :source "elpaca-menu-lock-file" :recipe
-                (:package "ace-jump-mode" :repo "winterTTr/ace-jump-mode"
-                          :fetcher github :files
-                          ("*.el" "*.el.in" "dir" "*.info" "*.texi" "*.texinfo"
-                           "doc/dir" "doc/*.info" "doc/*.texi" "doc/*.texinfo"
-                           "lisp/*.el" "docs/dir" "docs/*.info" "docs/*.texi"
-                           "docs/*.texinfo"
-                           (:exclude ".dir-locals.el" "test.el" "tests.el"
-                                     "*-test.el" "*-tests.el" "LICENSE"
-                                     "README*" "*-pkg.el"))
-                          :source "elpaca-menu-lock-file" :protocol https
-                          :inherit t :depth treeless :ref
-                          "8351e2df4fbbeb2a4003f2fb39f46d33803f3dac"))
- (ace-mc :source "elpaca-menu-lock-file" :recipe
-         (:package "ace-mc" :repo "mm--/ace-mc" :fetcher github :files
-                   ("*.el" "*.el.in" "dir" "*.info" "*.texi" "*.texinfo"
-                    "doc/dir" "doc/*.info" "doc/*.texi" "doc/*.texinfo"
-                    "lisp/*.el" "docs/dir" "docs/*.info" "docs/*.texi"
-                    "docs/*.texinfo"
-                    (:exclude ".dir-locals.el" "test.el" "tests.el" "*-test.el"
-                              "*-tests.el" "LICENSE" "README*" "*-pkg.el"))
-                   :source "elpaca-menu-lock-file" :protocol https :inherit t
-                   :depth treeless :ref
-                   "6877880efd99e177e4e9116a364576def3da391b"))
- (ace-window :source "elpaca-menu-lock-file" :recipe
+((ace-window :source "elpaca-menu-lock-file" :recipe
              (:package "ace-window" :repo "abo-abo/ace-window" :fetcher github
                        :files
                        ("*.el" "*.el.in" "dir" "*.info" "*.texi" "*.texinfo"
