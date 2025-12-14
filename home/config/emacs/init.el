@@ -2170,6 +2170,7 @@ will not refresh `column-number-mode."
          ("C-M-r" . #'isearch-backward)
          :map isearch-mode-map
          ("C-g"   . #'isearch-cancel)
+         ("C-SPC" . #'isearch-mark-selection)
          ("M-w"   . #'isearch-copy-selection))
   :config
 
@@ -2181,6 +2182,13 @@ will not refresh `column-number-mode."
                         isearch-other-end (point))))
         (kill-new selection)
         (isearch-done))))
+
+  (defun isearch-mark-selection ()
+    "Mark the current Isearch selection."
+    (interactive)
+    (isearch-done)
+    (push-mark isearch-other-end t 'activate)
+    (activate-mark))
 
   (defvar-keymap isearch-repeat-map
     :doc "Support Isearch based navigation with repeats."
