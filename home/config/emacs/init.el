@@ -2496,12 +2496,15 @@ will not refresh `column-number-mode."
   (defvar-keymap surround-map
     :doc "Keymap for all interactive `surround' commands."
     "c"   #'surround-change
+    "M-c" #'surround-change
     "d"   #'surround-delete
-    "i"   #'surround-insert
-    "k"   #'surround-kill
-    "K"   #'surround-kill-outer
-    "m"   #'surround-mark
-    "M"   #'surround-mark-outer
+    "M-d" #'surround-delete
+    "w"   #'surround-kill
+    "M-w" #'surround-kill
+    "q"   #'surround-kill-outer
+    "M-q" #'surround-kill-outer
+    "s"   #'surround-insert
+    "M-s" #'surround-insert
     "["   #'surround-mark
     "]"   #'surround-mark-outer
     "M-[" #'surround-mark
