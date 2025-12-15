@@ -906,7 +906,8 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
   (defhook! my--ibuffer-group-by-projects ()
     ibuffer-hook
     "Group buffers by projects."
-    (setq ibuffer-filter-groups (ibuffer-project-generate-filter-groups)))
+    (setq ibuffer-filter-groups (ibuffer-project-generate-filter-groups))
+    (ibuffer-do-sort-by-project-file-relative))
 
   :config
 
