@@ -563,7 +563,6 @@ anything that can be a key's definition."
 ;; (OSC) 52 escape sequences, to manipulate the Operating System's Clipboard
 ;; from an Emacs TTY frame.
 (use-package! clipetty
-  :if (not (display-graphic-p))
   :init
 
   (global-clipetty-mode +1))
