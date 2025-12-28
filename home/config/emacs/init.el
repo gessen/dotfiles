@@ -4014,6 +4014,31 @@ Return nil if there is no name or if NODE is not a defun node."
 
   (eglot-booster-mode +1))
 
+;; Package `eglot-hover' provides a minor mode to improve Eglot's default hover
+;; messages.
+(use-package! eglot-hover
+  :ensure (:host codeberg :repo "slotThe/eglot-hover")
+  :demand t
+  :after eglot
+  :config
+
+  (defhook! my--eglot-hover-mode-setup ()
+    eglot-managed-mode-hook
+    "Turn on or off `eglot-hover-mode', depending on the Eglot state."
+    (if (eglot-managed-p)
+        (eglot-hover-mode +1)
+      (eglot-hover-mode -1)))
+
+  (set-leader-keys-for-minor-mode! 'eglot--managed-mode
+    "t h" #'eglot-hover-mode)
+
+  ;; Associate powered by tree-sitter modes with code block names.
+  (setopt eglot-hover-assocs '((c-ts-mode . "cpp")
+                               (c++-ts-mode . "cpp")
+                               (c-or-c++-ts-mode . "cpp")
+                               (python-ts-mode . "python")
+                               (rust-ts-mode . "rust"))))
+
 ;; Package `eglot-x' adds support for some of Language Server Protocol
 ;; extensions.
 (use-package! eglot-x
