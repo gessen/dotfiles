@@ -4637,7 +4637,9 @@ reversed if called with universal argument."
         (let ((browse-at-remote-prefer-symbolic
                (not browse-at-remote-prefer-symbolic)))
           (browse-at-remote-kill))
-      (browse-at-remote-kill)))
+      (browse-at-remote-kill))
+    ;; Prevent URL escapes from being interpreted as format strings.
+    (message (replace-regexp-in-string "%" "%%" (car kill-ring) t t)))
 
   (set-leader-keys!
     "g r" #'browse-at-remote-dwim
@@ -4680,7 +4682,12 @@ that file in your browser at the visited revision."
                      (or start-line line)
                      (when (and end-line (not (equal start-line end-line)))
                        end-line)))
-        (funcall fn)))))
+        (funcall fn))))
+
+  :config
+
+  ;; Use commit hash for link rather than branch names.
+  (setopt browse-at-remote-prefer-symbolic nil))
 
 ;; Package `consult-git-log-grep' provides an interactive way to search the git
 ;; log using `consult'.

@@ -76,7 +76,7 @@
                                         "README*" "*-pkg.el"))
                              :source "elpaca-menu-lock-file" :protocol https
                              :inherit t :depth treeless :ref
-                             "cf0269f3db9e968c819b1d85b33d791c20c2e495"))
+                             "27b17cc63b9f9dca893425908373251eb9b10f44"))
  (cape :source "elpaca-menu-lock-file" :recipe
        (:package "cape" :repo "minad/cape" :fetcher github :files
                  ("*.el" "*.el.in" "dir" "*.info" "*.texi" "*.texinfo" "doc/dir"
