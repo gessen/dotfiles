@@ -1389,6 +1389,8 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
 
   (with-eval-after-load 'embark
     (keymap-set embark-identifier-map "x"
+                '("inflections" . hydra-string-inflection/body))
+    (keymap-set embark-flymake-map "x"
                 '("inflections" . hydra-string-inflection/body))))
 
 ;; Package `ws-butler' unobtrusively remove trailing whitespace. What this means
