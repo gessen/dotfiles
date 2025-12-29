@@ -2660,6 +2660,43 @@ will not refresh `column-number-mode."
 (setopt minibuffer-prompt-properties
         '(read-only t cursor-intangible t face minibuffer-prompt))
 
+;; Feature `minibuffer' provides minibuffer and completion functions.
+(use-feature! minibuffer
+  :bind ( :map minibuffer-local-completion-map
+          ;; Unbind `minibuffer-complete-word'
+          ("SPC" . nil))
+  :config
+
+  ;; First TAB pops up the window showing the completions list buffer, and the
+  ;; next TAB selects that window.
+  (setopt completion-auto-select 'second-tab)
+
+  ;; Always show *Completions* buffer after a completion attempt, and the list
+  ;; of completions is updated if already visible.
+  (setopt completion-auto-help 'always)
+
+  ;; Do not show help in the *Completions* buffer.
+  (setopt completion-show-help nil)
+
+  ;; Sort candidates in the *Completions* buffer according to the order of the
+  ;; candidates in the minibuffer history.
+  (setopt completions-sort 'historical)
+
+  ;; Enable grouping of completion candidates in the *Completions* buffer.
+  (setopt completions-group t)
+
+  ;; Display completions down the screen in one column.
+  (setopt completions-format 'one-column)
+
+  ;; Display completions with details added as prefix/suffix.
+  (setopt completions-detailed t)
+
+  ;; Limit *Completions* buffer height.
+  (setopt completions-max-height 20)
+
+  ;; Allow navigating completions from the minibuffer.
+  (setopt minibuffer-visible-completions t))
+
 ;; Feature `savehist' saves minibuffer history to an external file after exit.
 (use-feature! savehist
   :demand t
