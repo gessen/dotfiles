@@ -3406,6 +3406,8 @@ defeats the purpose of `corfu-sort-function'."
     "u" #'diff-revert-and-kill-hunk
     "w" #'diff-ignore-whitespace-hunk)
 
+  :bind ( :map diff-mode-map
+          ("M-o" . nil))
   :config
 
   ;; Set `diff-mode' buffers as read-only.
