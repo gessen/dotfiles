@@ -5243,6 +5243,9 @@ during teardown."
 
 ;;;; Modeline
 
+;; Compress modelines wider than the currently selected window.
+(setopt mode-line-compact 'long)
+
 ;; Package `keycast' provides two modes that display the current command and its
 ;; key or mouse binding, and update the displayed information once another
 ;; command is invoked. `keycast-mode' displays the command and event in the
