@@ -3602,14 +3602,7 @@ defeats the purpose of `corfu-sort-function'."
   (setq markdown-italic-underscore t))
 
 ;; Package `markdown-toc' is a simple TOC generator for Markdown file.
-(use-package! markdown-toc
-  :hook ((markdown-mode-hook gfm-mode-hook) . markdown-toc-mode))
-
-;; Package `grip-mode' instantly previews GitHub-flavored Markdown/Org using
-;; grip.
-(use-package! grip-mode
-  :bind ( :map markdown-mode-command-map
-          ("g" . #'grip-mode)))
+(use-package! markdown-toc)
 
 ;;;; Meson
 

@@ -568,19 +568,6 @@
                                        :source "elpaca-menu-lock-file" :protocol
                                        https :inherit t :depth treeless :ref
                                        "60eb00ed7e51c0875a38cff25c9a87fe79296484"))
- (grip-mode :source "elpaca-menu-lock-file" :recipe
-            (:package "grip-mode" :repo "seagle0128/grip-mode" :fetcher github
-                      :files
-                      ("*.el" "*.el.in" "dir" "*.info" "*.texi" "*.texinfo"
-                       "doc/dir" "doc/*.info" "doc/*.texi" "doc/*.texinfo"
-                       "lisp/*.el" "docs/dir" "docs/*.info" "docs/*.texi"
-                       "docs/*.texinfo"
-                       (:exclude ".dir-locals.el" "test.el" "tests.el"
-                                 "*-test.el" "*-tests.el" "LICENSE" "README*"
-                                 "*-pkg.el"))
-                      :source "elpaca-menu-lock-file" :protocol https :inherit t
-                      :depth treeless :ref
-                      "26bdadf604b34e5a6b9628f3476bf7f5e88d2c3d"))
  (helpful :source "elpaca-menu-lock-file" :recipe
           (:package "helpful" :repo "Wilfred/helpful" :fetcher github :files
                     ("*.el" "*.el.in" "dir" "*.info" "*.texi" "*.texinfo"
