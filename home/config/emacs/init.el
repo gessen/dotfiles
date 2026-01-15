@@ -3963,6 +3963,8 @@ Return nil if there is no name or if NODE is not a defun node."
   ;; Inhibit logging a JSONRPC-related events.
   (fset #'jsonrpc--log-event #'ignore)
 
+  :bind ( :map eglot-mode-map
+          ("<f5>" . #'eglot-momentary-inlay-hints))
   :config
 
   (set-prefixes-for-minor-mode! 'eglot--managed-mode
