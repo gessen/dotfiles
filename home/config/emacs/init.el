@@ -1030,13 +1030,13 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
     (interactive)
     (set-buffer-file-coding-system 'undecided-dos nil)))
 
-;; Feature `project' provides simple operations on the current project. It
+;; Package `project' provides simple operations on the current project. It
 ;; contains generic infrastructure for dealing with projects, some utility
 ;; functions, and commands using that infrastructure. The goal is to make it
 ;; easier for Lisp programs to operate on the current project, without having to
 ;; know which package handles detection of that project type, parsing its config
 ;; files, etc.
-(use-feature! project
+(use-package! project
   :config
 
   ;; Mark C++-based projects without any supported version control as projects.
@@ -2839,8 +2839,8 @@ point. "
    ;; expensive due to file loading.
    consult-ripgrep consult-git-grep consult-grep
    consult-bookmark consult-recent-file consult-xref
-   consult--source-bookmark consult--source-file-register
-   consult--source-recent-file consult--source-project-recent-file
+   consult-source-bookmark consult-source-file-register
+   consult-source-recent-file consult-source-project-recent-file
    :preview-key '(:debounce 0.4 any)))
 
 ;; Package `embark' provides a sort of right-click contextual menu for Emacs,
@@ -4845,10 +4845,6 @@ that file in your browser at the visited revision."
     "g i" #'magit-init
     "g l" #'magit-log-buffer-file
     "g s" #'magit-status)
-
-  ;; Suppress the message we get about "Turning on magit-auto-revert-mode" when
-  ;; loading Magit.
-  (setopt magit-no-message '("Turning on magit-auto-revert-mode..."))
 
   :config
 
