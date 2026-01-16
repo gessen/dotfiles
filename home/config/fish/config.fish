@@ -97,8 +97,20 @@ bind ctrl-x,ctrl-e edit_command_buffer
 bind alt-m copy-prev-shell-word
 
 # Starts pager search mode by default when completing
-bind tab complete-and-search
-bind shift-tab complete
+bind tab '
+    if commandline --search-field >/dev/null
+        commandline -f complete
+    else
+        commandline -f complete-and-search
+    end
+'
+bind shift-tab '
+    if commandline --search-field >/dev/null
+        commandline -f complete-and-search
+    else
+        commandline -f complete
+    end
+'
 
 # Prefix search with [M-S-up] and [M-S-down]
 bind alt-shift-up history-prefix-search-backward
