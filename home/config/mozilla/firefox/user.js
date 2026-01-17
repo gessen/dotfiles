@@ -8,6 +8,11 @@ user_pref("gfx.webrender.all", true);
 user_pref("gfx.webrender.compositor", true);
 user_pref("gfx.webrender.precache-shaders", true);
 
+// WebRender Layer Compositor which limits what needs updating on the screen
+// when something moves or changes
+user_pref("gfx.webrender.layer-compositor", true);
+user_pref("media.wmf.zero-copy-nv12-textures-force-enabled", true);
+
 // Use GPU-accelerated Canvas2D with more memory
 user_pref("gfx.canvas.accelerated.cache-items", 32768);
 user_pref("gfx.canvas.accelerated.cache-size", 4096);
@@ -75,22 +80,17 @@ user_pref("dom.prefetch_dns_for_anchor_https_document", false);
 // Disable link prefetching <link rel="prefetch">
 user_pref("network.prefetch-next", false);
 
-// Disable Network Predictor that trains and uses Firefox's algorithm to preload
-// page resource by tracking past page resources
-user_pref("network.predictor.enabled", false);
-
 // Tracking protection
 
 // Enable Enhanced Tracking Protection
 user_pref("browser.contentblocking.category", "strict");
 
 // Allow embedded tweets, Instagram and Reddit posts, and TikTok embeds
-user_pref("urlclassifier.trackingSkipURLs", "*.reddit.com, *.twitter.com, *.twimg.com, *.tiktok.com");
-user_pref("urlclassifier.features.socialtracking.skipURLs", "*.instagram.com, *.twitter.com, *.twimg.com");
+user_pref("urlclassifier.trackingSkipURLs", "*://embed.reddit.com/*,*://*.twitter.com/*,*://*.twimg.com/*");
+user_pref("urlclassifier.features.socialtracking.skipURLs", "*://*.twitter.com/*,*://*.twimg.com/*");
 
 // Remove temp files opened from non-PB windows with an external application
 user_pref("browser.download.start_downloads_in_tmp_dir", true);
-user_pref("browser.helperApps.deleteTempFileOnExit", true);
 
 // Disable UITour backend
 user_pref("browser.uitour.enabled", false);
@@ -105,6 +105,9 @@ user_pref("security.OCSP.enabled", 0);
 
 // HTTP Public Key Pinning (HPKP)
 user_pref("security.cert_pinning.enforcement_level", 2);
+
+// Disable referrer and storage access for resources injected by content scripts
+user_pref("privacy.antitracking.isolateContentScriptResources", true);
 
 // Disable CSP Level 2 Reporting
 user_pref("security.csp.reporting.enabled", false);
@@ -156,6 +159,9 @@ user_pref("network.IDN_show_punycode", true);
 user_pref("dom.security.https_only_mode", true);
 user_pref("dom.security.https_only_mode_ever_enabled", true);
 user_pref("dom.security.https_only_mode_ever_enabled_pbm", true);
+
+// Offer suggestion for HTTPS site when available
+user_pref("dom.security.https_only_mode_error_page_user_suggestions", true);
 
 // Passwords
 
