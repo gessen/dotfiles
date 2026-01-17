@@ -4725,18 +4725,6 @@ that file in your browser at the visited revision."
   ;; Use commit hash for link rather than branch names.
   (setopt browse-at-remote-prefer-symbolic nil))
 
-;; Package `consult-git-log-grep' provides an interactive way to search the git
-;; log using `consult'.
-(use-package! consult-git-log-grep
-  :init
-
-  (set-leader-keys! "g ?" #'consult-git-log-grep)
-
-  :config
-
-  ;; Use `magit' to show the commit (must be called from `magit-status').
-  (setq consult-git-log-grep-open-function #'magit-show-commit))
-
 ;; Package `consult-ls-git' allows to quickly select a file from a git
 ;; repository or act on a stash. It provides a consult multi view of files
 ;; considered by git status, stashes as well as all tracked files. Alternatively

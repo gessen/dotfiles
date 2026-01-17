@@ -192,20 +192,6 @@
                           :source "elpaca-menu-lock-file" :protocol https
                           :inherit t :depth treeless :ref
                           "d8b444aac39edfc6473ffbd228df3e9119451b51"))
- (consult-git-log-grep :source "elpaca-menu-lock-file" :recipe
-                       (:package "consult-git-log-grep" :fetcher github :repo
-                                 "ghosty141/consult-git-log-grep" :files
-                                 ("*.el" "*.el.in" "dir" "*.info" "*.texi"
-                                  "*.texinfo" "doc/dir" "doc/*.info"
-                                  "doc/*.texi" "doc/*.texinfo" "lisp/*.el"
-                                  "docs/dir" "docs/*.info" "docs/*.texi"
-                                  "docs/*.texinfo"
-                                  (:exclude ".dir-locals.el" "test.el"
-                                            "tests.el" "*-test.el" "*-tests.el"
-                                            "LICENSE" "README*" "*-pkg.el"))
-                                 :source "elpaca-menu-lock-file" :protocol https
-                                 :inherit t :depth treeless :ref
-                                 "5b1669ebaff9a91000ea185264cfcb850885d21f"))
  (consult-ls-git :source "elpaca-menu-lock-file" :recipe
                  (:package "consult-ls-git" :repo "rcj/consult-ls-git" :fetcher
                            github :files
