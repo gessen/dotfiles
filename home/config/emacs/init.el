@@ -185,6 +185,15 @@ graphical frame is created."
 ;; native compilation from leaving temporary files in /tmp
 (setq native-comp-async-query-on-exit t)
 
+(defadvice! my--native--compile-async-skip-p (fn file load selector)
+  :around #'native--compile-async-skip-p
+  "Correctly ignore *.eln.gz files from native compilation."
+  (let* ((naive-elc-file (file-name-with-extension file "elc"))
+         (elc-file (replace-regexp-in-string
+                    "\\.el\\.elc$" ".elc" naive-elc-file)))
+    (or (gethash elc-file comp--no-native-compile)
+        (funcall fn file load selector))))
+
 ;;;; Elpaca
 
 (defvar elpaca-installer-version 0.11)
