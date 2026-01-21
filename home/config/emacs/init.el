@@ -5033,6 +5033,10 @@ possibly new window."
 ;; Avoid loading unnecessary `default' library
 (setq inhibit-default-init t)
 
+;; Disable and kill the *Messages* buffer.
+(setq-default message-log-max nil)
+(kill-buffer "*Messages*")
+
 ;; Get rid of "For information about GNU Emacs..." message at startup, unless
 ;; we're in a daemon session, where it'll say "Starting Emacs daemon." instead,
 ;; which isn't so bad.
