@@ -2248,15 +2248,15 @@ will not refresh `column-number-mode."
   (setopt grep-use-headings t)
 
   ;; Use ripgrep instead.
-  (defvar rg-options "--no-heading --null --regexp")
+  (defvar rg-options "-nH --null --no-heading --no-messages -e")
   (setopt grep-command (format "rg %s " rg-options))
-  (setopt grep-template (format "rg %s <R> --glob <F>" rg-options))
+  (setopt grep-template (format "%s<R> -g '<F>'" grep-command))
   (setopt grep-find-command
-          (format "%s . -type f -print0 | \"%s\" -0 rg %s "
-                  find-program xargs-program rg-options))
+          (format "%s . -type f -print0 | \"%s\" -0 %s"
+                  find-program xargs-program grep-command))
   (setopt grep-find-template
-          (format "%s -H <D> <X> -type f <F> -print0 | \"%s\" -0 rg %s <R>"
-                  find-program xargs-program rg-options))
+          (format "%s -H <D> <X> -type f <F> -print0 | \"%s\" -0 %s<R>"
+                  find-program xargs-program grep-command))
 
   ;; Add various aliases for globs.
   (push '("rust" . "*.rs") grep-files-aliases)
