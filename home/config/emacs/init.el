@@ -3076,6 +3076,18 @@ completing-read prompter."
   (setq xref-show-xrefs-function #'consult-xref)
   (setq xref-show-definitions-function #'consult-xref))
 
+;; Feature `semantic/symref/grep' implements the Symref tool API using the
+;; external tools find/grep.
+(use-feature! semantic/symref/grep
+  :config
+
+  ;; List of major modes that are not supported by the default list.
+  (setq semantic-symref-filepattern-alist
+        '((c-ts-mode "*.[ch]")
+          (c++-ts-mode "*.[chCH]" "*.[ch]pp" "*.cc" "*.hh")
+          (rust-ts-mode "*.rs")
+          (toml-ts-mode "*.toml"))))
+
 ;; Package `xref' provides a somewhat generic infrastructure for cross
 ;; referencing commands, in particular "find-definition". Some part of the
 ;; functionality must be implemented in a language dependent way and that's done
