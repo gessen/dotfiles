@@ -5009,6 +5009,9 @@ possibly new window."
     "c r" #'recompile)
 
   :hook (compilation-filter-hook . ansi-color-compilation-filter)
+  :bind ( :map compilation-mode-map
+          ("C-o" . nil)
+          ("o"   . #'compilation-display-error))
   :config
 
   ;; Use a more specific set of regexps to avoid conflicts between patterns,
