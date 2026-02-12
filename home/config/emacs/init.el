@@ -4852,6 +4852,9 @@ that file in your browser at the visited revision."
 
   :config
 
+  ;; Show fine differences for all displayed diff hunks.
+  (setopt magit-diff-refine-hunk 'all)
+
   ;; The default location for git-credential-cache is in
   ;; ~/.config/git/credential. However, if ~/.git-credential-cache/ exists, then
   ;; it is used instead. Magit seems to be hardcoded to use the latter, so here
