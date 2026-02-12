@@ -3740,40 +3740,38 @@ Return nil if there is no name or if NODE is not a defun node."
   (set-prefixes-for-major-mode! 'rust-ts-mode "s" "session")
   (set-leader-keys-for-major-mode! 'rust-ts-mode "s s" #'eglot)
 
-  (defvar rust-compilation-location
-    (let ((file "\\([^\n]+\\)")
-          (start-line "\\([0-9]+\\)")
-          (start-col "\\([0-9]+\\)"))
-      (concat file ":" start-line ":" start-col)))
-
   (defvar rust-compilation-regexp
-    (let ((re (concat "^\\(?:error\\|\\(warning\\)\\|\\(note\\)\\)[^\0]+?--> "
-                      rust-compilation-location)))
-      (cons re '(3 4 5 (1 . 2))))
-    "Specifications for matching errors in rustc invocations.")
+    (list (rx bol (or (group-n 1 "error")
+                      (group-n 2 "warning")
+                      (group-n 3 "note"))
+              (? "[" (+ (in "A-Z" "0-9")) "]") ":" (* nonl)
+              "\n" (+ " ") "-->"
+              " " (group-n 4 (+ nonl))   ;; file
+              ":" (group-n 5 (+ digit))  ;; line
+              ":" (group-n 6 (+ digit))) ;; colum
+          4 5 6 (cons 2 3)
+          nil
+          '(1 compilation-error-face)
+          '(2 compilation-warning-face)
+          '(3 compilation-info-face))
+    "Specifications for matching messages in rustc invocations.")
 
-  (defvar rust-ref-compilation-regexp
-    (let ((re "^\\([0-9]+\\)[[:space:]]*|"))
-      (cons re '(nil 1 nil 0 1)))
-    "Specifications for matching code references in rustc invocations.")
-
-  (defvar rust-panic-compilation-regexp
-   (let ((re (concat "thread '[^']+' panicked at " rust-compilation-location)))
-     (cons re '(1 2 3)))
-   "Specifications for matching panics in rustc invocations.")
+  (defvar rust-panic-regexp
+    (list (rx "thread '" (+ nonl) "' " (? "(" (+ digit) ") ")
+              (group-n 1 "panicked" ) " at"
+              " " (group-n 2 (+ nonl))   ;; file
+              ":" (group-n 3 (+ digit))  ;; line
+              ":" (group-n 4 (+ digit))) ;; column
+          2 3 4 nil
+          nil
+          '(1 compilation-error-face))
+    "Specifications for matching panics in rust binaries.")
 
   (with-eval-after-load 'compile
     (add-to-list 'compilation-error-regexp-alist-alist
                  (cons 'rust rust-compilation-regexp))
     (add-to-list 'compilation-error-regexp-alist-alist
-                 (cons 'rust-ref rust-ref-compilation-regexp))
-    (add-to-list 'compilation-error-regexp-alist-alist
-                 (cons 'rust-panic rust-panic-compilation-regexp))
-
-    ;; `rust-ref' must be added before `rust' as it uses its file source.
-    (add-to-list 'compilation-error-regexp-alist 'rust-ref)
-    (add-to-list 'compilation-error-regexp-alist 'rust)
-    (add-to-list 'compilation-error-regexp-alist 'rust-panic))
+                 (cons 'rust-panic rust-panic-regexp)))
 
   :mode ("\\.rs\\'")
   :config
@@ -5013,9 +5011,23 @@ possibly new window."
   :hook (compilation-filter-hook . ansi-color-compilation-filter)
   :config
 
+  ;; Use a more specific set of regexps to avoid conflicts between patterns,
+  ;; such as the gnu pattern matching errors from rust compiler warnings.
+  (setopt compilation-error-regexp-alist
+          '(meson
+            bash
+            python-tracebacks-and-caml
+            cmake
+            cmake-info
+            clang-include
+            gcc-include
+            rust
+            rust-panic
+            shellcheck))
+
   ;; Automatically scroll the Compilation buffer as output appears,
   ;; but stop at the first error.
-  (setq compilation-scroll-output 'first-error))
+  (setopt compilation-scroll-output 'first-error))
 
 ;; Feature `consult-compile' provides the command `consult-compile-error' to
 ;; quickly jump to compilation errors and warnings.
