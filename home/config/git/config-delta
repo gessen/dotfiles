@@ -1,6 +1,5 @@
 [delta]
 	features = modus-vivendi line-numbers decorations navigate
-	word-diff-regex = "\\S+"
 [delta "decorations"]
 	file-style = yellow bold ul
 	file-decoration-style = yellow bold ul
