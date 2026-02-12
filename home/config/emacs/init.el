@@ -4916,7 +4916,7 @@ current theme. This will also disable line numbers and decorations."
     'magit-diff '(-1 -1 -1)
     '("l" "Toggle magit-delta" magit-delta-toggle))
 
-  (magit-delta-mode +1))
+  :hook (magit-mode-hook . magit-delta-mode))
 
 ;; Package `magit-todos' displays keyword entries from source code comments and
 ;; Org files in the Magit status buffer. Activating an item jumps to it in its
