@@ -3815,6 +3815,8 @@ Return nil if there is no name or if NODE is not a defun node."
       (set-leader-keys-for-minor-mode! 'eglot--managed-mode
         ;; Code actions
         "a m" #'eglot-x-expand-macro
+        "a r" #'eglot-x-ask-runnables
+        "a t" #'eglot-x-ask-related-tests
 
         ;; Build
         "b m" #'eglot-x-rebuild-proc-macros
@@ -3825,8 +3827,6 @@ Return nil if there is no name or if NODE is not a defun node."
 
         ;; Help
         "h m" #'eglot-x-view-recursive-memory-layout
-        "h t" #'eglot-x-ask-related-tests
-        "h r" #'eglot-x-ask-runnables
 
         ;; Open
         "o d" #'eglot-x-open-external-documentation
