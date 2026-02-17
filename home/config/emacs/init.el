@@ -2019,33 +2019,6 @@ will not refresh `column-number-mode."
 
   :hook (prog-mode-hook . column-enforce-mode))
 
-;; Package `highlight-indent-guides' highlights indentation levels via
-;; `font-lock'. Indent widths are dynamically discovered, which means this
-;; correctly highlights in any mode, regardless of indent width, even in
-;; languages with non-uniform indentation such as Haskell. This mode works
-;; properly around hard tabs and mixed indentation, and it behaves well in large
-;; buffers.
-(use-package! highlight-indent-guides
-  :init
-
-  (set-leader-keys! "t H i" #'highlight-indent-guides-mode)
-
-  :config
-
-  ;; Use normal '|' character to display guides.
-  (setq highlight-indent-guides-method 'character)
-
-  ;; Let indent level of the current line be coloured distinctly.
-  (setq highlight-indent-guides-responsive 'top)
-
-  ;; Suppress the error that sometimes prints when calculating faces by using
-  ;; `highlight-indent-guides-auto-set-faces'.
-  (setq highlight-indent-guides-suppress-auto-error t)
-
-  ;; Calculate reasonable values for the indent guide colors based on the
-  ;; current theme's colorscheme, and set them appropriately.
-  (highlight-indent-guides-auto-set-faces))
-
 ;; Package `highlight-numbers' provides syntax highlighting of numeric literals
 ;; in source code, like what many editors provide by default.
 (use-package! highlight-numbers

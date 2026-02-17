@@ -565,22 +565,6 @@
                     :source "elpaca-menu-lock-file" :protocol https :inherit t
                     :depth treeless :ref
                     "03756fa6ad4dcca5e0920622b1ee3f70abfc4e39"))
- (highlight-indent-guides :source "elpaca-menu-lock-file" :recipe
-                          (:package "highlight-indent-guides" :fetcher github
-                                    :repo "DarthFennec/highlight-indent-guides"
-                                    :files
-                                    ("*.el" "*.el.in" "dir" "*.info" "*.texi"
-                                     "*.texinfo" "doc/dir" "doc/*.info"
-                                     "doc/*.texi" "doc/*.texinfo" "lisp/*.el"
-                                     "docs/dir" "docs/*.info" "docs/*.texi"
-                                     "docs/*.texinfo"
-                                     (:exclude ".dir-locals.el" "test.el"
-                                               "tests.el" "*-test.el"
-                                               "*-tests.el" "LICENSE" "README*"
-                                               "*-pkg.el"))
-                                    :source "elpaca-menu-lock-file" :protocol
-                                    https :inherit t :depth treeless :ref
-                                    "802fb2eaf67ead730d7e3483b9a1e9639705f267"))
  (highlight-numbers :source "elpaca-menu-lock-file" :recipe
                     (:package "highlight-numbers" :fetcher github :repo
                               "Fanael/highlight-numbers" :old-names
