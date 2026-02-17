@@ -5123,8 +5123,10 @@ possibly new window."
 ;; Set cursor as white IBeam.
 (setq-default cursor-type 'bar)
 
-;; Allow you to resize frames however you want, not just in whole columns.
-(setq frame-resize-pixelwise t)
+;; Allow you to resize frames and windows however you want, not just in whole
+;; columns.
+(setopt frame-resize-pixelwise t)
+(setopt window-resize-pixelwise t)
 
 ;; Don't suggest shorter ways to type commands in M-x, since they don't apply
 ;; when using Vertico.
