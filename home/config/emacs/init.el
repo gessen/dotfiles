@@ -3252,6 +3252,14 @@ defeats the purpose of `corfu-sort-function'."
 
   (global-corfu-mode +1)
 
+  ;; Feature `corfu-auto' automatically shows the popup.
+  (use-feature! corfu-auto
+    :demand t
+    :config
+
+    ;; Enable showing the popup automatically.
+    (setopt corfu-auto t))
+
   ;; Feature `corfu-echo' shows candidate documentation in echo area.
   (use-feature! corfu-echo
     :demand t
