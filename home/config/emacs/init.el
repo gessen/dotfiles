@@ -578,6 +578,13 @@ anything that can be a key's definition."
 
 ;;;; Mouse integration
 
+;; Mouse yank commands yank at point instead of at click. This also allows
+;; yanking text into an Isearch without moving the mouse cursor to the echo area
+(setopt mouse-yank-at-point t)
+
+;; Double-clicking attempts to select the symbol at click.
+(setopt mouse-1-double-click-prefer-symbols t)
+
 ;; Clicking `down-mouse-3' (usually, the right mouse button) anywhere in the
 ;; buffer pops up a menu whose contents depends on surrounding context near the
 ;; mouse click.
