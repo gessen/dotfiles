@@ -665,6 +665,11 @@ For details on DATA, CONTEXT, and signal, see
 
 ;;; Windows management
 
+;; When switching the buffer respect display actions specified by
+;; `display-buffer-overriding-action', `display-buffer-alist' and other display
+;; related variables.
+(setopt switch-to-buffer-obey-display-actions t)
+
 ;; Set custom actions when display certain buffers.
 (setq display-buffer-alist
       '(;; No window
