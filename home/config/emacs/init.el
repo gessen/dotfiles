@@ -1098,6 +1098,7 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
     "p /" #'project-search
     "p B" #'project-display-buffer
     "p c" #'project-compile
+    "p C" #'project-customize-dirlocals
     "p d" #'project-find-dir
     "p D" #'project-dired
     "p e" #'project-eshell
@@ -3826,6 +3827,7 @@ Return nil if there is no name or if NODE is not a defun node."
 
       (set-leader-keys-for-minor-mode! 'eglot--managed-mode
         ;; Code actions
+        "a h" #'eglot-x-hover-actions
         "a m" #'eglot-x-expand-macro
         "a r" #'eglot-x-ask-runnables
         "a t" #'eglot-x-ask-related-tests
@@ -4113,6 +4115,9 @@ Return nil if there is no name or if NODE is not a defun node."
   :demand t
   :after eglot
   :config
+
+  ;; Put hover actions at the top of Eldoc buffer.
+  (setopt eglot-x-hover-actions-priority 80)
 
   ;; Set up `eglot-x' to extend Eglot's feature-set. Call it when there are no
   ;; active LSP servers.
