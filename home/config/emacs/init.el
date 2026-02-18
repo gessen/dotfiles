@@ -2271,6 +2271,15 @@ will not refresh `column-number-mode."
           ("M-s e"   . #'iedit-mode-from-isearch)
           ("M-s M-e" . #'iedit-mode-from-isearch)))
 
+;; Package `nerd-icons-grep' adds `nerd-icons' to `grep-mode' buffers when
+;; `grep-use-headings' is t.
+(use-package! nerd-icons-grep
+  :demand
+  :after grep
+  :config
+
+  (nerd-icons-grep-mode +1))
+
 ;; Package `substitute' is a set of commands that perform text replacement (i)
 ;; throughout the buffer, (ii) limited to the current definition (per
 ;; narrow-to-defun), (iii) from point to the end of the buffer, and (iv) from

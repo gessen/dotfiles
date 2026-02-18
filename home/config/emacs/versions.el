@@ -914,6 +914,19 @@
                              :source "elpaca-menu-lock-file" :protocol https
                              :inherit t :depth treeless :ref
                              "929b62f01b93d30a3f42cc507fc45c84a2457b3f"))
+ (nerd-icons-grep :source "elpaca-menu-lock-file" :recipe
+                  (:package "nerd-icons-grep" :fetcher github :repo
+                            "hron/nerd-icons-grep" :files
+                            ("*.el" "*.el.in" "dir" "*.info" "*.texi"
+                             "*.texinfo" "doc/dir" "doc/*.info" "doc/*.texi"
+                             "doc/*.texinfo" "lisp/*.el" "docs/dir"
+                             "docs/*.info" "docs/*.texi" "docs/*.texinfo"
+                             (:exclude ".dir-locals.el" "test.el" "tests.el"
+                                       "*-test.el" "*-tests.el" "LICENSE"
+                                       "README*" "*-pkg.el"))
+                            :source "elpaca-menu-lock-file" :protocol https
+                            :inherit t :depth treeless :ref
+                            "7179ff3384efce53f7de2f3c1a98070a310a10da"))
  (nerd-icons-ibuffer :source "elpaca-menu-lock-file" :recipe
                      (:package "nerd-icons-ibuffer" :repo
                                "seagle0128/nerd-icons-ibuffer" :fetcher github
