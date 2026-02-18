@@ -23,8 +23,8 @@
                             (tool-bar-lines . 0)
                             (vertical-scroll-bars)
                             (user-size . t)
-                            (width . 110)
-                            (height . 36)
+                            (width . 160)
+                            (height . 57)
                             (font . "monospace-11")))
 
 ;; Set initial frame to be maximized
