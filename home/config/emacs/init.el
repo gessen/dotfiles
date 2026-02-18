@@ -4559,16 +4559,6 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
           ("C-c C-c" . #'dired-copy-paste-do-copy)
           ("C-c C-y" . #'dired-copy-paste-do-paste)))
 
-;; Package `dired-subtree' defines function `dired-subtree-insert' which inserts
-;; the subdirectory directly below its line in the original listing, and indents
-;; the listing of subdirectory to resemble a tree-like structure. The tree
-;; display is somewhat more intuitive than the default "flat" subdirectory
-;; manipulation provided by `dired-maybe-insert-subdir'.
-(use-package! dired-subtree
-  :after dired
-  :bind ( :map dired-mode-map
-          ("TAB" . #'dired-subtree-toggle)))
-
 ;; Package `diredfl' provides extra font lock rules for a more colourful
 ;; `dired'.
 (use-package! diredfl

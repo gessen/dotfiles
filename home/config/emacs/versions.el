@@ -279,19 +279,6 @@
                             "jsilve24/dired-copy-paste" :package
                             "dired-copy-paste" :ref
                             "aefb5597e65bc1a7b771c2c82961f5a10b5f424b"))
- (dired-hacks-utils :source "elpaca-menu-lock-file" :recipe
-                    (:package "dired-hacks-utils" :fetcher github :repo
-                              "Fuco1/dired-hacks" :files
-                              ("dired-hacks-utils.el") :source
-                              "elpaca-menu-lock-file" :protocol https :inherit t
-                              :depth treeless :ref
-                              "de9336f4b47ef901799fe95315fa080fa6d77b48"))
- (dired-subtree :source "elpaca-menu-lock-file" :recipe
-                (:package "dired-subtree" :fetcher github :repo
-                          "Fuco1/dired-hacks" :files ("dired-subtree.el")
-                          :source "elpaca-menu-lock-file" :protocol https
-                          :inherit t :depth treeless :ref
-                          "de9336f4b47ef901799fe95315fa080fa6d77b48"))
  (diredfl :source "elpaca-menu-lock-file" :recipe
           (:package "diredfl" :fetcher github :repo "purcell/diredfl" :files
                     ("*.el" "*.el.in" "dir" "*.info" "*.texi" "*.texinfo"
