@@ -828,7 +828,14 @@ window instead."
 
   (set-leader-keys! "b l" #'ibuffer)
 
-  :bind ([remap list-buffers] . #'ibuffer))
+  :bind ([remap list-buffers] . #'ibuffer)
+  :config
+
+  ;; Don't ask for confirmation of dangerous operations.
+  (setopt ibuffer-expert t)
+
+  ;; Don't show the names of filter groups which are empty.
+  (setopt ibuffer-show-empty-filter-groups nil))
 
 ;; Feature `windmove' provides keybindings S-left, S-right, S-up, and S-down to
 ;; move between windows. This is much more convenient and efficient than using
