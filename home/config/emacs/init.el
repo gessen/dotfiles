@@ -4523,6 +4523,9 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
   ;; Instantly revert Dired buffers on re-visiting them, with no message.
   (setopt dired-auto-revert-buffer t)
 
+  ;; Automatically revert Dired buffers after `dired-do' operations.
+  (setopt dired-do-revert-buffer t)
+
   ;; Copy directories recursively.
   (setopt dired-recursive-copies 'always)
 
