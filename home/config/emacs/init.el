@@ -828,11 +828,7 @@ window instead."
 
   (set-leader-keys! "b l" #'ibuffer)
 
-  :bind ([remap list-buffers] . #'ibuffer)
-  :config
-
-  ;; Display Ibuffer in another window by default
-  (setopt ibuffer-use-other-window t))
+  :bind ([remap list-buffers] . #'ibuffer))
 
 ;; Feature `windmove' provides keybindings S-left, S-right, S-up, and S-down to
 ;; move between windows. This is much more convenient and efficient than using
@@ -4179,7 +4175,12 @@ unhelpful."
          ([remap describe-variable] . #'helpful-variable)
          ([remap describe-symbol]   . #'helpful-symbol)
          ([remap describe-key]      . #'helpful-key)
-         ([remap describe-command]  . #'helpful-command)))
+         ([remap describe-command]  . #'helpful-command))
+
+  :config
+
+  (with-eval-after-load 'ibuffer
+    (add-to-list 'ibuffer-help-buffer-modes 'helpful-mode)))
 
 ;;;; Emacs Lisp development
 
