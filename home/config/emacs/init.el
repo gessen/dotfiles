@@ -2960,7 +2960,7 @@ completing-read prompter."
   (setopt completion-styles '(orderless basic))
   (setq completion-category-defaults nil)
 
-  ;; Modify default dispatch list to use \"?\" for fuzzy matching.
+  ;; Modify default dispatch list to use \"`\" for fuzzy matching.
   (setopt orderless-affix-dispatch-alist
           '((?% . char-fold-to-regexp)
             (?! . orderless-not)
@@ -2968,7 +2968,7 @@ completing-read prompter."
             (?, . orderless-initialism)
             (?= . orderless-literal)
             (?^ . orderless-literal-prefix)
-            (?? . orderless-flex))))
+            (?` . orderless-flex))))
 
 ;; Package `vertico' provides a performant and minimalistic vertical completion
 ;; UI based on the default completion system. The main focus of Vertico is to
