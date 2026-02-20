@@ -4573,21 +4573,6 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
 (use-package! diredfl
   :hook (dired-mode-hook . diredfl-mode))
 
-;; Package `fd-dired' provides a dired-mode interface for fd's result. Same
-;; functionality as `find-dired' and `find-grep-dired', use fd and rg instead.
-;; Depends on `find-dired'.
-(use-package! fd-dired
-  :after dired
-  :init
-
-  (set-leader-keys-for-major-mode! 'dired-mode
-    "f" #'fd-dired
-    "g" #'fd-grep-dired)
-
-  :bind ( :map dired-mode-map
-          ("C-c C-f" . #'fd-dired)
-          ("C-c /"   . #'fd-grep-dired)))
-
 ;; Package `nerd-icons-dired' shows icons for each file in Dired,
 (use-package! nerd-icons-dired
   :hook (dired-mode-hook . nerd-icons-dired-mode))

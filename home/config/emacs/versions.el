@@ -440,19 +440,6 @@
                               :source "elpaca-menu-lock-file" :protocol https
                               :inherit t :depth treeless :ref
                               "502d36e0fb4c4daedc16ea5d732dcbc8285d6fb1"))
- (fd-dired :source "elpaca-menu-lock-file" :recipe
-           (:package "fd-dired" :fetcher github :repo "yqrashawn/fd-dired"
-                     :files
-                     ("*.el" "*.el.in" "dir" "*.info" "*.texi" "*.texinfo"
-                      "doc/dir" "doc/*.info" "doc/*.texi" "doc/*.texinfo"
-                      "lisp/*.el" "docs/dir" "docs/*.info" "docs/*.texi"
-                      "docs/*.texinfo"
-                      (:exclude ".dir-locals.el" "test.el" "tests.el"
-                                "*-test.el" "*-tests.el" "LICENSE" "README*"
-                                "*-pkg.el"))
-                     :source "elpaca-menu-lock-file" :protocol https :inherit t
-                     :depth treeless :ref
-                     "c5b31aec25d20c3219e2635b82efeba532895278"))
  (fish-mode :source "elpaca-menu-lock-file" :recipe
             (:package "fish-mode" :fetcher github :repo "wwwjfy/emacs-fish"
                       :files
