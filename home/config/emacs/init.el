@@ -536,14 +536,19 @@ anything that can be a key's definition."
 
 (require 'xdg)
 
-(defconst my-config-dir user-emacs-directory
-  "Directory for Emacs configuration. Must end with slash.")
-
 (defconst my-cache-dir (concat (xdg-cache-home) "/emacs/")
   "Directory for volatile local storage. Must end with slash.")
 
 (defconst my-data-dir (concat (xdg-data-home) "/emacs/")
   "Directory for non-volatile local storage. Must end with slash.")
+
+(defsubst cache-dir (path)
+  "Expand PATH relative to `my-cache-dir'."
+  (expand-file-name (convert-standard-filename path) my-cache-dir))
+
+(defsubst data-dir (path)
+  "Expand PATH relative to `my-data-dir'."
+  (expand-file-name (convert-standard-filename path) my-data-dir))
 
 ;;; Environment
 ;;;; Encoding
@@ -654,7 +659,7 @@ For details on DATA, CONTEXT, and signal, see
 (setopt confirm-kill-processes nil)
 
 ;; Prevent Custom from modifying this file.
-(setopt custom-file (expand-file-name "custom.el" my-cache-dir))
+(setopt custom-file (cache-dir "custom.el"))
 
 ;; Silence Emacs in terminal.
 (setq ring-bell-function #'ignore)
@@ -1092,7 +1097,7 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
   (setopt project-mode-line t)
 
   ;; Do not litter `user-emacs-directory' with Project persistent history.
-  (setopt project-list-file (expand-file-name "projects.el" my-cache-dir))
+  (setopt project-list-file (cache-dir "projects.el"))
 
   (set-leader-keys!
     "p !" #'project-shell-command
@@ -1130,13 +1135,13 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
   :config
 
   ;; Never perform auto-cleanup, especially at the start.
-  (setq recentf-auto-cleanup 'never)
+  (setopt recentf-auto-cleanup 'never)
 
   ;; Increase the maximum number of items of the recent list that will be saved.
-  (setq recentf-max-saved-items 300)
+  (setopt recentf-max-saved-items 300)
 
   ;; Do not litter `user-emacs-directory' with recentf persistent history.
-  (setq recentf-save-file (expand-file-name "recentf.el" my-cache-dir))
+  (setopt recentf-save-file (cache-dir "recentf.el"))
 
   ;; List of regexps and predicates for filenames excluded from the recent list.
   (setopt recentf-exclude (list my-cache-dir (file-truename elpaca-directory)))
@@ -1163,7 +1168,7 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
         (apply save-place-alist-to-file args))))
 
   ;; Do not litter `user-emacs-directory' with persistent history file.
-  (setq save-place-file (expand-file-name "places.el" my-cache-dir))
+  (setopt save-place-file (cache-dir "places.el"))
 
   (save-place-mode +1))
 
@@ -1200,10 +1205,8 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
   (setopt remote-file-name-inhibit-locks t)
 
   ;; Do not litter `user-emacs-directory' with tramp files.
-  (setopt tramp-auto-save-directory (expand-file-name
-                                     "tramp-auto-save"
-                                     my-cache-dir)
-          tramp-persistency-file-name (expand-file-name "tramp.el" my-cache-dir)
+  (setopt tramp-auto-save-directory (cache-dir "tramp-auto-save")
+          tramp-persistency-file-name (cache-dir "tramp.el")
           tramp-backup-directory-alist backup-directory-alist))
 
 ;; Feature `uniquify' replaces Emacs's traditional method for making buffer
@@ -1264,12 +1267,12 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
 (setq create-lockfiles nil)
 
 ;; Do not litter `user-emacs-directory with auto-save files.
-(setq auto-save-list-file-prefix (expand-file-name "auto-save/" my-cache-dir))
-(let ((autosave-dir (expand-file-name "auto-save/site/" my-cache-dir))
-      (tramp-autosave-dir (expand-file-name "auto-save/dist/" my-cache-dir)))
-  (setq auto-save-file-name-transforms
-        `((".*" ,autosave-dir t)
-          ("\\`/[^/]*:\\([^/]*/\\)*\\([^/]*\\)\\'" ,tramp-autosave-dir t)))
+(setopt auto-save-list-file-prefix (cache-dir "auto-save/"))
+(let ((autosave-dir (cache-dir "auto-save/site/"))
+      (tramp-autosave-dir (cache-dir "auto-save/dist/")))
+  (setopt auto-save-file-name-transforms
+          `((".*" ,autosave-dir t)
+            ("\\`/[^/]*:\\([^/]*/\\)*\\([^/]*\\)\\'" ,tramp-autosave-dir t)))
   (unless (file-directory-p autosave-dir)
     (make-directory autosave-dir t))
   (unless (file-directory-p tramp-autosave-dir)
@@ -1658,7 +1661,7 @@ column as mark, it add cursor to each line."
     (setopt mc/match-cursor-style nil)
 
     ;; Do not litter `user-emacs-directory' with settings.
-    (setopt mc/list-file (expand-file-name "mc-lists.el" my-data-dir))
+    (setopt mc/list-file (data-dir "mc-lists.el"))
 
     ;; Do not leave `multiple-cursors-mode' with RET.
     (keymap-unset mc/keymap "<return>")
@@ -1753,8 +1756,7 @@ column as mark, it add cursor to each line."
   (setopt undo-fu-session-compression 'zst)
 
   ;; Do not litter `user-emacs-directory' with undo history.
-  (setopt undo-fu-session-directory
-          (expand-file-name "undo-session/" my-cache-dir))
+  (setopt undo-fu-session-directory (cache-dir "undo-session/"))
 
   ;; Ignore undo session for the following files.
   (setopt undo-fu-session-incompatible-files
@@ -1830,7 +1832,7 @@ possibly new window."
   :config
 
   ;; Do not litter `user-emacs-directory' with bookmarks file.
-  (setopt bookmark-default-file (expand-file-name "bookmarks.el" my-data-dir))
+  (setopt bookmark-default-file (data-dir "bookmarks.el"))
 
   ;; Save bookmarks immediately.
   (setopt bookmark-save-flag 0)
@@ -2528,7 +2530,7 @@ will not refresh `column-number-mode."
   :config
 
   ;; Do not litter `user-emacs-directory with persistent abbrevs file.
-  (setq abbrev-file-name (expand-file-name "abbrev.el" my-data-dir)))
+  (setopt abbrev-file-name (data-dir "abbrev.el")))
 
 ;; Feature `hippie-exp' allows to expand text while trying various ways to find
 ;; its expansion. Called repeatedly it tries all possible completions in
@@ -2584,7 +2586,7 @@ will not refresh `column-number-mode."
   :config
 
   ;; Save auto snippets in persistent location outside `user-emacs-directory'.
-  (setq aya-persist-snippets-dir (expand-file-name "snippets" my-data-dir)))
+  (setopt aya-persist-snippets-dir (data-dir "snippets")))
 
 ;; Package `consult-yasnippet' allows to interactively select a Yasnippet
 ;; snippet through completing-read with in buffer previews.
@@ -2617,7 +2619,7 @@ will not refresh `column-number-mode."
   (setq yas-minor-mode-map (make-sparse-keymap))
 
   ;; Save yasnippets in persistent location outside `user-emacs-directory'.
-  (let ((yas-snippet-dir (expand-file-name "snippets" my-data-dir)))
+  (let ((yas-snippet-dir (data-dir "snippets")))
     (unless (file-directory-p yas-snippet-dir)
       (make-directory yas-snippet-dir t))
     (setopt yas-snippet-dirs (list yas-snippet-dir)))
@@ -2725,7 +2727,7 @@ will not refresh `column-number-mode."
                                         extended-command-history))
 
   ;; Do not litter `user-emacs-directory' with persistent history file.
-  (setq savehist-file (expand-file-name "savehist.el" my-cache-dir))
+  (setopt savehist-file (cache-dir "savehist.el"))
 
   (savehist-mode +1))
 
@@ -3410,7 +3412,7 @@ defeats the purpose of `corfu-sort-function'."
   :config
 
   ;; Do not litter `user-emacs-directory' with devdocs data.
-  (setopt devdocs-data-dir (expand-file-name "devdocs" my-cache-dir)))
+  (setopt devdocs-data-dir (cache-dir "devdocs")))
 
 ;;;; Diff/Merge handling
 
@@ -4276,26 +4278,26 @@ unhelpful."
   :config
 
   ;; Default directory for Org to look in in certain rare situation.
-  (setq org-directory (expand-file-name "org" my-data-dir))
+  (setopt org-directory (data-dir "org"))
 
   ;; Show headlines but not content by default.
-  (setq org-startup-folded 'content)
+  (setopt org-startup-folded 'content)
 
   ;; Hide the first N-1 stars in a headline.
-  (setq org-hide-leading-stars t)
+  (setopt org-hide-leading-stars t)
 
   ;; Do not adapt indentation to outline node level.
-  (setq org-adapt-indentation nil)
+  (setopt org-adapt-indentation nil)
 
   ;; Use cornered arrow instead of three dots to increase its visibility.
-  (setq org-ellipsis "⤵")
+  (setopt org-ellipsis "⤵")
 
   ;; Require braces in order to trigger interpretations as sub/superscript. This
   ;; can be helpful in documents that need "_" frequently in plain text.
-  (setq org-use-sub-superscripts '{})
+  (setopt org-use-sub-superscripts '{})
 
   ;; Make `mwim' behaving like it should in Org.
-  (setq org-special-ctrl-a/e t)
+  (setopt org-special-ctrl-a/e t)
 
   ;; Add additional backends to export engine.
   (dolist (backend '(beamer md confluence))
@@ -4937,12 +4939,9 @@ current theme. This will also disable line numbers and decorations."
           transient-show-during-minibuffer-read t)
 
   ;; Do not litter `user-emacs-directory' with transient files.
-  (setopt transient-levels-file (expand-file-name "transient/levels.el"
-                                                  my-cache-dir)
-          transient-values-file (expand-file-name "transient/values.el"
-                                                  my-cache-dir)
-          transient-history-file (expand-file-name "transient/history.el"
-                                                   my-cache-dir))
+  (setopt transient-levels-file (cache-dir "transient/levels.el")
+          transient-values-file (cache-dir "transient/values.el")
+          transient-history-file (cache-dir "transient/history.el"))
 
   ;; Allow using `q' to quit out of popups, in addition to `C-g'.
   (transient-bind-q-to-quit))
@@ -4956,7 +4955,7 @@ current theme. This will also disable line numbers and decorations."
   :config
 
   ;; Do not litter `user-emacs-directory' with Eshell data.
-  (setopt eshell-directory-name (expand-file-name "eshell" my-cache-dir)))
+  (setopt eshell-directory-name (cache-dir "eshell")))
 
 ;;;; External commands
 
