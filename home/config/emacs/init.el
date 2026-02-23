@@ -2953,11 +2953,11 @@ completing-read prompter."
   :demand t
   :config
 
-  ;; Rely on `orderless' for completions with `basic' fallback in order to
-  ;; ensure that completion commands which rely on dynamic completion tables,
-  ;; e.g., `completion-table-dynamic' or `completion-table-in-turn', work
-  ;; correctly.
-  (setopt completion-styles '(orderless basic))
+  ;; Rely on `orderless' for completions with `basic' and `partial-completion'
+  ;; fallback in order to ensure that completion commands which rely on dynamic
+  ;; completion tables, e.g., `completion-table-dynamic' or
+  ;; `completion-table-in-turn', work correctly.
+  (setopt completion-styles '(orderless basic partial-completion))
   (setq completion-category-defaults nil)
 
   ;; Modify default dispatch list to use \"`\" for fuzzy matching and disable
