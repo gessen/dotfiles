@@ -2471,32 +2471,40 @@ will not refresh `column-number-mode."
 
 ;;;; Automatic delimiter pairing
 
-;; Show the matching paren if it is visible, and the expression otherwise.
-(setq show-paren-style 'mixed)
-
-;; Show parens when point is just inside one. This will only be done when point
-;; isn't also just outside a paren.
-(setq show-paren-when-point-inside-paren t)
-
-;; Show parens when point is in the line's periphery. The periphery is at the
-;; beginning or end of a line or in any whitespace there.
-(setq show-paren-when-point-in-periphery t)
-
-;; Show context around the opening paren if it is offscreen. The context is
-;; usually the line that contains the openparen, except if the openparen is on
-;; its own line, in which case the context includes the previous nonblank line.
-;; By default, the context is shown in the echo area.
-(setq show-paren-context-when-offscreen t)
-
-;; Any matching parenthesis is highlighted in `show-paren-style' after
-;; `show-paren-delay' seconds of Emacs idle time.
-(show-paren-mode +1)
-
 ;; Typing an open parenthesis automatically inserts the corresponding closing
 ;; parenthesis, and vice versa. (Likewise for brackets, etc.). If the region is
 ;; active, the parentheses (brackets, etc.) are inserted around the region
 ;; instead.
 (electric-pair-mode +1)
+
+;; Feature `paren' highlights matching parenthesis.
+(use-feature! paren
+  :demand t
+  :config
+
+  ;; Show the matching paren if it is visible, and the expression otherwise.
+  (setopt show-paren-style 'mixed)
+
+  ;; Decrease the time after `paren' highlights matches.
+  (setopt show-paren-delay 0)
+
+  ;; Show parens when point is just inside one. This will only be done when
+  ;; point isn't also just outside a paren.
+  (setopt show-paren-when-point-inside-paren t)
+
+  ;; Show parens when point is in the line's periphery. The periphery is at the
+  ;; beginning or end of a line or in any whitespace there.
+  (setopt show-paren-when-point-in-periphery t)
+
+  ;; Show context around the opening paren if it is offscreen. The context is
+  ;; usually the line that contains the openparen, except if the openparen is on
+  ;; its own line, in which case the context includes the previous nonblank
+  ;; line. By default, the context is shown in the echo area.
+  (setopt show-paren-context-when-offscreen t)
+
+  ;; Any matching parenthesis is highlighted in `show-paren-style' after
+  ;; `show-paren-delay' seconds of Emacs idle time.
+  (show-paren-mode +1))
 
 ;; Package `surround' inserts, changes, deletes and marks surrounding pairs of
 ;; quotes, braces, etc.
