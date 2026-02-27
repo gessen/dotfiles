@@ -3151,7 +3151,10 @@ completing-read prompter."
   :config
 
   ;; Decrease the idle time after ElDoc shows documentation at point.
-  (setopt eldoc-idle-delay 0))
+  (setopt eldoc-idle-delay 0)
+
+  ;; Prefer ElDoc's documentation buffer if it is displayed in some window.
+  (setopt eldoc-echo-area-prefer-doc-buffer t))
 
 ;; Package `breadcrumb' provide `project' and `imenu'-based breadcrumb paths
 ;; displayed either on header line or mode line.
