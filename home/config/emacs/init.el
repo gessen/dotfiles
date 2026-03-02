@@ -4469,6 +4469,14 @@ unhelpful."
              dired-create-directory)
   :init
 
+  (defadvice! my--find-file-read-args (fn &rest args)
+    :around #'find-file-read-args
+    "Use `default-directory' of the current Dired directory."
+    (if (derived-mode-p #'dired-mode)
+        (let ((default-directory (dired-current-directory)))
+          (apply fn args))
+      (apply fn args)))
+
   (defvar dired--limit-hist '()
     "Minibuffer history for `dired-limit-regexp'.")
 
@@ -4544,6 +4552,16 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
 
   ;; Hide free space label at the top
   (setopt dired-free-space nil)
+
+  ;; Create destination dirs when copying/removing files without asking.
+  (setopt dired-create-destination-dirs 'always)
+
+  ;; Consider a file name ending in a slash as a directory to create.
+  (setopt dired-create-destination-dirs-on-trailing-dirsep t)
+
+  ;; Search file names with Isearch when initial point position is on a file
+  ;; name.
+  (setopt dired-isearch-filenames 'dwim)
 
   ;; Compress with Zstandard by default
   (setopt dired-compress-file-default-suffix ".zst"
