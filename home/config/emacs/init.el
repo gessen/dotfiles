@@ -2475,6 +2475,12 @@ possibly new window."
 
   (global-auto-revert-mode +1))
 
+;;;; Automatic indentation
+
+;; Indent the yanked text only if point is not in a string or comment and yanked
+;; region is longer than 1 line.
+(setopt electric-indent-actions '(yank))
+
 ;;;; Automatic delimiter pairing
 
 ;; Typing an open parenthesis automatically inserts the corresponding closing
