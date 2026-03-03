@@ -212,38 +212,28 @@ function ef -d "Open selected files with EDITOR or xdg-open with fd+fzf"
     end
 end
 
-function eg -d "Open files with EDITOR with rg+fzf"
+function eg -d "Open files with EDITOR with rg+fzf with preview"
     if test (count $argv) = 0
         return
     end
+    set -f rg_cmd rg --no-heading --line-number --column --color=always
+    set -f fzf_cmd fzf --ansi --exit-0 --multi --delimiter=: \
+        --preview="bat --style=default --color=always \
+        --highlight-line={2} {1}" \
+        --preview-window="up,60%,+{2}+3/3,~3"
     if test (string match --entire emacs "$EDITOR")
-        set -f files (rg --no-heading --column --line-number --color=always \
-              $argv \
-            | fzf --ansi --select-1 --exit-0 --multi \
+        set -f files ($rg_cmd $argv \
+            | $fzf_cmd \
             | awk -F: '{printf "+%s:%s %s\n", $2, $3, $1}')
     else
-        set -f files (rg --no-heading --column --line-number --color=always \
-              $argv \
-            | fzf --ansi --select-1 --exit-0 --multi \
+        set -f files ($rg_cmd $argv \
+            | $fzf_cmd \
             | awk -F: '{printf "%s:%s:%s\n", $1, $2, $3}')
     end
     if test -z "$files"
         return
     end
     $EDITOR (string split " " $files)
-end
-
-function egp -d "Open files with EDITOR with fg+fzf with preview"
-    if test (count $argv) = 0
-        return
-    end
-    set -f files (rg --max-count=1 --files-with-matches --no-messages $argv \
-        | fzf --select-1 --exit-0 --multi \
-          --preview="rg --pretty --context=10 $argv {}")
-    if test -z "$files"
-        return
-    end
-    $EDITOR $files
 end
 
 abbr -a ec emacsclient --tty
@@ -501,7 +491,6 @@ set -gx FZF_DEFAULT_COMMAND "fd \
 
 # Default fzf options
 set -gx FZF_DEFAULT_OPTS " \
---height=60% \
 --bind=alt-p:preview-up,alt-n:preview-down \
 --bind=ctrl-alt-p:preview-half-page-up,ctrl-alt-n:preview-half-page-down \
 --bind=alt-up:preview-half-page-up,alt-down:preview-half-page-down \
