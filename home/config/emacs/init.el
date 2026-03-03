@@ -636,7 +636,9 @@ anything that can be a key's definition."
 ;; supports the protocol, whereas Emacs has to deduce "modifyOtherKeys" support
 ;; from the TERM variable.
 (use-package! kkp
-  :init
+  :ensure (:host github :repo "gessen/kkp" :branch "normal-erase")
+  :demand t
+  :config
 
   (global-kkp-mode +1))
 

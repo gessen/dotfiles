@@ -623,14 +623,15 @@
                     :depth treeless :ref
                     "b831e380c4deb1d51ce5db0a965b96427aec52e4"))
  (kkp :source "elpaca-menu-lock-file" :recipe
-      (:package "kkp" :fetcher github :repo "benotn/kkp" :files
+      (:package "kkp" :fetcher github :repo "gessen/kkp" :files
                 ("*.el" "*.el.in" "dir" "*.info" "*.texi" "*.texinfo" "doc/dir"
                  "doc/*.info" "doc/*.texi" "doc/*.texinfo" "lisp/*.el"
                  "docs/dir" "docs/*.info" "docs/*.texi" "docs/*.texinfo"
                  (:exclude ".dir-locals.el" "test.el" "tests.el" "*-test.el"
                            "*-tests.el" "LICENSE" "README*" "*-pkg.el"))
                 :source "elpaca-menu-lock-file" :protocol https :inherit t
-                :depth treeless :ref "1a7b4f395aa4e1e04afc45fe2dbd6a045871803b"))
+                :depth treeless :host github :branch "normal-erase" :ref
+                "49f65217d5d8490d558fc848e665c1f908ef7237"))
  (llama :source "elpaca-menu-lock-file" :recipe
         (:package "llama" :fetcher github :repo "tarsius/llama" :files
                   ("llama.el" ".dir-locals.el") :source "elpaca-menu-lock-file"
