@@ -445,14 +445,6 @@
                                "elpaca-menu-lock-file" :protocol https :inherit
                                t :depth treeless :ref
                                "909d98d9ec70c2baa5467634ec37181a058f2548"))
- (flymake-popon :source "elpaca-menu-lock-file" :recipe
-                (:package "flymake-popon" :repo
-                          ("https://codeberg.org/akib/emacs-flymake-popon"
-                           . "flymake-popon")
-                          :files ("*" (:exclude ".git")) :source
-                          "elpaca-menu-lock-file" :protocol https :inherit t
-                          :depth treeless :ref
-                          "99ea813346f3edef7220d8f4faeed2ec69af6060"))
  (frog-jump-buffer :source "elpaca-menu-lock-file" :recipe
                    (:package "frog-jump-buffer" :repo
                              "waymondo/frog-jump-buffer" :fetcher github :files
@@ -1012,12 +1004,6 @@
                           :source "elpaca-menu-lock-file" :protocol https
                           :inherit t :depth treeless :ref
                           "348e83ff193051d5ad332642100dd704f6e2a6d2"))
- (popon :source "elpaca-menu-lock-file" :recipe
-        (:package "popon" :repo
-                  ("https://codeberg.org/akib/emacs-popon" . "popon") :files
-                  ("*" (:exclude ".git")) :source "elpaca-menu-lock-file"
-                  :protocol https :inherit t :depth treeless :ref
-                  "bf8174cb7e6e8fe0fe91afe6b01b6562c4dc39da"))
  (popup :source "elpaca-menu-lock-file" :recipe
         (:package "popup" :fetcher github :repo "auto-complete/popup-el" :files
                   ("*.el" "*.el.in" "dir" "*.info" "*.texi" "*.texinfo"
