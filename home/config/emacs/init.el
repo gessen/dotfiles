@@ -6,7 +6,7 @@
 
 ;;; Code:
 
-(defconst my-minimum-emacs-version "30.0"
+(defconst my-minimum-emacs-version "31.0"
   "This Emacs configuration does not support any Emacs version below this.")
 
 ;; Make sure we are running a modern enough Emacs, otherwise abort init.
@@ -474,14 +474,23 @@ anything that can be a key's definition."
     "C-x a"         "abbrev"
     "C-x n"         "narrow"
     "C-x p"         "projects"
+    "C-x p C-x"     "extra"
     "C-x r"         "reg/rect/bkmks"
     "C-x t ^"       "detach"
     "C-x t"         "tab-bar"
     "C-x v"         "vc"
     "C-x v b"       "branch"
+    "C-x v I"       "incoming"
     "C-x v M"       "mergebase"
+    "C-x v o"       "outgoing-base"
+    "C-x v O"       "outgoing"
+    "C-x v T"       "outstanding"
+    "C-x v w"       "worktree"
     "C-x w"         "window-extras"
     "C-x w ^"       "detach"
+    "C-x w f"       "layout-flip"
+    "C-x w o"       "rotate-windows"
+    "C-x w r"       "layout-rotate"
     "C-x x"         "buffer-extras"
     "C-x C-k"       "kmacro"
     "C-x C-k C-q"   "counters"
@@ -591,6 +600,10 @@ anything that can be a key's definition."
 ;; Double-clicking attempts to select the symbol at click.
 (setopt mouse-1-double-click-prefer-symbols t)
 
+;; Clicking the left mouse button with the <Shift> modifier (`S-down-mouse-1')
+;; adjusts the already selected region.
+(mouse-shift-adjust-mode +1)
+
 ;; Clicking `down-mouse-3' (usually, the right mouse button) anywhere in the
 ;; buffer pops up a menu whose contents depends on surrounding context near the
 ;; mouse click.
@@ -602,11 +615,6 @@ anything that can be a key's definition."
   (pixel-scroll-precision-mode +1)
   (keymap-unset pixel-scroll-precision-mode-map "<prior>")
   (keymap-unset pixel-scroll-precision-mode-map "<next>"))
-
-;; Mouse integration works out of the box in windowed mode but not terminal mode
-(without-display-graphic!
-  ;; Enable basic mouse support (click and drag).
-  (xterm-mouse-mode t))
 
 ;;;; Keyboard integration
 
@@ -677,35 +685,35 @@ For details on DATA, CONTEXT, and signal, see
 (setopt switch-to-buffer-obey-display-actions t)
 
 ;; Set custom actions when display certain buffers.
-(setq display-buffer-alist
-      '(;; No window
-        ("\\`\\*Async Shell Command\\*\\'"
-         (display-buffer-no-window))
-        ("\\`\\*\\(Warnings\\|Compile-Log\\|Org Links\\)\\*\\'"
-         (display-buffer-no-window)
-         (allow-no-window . t))
-        ;; Make Helpful behave more similar to builtin Help.
-        ((derived-mode . helpful-mode)
-         (display-buffer-reuse-mode-window display-buffer-pop-up-window)
-         (mode . helpful-mode))
-        ;; Bottom reusable window
-        ((or . ((derived-mode . flymake-diagnostics-buffer-mode)
-                (derived-mode . flymake-project-diagnostics-mode)
-                (derived-mode . occur-mode)
-                (derived-mode . grep-mode)))
-         (display-buffer-reuse-mode-window display-buffer-below-selected)
-         (mode . ( flymake-diagnostics-buffer-mode
-                   flymake-project-diagnostics-mode
-                   occur-mode
-                   grep-mode))
-         (body-function . select-window))
-        ;; Compilation window in fullscreen
-        ((derived-mode . compilation-mode)
-         (display-buffer-full-frame))
-        ;; Select Eldoc window when launching it
-        ("\\*eldoc.*\\*"
-         (display-buffer-reuse-window display-buffer-pop-up-window)
-         (body-function . select-window))))
+(setopt display-buffer-alist
+        '(;; No window
+          ("\\`\\*Async Shell Command\\*\\'"
+           (display-buffer-no-window))
+          ("\\`\\*\\(Warnings\\|Compile-Log\\|Org Links\\)\\*\\'"
+           (display-buffer-no-window)
+           (allow-no-window . t))
+          ;; Make Helpful behave more similar to builtin Help.
+          ((derived-mode . helpful-mode)
+           (display-buffer-reuse-mode-window display-buffer-pop-up-window)
+           (mode . helpful-mode))
+          ;; Bottom reusable window
+          ((or . ((derived-mode . flymake-diagnostics-buffer-mode)
+                  (derived-mode . flymake-project-diagnostics-mode)
+                  (derived-mode . occur-mode)
+                  (derived-mode . grep-mode)))
+           (display-buffer-reuse-mode-window display-buffer-below-selected)
+           (mode . ( flymake-diagnostics-buffer-mode
+                     flymake-project-diagnostics-mode
+                     occur-mode
+                     grep-mode))
+           (body-function . select-window))
+          ;; Compilation window in fullscreen
+          ((derived-mode . compilation-mode)
+           (display-buffer-full-frame))
+          ;; Select Eldoc window when launching it
+          ("\\*eldoc.*\\*"
+           (display-buffer-reuse-window display-buffer-pop-up-window)
+           (body-function . select-window))))
 
 (defun maximize-buffer ()
   "Maximize buffer, use again to undo it."
@@ -836,6 +844,9 @@ window instead."
 
   :bind ([remap list-buffers] . #'ibuffer)
   :config
+
+  ;; Show buffer sizes in human-readable format.
+  (setopt ibuffer-human-readable-size t)
 
   ;; Don't ask for confirmation of dangerous operations.
   (setopt ibuffer-expert t)
@@ -1060,13 +1071,13 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
     (interactive)
     (set-buffer-file-coding-system 'undecided-dos nil)))
 
-;; Package `project' provides simple operations on the current project. It
+;; Feature `project' provides simple operations on the current project. It
 ;; contains generic infrastructure for dealing with projects, some utility
 ;; functions, and commands using that infrastructure. The goal is to make it
 ;; easier for Lisp programs to operate on the current project, without having to
 ;; know which package handles detection of that project type, parsing its config
 ;; files, etc.
-(use-package! project
+(use-feature! project
   :config
 
   ;; Mark C++-based projects without any supported version control as projects.
@@ -1148,8 +1159,8 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
   (setopt recentf-exclude (list my-cache-dir (file-truename elpaca-directory)))
 
   ;; Suppress messages saying the recentf file was either loaded or saved.
-  (dolist (func '(recentf-load-list recentf-save-list))
-    (advice-add func :around #'advice-silence-messages!))
+  (advice-add #'recentf-load-list :around #'advice-silence-messages!)
+  (setopt recentf-show-messages nil)
 
   (recentf-mode +1))
 
@@ -1336,7 +1347,12 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
 (use-feature! hideshow
   :init
 
-  (set-leader-keys! "t h" #'hs-minor-mode))
+  (set-leader-keys! "t h" #'hs-minor-mode)
+
+  :config
+
+  ;; Display block hide/show indicators on the fringe.
+  (setopt hs-show-indicators t))
 
 ;; Feature `outline' `outline' provides major and minor modes for collapsing
 ;; sections of a buffer into an outline-like format.
@@ -3308,17 +3324,6 @@ defeats the purpose of `corfu-sort-function'."
             ("C-q" . #'corfu-quick-complete)
             ("M-q" . #'corfu-quick-insert))))
 
-;; Package `corfu-terminal' replaces Corfu's child frames (which are unusuable
-;; on terminal) with popup/popon which works everywhere.
-(use-package! corfu-terminal
-  :ensure (:host codeberg :repo "akib/emacs-corfu-terminal")
-  :demand t
-  :after corfu
-  :config
-
-  (without-display-graphic!
-    (corfu-terminal-mode +1)))
-
 ;; Package `nerd-icons-corfu' adds icons to completions in Corfu. It uses
 ;; `nerd-icons` under the hood and, as such, works on both GUI and terminal
 (use-package! nerd-icons-corfu
@@ -3338,10 +3343,10 @@ defeats the purpose of `corfu-sort-function'."
 
 (set-leader-keys! "e s" #'next-error-select-buffer)
 
-;; Package `flymake' is a minor Emacs mode performing on-the-fly syntax checks.
+;; Feature `flymake' is a minor Emacs mode performing on-the-fly syntax checks.
 ;; Flymake collects diagnostic information for multiple sources, called
 ;; backends, and visually annotates the relevant portions in the buffer.
-(use-package! flymake
+(use-feature! flymake
   :demand t
   :config
 
@@ -3437,10 +3442,12 @@ defeats the purpose of `corfu-sort-function'."
   (set-leader-keys-for-major-mode! 'diff-mode
     "a" #'diff-apply-hunk
     "A" #'diff-apply-buffer
+    "d" #'diff-delete-other-hunks
     "e" #'diff-ediff-patch
     "f" #'next-error-follow-minor-mode
     "g" #'diff-refresh-hunk
     "n" #'diff-restrict-view
+    "k" #'diff-revert-and-kill-hunk
     "r" #'diff-reverse-direction
     "s" #'diff-split-hunk
     "t" #'diff-test-hunk
@@ -3510,20 +3517,6 @@ defeats the purpose of `corfu-sort-function'."
   ;; Prompt to remove unmodified buffers A/B/C at session end.
   (setopt ediff-keep-variants nil))
 
-;; Feature `smerge-mode' provides a lightweight alternative to Emerge and Ediff.
-(use-feature! smerge-mode
-  :config
-
-  (defvar-keymap smerge-repeat-map
-    :doc "Support SMerge navigation and controls with repeats."
-    :repeat t
-    "n" #'smerge-next
-    "p" #'smerge-prev
-    "u" #'smerge-keep-upper
-    "b" #'smerge-keep-base
-    "l" #'smerge-keep-lower
-    "a" #'smerge-keep-all))
-
 ;;; Language support
 ;;;; Tree-sitter
 
@@ -3560,26 +3553,18 @@ defeats the purpose of `corfu-sort-function'."
 ;; powered by tree-sitter.
 (use-feature! bash-ts-mode
   :mode ("\\.sh\\'"))
+;;;; C/C++
 
-;;;; C
-
-;; Feature `c-ts-mode' provides major mode for editing C, powered by
-;; tree-sitter.
+;; Feature `c-ts-mode' provides major mode for editing both C and C++, powered
+;; by tree-sitter.
 (use-feature! c-ts-mode
   :init
 
-  (set-prefixes-for-major-mode! 'c-ts-mode "s" "session")
-  (set-leader-keys-for-major-mode! 'c-ts-mode "s s" #'eglot)
-
-  ;; Launch tree-sitter version of `c-mode' instead.
-  (push '(c-mode . c-ts-mode) major-mode-remap-alist))
-
-;;;; C++
-
-;; Feature `c++-ts-mode' provides major mode for editing C++, powered by
-;; tree-sitter.
-(use-feature! c++-ts-mode
-  :init
+  (defhook! my--c-ts-mode-setup ()
+    c-ts-mode-hook
+    "Set custom settings for `c-ts-mode'."
+    ;; Select C documents when inside `c-ts-mode' buffers.
+    (setq-local devdocs-current-docs '("c")))
 
   (defhook! my--c++-ts-mode-setup ()
     c++-ts-mode-hook
@@ -3587,25 +3572,46 @@ defeats the purpose of `corfu-sort-function'."
     ;; Select C++ documents when inside `c++-ts-mode' buffers.
     (setq-local devdocs-current-docs '("cpp")))
 
-  (defun my--c-ts-mode-indent-style ()
-    "Override the built-in BSD indentation style with some additional rules."
-    `(
-      ;; Align function arguments with the offset.
-      ((match nil "argument_list") parent-bol c-ts-mode-indent-offset)
-      ;; Same for parameters.
-      ((match nil "parameter_list") parent-bol c-ts-mode-indent-offset)
-      ;; Do not indent inside namespaces.
-      ((n-p-gp nil nil "namespace_definition") grand-parent 0)
-      ;; Append to BSD style
-      ,@(alist-get 'bsd (c-ts-mode--indent-styles 'cpp))))
-  (setopt c-ts-mode-indent-style #'my--c-ts-mode-indent-style)
-
+  (set-prefixes-for-major-mode! 'c-ts-mode "s" "session")
   (set-prefixes-for-major-mode! 'c++-ts-mode "s" "session")
+
+  (set-leader-keys-for-major-mode! 'c-ts-mode "s s" #'eglot)
   (set-leader-keys-for-major-mode! 'c++-ts-mode "s s" #'eglot)
 
-  ;; Launch tree-sitter version of `c++-mode' instead.
+  ;; Launch tree-sitter versions instead.
+  (push '(c-mode . c-ts-mode) major-mode-remap-alist)
   (push '(c++-mode . c++-ts-mode) major-mode-remap-alist)
-  (push '(c-or-c++-mode . c-or-c++-ts-mode) major-mode-remap-alist))
+  (push '(c-or-c++-mode . c-or-c++-ts-mode) major-mode-remap-alist)
+
+  :config
+
+  (defun my--c-ts-mode-indent-style ()
+    "Override the built-in BSD indentation style with some additional rules."
+    (cond
+     ((eq major-mode 'c-ts-mode)
+      `((c
+         ;; Align function arguments with the offset.
+         ((match nil "argument_list") parent-bol c-ts-indent-offset)
+         ;; Same for parameters.
+         ((match nil "parameter_list") parent-bol c-ts-indent-offset)
+         ;; Append to BSD style
+         ,@(cdr (car (c-ts-mode--simple-indent-rules 'c 'bsd))))))
+     ((eq major-mode 'c++-ts-mode)
+      `((cpp
+         ;; Align function arguments with the offset.
+         ((match nil "argument_list") parent-bol c-ts-indent-offset)
+         ;; Same for parameters.
+         ((match nil "parameter_list") parent-bol c-ts-indent-offset)
+         ;; Do not indent inside namespaces.
+         ((n-p-gp nil nil "namespace_definition") grand-parent 0)
+         ;; Append to BSD style
+         ,@(cdr (car (c-ts-mode--simple-indent-rules 'cpp 'bsd))))))))
+
+  ;; Set custom indent style based on BSD for both C and C++.
+  (setopt c-ts-mode-indent-style 'my--c-ts-mode-indent-style)
+
+  ;; Syntax-highlight Doxygen comment blocks.
+  (setopt c-ts-mode-enable-doxygen t))
 
 ;;;; CMake
 
@@ -3760,41 +3766,11 @@ Return nil if there is no name or if NODE is not a defun node."
   (set-prefixes-for-major-mode! 'rust-ts-mode "s" "session")
   (set-leader-keys-for-major-mode! 'rust-ts-mode "s s" #'eglot)
 
-  (defvar rust-compilation-regexp
-    (list (rx bol (or (group-n 1 "error")
-                      (group-n 2 "warning")
-                      (group-n 3 "note"))
-              (? "[" (+ (in "A-Z" "0-9")) "]") ":" (* nonl)
-              "\n" (+ " ") "-->"
-              " " (group-n 4 (+ nonl))   ;; file
-              ":" (group-n 5 (+ digit))  ;; line
-              ":" (group-n 6 (+ digit))) ;; colum
-          4 5 6 (cons 2 3)
-          nil
-          '(1 compilation-error-face)
-          '(2 compilation-warning-face)
-          '(3 compilation-info-face))
-    "Specifications for matching messages in rustc invocations.")
-
-  (defvar rust-panic-regexp
-    (list (rx "thread '" (+ nonl) "' " (? "(" (+ digit) ") ")
-              (group-n 1 "panicked" ) " at"
-              " " (group-n 2 (+ nonl))   ;; file
-              ":" (group-n 3 (+ digit))  ;; line
-              ":" (group-n 4 (+ digit))) ;; column
-          2 3 4 nil
-          nil
-          '(1 compilation-error-face))
-    "Specifications for matching panics in rust binaries.")
-
-  (with-eval-after-load 'compile
-    (add-to-list 'compilation-error-regexp-alist-alist
-                 (cons 'rust rust-compilation-regexp))
-    (add-to-list 'compilation-error-regexp-alist-alist
-                 (cons 'rust-panic rust-panic-regexp)))
-
   :mode ("\\.rs\\'")
   :config
+
+  ;; Fontify suffixes of number literals as types.
+  (setopt rust-ts-mode-fontify-number-suffix-as-type t)
 
   (with-eval-after-load 'consult-imenu
     ;; Update `consult-imenu' with the symbol categories for Rust.
@@ -3934,6 +3910,11 @@ Return nil if there is no name or if NODE is not a defun node."
 ;; Feature `toml-ts-mode' provides major mode for editing TOML, powered by
 ;; tree-sitter
 (use-feature! toml-ts-mode
+  :init
+
+  (set-prefixes-for-major-mode! 'toml-ts-mode "s" "session")
+  (set-leader-keys-for-major-mode! 'toml-ts-mode "s s" #'eglot)
+
   :mode ("\\.toml\\'"))
 
 ;; Package `yaml-mode' provides a major mode for YAML.
@@ -3969,7 +3950,7 @@ Return nil if there is no name or if NODE is not a defun node."
 
     (consult-eglot-embark-mode +1)))
 
-;; Package `eglot' is the Emacs client for the Language Server Protocol (LSP).
+;; Feature `eglot' is the Emacs client for the Language Server Protocol (LSP).
 ;; The name “Eglot” is an acronym that stands for "Emacs Polyglot". Eglot
 ;; provides infrastructure and a set of commands for enriching the source code
 ;; editing capabilities of Emacs via LSP. LSP is a standardized communications
@@ -3985,7 +3966,7 @@ Return nil if there is no name or if NODE is not a defun node."
 ;; refactoring, on-the-fly diagnostics, and more. Eglot itself is completely
 ;; language-agnostic, but it can support any programming language for which
 ;; there is a language server and an Emacs major mode.
-(use-package! eglot
+(use-feature! eglot
   :init
 
   ;; Increase the amount of data which Emacs reads from the process. The Emacs
@@ -4130,12 +4111,6 @@ Return nil if there is no name or if NODE is not a defun node."
   ;; active LSP servers.
   (eglot-x-setup))
 
-;; Package `jsonrpc' implements the JSONRPC 2.0 specification. As the name
-;; suggests, JSONRPC is a generic Remote Procedure Call protocol designed around
-;; JSON objects. This library was originally extracted from Eglot, an Emacs
-;; LSP client.
-(use-package! jsonrpc)
-
 ;;; Introspection
 ;;;; Help
 
@@ -4158,13 +4133,6 @@ help buffer.")
     "Don't ask for confirmation before reverting help buffers.
 \(Reverting is done by pressing \\<help-mode-map>\\[revert-buffer].)"
     (funcall help-mode-revert-buffer ignore-auto 'noconfirm))
-
-  (defhook! my--xref-help-setup ()
-    help-mode-hook
-    "Make xref look up Elisp symbols in help buffers.
-Otherwise, it will try to find a TAGS file using etags, which is
-unhelpful."
-    (add-hook #'xref-backend-functions #'elisp--xref-backend nil 'local))
 
   (set-leader-keys!
     "h b" #'describe-bindings
@@ -4560,6 +4528,9 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
   ;; Consider a file name ending in a slash as a directory to create.
   (setopt dired-create-destination-dirs-on-trailing-dirsep t)
 
+  ;; Let `dired-create-empty-file' act on the current directory.
+  (setopt dired-create-empty-file-in-current-directory t)
+
   ;; Search file names with Isearch when initial point position is on a file
   ;; name.
   (setopt dired-isearch-filenames 'dwim)
@@ -4652,8 +4623,9 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
     (auto-fill-mode +1)
     (display-fill-column-indicator-mode +1))
 
-  ;; Remove unnecessary hook functions.
-  (setopt log-edit-hook '(log-edit-insert-message-template)))
+  ;; Remove unnecessary hook functions and show diff by default.
+  (setopt log-edit-hook '(log-edit-insert-message-template
+                          log-edit-maybe-show-diff)))
 
 ;; Feature `vc' allows you to use a version control system from within Emacs,
 ;; integrating the version control operations smoothly with editing. It provides
@@ -4668,9 +4640,17 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
           ("RET" . #'vc-dir-root)
           ("e"   . #'vc-ediff)
           ("F"   . #'vc-update)
+          ("l"   . #'vc-print-change-log)
+          ("L"   . #'vc-print-root-change-log)
           ("k"   . #'vc-revert))
 
   :config
+
+  ;; `C-x v I' and `C-x v O' become prefix commands with log and diff command.
+  (setopt vc-use-incoming-outgoing-prefixes t)
+
+  ;; Prompt to allow VCS operations that may rewrite published history.
+  (setopt vc-allow-rewriting-published-history 'ask)
 
   ;; Feature `vc-dir' provides a directory status display under VC.
   (use-feature! vc-dir
@@ -4678,7 +4658,12 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
             ("M-s" . nil)
             ("e"   . #'vc-ediff)
             ("F"   . #'vc-update)
-            ("k"   . #'vc-revert))))
+            ("k"   . #'vc-revert))
+
+    :config
+
+    ;; Refreshing the VC-Dir buffer also hides up-to-date and ignored items.
+    (setopt vc-dir-hide-up-to-date-on-revert t)))
 
 ;; Feature `vc-git' contains a VC backend for the git version control system.
 (use-feature! vc-git
