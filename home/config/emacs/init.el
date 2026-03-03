@@ -718,6 +718,9 @@ For details on DATA, CONTEXT, and signal, see
            (display-buffer-reuse-window display-buffer-pop-up-window)
            (body-function . select-window))))
 
+;; Killing buffers should also quit their windows.
+(setopt kill-buffer-quit-windows t)
+
 (defun maximize-buffer ()
   "Maximize buffer, use again to undo it."
   (interactive)
