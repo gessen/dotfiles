@@ -194,7 +194,7 @@ set -gx LESS $LESS
 
 ### Editor
 
-function fe -d "Open selected files with EDITOR or xdg-open with fd+fzf"
+function ef -d "Open selected files with EDITOR or xdg-open with fd+fzf"
     set -l out (fd --type file --color=always $argv[1] | \
         fzf --ansi --layout=reverse --tac --select-1 --exit-0 --multi \
         --expect=ctrl-o,ctrl-e)
