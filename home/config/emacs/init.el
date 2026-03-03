@@ -5119,39 +5119,9 @@ possibly new window."
 
 ;;;; Theme
 
-(defvar after-load-theme-hook nil
-  "Hook run after a color theme is loaded using `load-theme'.")
-
-(defadvice! my--after-load-theme (&rest _)
-  :after #'load-theme
-  "After theme is loaded, run `after-load-theme-hook'."
-  (run-hooks 'after-load-theme-hook))
-
-(defhook! my--set-cursor-color-in-terminal ()
-  (after-load-theme-hook server-after-make-frame-hook)
-  "Set cursor color in terminal Emacs based on the current theme."
-  (unless (display-graphic-p)
-    (let ((color (face-attribute 'cursor :background)))
-      (if color
-          ;; Only some terminals support this exact escape code.
-          (send-string-to-terminal (format "\e]12;%s\a" color))))))
-
-(defhook! my--reset-cursor-color-in-terminal-main ()
-  kill-emacs-hook
-  "Reset cursor color in terminal Emacs after exiting it."
-  (unless (display-graphic-p)
-    (send-string-to-terminal "\e]112\a")))
-
-(defun my--reset-cursor-color-in-terminal (terminal)
-  "Reset cursor color in terminal Emacs"
-  (send-string-to-terminal "\e]112\a" terminal))
-(add-to-list 'delete-terminal-functions #'my--reset-cursor-color-in-terminal)
-
-(defadvice! my--after-global-kkp-mode (&rest _)
-  :after #'global-kkp-mode
-  "After KKP mode is enabled, ensure that terminal reset is called first
-during teardown."
-  (push 'my--reset-cursor-color-in-terminal delete-terminal-functions))
+;; Set cursor color in terminal Emacs based on the current theme. This uses the
+;; OSC 12 escape sequence.
+(setopt xterm-update-cursor 'color)
 
 ;; Package `modus-themes' is a pack of themes that conform with the highest
 ;; standard for colour-contrast accessibility between background and foreground
