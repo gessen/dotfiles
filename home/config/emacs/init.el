@@ -5460,6 +5460,12 @@ possibly new window."
 
 ;;; Closing
 
+(use-package! dape
+  :init
+
+  (setopt dape-adapter-dir (file-name-as-directory
+                            (cache-dir "debug-adapters"))))
+
 ;; Restore default values after startup.
 (dolist (handler file-name-handler-alist)
   (cl-pushnew handler my--initial-file-name-handler-alist))
