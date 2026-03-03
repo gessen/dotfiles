@@ -696,6 +696,9 @@ For details on DATA, CONTEXT, and signal, see
           ("\\`\\*\\(Warnings\\|Compile-Log\\|Org Links\\)\\*\\'"
            (display-buffer-no-window)
            (allow-no-window . t))
+          ;; Make Majutsu behave like Magit.
+          ((derived-mode . majutsu-log-mode)
+           (display-buffer-full-frame))
           ;; Make Helpful behave more similar to builtin Help.
           ((derived-mode . helpful-mode)
            (display-buffer-reuse-mode-window display-buffer-pop-up-window)
@@ -1108,6 +1111,7 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
             (project-find-dir "Find directory" ?d)
             (project-dired "Dired" ?D)
             (magit-project-status "Magit" ?m)
+            (majutsu-project-log "Majutsu" ?j)
             (project-vc-dir "VC-Dir" ?v)
             (project-eshell "Eshell" ?e)
             (project-any-command "Other" ?o)))
@@ -1457,7 +1461,14 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
   :hook (prog-mode-hook . ws-butler-mode)
 
   :init
-  (set-leader-keys! "t C-w" #'ws-butler-mode))
+
+  (set-leader-keys! "t C-w" #'ws-butler-mode)
+
+  :config
+
+  ;; Do not restore to the buffer trimmed whitespace right before point.
+  ;; This behavior isn't compatible with `vc-jj' and `diff-hl'.
+  (setopt ws-butler-keep-whitespace-before-point nil))
 
 ;;;; Indentation
 
@@ -4766,6 +4777,16 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
 
   ;; Feature `vc-dir' provides a directory status display under VC.
   (use-feature! vc-dir
+    :init
+
+    (defadvice! my--vc-dir-hide-state-silent
+        (vc-dir-hide-state &rest args)
+      :around #'vc-dir-hide-state
+      "Make `vc-dir-hide-state' silent when used with default argument."
+      (if (car args)
+          (apply vc-dir-hide-state args)
+        (advice-silence-messages! vc-dir-hide-state args)))
+
     :bind ( :map vc-dir-mode-map
             ("M-s" . nil)
             ("e"   . #'vc-ediff)
@@ -4789,6 +4810,8 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
 
   ;; Show stat output in git log
   (setopt vc-git-log-switches '("--stat")))
+
+;;;;; Git
 
 ;; Package `browse-at-remote' easily opens target page on github/gitlab (or
 ;; bitbucket) from Emacs by calling `browse-at-remote` function. Supports Dired
@@ -5067,6 +5090,34 @@ current theme. This will also disable line numbers and decorations."
 
   ;; Allow using `q' to quit out of popups, in addition to `C-g'.
   (transient-bind-q-to-quit))
+
+;;;;; Jujutsu
+
+;; Package `majutsu' provides a Magit-style interface for Jujutsu, offering an
+;; efficient way to interact with JJ repositories from within Emacs.
+(use-package! majutsu
+  :ensure (:host github :repo "0WD0/majutsu")
+  :init
+
+  ;; Suppress messages about redefining template helpers.
+  (advice-add #'majutsu-template--register-function
+              :around #'advice-silence-messages!)
+
+  (defadvice! my--majutsu-log-load-magit (&rest _)
+    :before #'majutsu-log
+    "Run `majutus-log' with correct autoload."
+    (require 'magit))
+
+  (defun majutsu-project-log ()
+    "Run `majutsu-log' in the current project's root."
+    (interactive)
+    (majutsu-log (project-root (project-current t))))
+
+  (set-leader-keys! "g j" #'majutsu-log))
+
+;; Package `vc-jj' includes support for the Jujutsu version control system.
+(use-package! vc-jj
+  :hook (vc-dir-mode-hook . vc-dir-hide-up-to-date))
 
 ;;;; Terminal emulator
 

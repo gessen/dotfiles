@@ -1,0 +1,86 @@
+#:schema https://jj-vcs.github.io/jj/prerelease/config-schema.json
+
+[user]
+name = "Jacek Swierk"
+email = "jacek.swierk@gmail.com"
+
+[ui]
+default-command = "log"
+diff-editor = ":builtin"
+diff-formatter = ":git"
+pager = "delta"
+revsets-use-glob-by-default = true
+
+[fix.tools.clang-format]
+command = ["clang-format", "--assume-filename=$path"]
+patterns = [
+  "**/*.h",
+  "**/*.hh",
+  "**/*.hpp",
+  "**/*.hxx",
+  "**/*.c",
+  "**/*.cc",
+  "**/*.cpp",
+  "**/*.cxx",
+]
+
+[fix.tools.rustfmt]
+command = ["rustfmt", "+nightly", "--emit", "stdout", "--edition", "2024"]
+patterns = ["**/*.rs"]
+
+[fix.tools.shfmt]
+command = [
+  "shfmt",
+  "--indent",
+  "2",
+  "--binary-next-line",
+  "--case-indent",
+  "--space-redirects",
+  "--filename=$path"
+]
+patterns = ["**/*.sh"]
+
+[merge-tools.ediff]
+program = "sh"
+merge-args = [
+  "-c",
+  'emacsclient -c --eval "(ediff-merge-files-with-ancestor \"$0\" \"$1\" \"$2\" nil \"$3\")"',
+  "$left",
+  "$right",
+  "$base",
+  "$output"
+]
+
+[revset-aliases]
+"closest_bookmark(to)" = "latest(coalesce(heads(::to & bookmarks()), fork_point(to | trunk())))"
+"stack()" = "stack(@)"
+"stack(x)" = "stack(x, 2)"
+"stack(x, n)" = "ancestors(reachable(x, mutable()), 2)"
+
+[template-aliases]
+"format_timestamp(ts)" = "ts.ago()"
+
+[aliases]
+# Find the closest ancestor with a bookmark pointing at it, and move it to the
+# parent of the working copy.
+tug = [
+  "bookmark",
+  "move",
+  "--from",
+  "closest_bookmark(@-)",
+  "--to",
+  "@-",
+]
+
+[templates]
+draft_commit_description = '''
+concat(
+  coalesce(description, default_commit_description, "\n"),
+  surround(
+    "\nJJ: This commit contains the following changes:\n", "",
+    indent("JJ:     ", diff.stat(72)),
+  ),
+  "\nJJ: ignore-rest\n",
+  diff.git(),
+)
+'''

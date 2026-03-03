@@ -462,6 +462,76 @@ abbr -a gwip git-wip
 abbr -a gunwip git-unwip
 abbr -a gunwipall git-unwip-all
 
+### Jujutsu
+
+abbr -a jaba jj abandon
+
+abbr -a jabs jj absorb
+
+abbr -a jbs jj bisect run --range
+
+abbr -a jb jj bookmark
+abbr -a jbc jj bookmark create
+abbr -a jbd jj bookmark delete
+abbr -a jbf jj bookmark forget
+abbr -a jbl jj bookmark list
+abbr -a jblt jj bookmark list --tracked
+abbr -a jbm jj bookmark move
+abbr -a jbmf jj bookmark move --allow-backwards
+abbr -a jbr jj bookmark rename
+abbr -a jbt jj bookmark track
+
+abbr -a jc jj commit
+abbr -a jci jj commit --interactive
+
+abbr -a jde jj describe
+
+abbr -a jd jj diff
+abbr -a jdp jj diff -r @-
+abbr -a jdr jj diff -r
+
+abbr -a je jj edit
+abbr -a jep jj edit -r @-
+
+abbr -a jf jj git fetch
+
+abbr -a jl jj log
+abbr -a jlo jj log -r ::@
+abbr -a jlog jj log -r "'all()'"
+abbr -a jls jj log -r "'stack()'"
+
+abbr -a jm jj metaedit
+abbr -a jm! jj metaedit --update-author-timestamp
+
+abbr -a jn jj new
+abbr -a jnt jj new "'trunk()'"
+
+abbr -a jp jj git push
+abbr -a jpc jj git push -r @
+abbr -a jpa jj git push --all
+abbr -a jpb jj git push --bookmark
+abbr -a jpp jj git push -r @-
+abbr -a jpt jj git push --tracked
+
+abbr -a jrb jj rebase
+abbr -a jrbt jj rebase --onto "'trunk()'"
+abbr -a jrbtb jj rebase --onto "'trunk()'" --branch
+
+abbr -a jrs jj restore
+
+abbr -a jsh jj show
+abbr -a jshn jj show --no-patch
+abbr -a jshs jj show --stat
+
+abbr -a jsp jj split
+abbr -a jspf jj split --ignore-immutable
+
+abbr -a jsq jj squash
+abbr -a jsqf jj squash --ignore-immutable
+abbr -a jsqi jj squash --interactive
+
+abbr -a jst jj status
+
 ### Bat
 
 if type -q bat
@@ -487,6 +557,7 @@ set -gx FZF_DEFAULT_COMMAND "fd \
 --hidden \
 --follow \
 --exclude .git \
+--exclude .jj \
 "
 
 # Default fzf options
