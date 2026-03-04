@@ -4182,6 +4182,10 @@ help buffer.")
 (use-feature! elisp-mode
   :config
 
+  ;; Highlight symbols according to their semantic meaning.
+  (setopt elisp-fontify-semantically t
+          elisp-add-help-echo nil)
+
   (defadvice! my--fill-elisp-docstrings-correctly (&rest _)
     :before-until #'fill-context-prefix
     "Prevent `auto-fill-mode' from adding indentation to Elisp docstrings."
@@ -5240,8 +5244,8 @@ possibly new window."
 (setq inhibit-default-init t)
 
 ;; Disable and kill the *Messages* buffer.
-(setq-default message-log-max nil)
-(kill-buffer "*Messages*")
+;; (setq-default message-log-max nil)
+;; (kill-buffer "*Messages*")
 
 ;; Get rid of "For information about GNU Emacs..." message at startup, unless
 ;; we're in a daemon session, where it'll say "Starting Emacs daemon." instead,
