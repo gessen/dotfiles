@@ -644,6 +644,16 @@ anything that can be a key's definition."
 
 ;;;; Encryption
 
+(use-feature! auth-source
+  :config
+
+  ;;
+  ;; (setopt auth-sources (list (cache-dir "authinfo.gpg")))
+
+  ;;
+  (setopt user-full-name "Jacek Świerk"
+          user-mail-address "jacek.swierk@gmail.com"))
+
 ;; Feature `epg-config' is a basic configuration for EasyPG Emacs library.
 (use-feature! epg-config
   :config
@@ -5514,6 +5524,153 @@ possibly new window."
 ;; more intuitive way, like Avy.
 (use-package! tabgo
   :bind ("M-J" . #'tabgo))
+
+;;; Mail
+
+;; (setopt mail-user-agent 'gnus-user-agent)
+;; (setopt read-mail-command #'gnus)
+;; (setopt gnus-save-newsrc-file nil)
+;; (setopt gnus-read-newsrc-file nil)
+;; (setopt gnus-home-directory (cache-dir "gnus/"))
+;; (setopt gnus-directory (cache-dir "gnus/news"))
+;; (setopt message-directory (cache-dir "gnus/mail"))
+;; (setopt nndraft-directory (cache-dir "gnus/drafts"))
+
+;; (use-package! auth-source-xoauth2-plugin
+;;   :demand t
+;;   :config
+
+;;   (auth-source-xoauth2-plugin-mode +1))
+
+;; Feature `gnus'
+(use-feature! gnus
+  :config
+
+  ;;
+  (setopt gnus-select-method '(nnnil ""))
+
+  ;;
+  (setopt gnus-secondary-select-methods
+          '((nntp "news.gwene.org")
+            ;; (nnimap "imap.google.com"
+            ;;         (nnimap-server-port 993)
+            ;;         (nnimap-stream ssl)
+            ;;         (nnimap-authenticator xoauth2)
+            ;;         (nnimap-inbox "INBOX")
+            ;;         (nnimap-expunge 'immediately)
+            ;;         (nnmail-expiry-wait 'immediate)
+            ;;         (nnmail-expiry-target "nnimap+gmail:[Gmail]/Trash")
+            ;;         (nnir-search-engine imap))
+            ))
+
+  (setopt gnus-gcc-mark-as-read t)
+  (setopt gnus-agent t)
+  (setopt gnus-novice-user nil)           ; careful with this
+
+  ;; checking sources
+  (setopt gnus-check-new-newsgroups 'ask-server)
+  (setopt gnus-read-active-file 'some)
+
+  ;; dribble
+  (setopt gnus-use-dribble-file t)
+  (setopt gnus-always-read-dribble-file t)
+
+  ;; agent
+  (setopt gnus-agent-article-alist-save-format 1)  ; uncompressed
+  (setopt gnus-agent-cache t)
+  (setopt gnus-agent-confirmation-function 'y-or-n-p)
+  (setopt gnus-agent-consider-all-articles nil)
+  (setopt gnus-agent-directory "~/News/agent/")
+  (setopt gnus-agent-enable-expiration 'ENABLE)
+  (setopt gnus-agent-expire-all nil)
+  (setopt gnus-agent-expire-days 30)
+  (setopt gnus-agent-mark-unread-after-downloaded t)
+  (setopt gnus-agent-queue-mail t)        ; queue if unplugged
+  (setopt gnus-agent-synchronize-flags nil)
+
+  ;; article
+  (setopt gnus-article-browse-delete-temp 'ask)
+  (setopt gnus-article-over-scroll nil)
+  (setopt gnus-article-show-cursor t)
+  (setopt gnus-article-sort-functions
+          '((not gnus-article-sort-by-number)
+            (not gnus-article-sort-by-date)))
+  (setopt gnus-article-truncate-lines nil)
+  (setopt gnus-html-frame-width 80)
+  (setopt gnus-html-image-automatic-caching t)
+  (setopt gnus-inhibit-images t)
+  (setopt gnus-max-image-proportion 0.7)
+  (setopt gnus-treat-display-smileys nil)
+  (setopt gnus-article-mode-line-format "%G %S %m")
+  (setopt gnus-visible-headers
+          '("^From:" "^To:" "^Cc:" "^Subject:" "^Newsgroups:" "^Date:"
+            "Followup-To:" "Reply-To:" "^Organization:" "^X-Newsreader:"
+            "^X-Mailer:"))
+  (setopt gnus-sorted-header-list gnus-visible-headers)
+  (setopt gnus-article-x-face-too-ugly ".*") ; all images in headers are outright annoying---disabled!
+
+  ;; async
+  (setopt gnus-asynchronous t)
+  (setopt gnus-use-article-prefetch 15)
+
+  ;; group
+  (setopt gnus-level-subscribed 6)
+  (setopt gnus-level-unsubscribed 7)
+  (setopt gnus-level-zombie 8)
+  (setopt gnus-activate-level 1)
+  (setopt gnus-list-groups-with-ticked-articles nil)
+  (setopt gnus-group-sort-function '(gnus-group-sort-by-unread
+                                     gnus-group-sort-by-alphabet
+                                     gnus-group-sort-by-rank))
+  (setopt gnus-group-line-format "%M%p%P%5y:%B%(%g%)\n")
+  (setopt gnus-group-mode-line-format "%%b")
+  (setopt gnus-topic-display-empty-topics nil)
+
+  ;; summary
+  (setopt gnus-auto-select-first nil)
+  (setopt gnus-summary-ignore-duplicates t)
+  (setopt gnus-suppress-duplicates t)
+  (setopt gnus-save-duplicate-list t)
+  (setopt gnus-summary-goto-unread nil)
+  (setopt gnus-summary-make-false-root 'adopt)
+  (setopt gnus-summary-thread-gathering-function
+          'gnus-gather-threads-by-subject)
+  (setopt gnus-summary-gather-subject-limit 'fuzzy)
+  (setopt gnus-thread-sort-functions
+          '((not gnus-thread-sort-by-date)
+            (not gnus-thread-sort-by-number)))
+  (setopt gnus-subthread-sort-functions '(gnus-thread-sort-by-date))
+  (setopt gnus-thread-hide-subtree nil)
+  (setopt gnus-thread-ignore-subject nil)
+  (setopt gnus-user-date-format-alist
+          '(((gnus-seconds-today) . "Today at %R")
+            ((+ (* 60 60 24) (gnus-seconds-today)) . "Yesterday, %R")
+            (t . "%Y-%m-%d %R")))
+
+  ;; When the %f specifier in `gnus-summary-line-format' matches my
+  ;; name, this will use the contents of the "To:" field, prefixed by
+  ;; the string I specify.  Useful when checking your "Sent" summary or
+  ;; a mailing list you participate in.
+  (setopt gnus-ignored-from-addresses "Protesilaos Stavrou")
+  (setopt gnus-summary-to-prefix "To: ")
+
+  (setopt gnus-summary-line-format "%U%R %-18,18&user-date; %4L:%-25,25f %B%s\n")
+  (setopt gnus-summary-mode-line-format "[%U] %p")
+
+  ;; Use subject
+  (setopt gnus-sum-thread-tree-false-root nil)
+  (setopt gnus-sum-thread-tree-root nil)
+
+  (setopt gnus-sum-thread-tree-indent " ")
+  ;; (setopt gnus-sum-thread-tree-leaf-with-other "+-> ")
+  ;; (setopt gnus-sum-thread-tree-single-leaf "\\-> ")
+  ;; (setopt gnus-sum-thread-tree-vertical "|")
+  (setopt gnus-sum-thread-tree-vertical        "│")
+  (setopt gnus-sum-thread-tree-leaf-with-other "├─► ")
+  (setopt gnus-sum-thread-tree-single-leaf     "╰─► ")
+
+  (require 'gnus-topic)
+  (add-hook 'gnus-group-mode-hook #'gnus-topic-mode))
 
 ;;; Closing
 
