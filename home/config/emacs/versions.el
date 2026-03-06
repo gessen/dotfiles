@@ -684,7 +684,7 @@
                  (:exclude ".dir-locals.el" "test.el" "tests.el" "*-test.el"
                            "*-tests.el" "LICENSE" "README*" "*-pkg.el"))
                 :source "elpaca-menu-lock-file" :protocol https :inherit t
-                :depth treeless :ref "1a7b4f395aa4e1e04afc45fe2dbd6a045871803b"))
+                :depth treeless :ref "73957230ffdd3dedf16f4436f61471bd1365abf6"))
  (llama :source "elpaca-menu-lock-file" :recipe
         (:package "llama" :fetcher github :repo "tarsius/llama" :files
                   ("llama.el" ".dir-locals.el") :source "elpaca-menu-lock-file"

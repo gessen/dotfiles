@@ -623,9 +623,7 @@ anything that can be a key's definition."
 ;; supports the protocol, whereas Emacs has to deduce "modifyOtherKeys" support
 ;; from the TERM variable.
 (use-package! kkp
-  :init
-
-  (global-kkp-mode +1))
+  :hook (tty-setup-hook . global-kkp-mode))
 
 ;;;; Encryption
 
