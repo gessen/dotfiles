@@ -1289,6 +1289,23 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
 ;;; Editing
 ;;;; Text formatting
 
+(defun toggle-fill-paragraph ()
+  "Toggle fill/unfill of the current region.
+Operates on the current paragraph if no region is active."
+  (interactive)
+  (let (deactivate-mark
+        (fill-column
+         (if (eq last-command this-command)
+             (progn (setq this-command nil)
+                    most-positive-fixnum)
+           fill-column)))
+    (if (derived-mode-p '(prog-mode))
+        (call-interactively #'prog-fill-reindent-defun)
+      (call-interactively #'fill-paragraph))))
+
+(keymap-global-set "M-q" #'toggle-fill-paragraph)
+(keymap-unset prog-mode-map "M-q")
+
 ;; When region is active, make `capitalize-word' and friends act on it.
 (keymap-global-set "M-i" #'capitalize-dwim)
 (keymap-global-set "M-l" #'downcase-dwim)
