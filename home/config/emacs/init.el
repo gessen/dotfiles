@@ -852,34 +852,6 @@ window instead."
          ("S-<up>"    . #'windmove-up)
          ("S-<down>"  . #'windmove-down)))
 
-;; Feature `winner' provides an undo/redo stack for window configurations, with
-;; undo and redo being C-c left and C-c right, respectively. (Actually "redo"
-;; doesn't revert a single undo, but rather a whole sequence of them.) For
-;; instance, you can use C-x 1 to focus on a particular window, then return to
-;; your previous layout with C-c left.
-(use-feature! winner
-  :demand t
-  :config
-
-  (set-leader-keys!
-    "w u" #'winner-undo
-    "w U" #'winner-redo)
-
-  (setq winner-boring-buffer '("*Completions*"
-                               "*Compile-Log*"
-                               "*inferior-lisp*"
-                               "*Fuzzy Completions*"
-                               "*Apropos*"
-                               "*Help*"
-                               "*cvs*"
-                               "*Buffer List*"
-                               "*Ibuffer*"
-                               "*esh command on file*"))
-
-  ;; For some reason `winner-mode' must be delayed, otherwise launching
-  ;; emacsclient in GUI may work strangely.
-  (with-display-graphic! (winner-mode +1)))
-
 ;; Package `ace-window' provides a function, `ace-window' which is meant to
 ;; replace `other-window' by assigning each window a short, unique label. When
 ;; there are only two windows present, `other-window' is called. If there are
@@ -5387,7 +5359,9 @@ during teardown."
   (setopt tab-bar-show 1)
 
   ;; Truncate buffer's name to avoid very long tabs.
-  (setopt tab-bar-tab-name-function #'tab-bar-tab-name-truncated))
+  (setopt tab-bar-tab-name-function #'tab-bar-tab-name-truncated)
+
+  (tab-bar-history-mode +1))
 
 ;; Feature `tab-line' displays a tab line on the top screen line of each window.
 ;; The Tab Line shows special buttons for each buffer that was displayed in a
