@@ -4975,6 +4975,9 @@ current theme. This will also disable line numbers and decorations."
 
 ;;;; External commands
 
+;; Show current directory when prompting for a shell command.
+(setopt shell-command-prompt-show-cwd t)
+
 (set-leader-keys! "!" (cons "shell cmd" #'shell-command))
 (set-leader-keys! "&" (cons "async shell cmd" #'async-shell-command))
 
