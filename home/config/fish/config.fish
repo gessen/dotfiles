@@ -335,7 +335,9 @@ abbr -a gcpa git cherry-pick --abort
 abbr -a gcpc git cherry-pick --continue
 
 abbr -a gclean git clean --interactive -d
+
 abbr -a gcl git clone --recurse-submodules
+abbr -a gcl1 git clone --recurse-submodules --depth=1
 
 abbr -a gc git commit
 abbr -a gcs git commit --gpg-sign
