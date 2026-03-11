@@ -480,6 +480,13 @@ if type -q dua
     abbr -a du dua
 end
 
+### Fd
+
+if type -q fd
+    abbr -a fdh fd -HL
+    abbr -a fdi fd -HIL
+end
+
 ### Fzf
 
 # Set fd as the default source for fzf

@@ -8,6 +8,7 @@ dotfiles:
   - config/emacs/early-init.el
   - config/emacs/init.el
   - config/emacs/versions.el
+  - config/fd/ignore
   - config/fish/config.fish
   - config/fish/fish_plugins
   - config/fontconfig/fonts.conf
