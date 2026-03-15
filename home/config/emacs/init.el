@@ -889,12 +889,10 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
     "w M" #'ace-swap-window
     "w w" #'ace-window-prefix)
 
-  :bind ("M-o" . #'ace-window)
-
-  :config
-
   ;; Show the Ace window key in the mode line.
-  (ace-window-display-mode +1))
+  (ace-window-display-mode +1)
+
+  :bind ("M-o" . #'ace-window))
 
 ;; Package `ibuffer-project' provides IBuffer filtering and sorting functions to
 ;; group buffers by function or regexp applied to `default-directory'. By
@@ -2600,8 +2598,8 @@ will not refresh `column-number-mode."
 ;; fillable templates.
 (use-package! yasnippet
   :functions yas-reload-all
-  :defer 1
-  :commands (yas-next-field
+  :commands (yas-hippie-try-expand
+             yas-next-field
              yas-prev-field)
   :init
 
@@ -3329,7 +3327,6 @@ defeats the purpose of `corfu-sort-function'."
 ;; Flymake collects diagnostic information for multiple sources, called
 ;; backends, and visually annotates the relevant portions in the buffer.
 (use-package! flymake
-  :demand t
   :config
 
   (defvar-keymap flymake-repeat-map
