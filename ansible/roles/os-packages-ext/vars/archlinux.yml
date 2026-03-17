@@ -1,6 +1,5 @@
 ---
 packages_aur:
-  - dropbox
   - emacs-lsp-booster
   - mkinitcpio-firmware
   - mpv-thumbfast-git
