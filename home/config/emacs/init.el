@@ -1330,6 +1330,9 @@ Operates on the current paragraph if no region is active."
 
   (set-leader-keys! "t o" #'outline-minor-mode)
 
+  :hook ((diff-mode-hook
+          grep-mode-hook
+          xref-after-update-hook) . outline-minor-mode)
   :config
 
   ;; Show outline clickable buttons in a buffer.
