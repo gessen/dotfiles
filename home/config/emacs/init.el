@@ -2110,14 +2110,12 @@ will not refresh `column-number-mode."
 
   (defhydra hydra-symbol-overlay (:color pink :hint nil)
     "
-[_n_] next   [_p_] prev      [_d_] def           [_f_/_b_] switch [_t_] scope
-[_e_] echo   [_o_] unoverlay [_O_] unoverlay all [_c_]^^   copy   [_z_] center
-[_s_] search [_r_] replace   [_R_] rename        ^^^^             [_q_] quit
+[_n_] next    [_p_] prev          [_f_/_b_] switch [_t_] scope
+[_o_] overlay [_O_] unoverlay all [_c_]^^ copy     [_z_] center
+[_s_] search  [_r_] replace       [_R_]^^ rename   [_q_] quit
 "
     ("b" symbol-overlay-switch-backward)
     ("c" symbol-overlay-save-symbol)
-    ("d" symbol-overlay-jump-to-definition)
-    ("e" symbol-overlay-echo-mark)
     ("f" symbol-overlay-switch-forward)
     ("n" symbol-overlay-jump-next)
     ("o" symbol-overlay-put)
