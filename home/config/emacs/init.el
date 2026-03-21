@@ -3155,7 +3155,10 @@ completing-read prompter."
 
 ;; Enable indentation and completion using the TAB key. `completion-at-point' is
 ;; bound to C-M-i, which is M-TAB in a terminal without kitty protocol.
-(setq tab-always-indent 'complete)
+(setopt tab-always-indent 'complete)
+
+;; Disable Ispell completion function.
+(setopt text-mode-ispell-word-completion nil)
 
 ;; Package `cape' provides Completion At Point Extensions which can be used in
 ;; combination with Corfu, Company or the default completion UI. The completion
