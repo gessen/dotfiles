@@ -195,45 +195,40 @@ set -gx LESS $LESS
 ### Editor
 
 function ef -d "Open selected files with EDITOR or xdg-open with fd+fzf"
-    set -l out (fd --type file --color=always $argv[1] | \
-        fzf --ansi --layout=reverse --tac --select-1 --exit-0 --multi \
-        --expect=ctrl-o,ctrl-e)
-    set -l key $out[1]
-    set -l files $out[2..-1]
-    if test -z $files
-        return
-    end
-    if test $key = ctrl-o
-        for file in $files
-            xdg-open $file
-        end
-    else
-        $EDITOR $files
-    end
+    set -f fd_cmd fd --type file --color=always
+    set -f fzf_execute "printf '%s\0' {+} \
+        | xargs -0 $EDITOR"
+    set -f fzf_xdg_execute "printf '%s\0' {+} \
+        | xargs -0 -n 1 xdg-open 2>/dev/null"
+    set -f fzf_cmd fzf --layout=reverse --ansi --exit-0 --multi \
+        --preview="bat --style=default --color=always \
+        {}" \
+        --preview-window="up,60%" \
+        --bind="enter:execute($fzf_execute)+deselect-all" \
+        --bind="ctrl-o:execute($fzf_xdg_execute)+deselect-all"
+    $fd_cmd $argv | $fzf_cmd
 end
 
-function eg -d "Open files with EDITOR with rg+fzf with preview"
+function eg -d "Open files with EDITOR with rg+fzf"
     if test (count $argv) = 0
         return
     end
     set -f rg_cmd rg --no-heading --line-number --column --color=always
+    if test (string match --entire emacs "$EDITOR")
+        set -f fzf_execute "printf '%s\n' {+} \
+            | awk -F: '{printf \"+%s:%s%c%s%c\", \$2, \$3, 0, \$1, 0}' \
+            | xargs -0 $EDITOR"
+    else
+        set -f fzf_execute "printf '%s\n' {+} \
+            | awk -F: '{printf \"%s:%s:%s%c\", \$1, \$2, \$3, 0}'\
+            | xargs -0 $EDITOR"
+    end
     set -f fzf_cmd fzf --layout=reverse --ansi --exit-0 --multi --delimiter=: \
         --preview="bat --style=default --color=always \
         --highlight-line={2} {1}" \
-        --preview-window="up,60%,+{2}+3/3,~3"
-    if test (string match --entire emacs "$EDITOR")
-        set -f files ($rg_cmd $argv \
-            | $fzf_cmd \
-            | awk -F: '{printf "+%s:%s %s\n", $2, $3, $1}')
-    else
-        set -f files ($rg_cmd $argv \
-            | $fzf_cmd \
-            | awk -F: '{printf "%s:%s:%s\n", $1, $2, $3}')
-    end
-    if test -z "$files"
-        return
-    end
-    $EDITOR (string split " " $files)
+        --preview-window="up,60%,+{2}+3/3,~3" \
+        --bind="enter:execute($fzf_execute)+deselect-all"
+    $rg_cmd $argv | $fzf_cmd
 end
 
 abbr -a ec emacsclient --tty
