@@ -4111,6 +4111,10 @@ Return nil if there is no name or if NODE is not a defun node."
   :after eglot
   :config
 
+  ;; Disable experimental SnippetTextEdits as they work incorrectly with
+  ;; comments that have backticks.
+  (setopt eglot-x-enable-snippet-text-edit nil)
+
   ;; Put hover actions at the top of Eldoc buffer.
   (setopt eglot-x-hover-actions-priority 80)
 
