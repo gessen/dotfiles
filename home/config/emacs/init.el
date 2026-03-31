@@ -1705,8 +1705,12 @@ column as mark, it add cursor to each line."
     "s r N" #'rectangle-number-lines
     "s r o" #'open-rectangle
     "s r s" #'string-rectangle
+    "s r t" #'string-insert-rectangle
     "s r x" #'clear-rectangle
-    "s r y" #'yank-rectangle))
+    "s r y" #'yank-rectangle)
+
+  :bind ( :map rectangle-mark-mode-map
+          ("M-t" . #'string-insert-rectangle)))
 
 ;;;; Undo/redo
 
