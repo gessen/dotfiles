@@ -1552,11 +1552,17 @@ column as mark, it add cursor to each line."
   (cond
    ;; Region does not exist - call `set-mark-command'
    ((not (region-active-p))
-    (setq this-command 'set-mark-command)
+    (setq this-command 'set-mark-command
+          this-original-command 'set-mark-command)
     (call-interactively 'set-mark-command))
+
    ;; Region exists and is a single line - call `expreg-expand'
-   ((= (line-number-at-pos) (line-number-at-pos (mark)))
+   ((or (eq last-command 'expreg-expand)
+        (= (line-number-at-pos) (line-number-at-pos (mark))))
+    (setq this-command 'expreg-expand
+          this-original-command 'expreg-expand)
     (call-interactively 'expreg-expand))
+
    ;; Region exists and is a multi line - either call `mc/edit-lines' or
    ;; `rectangle-mark-mode'
    (t
@@ -1564,9 +1570,15 @@ column as mark, it add cursor to each line."
            (save-excursion
              (goto-char (mark))
              (current-column))))
-      (if (eq column-of-mark (current-column))
-          (call-interactively 'mc/edit-lines)
-        (call-interactively 'rectangle-mark-mode))))))
+      (if (= column-of-mark (current-column))
+          (progn
+            (setq this-command 'mc/edit-lines
+                  this-original-command 'mc/edit-lines)
+            (call-interactively 'mc/edit-lines))
+        (progn
+          (setq this-command 'rectangle-mark-mode
+                this-original-command 'rectangle-mark-mode)
+          (call-interactively 'rectangle-mark-mode)))))))
 
 ;; Overwrite default `set-mark-command' with dwim version.
 (keymap-global-set "<remap> <set-mark-command>" #'set-mark-command-dwim)
@@ -1609,6 +1621,7 @@ column as mark, it add cursor to each line."
   (defvar-keymap expreg-repeat-map
     :doc "Support Expreg based selection with repeats."
     :repeat t
+    "SPC" #'expreg-expand
     "="   #'expreg-expand
     "-"   #'expreg-contract))
 
