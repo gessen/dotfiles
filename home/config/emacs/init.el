@@ -5185,6 +5185,9 @@ possibly new window."
 (setq-default bidi-display-reordering 'left-to-right
               bidi-paragraph-direction 'left-to-right)
 
+;; Disable bidirectional parentheses algorithm for a modest performance boost.
+(setopt bidi-inhibit-bpa t)
+
 ;; Feature `display-line-numbers' provides a minor mode interface for
 ;; `display-line-numbers'.
 (use-feature! display-line-numbers
