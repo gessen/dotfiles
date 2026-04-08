@@ -3745,28 +3745,98 @@ defeats the purpose of `corfu-sort-function'."
                 column-enforce-column fill-column)
     ;; Select Rust documents when inside `rust-ts-mode' buffers.
     (setq-local devdocs-current-docs '("rust"))
-    ;; Custom Imenu Rust node types
+    ;; Improve Imenu support.
     (setq-local treesit-simple-imenu-settings
-                '(("Associated Type" "\\`type_item\\'" nil nil)
-                  ("Constant" "\\`const_item\\'" nil nil)
-                  ("Enumeration" "\\`enum_item\\'" nil nil)
-                  ("Function" "\\`function_item\\'" nil nil)
-                  ("Implementation" "\\`impl_item\\'" nil nil)
-                  ("Macro" "\\`macro_definition\\'" nil nil)
-                  ("Module" "\\`mod_item\\'" nil nil)
-                  ("Static" "\\`static_item\\'" nil nil)
-                  ("Struct" "\\`struct_item\\'" nil nil)
-                  ("Trait" "\\`trait_item\\'" nil nil)))
+                (let ((node-function-p #'my--rust-ts-mode--node-function-p)
+                      (node-method-p #'my--rust-ts-mode--node-method-p))
+                  `(("Constant" ,(rx bos (or "const_item"
+                                             "static_item")
+                                     eos) nil nil)
+                    ("Enum" "\\`enum_item\\'" nil nil)
+                    ("EnumMember" "\\`enum_variant\\'" nil nil)
+                    ("Field" "\\`field_declaration\\'" nil nil)
+                    ("Function" ,(rx bos (or "function_item"
+                                             "function_signature_item"
+                                             "macro_definition")
+                                     eos) ,node-function-p nil)
+                    ("Interface" "\\`trait_item\\'" nil nil)
+                    ("Method" ,(rx bos (or "function_item"
+                                           "function_signature_item")
+                                   eos) ,node-method-p nil)
+                    ("Module" "\\`mod_item\\'" nil nil)
+                    ("Object" "\\`impl_item\\'" nil nil)
+                    ("Struct" "\\`struct_item\\'" nil nil)
+                    ("TypeParameter" ,(rx bos (or "type_item"
+                                                  "associated_type")
+                                          eos) nil nil))))
+    ;; Improve Outline support.
+    (setq-local treesit-outline-predicate
+                'treesit-outline-predicate--from-imenu)
+    ;; Improve navigation support.
+    (setq-local treesit-defun-type-regexp
+                (regexp-opt '("enum_item"
+                              "function_item"
+                              "function_signature_item"
+                              "impl_item"
+                              "macro_definition"
+                              "struct_item"
+                              "trait_item")))
     ;; Improve the builtin Imenu with additional nodes
     (setq-local treesit-defun-name-function #'my--rust-ts-mode--defun-name))
+
+  (defun my--rust-ts-mode--node-method-p (node)
+    "Return non-nil if NODE is a Rust method.
+NODE should be a tree-sitter function node with a `parameters' field."
+    (when-let*
+        ((parameters (treesit-node-child-by-field-name node "parameters"))
+         (parameter (treesit-node-child parameters 0 t)))
+      (or (equal (treesit-node-type parameter) "self_parameter")
+          (and (equal (treesit-node-type parameter) "parameter")
+               (when-let* ((receiver (treesit-node-child parameter 0 t)))
+                 (equal (treesit-node-type receiver) "self"))))))
+
+  (defun my--rust-ts-mode--node-function-p (node)
+    "Return non-nil if NODE is a Rust function and not a method."
+    (not (my--rust-ts-mode--node-method-p node)))
 
   (defun my--rust-ts-mode--defun-name (node)
     "Return the defun name of NODE.
 Return nil if there is no name or if NODE is not a defun node."
-    (pcase (treesit-node-type node)
-      ((or "const_item" "macro_definition" "trait_item")
-       (treesit-node-text (treesit-node-child-by-field-name node "name") t))
-      (_ (rust-ts-mode--defun-name node))))
+    (cl-flet
+        ((treesit-field-text (node field)
+           (treesit-node-text (treesit-node-child-by-field-name node field) t))
+         (treesit-node-grandparent (node)
+           (let ((grandparent (treesit-node-parent (treesit-node-parent node))))
+             (unless (equal (treesit-node-type grandparent) "mod_item")
+               grandparent)))
+         (join (&rest parts) (string-join (delq nil parts) " ")))
+      (pcase (treesit-node-type node)
+        ((or "function_item"
+             "function_signature_item"
+             "type_item")
+         (let* ((grandparent (treesit-node-grandparent node))
+                (trait-text (treesit-field-text grandparent "trait"))
+                (type-text (treesit-field-text grandparent "type"))
+                (name-text (treesit-field-text grandparent "name")))
+           (join (when trait-text "impl") trait-text
+                 (when type-text (if trait-text "for" "impl")) type-text
+                 name-text (treesit-field-text node "name"))))
+        ("impl_item"
+         (let ((trait-text (treesit-field-text node "trait")))
+           (join "impl" trait-text
+                 (when trait-text "for") (treesit-field-text node "type"))))
+        ((or "const_item"
+             "macro_definition"
+             "static_item"
+             "trait_item")
+         (treesit-field-text node "name"))
+        ((or "associated_type"
+             "enum_variant"
+             "field_declaration")
+         (let ((grandparent (treesit-node-grandparent node)))
+           (join (treesit-field-text grandparent "name")
+                 (treesit-field-text node "name"))))
+        (_ (rust-ts-mode--defun-name node)))))
 
   (set-prefixes-for-major-mode! 'rust-ts-mode "s" "session")
   (set-leader-keys-for-major-mode! 'rust-ts-mode "s s" #'eglot)
@@ -3811,16 +3881,17 @@ Return nil if there is no name or if NODE is not a defun node."
     ;; Update `consult-imenu' with the symbol categories for Rust.
     (add-to-list 'consult-imenu-config
                  '(rust-ts-mode
-                   :types ((?a "Associated Type" font-lock-type-face)
-                           (?c "Constant" font-lock-constant-face)
-                           (?e "Enumeration" font-lock-type-face)
+                   :types ((?e "Enum" font-lock-type-face)
+                           (?E "EnumMember" font-lock-type-face)
+                           (?F "Field" font-lock-property-name-face)
                            (?f "Function" font-lock-function-name-face)
-                           (?i "Implementation" font-lock-type-face)
-                           (?M "Macro" font-lock-preprocessor-face)
-                           (?m "Module" font-lock-constant-face)
-                           (?S "Static" font-lock-constant-face)
+                           (?i "Interface" font-lock-type-face)
+                           (?k "Constant" font-lock-constant-face)
+                           (?m "Method" font-lock-function-name-face)
+                           (?M "Module" font-lock-constant-face)
+                           (?o "Object" font-lock-type-face)
                            (?s "Struct" font-lock-type-face)
-                           (?t "Trait" font-lock-type-face)))))
+                           (?t "TypeParameter" font-lock-type-face)))))
 
   (with-eval-after-load 'eglot
     ;; Set additional initialization options for rust-analyzer.
@@ -3962,6 +4033,31 @@ Return nil if there is no name or if NODE is not a defun node."
           ([remap xref-find-apropos] . #'consult-eglot-symbols))
 
   :config
+
+  ;; Slightly modify keys and correct few typos in the default value.
+  (setopt consult-eglot-narrow
+          '((?a . "Array")
+            (?B . "Boolean")
+            (?c . "Class")
+            (?C . "Constructor")
+            (?e . "Enum")
+            (?E . "EnumMember")
+            (?F . "Field")
+            (?f . "Function")
+            (?i . "Interface")
+            (?k . "Constant")
+            (?m . "Method")
+            (?M . "Module")
+            (?n . "Namespace")
+            (?N . "Number")
+            (?o . "Object")
+            (?O . "Other")
+            (?P . "Package")
+            (?p . "Property")
+            (?s . "Struct")
+            (?S . "String")
+            (?t . "TypeParameter")
+            (?v . "Variable")))
 
   (set-leader-keys-for-minor-mode! 'eglot--managed-mode
     "g s" #'consult-eglot-symbols)
