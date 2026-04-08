@@ -2723,20 +2723,26 @@ will not refresh `column-number-mode."
   :demand t
   :config
 
+  (defhook! my--savehist-remove-text-properties ()
+    savehist-save-hook
+    "Remove text properties (fonts, overlays, etc.)."
+    (setq kill-ring (mapcar #'substring-no-properties
+                            (cl-remove-if-not #'stringp kill-ring))))
+
   ;; Maximum length of history lists before truncation takes place. Truncation
   ;; deletes old elements, and is done just after inserting a new element.
-  (setq history-length 1000)
+  (setopt history-length 1000)
 
   ;; The interval between autosaves of minibuffer history.
-  (setq savehist-autosave-interval 60)
+  (setopt savehist-autosave-interval 60)
 
   ;; Save history of additional variables such as `mark-ring'
-  (setq savehist-additional-variables '(mark-ring
-                                        global-mark-ring
-                                        kill-ring
-                                        search-ring
-                                        regexp-search-ring
-                                        extended-command-history))
+  (setopt savehist-additional-variables '(mark-ring
+                                          global-mark-ring
+                                          kill-ring
+                                          search-ring
+                                          regexp-search-ring
+                                          extended-command-history))
 
   ;; Do not litter `user-emacs-directory' with persistent history file.
   (setopt savehist-file (cache-dir "savehist.el"))
