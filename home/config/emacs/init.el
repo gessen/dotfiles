@@ -3131,6 +3131,12 @@ completing-read prompter."
   ;; Use ripgrep for regexp search inside files.
   (setopt xref-search-program 'ripgrep)
 
+  ;; Semantic framework needs to be customized to support modes powered by
+  ;; tree-sitter. Use find and grep directly instead of going through the
+  ;; Semantic framework.
+  (setopt xref-references-in-directory-function
+          'xref-references-in-directory-grep)
+
   ;; Show Eldoc message after Xref commands.
   (eldoc-add-command-completions "xref-find-" "xref-go-" "xref-goto-"))
 
