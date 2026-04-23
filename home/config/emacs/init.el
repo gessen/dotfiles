@@ -4373,6 +4373,32 @@ help buffer.")
 ;;; Applications
 ;;;; Large Language Models
 
+;; Package `agent-shell' is a native Emacs shell to interact with LLM agents
+;; powered by Agent Client Protocol. With `agent-shell', you can chat with the
+;; likes of Gemini CLI, Claude Code, Mistral Vibe, or any other ACP-driven
+;; agent.
+(use-package! agent-shell
+  :init
+
+  (set-leader-keys!
+    "a s" #'agent-shell)
+
+  :config
+
+  ;; ;; Prefer viewport interaction over shell interaction.
+  ;; (setopt agent-shell-prefer-viewport-interaction t)
+
+  ;; Use OpenCode as a default provider.
+  (setopt agent-shell-preferred-agent-config
+          (agent-shell-opencode-make-agent-config))
+
+  ;; Always prompt to choose a session or start a new one.
+  (setopt agent-shell-session-strategy 'prompt)
+
+  ;; Display a formatted box showing token counts, context window usage, and
+  ;; cost information after each agent response.
+  (setopt agent-shell-show-usage-at-turn-end t))
+
 ;; Package `gptel' provides a simple Large Language Model chat client for Emacs,
 ;; offering support for multiple models and backends. It integrates seamlessly
 ;; with Emacs, remaining accessible at any time and working uniformly across
@@ -4402,7 +4428,7 @@ help buffer.")
   (setopt gptel-backend '(gptel-gh "Copilot"))
 
   ;; Set Gemini 3.1 Pro as the default model.
-  (setopt gptel-model 'gemini-3.1-pro-preview)
+  (setopt gptel-model 'gpt-5.4)
 
   ;; Enable advanced options in `gptel-menu'.
   (setopt gptel-expert-commands t)
