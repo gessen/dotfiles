@@ -686,6 +686,9 @@ For details on DATA, CONTEXT, and signal, see
           ("\\`\\*\\(Warnings\\|Compile-Log\\|Org Links\\)\\*\\'"
            (display-buffer-no-window)
            (allow-no-window . t))
+          ;; Make Majutsu behave like Magit.
+          ((derived-mode . majutsu-log-mode)
+           (display-buffer-full-frame))
           ;; Make Helpful behave more similar to builtin Help.
           ((derived-mode . helpful-mode)
            (display-buffer-reuse-mode-window display-buffer-pop-up-window)
@@ -1068,6 +1071,7 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
             (project-find-dir "Find directory" ?d)
             (project-dired "Dired" ?D)
             (magit-project-status "Magit" ?m)
+            (majutsu-project-log "Majutsu" ?j)
             (project-vc-dir "VC-Dir" ?v)
             (project-eshell "Eshell" ?e)
             (project-any-command "Other" ?o)))
@@ -1438,7 +1442,14 @@ Operates on the current paragraph if no region is active."
   :hook (prog-mode-hook . ws-butler-mode)
 
   :init
-  (set-leader-keys! "t C-w" #'ws-butler-mode))
+
+  (set-leader-keys! "t C-w" #'ws-butler-mode)
+
+  :config
+
+  ;; Do not restore to the buffer trimmed whitespace right before point.
+  ;; This behavior isn't compatible with `vc-jj' and `diff-hl'.
+  (setopt ws-butler-keep-whitespace-before-point nil))
 
 ;;;; Indentation
 
@@ -4939,6 +4950,16 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
 
   ;; Feature `vc-dir' provides a directory status display under VC.
   (use-feature! vc-dir
+    :init
+
+    (defadvice! my--vc-dir-hide-state-silent
+        (vc-dir-hide-state &rest args)
+      :around #'vc-dir-hide-state
+      "Make `vc-dir-hide-state' silent when used with default argument."
+      (if (car args)
+          (apply vc-dir-hide-state args)
+        (advice-silence-messages! vc-dir-hide-state args)))
+
     :bind ( :map vc-dir-mode-map
             ("M-s" . nil)
             ("e"   . #'vc-ediff)
@@ -4950,6 +4971,8 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
     ;; Hide items whenever their state would change to 'up-to-date' or
     ;; 'ignored'.
     (setopt vc-dir-auto-hide-up-to-date t)))
+
+;;;;; Git
 
 ;; Feature `vc-git' contains a VC backend for the git version control system.
 (use-feature! vc-git
@@ -5244,6 +5267,67 @@ current theme. This will also disable line numbers and decorations."
 
   ;; Allow using `q' to quit out of popups, in addition to `C-g'.
   (transient-bind-q-to-quit))
+
+;;;;; Jujutsu
+
+;; Package `majutsu' provides a Magit-style interface for Jujutsu, offering an
+;; efficient way to interact with JJ repositories from within Emacs.
+(use-package! majutsu
+  :ensure (:host github :repo "0WD0/majutsu")
+  :init
+
+  ;; Suppress messages about redefining template helpers.
+  (advice-add #'majutsu-template--register-function
+              :around #'advice-silence-messages!)
+
+  (defadvice! my--majutsu-log-load-magit (&rest _)
+    :before #'majutsu-log
+    "Run `majutus-log' with correct autoload."
+    (require 'magit))
+
+  (defun majutsu-project-log ()
+    "Run `majutsu-log' in the current project's root."
+    (interactive)
+    (majutsu-log (project-root (project-current t))))
+
+  (set-leader-keys! "g j" #'majutsu-log))
+
+;; Package `vc-jj' includes support for the Jujutsu version control system.
+(use-package! vc-jj
+  :config
+
+	(defun vc-jj-project-list-files (dir extra-ignores)
+	  "List all files in directory DIR.
+	Do not include files matching glob patterns in EXTRA-IGNORES in the
+	result.
+
+	This function is called by `project-files' as of project.el 0.11.2.  The
+	value of EXTRA-IGNORES comes from the variable `project-vc-ignores'.
+
+	If EXTRA-IGNORES is non-nil, this implementation falls back to a generic
+	implementation."
+	  (if extra-ignores
+	      ;; Same fallback as in project.el for git <= 2.13.  Note:
+	      ;; currently includes the contents of the `.jj' directory so we
+	      ;; don't want to merge this as-is.
+	      ;; TODO: handle extra-ignores parameter better -- rewrite each
+	      ;; element e to be `~root-glob:"e"' and use `&' to combine them?
+	      (vc-default-project-list-files 'JJ dir extra-ignores)
+	    (let* ((default-directory (expand-file-name (vc-jj-root dir)))
+	           (args (list "--" (file-relative-name dir)))
+	           (files (apply #'vc-jj--process-lines nil "file" "list" args)))
+	      (mapcar #'expand-file-name files))))
+
+  (cl-defmethod project-files :around ((project (head vc)) &optional dirs)
+    "Return a list of files in directories DIRS in PROJECT."
+    ;; Intercept the primary/default `project-files' method.  Vc-jj does
+    ;; not register itself as a new project backend: it hooks into the
+    ;; existing VC integration into project.el (see `project-try-vc' in
+    ;; `project-find-functions').  Because of that, we cannot provide a
+    ;; standalone `project-files' method for a distinct backend class.
+    ;; Therefore, we wrap the primary method with an :around method and
+    ;; selectively override its behavior when the VC backend is JJ.
+    (cl-call-next-method)))
 
 ;;;; Terminal emulator
 

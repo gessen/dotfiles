@@ -1,0 +1,70 @@
+#:schema https://jj-vcs.github.io/jj/prerelease/config-schema.json
+
+[user]
+name = "Jacek Swierk"
+email = "jacek.swierk@gmail.com"
+
+[ui]
+diff-editor = "meld"
+diff-formatter = ":git"
+pager = "delta"
+revsets-use-glob-by-default = true
+
+[fix.tools.clang-format]
+command = ["clang-format", "--assume-filename=$path"]
+patterns = [
+  "**/*.h",
+  "**/*.hh",
+  "**/*.hpp",
+  "**/*.hxx",
+  "**/*.c",
+  "**/*.cc",
+  "**/*.cpp",
+  "**/*.cxx",
+]
+
+[fix.tools.fish_indent]
+command = ["fish_indent"]
+patterns = ["**/*.fish"]
+
+[fix.tools.rustfmt]
+command = ["rustfmt", "+nightly", "--emit", "stdout", "--edition", "2024"]
+patterns = ["**/*.rs"]
+
+[fix.tools.shfmt]
+command = [
+  "shfmt",
+  "--indent",
+  "2",
+  "--binary-next-line",
+  "--case-indent",
+  "--space-redirects",
+  "--filename=$path"
+]
+patterns = ["**/*.sh"]
+
+[merge-tools.ediff]
+program = "sh"
+merge-args = [
+  "-c",
+  'emacsclient -c --eval "(ediff-merge-files-with-ancestor \"$0\" \"$1\" \"$2\" nil \"$3\")"',
+  "$left",
+  "$right",
+  "$base",
+  "$output"
+]
+
+[revsets]
+bookmark-advance-to = "closest_pushable(@)"
+
+[revset-aliases]
+"closest_pushable(to)" = "heads(::to & mutable() & ~description(exact:'') & (~empty() | merges()))"
+"stack()" = "stack(@)"
+"stack(x)" = "stack(x, 2)"
+"stack(x, n)" = "ancestors(reachable(x, mutable()), n)"
+
+[templates]
+draft_commit_description = "builtin_draft_commit_description_with_diff"
+
+[template-aliases]
+"format_timestamp(ts)" = "ts.ago()"
