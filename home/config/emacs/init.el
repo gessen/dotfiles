@@ -2017,31 +2017,6 @@ possibly new window."
 
   (global-hl-line-mode +1))
 
-;; Package `column-enforce-mode' highlights text that extends beyond a column
-;; limit set by various modes.
-(use-package! column-enforce-mode
-  :init
-
-  (defadvice! my--set-fill-column (_)
-    :after
-    #'set-fill-column
-    "Refresh `column-enforce-mode' after changing `fill-column'
-via `set-fill-column'. Changing `fill-column' via other means
-will not refresh `column-number-mode."
-    (require 'column-enforce-mode)
-    (when column-enforce-mode
-      (column-enforce-mode -1)
-      (column-enforce-mode +1)))
-
-  (set-leader-keys!
-    "t 8" #'column-enforce-mode
-    "t *" #'global-column-enforce-mode)
-
-  ;; Set the column limit with the same limit as `fill-column'.
-  (setq column-enforce-column nil)
-
-  :hook (prog-mode-hook . column-enforce-mode))
-
 ;; Package `highlight-numbers' provides syntax highlighting of numeric literals
 ;; in source code, like what many editors provide by default.
 (use-package! highlight-numbers
@@ -3714,9 +3689,7 @@ defeats the purpose of `corfu-sort-function'."
   (defhook! my--python-ts-mode-setup ()
     python-ts-mode-hook
     "Set custom settings for `python-ts-mode'."
-    (setq-local fill-column 100
-                column-enforce-column fill-column)
-    (column-enforce-mode -1)
+    (setq-local fill-column 100)
     (display-fill-column-indicator-mode -1))
 
   ;; Launch tree-sitter version of `python-mode' instead.
@@ -3736,8 +3709,7 @@ defeats the purpose of `corfu-sort-function'."
     rust-ts-mode-hook
     "Set custom settings for `rust-ts-mode'."
     ;; Rust uses (by default) column limit of 100.
-    (setq-local fill-column 100
-                column-enforce-column fill-column)
+    (setq-local fill-column 100)
     ;; Select Rust documents when inside `rust-ts-mode' buffers.
     (setq-local devdocs-current-docs '("rust"))
     ;; Improve Imenu support.
@@ -4936,14 +4908,9 @@ that file in your browser at the visited revision."
     (defhook! my--git-commit-mode-setup ()
       git-commit-mode-hook
       "Set custom settings for `git-commit-mode'."
-      (setq-local fill-column 72
-                  column-enforce-column fill-column)
+      (setq-local fill-column 72)
       (auto-fill-mode +1)
-      (display-fill-column-indicator-mode +1)
-      (column-enforce-mode +1))
-
-    ;; Make overlong summary with the same face as `column-enforce-mode'.
-    (set-face-attribute 'git-commit-overlong-summary nil :underline t)
+      (display-fill-column-indicator-mode +1))
 
     ;; List of checks performed by `git-commit'.
     (setq git-commit-style-convention-checks '(non-empty-second-line
@@ -5295,7 +5262,12 @@ possibly new window."
     "t f" #'display-fill-column-indicator-mode
     "t F" #'global-display-fill-column-indicator-mode)
 
-  :hook (prog-mode-hook . display-fill-column-indicator-mode))
+  :hook (prog-mode-hook . display-fill-column-indicator-mode)
+
+  :config
+
+  ;; Highlight fill-column-indicator when current line is too long.
+  (setopt display-fill-column-indicator-warning t))
 
 ;;;; Font
 
