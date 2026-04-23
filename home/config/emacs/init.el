@@ -608,6 +608,9 @@ anything that can be a key's definition."
   (keymap-unset pixel-scroll-precision-mode-map "<prior>")
   (keymap-unset pixel-scroll-precision-mode-map "<next>"))
 
+;; Display tool-tips in TTY child frames.
+(without-display-graphic! (tty-tip-mode t))
+
 ;;;; Keyboard integration
 
 ;; Package `kpp' provides support for the Kitty Keyboard Protocol. KKP defines
@@ -3406,15 +3409,6 @@ defeats the purpose of `corfu-sort-function'."
 ;; syntax checkers and help selectively enable or disable diagnostic functions
 ;; based on major modes.
 (use-package! flymake-collection)
-
-;; Package `flymake-popon' shows Flymake diagnostics on cursor hover. This works
-;; on both graphical and non-graphical displays.
-(use-package! flymake-popon
-  :hook (flymake-mode-hook . flymake-popon-mode)
-  :config
-
-  ;; Increase the idle timeout from the default of 0.2 seconds.
-  (setq flymake-popon-delay 1.5))
 
 ;;;; Online documentation
 
