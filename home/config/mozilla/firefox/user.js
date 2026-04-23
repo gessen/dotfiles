@@ -1,93 +1,14 @@
-// Increases font cache size to improve performance on text-heavy websites
-user_pref("gfx.content.skia-font-cache-size", 32);
-
 // GFX rendering
-
-// Enable WebRender plus additional features
-user_pref("gfx.webrender.all", true);
-user_pref("gfx.webrender.compositor", true);
-user_pref("gfx.webrender.precache-shaders", true);
 
 // WebRender Layer Compositor which limits what needs updating on the screen
 // when something moves or changes
 user_pref("gfx.webrender.layer-compositor", true);
 user_pref("media.wmf.zero-copy-nv12-textures-force-enabled", true);
 
-// Use GPU-accelerated Canvas2D with more memory
-user_pref("gfx.canvas.accelerated.cache-items", 32768);
-user_pref("gfx.canvas.accelerated.cache-size", 4096);
-user_pref("webgl.max-size", 16384);
-
-// Enable hardware acceleration (Linux only)
-user_pref("media.ffmpeg.vaapi.enabled", true);
-
-// Disk cache
-
-// Disable disk cache
-user_pref("browser.cache.disk.enable", false);
-
-// Media cache
-
-// Increase the size of media memory cache
-user_pref("media.memory_cache_max_size", 262144);
-user_pref("media.memory_caches_combined_limit_kb", 1048576);
-user_pref("media.cache_readahead_limit", 600);
-user_pref("media.cache_resume_threshold", 300);
-
-// Image cache
-
-// Increase the chunk size for calls to the image decoders
-user_pref("image.cache.size", 10485760);
-user_pref("image.mem.decode_bytes_at_a_time", 65536);
-
-// Network
-
-// Increase the absolute number of HTTP connections
-user_pref("network.http.max-connections", 1800);
-user_pref("network.http.max-persistent-connections-per-server", 10);
-user_pref("network.http.max-urgent-start-excessive-connections-per-host", 5);
-user_pref("network.http.request.max-start-delay", 5);
-
-// Do not throttle requests
-user_pref("network.http.pacing.requests.enabled", false);
-
-// Increase DNS cache
-user_pref("network.dnsCacheEntries", 10000);
-user_pref("network.dnsCacheExpiration", 3600)
-
-// Increase TLS token caching
-user_pref("network.ssl_tokens_cache_capacity", 10240);
-
-// Speculative loading
-
-// Reduce any potential speculative connections when hovering over new tab
-// thumbnails or starting a URL bar search
-user_pref("network.http.speculative-parallel-limit", 0);
-
-// Disable DNS prefetching for HTMLLinkElement <link rel="dns-prefetch">
-user_pref("network.dns.disablePrefetch", true);
-user_pref("network.dns.disablePrefetchFromHTTPS", true);
-
-// Disable preconnection to the autocomplete URL in the address bar, bookmarks
-// and history
-user_pref("browser.urlbar.speculativeConnect.enabled", false);
-user_pref("browser.places.speculativeConnect.enabled", false);
-
-// Disable DNS prefetching for HTMLAnchorElement (speculative DNS)
-user_pref("dom.prefetch_dns_for_anchor_http_document", false);
-user_pref("dom.prefetch_dns_for_anchor_https_document", false);
-
-// Disable link prefetching <link rel="prefetch">
-user_pref("network.prefetch-next", false);
-
 // Tracking protection
 
 // Enable Enhanced Tracking Protection
 user_pref("browser.contentblocking.category", "strict");
-
-// Allow embedded tweets, Instagram and Reddit posts, and TikTok embeds
-user_pref("urlclassifier.trackingSkipURLs", "*://embed.reddit.com/*,*://*.twitter.com/*,*://*.twimg.com/*");
-user_pref("urlclassifier.features.socialtracking.skipURLs", "*://*.twitter.com/*,*://*.twimg.com/*");
 
 // Remove temp files opened from non-PB windows with an external application
 user_pref("browser.download.start_downloads_in_tmp_dir", true);
@@ -125,24 +46,42 @@ user_pref("security.tls.enable_0rtt_data", false);
 
 // Disk avoidance
 
+// Disable disk cache
+user_pref("browser.cache.disk.enable", false);
+
 // Prevent media cache from writing to disk in Private Browsing
 user_pref("browser.privatebrowsing.forceMediaMemoryCache", true);
 
+// Increase the size of media memory cache
+user_pref("media.memory_cache_max_size", 65536);
+
 // Minimum interval (in ms) between session save operations
 user_pref("browser.sessionstore.interval", 60000);
-
-// Store extra session data when crashing or restarting to install updates
-user_pref("browser.sessionstore.privacy_level", 2);
 
 // History
 
 // Set History section to show all options
 user_pref("privacy.history.custom", true);
 
-// Disable search and form history
-user_pref("browser.formfill.enable", false);
+// Speculative loading
 
-// URL bar
+// Reduce any potential speculative connections when hovering over new tab
+// thumbnails or starting a URL bar search
+user_pref("network.http.speculative-parallel-limit", 0);
+
+// Disable DNS prefetching for HTMLLinkElement <link rel="dns-prefetch">
+user_pref("network.dns.disablePrefetch", true);
+user_pref("network.dns.disablePrefetchFromHTTPS", true);
+
+// Disable preconnection to the autocomplete URL in the address bar, bookmarks
+// and history
+user_pref("browser.urlbar.speculativeConnect.enabled", false);
+user_pref("browser.places.speculativeConnect.enabled", false);
+
+// Disable link prefetching <link rel="prefetch">
+user_pref("network.prefetch-next", false);
+
+// Search and URL bar
 
 // Trim HTTPS from the URL bar
 user_pref("browser.urlbar.trimHttps", true);
@@ -151,9 +90,14 @@ user_pref("browser.urlbar.untrimOnUserInteraction.featureGate", true);
 // Disable search suggestions
 user_pref("browser.search.suggest.enabled", false);
 
+// Disable search and form history
+user_pref("browser.formfill.enable", false);
+
 // Enforce Punycode for Internationalized Domain Names to eliminate possible
 // spoofing
 user_pref("network.IDN_show_punycode", true);
+
+// HTTPS-only mode
 
 // Enable HTTPS-only everywhere
 user_pref("dom.security.https_only_mode", true);
@@ -190,14 +134,6 @@ user_pref("editor.truncate_user_pastes", false);
 user_pref("extensions.formautofill.addresses.enabled", false);
 user_pref("extensions.formautofill.creditCards.enabled", false);
 
-// Mixed content & cross-site
-
-// Block insecure passive content (images) on HTTPS pages
-user_pref("security.mixed_content.block_display_content", true);
-
-// Disallow PDFs to load javascript
-user_pref("pdfjs.enableScripting", false);
-
 // Extensions
 
 // Skip 3rd party panel when installing recommended addons
@@ -208,23 +144,24 @@ user_pref("extensions.postDownloadThirdPartyPrompt", false);
 // Control the amount of cross-origin information to send
 user_pref("network.http.referer.XOriginTrimmingPolicy", 2);
 
-// WebRTC
+// Containers
 
-// Disable WebRTC (Web Real-Time Communication)
-user_pref("media.peerconnection.enabled", false);
+// Enable containers and its UI setting
+user_pref("privacy.userContext.enabled", true);
+user_pref("privacy.userContext.ui.enabled", true);
 
-// Enable WebRTC Global Mute Toggles
-user_pref("privacy.webrtc.globalMuteToggles", true);
+// Various
 
-// Geolocation
-
-// Use alternative geolocation service instead of Google
-user_pref("geo.provider.network.url", "https://beacondb.net/v1/geolocate");
+// Disallow PDFs to load javascript
+user_pref("pdfjs.enableScripting", false);
 
 // Mozilla
 
 // Prevent accessibility services from accessing your browser
 user_pref("accessibility.force_disabled", 1);
+
+// Use alternative geolocation service instead of Google
+user_pref("geo.provider.network.url", "https://beacondb.net/v1/geolocate");
 
 // Disable metadata caching for installed add-ons
 user_pref("extensions.getAddons.cache.enabled", false);
@@ -257,6 +194,9 @@ user_pref("toolkit.coverage.endpoint.base", "");
 user_pref("browser.newtabpage.activity-stream.feeds.telemetry", false);
 user_pref("browser.newtabpage.activity-stream.telemetry", false);
 
+// Disable daily active users
+user_pref("datareporting.usage.uploadEnabled", false);
+
 // Experiments
 
 // Disable Studies
@@ -283,14 +223,21 @@ user_pref("extensions.htmlaboutaddons.recommendations.enabled", false);
 // Disable Firefox from asking to set as the default browser
 user_pref("browser.shell.checkDefaultBrowser", false);
 
+// Disable Extension Recommendations (CFR: "Contextual Feature Recommender")
+user_pref("browser.newtabpage.activity-stream.asrouter.userprefs.cfr.addons", false);
+user_pref("browser.newtabpage.activity-stream.asrouter.userprefs.cfr.features", false);
+
 // Hide "More from Mozilla" in Settings
 user_pref("browser.preferences.moreFromMozilla", false);
 
 // Disable about:config warning
 user_pref("browser.aboutConfig.showWarning", false);
 
-// Disable into screens
+// Disable intro screens
 user_pref("browser.aboutwelcome.enabled", false);
+
+// Enable new profile switcher
+user_pref("browser.profiles.enabled", true);
 
 // Theme adjustments
 
@@ -301,13 +248,10 @@ user_pref("toolkit.legacyUserProfileCustomizations.stylesheets", true);
 // (Windows only)
 user_pref("browser.privateWindowSeparation.enabled", false);
 
-// Always use XDG portals for file pickers which will make it use KDE's file
-// picker insted of GTK one
-user_pref("widget.use-xdg-desktop-portal.file-picker", 1);
-
 // AI
 
 // Disable AI features
+user_pref("browser.ai.control.default", "blocked");
 user_pref("browser.ml.enable", false);
 user_pref("browser.ml.chat.enabled", false);
 user_pref("browser.ml.chat.menu", false);
@@ -325,15 +269,9 @@ user_pref("browser.translations.neverTranslateLanguages", "pl");
 user_pref("gfx.webrender.quality.force-subpixel-aa-where-possible", true);
 
 // Use DirectWrite everywhere like Chrome (Windows only)
-user_pref("gfx.font_rendering.cleartype_params.cleartype_level", 100);
-user_pref("gfx.font_rendering.cleartype_params.force_gdi_classic_for_families", "");
-user_pref("gfx.font_rendering.cleartype_params.force_gdi_classic_max_size", 6);
 user_pref("gfx.font_rendering.cleartype_params.rendering_mode", 5);
+user_pref("gfx.font_rendering.cleartype_params.cleartype_level", 100);
 user_pref("gfx.font_rendering.directwrite.use_gdi_table_loading", false);
-
-// Use macOS Appearance Panel text smoothing setting when rendering text (macOS
-// only)
-user_pref("gfx.use_text_smoothing_setting", true);
 
 // URL bar
 
@@ -343,7 +281,7 @@ user_pref("browser.urlbar.trending.featureGate", false);
 // Disable recent searches
 user_pref("browser.urlbar.recentsearches.featureGate", false);
 
-// New windows and tabs
+// New tab page
 
 // Resume the previous Firefox session
 user_pref("browser.startup.page", 3);
@@ -356,10 +294,9 @@ user_pref("browser.newtabpage.activity-stream.showSponsored", false);
 user_pref("browser.newtabpage.activity-stream.showSponsoredCheckboxes", false);
 user_pref("browser.newtabpage.activity-stream.showSponsoredTopSites", false);
 
-// Disable recent pages, bookmarks, downloads and Pocket
+// Disable recent pages, bookmarks and downloads
 user_pref("browser.newtabpage.activity-stream.section.highlights.includeBookmarks", false);
 user_pref("browser.newtabpage.activity-stream.section.highlights.includeDownloads", false);
-user_pref("browser.newtabpage.activity-stream.section.highlights.includePocket", false);
 user_pref("browser.newtabpage.activity-stream.section.highlights.includeVisited", false);
 
 // Disable weather widget in Home page
@@ -387,10 +324,12 @@ user_pref("browser.download.open_pdf_attachments_inline", true);
 // Always load PDF sidebar
 user_pref("pdfjs.sidebarViewOnLoad", 2);
 
-// Tab behavior
+// DOM (Document Object Model)
 
-// Force all new windows opened by JavaScript into tabs
-user_pref("browser.link.open_newwindow.restriction", 0);
+// Prevent scripts from moving and resizing open windows
+user_pref("dom.disable_window_move_resize", true);
+
+// Tab behavior
 
 // Leave Bookmarks Menu open when selecting a site
 user_pref("browser.bookmarks.openInTabClosesMenu", false);
@@ -401,18 +340,8 @@ user_pref("browser.menu.showViewImageInfo", true);
 // Show all matches in Findbar
 user_pref("findbar.highlightAll", true);
 
-// Prevent scripts from moving and resizing open windows
-user_pref("dom.disable_window_move_resize", true);
-
 // Leave the browser window open even after you close the last tab
 user_pref("browser.tabs.closeWindowWithLastTab", false);
-
-// Show sidebar
-user_pref("sidebar.revamp", true);
-user_pref("sidebar.verticalTabs", true);
-
-// Enable tabs groups
-user_pref("browser.tabs.groups.enabled", true);
 
 // Keyboard and shortcuts
 
@@ -421,14 +350,7 @@ user_pref("browser.taskbar.lists.frequent.enabled", false);
 
 // Scrolling
 
-// Activate autoscroll
-user_pref("general.autoScroll", true);
-
-// Make scrolling feel more smooth
-user_pref("mousewheel.min_line_scroll_amount", 10);
-
 // Smooth scrolling
-user_pref("general.smoothScroll.currentVelocityWeighting", "1");
 user_pref("general.smoothScroll.msdPhysics.continuousMotionMaxDeltaMS", 12);
 user_pref("general.smoothScroll.msdPhysics.enabled", true);
 user_pref("general.smoothScroll.msdPhysics.motionBeginSpringConstant", 600);
@@ -436,4 +358,17 @@ user_pref("general.smoothScroll.msdPhysics.regularSpringConstant", 650);
 user_pref("general.smoothScroll.msdPhysics.slowdownMinDeltaMS", 25);
 user_pref("general.smoothScroll.msdPhysics.slowdownMinDeltaRatio", "2");
 user_pref("general.smoothScroll.msdPhysics.slowdownSpringConstant", 250);
+user_pref("general.smoothScroll.currentVelocityWeighting", "1");
 user_pref("general.smoothScroll.stopDecelerationWeighting", "1");
+user_pref("mousewheel.default.delta_multiplier_y", 300);
+
+// Sidebar
+
+// Show sidebar
+user_pref("sidebar.revamp", true);
+user_pref("sidebar.verticalTabs", true);
+
+// Scrolling
+
+// Activate autoscroll
+user_pref("general.autoScroll", true);
