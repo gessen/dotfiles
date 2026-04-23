@@ -1,0 +1,127 @@
+{
+    "theme": {
+        "mode": "system",
+        "light": "One Light",
+        "dark": "One Dark"
+    },
+    "base_keymap": "VSCode",
+    "buffer_font_family": "Intel One Mono",
+    "buffer_font_size": 15.0,
+    "ui_font_size": 19.0,
+    "helix_mode": true,
+    "auto_signature_help": true,
+    "show_wrap_guides": true,
+    "wrap_guides": [100],
+    "use_on_type_format": false,
+    "toolbar": {
+        "code_actions": true
+    },
+    "minimap": {
+        "show": "always"
+    },
+    "search": {
+        "regex": true
+    },
+    "use_smartcase_search": true,
+    "inlay_hints": {
+        "enabled": true
+    },
+    "agent": {
+        "favorite_models": [
+            {
+                "provider": "copilot_chat",
+                "model": "claude-opus-4.6",
+                "enable_thinking": false
+            },
+            {
+                "provider": "copilot_chat",
+                "model": "claude-sonnet-4.6",
+                "enable_thinking": false
+            },
+            {
+                "provider": "copilot_chat",
+                "model": "gemini-3.1-pro-preview",
+                "enable_thinking": false
+            }
+        ],
+        "default_profile": "write",
+        "default_model": {
+            "provider": "copilot_chat",
+            "model": "gemini-3.1-pro-preview"
+        },
+        "model_parameters": [],
+        "play_sound_when_agent_done": true,
+        "show_turn_stats": true
+    },
+    "semantic_tokens": "combined",
+    "tabs": {
+        "git_status": true,
+        "file_icons": true,
+        "show_diagnostics": "all"
+    },
+    "format_on_save": "off",
+    "tab_size": 4,
+    "terminal": {
+        "cursor_shape": "bar",
+        "copy_on_select": true
+    },
+    "lsp": {
+        "rust-analyzer": {
+            "initialization_options": {
+                "check": {
+                    "command": "clippy"
+                },
+                "diagnostics": {
+                    "experimental": {
+                        "enable": true
+                    }
+                },
+                "completion": {
+                    "postfix": {
+                        "enable": false
+                    }
+                },
+                "inlayHints": {
+                    "closureReturnTypeHints": {
+                        "enable": "always"
+                    },
+                    "lifetimeElisionHints": {
+                        "enable": "skip_trivial"
+                    }
+                },
+                "rustfmt": {
+                    "extraArgs": [
+                        "+nightly"
+                    ],
+                    "rangeFormatting": {
+                        "enable": true
+                    }
+                },
+                "workspace": {
+                    "symbol": {
+                        "search": {
+                            "kind": "all_symbols"
+                        }
+                    }
+                },
+                "interpret": {
+                    "tests": true
+                }
+            }
+        }
+    },
+    "which_key": {
+        "delay_ms": 0,
+        "enabled": true
+    },
+    "agent_servers": {
+        "opencode": {
+            "type": "extension",
+            "favorite_models": [
+                "github-copilot/claude-sonnet-4.6",
+                "github-copilot/claude-opus-4.6",
+                "github-copilot/gemini-3.1-pro-preview"
+            ]
+        }
+    }
+}

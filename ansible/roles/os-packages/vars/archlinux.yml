@@ -65,6 +65,7 @@ packages:
   - yazi
   - yt-dlp
   - zoxide
+  - zed
 
 packages_ignore:
 
