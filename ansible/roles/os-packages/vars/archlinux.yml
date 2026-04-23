@@ -14,6 +14,7 @@ packages:
   - atuin
   - bat
   - btop
+  - bun
   - calibre
   - clang
   - cmake
