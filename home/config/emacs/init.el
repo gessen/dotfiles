@@ -5120,8 +5120,14 @@ current theme. This will also disable line numbers and decorations."
 ;; Show current directory when prompting for a shell command.
 (setopt shell-command-prompt-show-cwd t)
 
+(defun start-terminal ()
+  "Start a terminal emulator in a subprocess."
+  (interactive)
+  (start-process "term" nil "kitty"))
+
 (set-leader-keys! "!" (cons "shell cmd" #'shell-command))
 (set-leader-keys! "&" (cons "async shell cmd" #'async-shell-command))
+(set-leader-keys! "@" (cons "term" #'start-terminal))
 
 ;; Feature `compile' provides a way to run a shell command from Emacs and view
 ;; the output in real time, with errors and warnings highlighted and
