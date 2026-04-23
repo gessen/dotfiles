@@ -1035,6 +1035,7 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
 ;; know which package handles detection of that project type, parsing its config
 ;; files, etc.
 (use-package! project
+  :ensure (:host github :repo "emacs-mirror/emacs")
   :config
 
   ;; Mark C++-based projects without any supported version control as projects.
@@ -2303,6 +2304,7 @@ will not refresh `column-number-mode."
   (add-hook 'substitute-post-replace-functions #'substitute-report-operation)
 
   (set-leader-keys!
+    "s l" #'substitute-target-on-line
     "s s" #'substitute-target-in-buffer
     "s f" #'substitute-target-in-defun
     "s <" #'substitute-target-above-point
@@ -3354,6 +3356,7 @@ defeats the purpose of `corfu-sort-function'."
 ;; Flymake collects diagnostic information for multiple sources, called
 ;; backends, and visually annotates the relevant portions in the buffer.
 (use-package! flymake
+  :ensure (:host github :repo "emacs-mirror/emacs")
   :config
 
   (defvar-keymap flymake-repeat-map
@@ -4093,6 +4096,7 @@ Return nil if there is no name or if NODE is not a defun node."
 ;; language-agnostic, but it can support any programming language for which
 ;; there is a language server and an Emacs major mode.
 (use-package! eglot
+  :ensure (:host github :repo "emacs-mirror/emacs")
   :init
 
   ;; Increase the amount of data which Emacs reads from the process. The Emacs
@@ -4146,8 +4150,9 @@ Return nil if there is no name or if NODE is not a defun node."
     "r r" #'eglot-rename
 
     ;; Session
-    "s d" #'eglot-stderr-buffer
+    "s d" #'eglot-describe-connection
     "s e" #'eglot-events-buffer
+    "s E" #'eglot-stderr-buffer
     "s f" #'eglot-forget-pending-continuations
     "s l" #'eglot-list-connections
     "s q" #'eglot-shutdown
@@ -4253,7 +4258,8 @@ Return nil if there is no name or if NODE is not a defun node."
 ;; suggests, JSONRPC is a generic Remote Procedure Call protocol designed around
 ;; JSON objects. This library was originally extracted from Eglot, an Emacs
 ;; LSP client.
-(use-package! jsonrpc)
+(use-package! jsonrpc
+  :ensure (:host github :repo "emacs-mirror/emacs"))
 
 ;;; Introspection
 ;;;; Help
@@ -4924,6 +4930,9 @@ that file in your browser at the visited revision."
 
   ;; Disable `diff-hl' in remote buffers.
   (setopt diff-hl-disable-on-remote t)
+
+  ;; Recenter after jumping to hunks.
+  (setopt diff-hl-next-previous-hunk-auto-recenter t)
 
   ;; Inline popup is shown over the hunk, hiding it.
   (setopt diff-hl-show-hunk-inline-hide-hunk t)
