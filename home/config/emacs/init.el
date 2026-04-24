@@ -4023,6 +4023,18 @@ Return nil if there is no name or if NODE is not a defun node."
 (use-package! git-modes
   :mode ("/git/config-\\ca*\\'" . gitconfig-mode))
 
+;; Package `nix-ts-mode' provides major mode for editing Nix expressions,
+;; powered by tree-sitter.
+(use-package! nix-ts-mode
+  :mode ("\\.nix\\'")
+  :config
+
+  (add-to-list
+   'treesit-language-source-alist
+   '(nix "https://github.com/nix-community/tree-sitter-nix"))
+
+  (treesit-ensure-installed 'nix))
+
 ;; Package `pkgbuild-mode' provides a major mode for PKGBUILD files used by Arch
 ;; Linux and derivatives.
 (use-package! pkgbuild-mode)
