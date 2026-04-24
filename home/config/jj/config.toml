@@ -69,6 +69,7 @@ auto-track-bookmarks = "jswierk/*"
 bookmark-advance-to = "closest_pushable(@)"
 
 [revset-aliases]
+"closest_bookmark(to)" = "latest(coalesce(heads(::to & bookmarks()), fork_point(to | trunk())))"
 "closest_pushable(to)" = "heads(::to & mutable() & ~description(exact:'') & (~empty() | merges()))"
 "stack()" = "stack(@)"
 "stack(x)" = "stack(x, 2)"
