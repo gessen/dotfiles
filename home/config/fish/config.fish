@@ -735,6 +735,43 @@ abbr -a ssh-copy-lessenv --set-cursor \
 
 ### Stormcloud
 
+function ew-devenv-start -d "Start dev container"
+    if not set -q argv[1]
+        set -f alsi latest
+    else
+        set -f alsi $argv[1]
+    end
+    docker container stop ew-devenv-$alsi 2>/dev/null || true
+    docker container rm ew-devenv-$alsi 2>/dev/null || true
+    docker run \
+        --name ew-devenv-$alsi \
+        --detach \
+        --init \
+        --interactive \
+        --tty \
+        --mount type=bind,src=$SSH_AUTH_SOCK,target=$SSH_AUTH_SOCK \
+        --mount type=bind,src=$HOME/Workspace,target=$HOME/Workspace \
+        --env SSH_AUTH_SOCK \
+        --publish 2222:22 \
+        --hostname ew-devenv:$alsi \
+        ew-devenv:$alsi
+    and ssh-keygen -f ~/.ssh/known_hosts -R "[localhost]:2222" 2>/dev/null
+end
+
+function ew-devenv-shell -d "Attach to dev container"
+    if not set -q argv[1]
+        set -f alsi latest
+    else
+        set -f alsi $argv[1]
+    end
+    docker exec \
+        --interactive \
+        --tty \
+        --env SSH_CONNECTION \
+        ew-devenv-$alsi \
+        $SHELL -l
+end
+
 function ew-update-v8 -d "Update or install v8"
     set -f git_url ssh://git@git.source.akamai.com:7999/sources/stormcloud_v8.git
     set -f v8_dir /opt/v8
