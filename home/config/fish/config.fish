@@ -801,29 +801,6 @@ function ew-devenv-shell -d "Attach to dev container"
         $SHELL -l
 end
 
-function ew-update-libcxx -d "Update or install libc++"
-    set -f git_url ssh://git@git.source.akamai.com:7999/sources/stormcloud_v8.git
-    set -f libcxx_dir /opt/libc++
-    set -f libcxx_tmp_dir /tmp/libc++-update
-    if not set -q argv[1]
-        set -f branch master
-    else
-        set -f branch $argv[1]
-    end
-    rm -rf $libcxx_tmp_dir
-    and mkdir -p $libcxx_tmp_dir
-    and cd $libcxx_tmp_dir
-    and git init
-    and git remote add origin $git_url
-    and git archive --remote=$git_url $branch libc++-$BUILD_OS.tar.gz \
-        | tar -xO \
-        | git lfs smudge libc++-$BUILD_OS.tar.gz \
-        | tar -zx
-    and rm -rf $libcxx_dir/*
-    and make -C libc++-$BUILD_OS install DESTDIR=$libcxx_dir
-    and cd -
-end
-
 function ew-update-v8 -d "Update or install v8"
     set -f git_url ssh://git@git.source.akamai.com:7999/sources/stormcloud_v8.git
     set -f v8_dir /opt/v8

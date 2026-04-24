@@ -66,21 +66,6 @@ RUN --mount=type=ssh export GIT_URL=ssh://git@git.source.akamai.com:7999/syscomm
  && make -j"$(nproc)" \
  && make install_sw
 
-FROM base AS libcxx
-ARG BUILD_OS=alsi22
-RUN --mount=type=ssh export GIT_URL=ssh://git@git.source.akamai.com:7999/sources/stormcloud_v8.git \
- && export GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=accept-new" \
- && export GIT_SSL_NO_VERIFY=1 \
- && mkdir -p /libc++ \
- && cd /libc++ \
- && git init \
- && git remote add origin "${GIT_URL}" \
- && git archive --remote="${GIT_URL}" jswierk/libcxx libc++-${BUILD_OS}.tar.gz \
-  | tar -xO \
-  | git lfs smudge libc++-${BUILD_OS}.tar.gz \
-  | tar -zx \
- && make -C libc++-${BUILD_OS} install DESTDIR=/opt/libc++/
-
 FROM base AS v8
 ARG BUILD_OS=alsi22
 RUN --mount=type=ssh export GIT_URL=ssh://git@git.source.akamai.com:7999/sources/stormcloud_v8.git \
@@ -90,7 +75,7 @@ RUN --mount=type=ssh export GIT_URL=ssh://git@git.source.akamai.com:7999/sources
  && cd /v8 \
  && git init \
  && git remote add origin "${GIT_URL}" \
- && git archive --remote="${GIT_URL}" jswierk/libcxx v8-${BUILD_OS}.tar.gz \
+ && git archive --remote="${GIT_URL}" master v8-${BUILD_OS}.tar.gz \
   | tar -xO \
   | git lfs smudge v8-${BUILD_OS}.tar.gz \
   | tar -zx \
@@ -142,7 +127,6 @@ RUN mkdir -p /build/capnproto \
 
 FROM base
 COPY --from=akamill /opt/akamill/ /opt/akamill/
-COPY --from=libcxx /opt/libc++/ /opt/libc++/
 COPY --from=openssl /opt/openssl/ /opt/openssl/
 COPY --from=v8 /opt/v8/ /opt/v8/
 COPY --from=ninja /opt/ninja/ninja /usr/local/bin/
