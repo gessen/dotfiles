@@ -87,3 +87,11 @@ CMakeUserPresets.json
 *.tmproj
 *.tmproject
 tmtags/
+
+# Stormcloud
+/.sccache/
+!/build_scripts/
+/target-deploy/
+
+# RustRover
+/.idea/
