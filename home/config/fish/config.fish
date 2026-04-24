@@ -734,9 +734,6 @@ end
 ### Kitty
 
 if type -q kitty
-    # Ensures that terminfo is uploaded
-    abbr -a ssh kitty +kitten ssh
-
     # Nicer scp/rsync
     abbr -a transfer kitty +kitten transfer
 end
