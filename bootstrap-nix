@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+set -o errexit
+set -o nounset
+
+DIR="$(cd "$(dirname "$0")" && pwd)"
+mkdir -p "${HOME}/.config/emacs"
+mkdir -p "${HOME}/.config/fish/conf.d"
+mkdir -p "${HOME}/.config/jj"
+mkdir -p "${HOME}/.config/kitty"
+mkdir -p "${HOME}/.local/share/cargo"
+mkdir -p "${HOME}/.local/share/emacs"
+mkdir -p "${HOME}/.ssh"
+stow --dir "${DIR}/home/config" . --target "${HOME}/.config" -v
+stow --dir "${DIR}/home/local" . --target "${HOME}/.local" -v
+stow --dir "${DIR}/home/ssh" . --target "${HOME}/.ssh" -v
+
+export NIX_INSTALLER_NO_MODIFY_PROFILE=1
+bash <(curl -L https://nixos.org/nix/install) --no-daemon
+
+. "${HOME}/.nix-profile/etc/profile.d/nix.sh"
+nix run home-manager/master switch

@@ -4,6 +4,9 @@
 set -l __fish_cache_dir $HOME/.cache/fish
 test -d $__fish_cache_dir; or mkdir -p $__fish_cache_dir
 
+# Add locally installed binaries
+fish_add_path -P $HOME/.local/bin
+
 ### XDG
 
 # Set XDG dir vars locally
@@ -260,7 +263,7 @@ abbr -a mgg emacsclient --create-frame --no-wait --eval '"(magit-status)"'
 abbr -a e emacs
 abbr -a et emacs -nw
 
-abbr -a se sudoedit
+abbr -a se EDITOR='(which $EDITOR)' sudoedit
 
 ### History
 
