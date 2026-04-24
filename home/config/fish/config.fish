@@ -683,6 +683,10 @@ or ssh-add
 abbr -a ssh-copy-terminfo --set-cursor \
     infocmp -a '|' ssh % tic -x -o ~/.terminfo /dev/stdin
 
+# Copy less settings to the given host
+abbr -a ssh-copy-lessenv --set-cursor \
+    echo "export LESS=-iMRswXz-4#5" '|' ssh % '"cat >> ~/.bashrc"' /dev/stdin
+
 ### Yazi
 
 function y --wraps yazi -d "Start Yazi but change CWD after exit"
