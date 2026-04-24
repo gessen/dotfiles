@@ -3697,6 +3697,13 @@ defeats the purpose of `corfu-sort-function'."
 ;; Package `fish-mode' provides a major mode for Fish shell scripts.
 (use-package! fish-mode)
 
+;;;; Jenkinsfile
+
+;; Package `jenkinsfile-mode' provides a major mode for editing Jenkins
+;; declarative pipeline files.
+(use-package! jenkinsfile-mode
+  :mode ("Jenkinsfile-" "\\.pipeline$"))
+
 ;;;; Markdown
 
 ;; Package `markdown-mode' provides a major mode for Markdown-formatted text.
