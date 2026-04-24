@@ -5517,7 +5517,10 @@ current theme. This will also disable line numbers and decorations."
   ;; Set to EdgeWorkers Jiras.
   (setq bug-reference-url-format "https://track.akamai.com/jira/browse/%s")
   (setopt bug-reference-bug-regexp
-          (rx (group (group word-start "EW-" (+ digit) word-end)))))
+          (rx (group (group word-start "EW-" (+ digit) word-end))))
+
+  ;; Instead of opening the link, just copy it to the kill-ring.
+  (setopt browse-url-handlers '(("https://track.akamai.com" . kill-new))))
 
 ;;;; Terminal emulator
 
