@@ -1,4 +1,16 @@
 #:schema https://mise.jdx.dev/schema/mise.json
 
+[settings]
+idiomatic_version_file_enable_tools = []
+
+[tasks.install-deps]
+description = "Install dependencies"
+run = "uv pip install -r requirements.txt"
+
 [tools]
 opencode = "latest"
+python = "{{ get_env(name='PYTHON_VERSION', default='3.11') }}"
+ruby = "3.4.3"
+ruff = "latest"
+ty = "latest"
+uv = "latest"
