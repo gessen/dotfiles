@@ -1,5 +1,6 @@
 [core]
 	pager = delta
+	hookspath = ~/.config/git/hooks
 [branch]
 	autosetuprebase = always
 	sort = committerdate
