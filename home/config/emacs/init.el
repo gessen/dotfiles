@@ -276,7 +276,8 @@ NAME and ARGS are as in `use-package'."
 
 (defvar-keymap my-leader-key-map
   :doc "Keymap for all common leader key commands."
-  "a" `("applications" . ,(make-sparse-keymap)) ;
+  "a" `("ai" . ,(make-sparse-keymap))
+  "A" `("apps" . ,(make-sparse-keymap))
   "b" `("buffers" . ,(make-sparse-keymap))
   "c" `("compile" . ,(make-sparse-keymap))
   "e" `("errors" . ,(make-sparse-keymap))
@@ -1800,7 +1801,7 @@ column as mark, it add cursor to each line."
   :init
 
   (set-leader-keys!
-    "a u" #'vundo
+    "A u" #'vundo
     "u v" #'vundo)
 
   :config
@@ -2789,7 +2790,7 @@ point. "
 
   (set-leader-keys!
     "/"   (cons "search project" #'consult-ripgrep)
-    "a m" #'consult-man
+    "A m" #'consult-man
     "b b" #'consult-buffer
     "b f" #'consult-focus-lines
     "b k" #'consult-keep-lines
@@ -3507,7 +3508,11 @@ defeats the purpose of `corfu-sort-function'."
   :config
 
   ;; Set `diff-mode' buffers as read-only.
-  (setopt diff-default-read-only t))
+  (setopt diff-default-read-only t)
+
+  ;; Use reliable file-based syntax highlighting when available and hunk-based
+  ;; syntax highlighting otherwise as a fallback.
+  (setopt diff-font-lock-syntax 'hunk-also))
 
 ;; Feature `ediff' is a comprehensive visual interface to diff & patch.
 (use-feature! ediff
@@ -4367,6 +4372,116 @@ help buffer.")
 (use-package! elisp-lint)
 
 ;;; Applications
+;;;; Large Language Models
+
+;; Package `gptel' provides a simple Large Language Model chat client for Emacs,
+;; offering support for multiple models and backends. It integrates seamlessly
+;; with Emacs, remaining accessible at any time and working uniformly across
+;; buffers.
+(use-package! gptel
+  :init
+
+  (set-leader-keys!
+    "a a" #'gptel
+    "a c" #'gptel-add
+    "a f" #'gptel-add-file
+    "a m" #'gptel-menu
+    "a r" #'gptel-rewrite)
+
+  (with-eval-after-load 'embark
+    (keymap-set embark-region-map "+" #'gptel-add))
+
+  :bind ( :map gptel-mode-map
+          ("C-<return>" . #'gptel-menu)
+          ("C-c C-g"    . #'gptel-abort))
+  :config
+
+  (set-leader-keys!
+    "a C" #'gptel-context-remove-all)
+
+  ;; Configure GitHub Copilot as the backend provider.
+  (setopt gptel-backend '(gptel-gh "Copilot"))
+
+  ;; Set Gemini 3.1 Pro as the default model.
+  (setopt gptel-model 'gemini-3.1-pro-preview)
+
+  ;; Enable advanced options in `gptel-menu'.
+  (setopt gptel-expert-commands t)
+
+  ;; Configure builtin `markdown-ts-mode' instead of requiring `markdown-mode'.
+  ;; (setopt gptel-default-mode 'markdown-ts-mode)
+  ;; (setopt gptel-prompt-prefix-alist
+  ;;         '((markdown-ts-mode . "### ")
+  ;;           (org-mode . "*** ")
+  ;;           (text-mode . "### ")))
+  ;; (setopt gptel-response-prefix-alist
+  ;;         '((markdown-ts-mode . "")
+  ;;           (org-mode . "")
+  ;;           (text-mode . "")))
+
+  ;; Do not litter `user-emacs-directory' with copilot tokens.
+  (setopt gptel-gh-github-token-file (cache-dir "copilot-chat/github-token"))
+  (setopt gptel-gh-token-file (cache-dir "copilot-chat/token")))
+
+;; Package `gptel-agent' is a collection of tools and prompts to use gptel
+;; “agentically” with any LLM, to autonomously perform tasks.
+(use-package! gptel-agent
+  :demand t
+  :after gptel
+  :config
+
+  ;; Read files from agents directories.
+  (gptel-agent-update))
+
+;; Package `gptel-prompts' offers an alternative way to manage your
+;; `gptel-directives' variable, using files rather than customizing the variable
+;; directly.
+(use-package! gptel-prompts
+  :ensure (:host github :repo "jwiegley/gptel-prompts")
+  :demand t
+  :after gptel
+  :config
+
+  ;; Use ~/.local/emacs/prompts directory.
+  (setopt gptel-prompts-directory (data-dir "prompts"))
+
+  (gptel-prompts-update)
+
+  ;; Ensure prompts are updated if prompt files change
+  (gptel-prompts-add-update-watchers))
+
+;; Package `gptel-quick' is a tiny everyday helper for easily looking up or
+;; summarizing text using an LLM. It provides one command. Call `gptel-quick' to
+;; show a short summary or explanation of the word at point, or an active
+;; region, in a popup. This is useful for quickly looking up names, words,
+;; phrases, or summarizing/explaining prose or snippets of code, with minimal
+;; friction:
+(use-package! gptel-quick
+  :ensure (:host github :repo "karthink/gptel-quick")
+  :init
+
+  (set-leader-keys! "a ?" #'gptel-quick)
+
+  (with-eval-after-load 'embark
+    (keymap-set embark-general-map "?" #'gptel-quick))
+
+  :config
+
+  ;; Display results in echo area.
+  (setopt gptel-quick-display nil))
+
+;; Package `llm-tool-collection' provides a crowd-sourced collection of tools to
+;; empower Large Language Models in Emacs.
+(use-package! llm-tool-collection
+  :ensure (:host github :repo "skissue/llm-tool-collection")
+  :demand t
+  :after gptel
+  :config
+
+  ;; Register all tools.
+  (mapcar (apply-partially #'apply #'gptel-make-tool)
+          (llm-tool-collection-get-all)))
+
 ;;;; Organisation
 
 ;; Skip building Org manual.
@@ -4616,7 +4731,7 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
     (add-to-history 'dired--limit-hist regexp))
 
   (set-leader-keys!
-    "a d" #'dired
+    "A d" #'dired
     "j d" #'dired-jump)
 
   :hook (dired-mode-hook . dired-hide-details-mode)
@@ -4738,14 +4853,14 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
 
 ;;;; Processes
 
-(set-leader-keys! "a p" #'list-processes)
+(set-leader-keys! "A p" #'list-processes)
 
 ;; Feature `proced' makes an Emacs buffer containing a listing of the current
 ;; system processes. You can use the normal Emacs commands to move around in
 ;; this buffer, and special Proced commands to operate on the processes listed.
 (use-feature! proced
   :init
-  (set-leader-keys! "a P" #'proced)
+  (set-leader-keys! "A P" #'proced)
 
   :config
 
