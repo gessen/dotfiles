@@ -17,6 +17,7 @@ set -gx ANSIBLE_HOME $xdg_config_home/ansible
 set -gx CARGO_HOME $xdg_data_home/cargo
 set -gx GNUPGHOME $xdg_data_home/gnupg
 set -gx GTK2_RC_FILES $xdg_config_home/gtk-2.0/settings.ini
+set -gx NPM_CONFIG_USERCONFIG $xdg_config_home/npm/npmrc
 set -gx RIPGREP_CONFIG_PATH $xdg_config_home/ripgrep/config
 set -gx RUSTUP_HOME $xdg_data_home/rustup
 
@@ -677,6 +678,12 @@ end
 
 if type -q yazi
     bind ctrl-o y
+end
+
+### Zed
+
+if type -q zeditor
+    abbr -a zed zeditor
 end
 
 ### Zoxide
