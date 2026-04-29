@@ -144,9 +144,9 @@ function bak -d "Backup files"
         end
         set -f f (string replace --regex "/+\$" "" $f)
         if test -d $f
-            rsync --archive --compress $f/ $f.bk
+            rsync --archive --compress -hhh --info=progress2 $f/ $f.bk
         else
-            rsync --archive --compress $f $f.bk
+            rsync --archive --compress -hhh --info=progress2 $f $f.bk
         end
     end
 end
@@ -650,7 +650,7 @@ abbr -a rgd --set-cursor rg --json --context=3 % '|' delta
 
 ### Rsync
 
-set -l rsync_cp rsync --archive --compress -hhh --progress
+set -l rsync_cp rsync --archive --compress -hhh --info=progress2
 abbr -a cpv $rsync_cp
 abbr -a rsync-cp $rsync_cp
 abbr -a rsync-mv $rsync_cp --remove-source-files
