@@ -3501,7 +3501,8 @@ defeats the purpose of `corfu-sort-function'."
 ;; with font-lock, indentation, activating and deactivating tree-sitter,
 ;; debugging tree-sitter, etc.
 (use-feature! treesit
-  :init
+  :demand t
+  :config
 
   ;; Decoration level to be used by tree-sitter fontifications. Level 1 usually
   ;; contains only comments and definitions. Level 2 usually adds keywords,
@@ -3510,24 +3511,22 @@ defeats the purpose of `corfu-sort-function'."
   ;; etc. Level 4 adds everything else that can be fontified: delimiters,
   ;; operators, brackets, punctuation, all functions, properties, variables,
   ;; etc.
-  (setq treesit-font-lock-level 4))
+  (setopt treesit-font-lock-level 4)
 
-;; Package `treesit-auto' automatically install and use tree-sitter major modes
-;; in Emacs 29+.
-(use-package! treesit-auto
-  :commands treesit-auto-install-all
-  :config
+  ;; Install tree-sitter language grammar libraries when needed without asking.
+  (setopt treesit-auto-install-grammar 'always)
 
-  ;; Install grammar only from the following list.
-  (setq treesit-auto-langs
-        '(bash c cpp cmake dockerfile json python rust toml)))
-
-;;;; Bash
-
-;; Feature `bash-ts-mode' provides major mode for editing Bash shell scripts,
-;; powered by tree-sitter.
-(use-feature! bash-ts-mode
-  :mode ("\\.sh\\'"))
+  ;; Enable selected tree-sitter modes by default.
+  (setopt treesit-enabled-modes '(bash-ts-mode
+                                  c-ts-mode
+                                  c++-ts-mode
+                                  c-or-c++-ts-mode
+                                  cmake-ts-mode
+                                  dockerfile-ts-mode
+                                  json-ts-mode
+                                  python-ts-mode
+                                  rust-ts-mode
+                                  toml-ts-mode)))
 
 ;;;; C/C++
 
@@ -3553,11 +3552,6 @@ defeats the purpose of `corfu-sort-function'."
 
   (set-leader-keys-for-major-mode! 'c-ts-mode "s s" #'eglot)
   (set-leader-keys-for-major-mode! 'c++-ts-mode "s s" #'eglot)
-
-  ;; Launch tree-sitter versions instead.
-  (push '(c-mode . c-ts-mode) major-mode-remap-alist)
-  (push '(c++-mode . c++-ts-mode) major-mode-remap-alist)
-  (push '(c-or-c++-mode . c-or-c++-ts-mode) major-mode-remap-alist)
 
   :config
 
@@ -3588,20 +3582,6 @@ defeats the purpose of `corfu-sort-function'."
 
   ;; Syntax-highlight Doxygen comment blocks.
   (setopt c-ts-mode-enable-doxygen t))
-
-;;;; CMake
-
-;; Feature `cmake-ts-mode' provides major mode for editing CMake files, powered
-;; by tree-sitter.
-(use-feature! cmake-ts-mode
-  :mode ("\\(?:CMakeLists\\.txt\\|\\.cmake\\)\\'"))
-
-;;;; Dockerfile
-
-;; Feature `dockerfile-ts-mode' provides major mode for Dockerfile, powered by
-;; tree-sitter.
-(use-feature! dockerfile-ts-mode
-  :mode ("\\(?:Dockerfile\\(?:\\..*\\)?\\|\\.[Dd]ockerfile\\)\\'"))
 
 ;;;; Fish
 
@@ -3692,9 +3672,6 @@ defeats the purpose of `corfu-sort-function'."
     "Set custom settings for `python-ts-mode'."
     (setq-local fill-column 100)
     (display-fill-column-indicator-mode -1))
-
-  ;; Launch tree-sitter version of `python-mode' instead.
-  (push '(python-mode . python-ts-mode) major-mode-remap-alist)
 
   (set-prefixes-for-major-mode! 'python-ts-mode "s" "session")
   (set-leader-keys-for-major-mode! 'python-ts-mode "s s" #'eglot))
@@ -3809,7 +3786,6 @@ Return nil if there is no name or if NODE is not a defun node."
   (set-prefixes-for-major-mode! 'rust-ts-mode "s" "session")
   (set-leader-keys-for-major-mode! 'rust-ts-mode "s s" #'eglot)
 
-  :mode ("\\.rs\\'")
   :config
 
   ;; Fontify suffixes of number literals as types.
@@ -3939,11 +3915,6 @@ Return nil if there is no name or if NODE is not a defun node."
 (use-package! git-modes
   :mode ("/git/config-\\ca*\\'" . gitconfig-mode))
 
-;; Feature `json-ts-mode' provides major mode for editing JSON, powered by
-;; tree-sitter.
-(use-feature! json-ts-mode
-  :mode ("\\.json\\'"))
-
 ;; Package `pkgbuild-mode' provides a major mode for PKGBUILD files used by Arch
 ;; Linux and derivatives.
 (use-package! pkgbuild-mode)
@@ -3957,9 +3928,7 @@ Return nil if there is no name or if NODE is not a defun node."
   :init
 
   (set-prefixes-for-major-mode! 'toml-ts-mode "s" "session")
-  (set-leader-keys-for-major-mode! 'toml-ts-mode "s s" #'eglot)
-
-  :mode ("\\.toml\\'"))
+  (set-leader-keys-for-major-mode! 'toml-ts-mode "s s" #'eglot))
 
 ;; Package `yaml-mode' provides a major mode for YAML.
 (use-package! yaml-mode)
