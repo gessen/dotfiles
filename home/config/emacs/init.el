@@ -1633,7 +1633,8 @@ column as mark, it add cursor to each line."
 
   (defvar-keymap expreg-repeat-map
     :doc "Support Expreg based selection with repeats."
-    :repeat t
+    :repeat (:hints ((expreg-expand   . "expand")
+                     (expreg-contract . "contract")))
     "SPC" #'expreg-expand
     "="   #'expreg-expand
     "-"   #'expreg-contract))
@@ -1754,10 +1755,11 @@ column as mark, it add cursor to each line."
 
   (defvar-keymap undo-fu-repeat-map
     :doc "Support `undo-fu' with repeats."
-    :repeat t
-    "r" #'undo-fu-only-redo
+    :repeat (:hints ((undo-fu-only-undo . "undo")
+                     (undo-fu-only-redo . "redo")))
     "u" #'undo-fu-only-undo
-    "/" #'undo-fu-only-undo)
+    "/" #'undo-fu-only-undo
+    "r" #'undo-fu-only-redo)
 
   ;; Use `undo-in-region' when a selection is present.
   (setopt undo-fu-allow-undo-in-region t)
@@ -2186,7 +2188,9 @@ possibly new window."
 
   (defvar-keymap isearch-repeat-map
     :doc "Support Isearch based navigation with repeats."
-    :repeat t
+    :repeat (:hints ((isearch-repeat-forward  . "forward")
+                     (isearch-repeat-backward . "backward")
+                     (recenter-top-bottom     . "recenter")))
     "s" #'isearch-repeat-forward
     "r" #'isearch-repeat-backward
     "l" #'recenter-top-bottom)
@@ -3336,7 +3340,8 @@ defeats the purpose of `corfu-sort-function'."
 
   (defvar-keymap flymake-repeat-map
     :doc "Support Flymake based navigation with repeats."
-    :repeat t
+    :repeat (:hints ((flymake-goto-next-error . "next")
+                     (flymake-goto-prev-error . "prev")))
     "n" #'flymake-goto-next-error
     "p" #'flymake-goto-prev-error)
 
@@ -3491,6 +3496,26 @@ defeats the purpose of `corfu-sort-function'."
 
   ;; Prompt to remove unmodified buffers A/B/C at session end.
   (setopt ediff-keep-variants nil))
+
+;; Feature `smerge-mode' provides a lightweight alternative to Emerge and Ediff.
+(use-feature! smerge-mode
+  :config
+
+  ;; Keep the repeat map without duplicates.
+  (keymap-unset smerge-repeat-map "m")
+  (keymap-unset smerge-repeat-map "o")
+
+  ;; Add hints to the existing repeat keymap.
+  (put 'smerge-next 'repeat-hint "next")
+  (put 'smerge-prev 'repeat-hint "prev")
+  (put 'smerge-resolve 'repeat-hint "resolve")
+  (put 'smerge-keep-upper 'repeat-hint "upper")
+  (put 'smerge-keep-base 'repeat-hint "base")
+  (put 'smerge-keep-lower 'repeat-hint "lower")
+  (put 'smerge-keep-all 'repeat-hint "all")
+  (put 'smerge-refine 'repeat-hint "Refine")
+  (put 'smerge-combine-with-next 'repeat-hint "Combine")
+  (put 'smerge-keep-current 'repeat-hint "current"))
 
 ;;; Language support
 ;;;; Tree-sitter
