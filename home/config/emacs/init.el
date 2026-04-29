@@ -4279,6 +4279,10 @@ help buffer.")
 (use-feature! elisp-mode
   :config
 
+  ;; Highlight symbols according to their semantic meaning.
+  (setopt elisp-fontify-semantically t
+          elisp-add-help-echo nil)
+
   (defadvice! my--fill-elisp-docstrings-correctly (&rest _)
     :before-until #'fill-context-prefix
     "Prevent `auto-fill-mode' from adding indentation to Elisp docstrings."
