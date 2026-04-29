@@ -2694,6 +2694,13 @@ possibly new window."
           ("SPC" . nil))
   :config
 
+  ;; Show the *Completions* buffer immediately when opening a minibuffer with
+  ;; completion.
+  (setopt completion-eager-display t)
+
+  ;; Always update the *Completions* buffer when typing.
+  (setopt completion-eager-update t)
+
   ;; First TAB pops up the window showing the completions list buffer, and the
   ;; next TAB selects that window.
   (setopt completion-auto-select 'second-tab)
