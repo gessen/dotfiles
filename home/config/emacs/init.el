@@ -2872,6 +2872,48 @@ point. "
 
   :config
 
+  (with-eval-after-load 'consult-imenu
+    (defun consult-imenu--decorate (name prefix face kind)
+      "Return imenu NAME decorated with PREFIX, FACE and KIND metadata."
+      (let ((key (concat (if prefix (concat prefix " " name) name))))
+        (when (and prefix face)
+          (add-face-text-property (1+ (length prefix)) (length key)
+                                  face 'append key))
+        (when kind
+          (add-face-text-property (if prefix (1+ (length prefix)) 0) (length key)
+                                  (nth 2 kind) 'append key)
+          (setq key (concat (car kind) " " key))
+          (put-text-property 0 (length (car kind)) 'consult--type (nth 1 kind) key))
+        key))
+
+    (defun consult-imenu--flatten (prefix face list types)
+      "Flatten imenu LIST.
+PREFIX is prepended in front of all items.
+FACE is the item face.
+TYPES is the mode-specific types configuration."
+      (mapcan
+       (lambda (item)
+         (let* ((name (concat (car item)))
+                (kind (assoc (get-text-property 0 'imenu-kind name) types))
+                (key (consult-imenu--decorate name prefix face kind)))
+           (if (imenu--subalist-p item)
+               (let* ((next-prefix name)
+                      (next-face face)
+                      (region (get-text-property 0 'imenu-region name)))
+                 (add-face-text-property 0 (length name)
+                                         'consult-imenu-prefix 'append name)
+                 (if prefix
+                     (setq next-prefix (concat prefix "/" name))
+                   (when-let* ((type (cdr (assoc name types))))
+                     (put-text-property 0 (length name) 'consult--type (car type) name)
+                     (setq next-face (cadr type))))
+                 (nconc
+                  (and region
+                       (list (cons key (consult-imenu--normalize (car region)))))
+                  (consult-imenu--flatten next-prefix next-face (cdr item) types)))
+             (list (cons key (consult-imenu--normalize (cdr item)))))))
+       list)))
+
   (consult-customize
    ;; Preview themes on any key press, but delay 0.5s.
    consult-theme :preview-key '(:debounce 0.5 any)
@@ -4121,9 +4163,6 @@ Return nil if there is no name or if NODE is not a defun node."
     ;; Toggle
     "t i" #'eglot-inlay-hints-mode
     "t s" #'eglot-semantic-tokens-mode)
-
-  ;; Tree-sitter produces a better Imenu.
-  (setq eglot-stay-out-of '(imenu))
 
   ;; Filter list of possible completions with Orderless.
   (setopt completion-category-overrides '((eglot (styles orderless))
