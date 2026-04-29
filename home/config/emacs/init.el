@@ -5409,6 +5409,11 @@ during teardown."
 ;; Compress modelines wider than the currently selected window.
 (setopt mode-line-compact 'long)
 
+;; Always show Flymake to see errors/warnings.
+;; Always show View Mode to better indicate read-only files.
+(setopt mode-line-collapse-minor-modes
+        '(not flymake-mode multiple-cursors-mode view-mode))
+
 ;; Package `keycast' provides two modes that display the current command and its
 ;; key or mouse binding, and update the displayed information once another
 ;; command is invoked. `keycast-mode' displays the command and event in the
@@ -5440,23 +5445,6 @@ during teardown."
     (add-to-list 'keycast-substitute-alist `(,event nil)))
 
   (keycast-mode-line-mode +1))
-
-;; Package `minions' implements a menu that lists enabled minor-modes, as
-;; well as commonly but not currently enabled minor-modes.  It can be used to
-;; toggle local and global minor-modes, to access mode-specific menus, and to
-;; get help about modes.
-(use-package! minions
-  :demand t
-  :config
-
-  ;; Always show Flymake to see errors/warnings.
-  ;; Always show View Mode to better indicate read-only files.
-  (setopt minions-prominent-modes '(flymake-mode
-                                    view-mode))
-
-  (set-leader-keys! "t m" #'minions-mode)
-
-  (minions-mode +1))
 
 ;;;; Tabs
 

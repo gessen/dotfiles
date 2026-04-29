@@ -806,17 +806,6 @@
                        :source "elpaca-menu-lock-file" :id meson-mode :type git
                        :protocol https :inherit t :depth treeless :ref
                        "0449c649daaa9322e1c439c1540d8c290501d455"))
- (minions :source "elpaca-menu-lock-file" :recipe
-          (:package "minions" :fetcher github :repo "tarsius/minions" :files
-                    ("*.el" "*.el.in" "dir" "*.info" "*.texi" "*.texinfo"
-                     "doc/dir" "doc/*.info" "doc/*.texi" "doc/*.texinfo"
-                     "lisp/*.el" "docs/dir" "docs/*.info" "docs/*.texi"
-                     "docs/*.texinfo"
-                     (:exclude ".dir-locals.el" "test.el" "tests.el" "*-test.el"
-                               "*-tests.el" "LICENSE" "README*" "*-pkg.el"))
-                    :source "elpaca-menu-lock-file" :id minions :type git
-                    :protocol https :inherit t :depth treeless :ref
-                    "5b73cd443c28a6e9c8e5ddd60ada38afdf40dfb9"))
  (modus-themes :source "elpaca-menu-lock-file" :recipe
                (:package "modus-themes" :fetcher github :repo
                          "protesilaos/modus-themes" :files
