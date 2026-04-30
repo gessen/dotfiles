@@ -61,6 +61,13 @@
     },
     "format_on_save": "off",
     "tab_size": 4,
+    "git_hosting_providers": [
+        {
+            "provider": "bitbucket",
+            "name": "Akamai GitSource",
+            "base_url": "https://git.source.akamai.com"
+        }
+    ],
     "terminal": {
         "cursor_shape": "bar",
         "copy_on_select": true
