@@ -112,6 +112,9 @@ set -gx SSH_ASKPASS_REQUIRE prefer
 set -gx BUILD_OS alsi22
 set -gx CROSS_CONFIG $HOME/.nix-profile/opt/ew-buildenv/$BUILD_OS/Cross.toml
 
+# Needed by dewploy
+set -gx GHOST_IP 198.18.132.36
+
 ### Early exit
 
 status is-interactive || exit
