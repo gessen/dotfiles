@@ -1170,14 +1170,54 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
 
   :config
 
+  (defhook! my--find-file-disable-vc ()
+    find-file-hook
+    ""
+    (if (file-remote-p (buffer-file-name))
+        (setq-local vc-handled-backends nil)))
+
+  (defun my--memoize-remote (key cache fn &rest args)
+    "Memoize a value if the key is a remote path."
+    (if (and key (file-remote-p key))
+        (if-let* ((current (assoc key (symbol-value cache))))
+            (cdr current)
+          (let ((current (apply fn args)))
+            (set cache (cons (cons key current) (symbol-value cache)))
+            current))
+      (apply fn args)))
+
+  (defvar my--tramp-project-curent-cache nil)
+  (defadvice! my--tramp-memoize-project-current (fn &optional prompt directory)
+    :around #'project-current
+    ""
+    (my--memoize-remote (or directory
+                            project-current-directory-override
+                            default-directory)
+                        'my--tramp-project-curent-cache fn prompt directory))
+
+  (defvar my--vc-git-root-cache nil)
+  (defadvice! my--tramp-memoize-vc-git-root (fn file)
+    :around #'vc-git-root
+    ""
+    (let ((value
+           (my--memoize-remote (file-name-directory file)
+                               'my--vc-git-root-cache fn file)))
+      ;; Sometimes vc-git-root returns nil even when there is a root there.
+      (unless (cdar my--vc-git-root-cache)
+        (setq my--vc-git-root-cache (cdr my--vc-git-root-cache)))
+      value))
+
+  (advice-add #'tramp-handle-lock-file :override #'ignore)
+  (advice-add #'tramp-handle-unlock-file :override #'ignore)
+
   ;; Show only warnings and errors.
-  (setopt tramp-verbose 2)
+  (setopt tramp-verbose 4)
 
   ;; Use rsync instead of default scp in order to utilize control master.
   (setopt tramp-default-method "rsync")
 
   ;; Use rsync for files above 1 KiB and ssh for smaller files.
-  (setopt tramp-copy-size-limit 1024)
+  (setopt tramp-copy-size-limit 128)
 
   ;; The default timeout is too long.
   (setopt tramp-connection-timeout 5)
@@ -1187,6 +1227,33 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
 
   ;; Disable file locks for remote files.
   (setopt remote-file-name-inhibit-locks t)
+
+  (connection-local-set-profile-variables
+   'remote-direct-async-process
+   '((tramp-direct-async-process . t)))
+
+  (connection-local-set-profiles
+   '(:application tramp :protocol "ssh")
+   'remote-direct-async-process)
+
+  (connection-local-set-profiles
+   '(:application tramp :protocol "rsync")
+   'remote-direct-async-process)
+
+  (tramp-set-completion-function
+   "ssh" (append (tramp-get-completion-function "ssh")
+                 (mapcar (lambda (file) `(tramp-parse-sconfig ,file))
+                         (directory-files "~/.ssh/conf.d" 'full ".conf"))))
+
+  (tramp-set-completion-function
+   "rsync" (append (tramp-get-completion-function "rsync")
+               (mapcar (lambda (file) `(tramp-parse-sconfig ,file))
+                       (directory-files "~/.ssh/conf.d" 'full ".conf"))))
+
+  ;; (tramp-set-completion-function
+  ;;  "rpc" (append (tramp-get-completion-function "rpc")
+  ;;                  (mapcar (lambda (file) `(tramp-parse-sconfig ,file))
+  ;;                          (directory-files "~/.ssh/conf.d" 'full ".conf"))))
 
   ;; Do not litter `user-emacs-directory' with tramp files.
   (setopt tramp-auto-save-directory (cache-dir "tramp-auto-save")
@@ -1241,6 +1308,20 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
 
   ;; Use `consult-fd' for finding.
   (setopt consult-dir-jump-file-command 'consult-fd))
+
+;; (use-package! tramp-rpc
+;;   :ensure (:host github :repo "ArthurHeymans/emacs-tramp-rpc")
+;;   :after tramp
+;;   :demand t
+;;   :config
+
+;;   ;; Do not litter `user-emacs-directory' with `tramp-rpc' binaries.
+;;   (setopt tramp-rpc-deploy-local-cache-directory
+;;           (expand-file-name "tramp-rpc" my-cache-dir))
+
+;;   ;; (setopt tramp-rpc-deploy-remote-directory "/root/.cache/tramp-rpc")
+;;   ;; (setopt tramp-rpc-deploy-prefer-build t)
+;;   )
 
 ;;; Saving files
 
