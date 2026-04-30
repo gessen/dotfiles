@@ -5421,6 +5421,22 @@ current theme. This will also disable line numbers and decorations."
     ;; selectively override its behavior when the VC backend is JJ.
     (cl-call-next-method)))
 
+;;;; Bug references
+
+;; Feature `bug-reference' provides minor modes for putting clickable overlays
+;; on references to bugs. A bug reference is text like "PR foo/29292". This is
+;; mapped to a URL using a user-supplied format. Two minor modes are provided.
+;; One works on any text in the buffer, the other operates only on comments and
+;; strings.
+(use-feature! bug-reference
+  :hook (prog-mode-hook . bug-reference-prog-mode)
+  :config
+
+  ;; Set to EdgeWorkers Jiras.
+  (setq bug-reference-url-format "https://track.akamai.com/jira/browse/%s")
+  (setopt bug-reference-bug-regexp
+          (rx (group (group word-start "EW-" (+ digit) word-end)))))
+
 ;;;; Terminal emulator
 
 ;; Feature `eshell' is a shell-like command interpreter implemented in Emacs
