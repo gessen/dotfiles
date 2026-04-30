@@ -5061,6 +5061,18 @@ that file in your browser at the visited revision."
 
   :config
 
+  ;; Add gitsource to the list of supported domains.
+  (push '(:host "^gitsource" :type "stash")
+        browse-at-remote-remote-type-regexps)
+  (push '(:host "git.source.akamai.com" :type "stash")
+        browse-at-remote-remote-type-regexps)
+
+  (defadvice! my--browse-at-remote--fix-repo-url-stash (args)
+    :filter-args #'browse-at-remote--fix-repo-url-stash
+    "Modify SSH alias into full HTTPS domain."
+    (list (replace-regexp-in-string "gitsource\\(-mirror\\)?"
+                                    "git.source.akamai.com" (s-join "" args))))
+
   ;; Use commit hash for link rather than branch names.
   (setopt browse-at-remote-prefer-symbolic nil))
 
