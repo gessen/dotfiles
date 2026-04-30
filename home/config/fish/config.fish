@@ -308,6 +308,29 @@ function eg -d "Open files with EDITOR with rg+fzf"
     $rg_cmd $argv | $fzf_cmd
 end
 
+function ast-eg -d "Open files with EDITOR with ast-grep+fzf"
+    if test (count $argv) = 0
+        return
+    end
+    set -f ast_grep_cmd ast-grep run --heading never --color always --pattern
+    if test (string match --entire emacs "$EDITOR")
+        set -f fzf_execute "printf '%s\n' {+} \
+            | awk -F: '{printf \"+%s%c%s%c\", \$2, 0, \$1, 0}' \
+            | xargs -0 $EDITOR"
+    else
+        set -f fzf_execute "printf '%s\n' {+} \
+            | awk -F: '{printf \"%s:%s%c\", \$1, \$2, 0}'\
+            | xargs -0 $EDITOR"
+    end
+    set -f fzf_cmd fzf --layout=reverse --ansi --exit-0 --multi --delimiter=: \
+        --preview="bat --style=default --color=always \
+        --theme='Monokai Extended Light' \
+        --highlight-line={2} {1}" \
+        --preview-window="up,60%,+{2}+3/3,~3" \
+        --bind="enter:execute($fzf_execute)+deselect-all"
+    $ast_grep_cmd $argv | $fzf_cmd
+end
+
 abbr -a ec emacsclient --tty
 abbr -a ecg emacsclient --create-frame --no-wait
 abbr -a mg emacsclient --tty --eval '"(magit-status)"'
