@@ -43,6 +43,11 @@ if type -q bat
     set -gx MANROFFOPT -c
 end
 
+### Cargo
+
+# Add locally installed cargo
+fish_add_path -P $CARGO_HOME/bin
+
 ### CMake
 
 # By default, use nproc number of threads
@@ -87,6 +92,23 @@ set -gx OPENCODE_DISABLE_LSP_DOWNLOAD true
 
 # Enable web searches using Exa AI
 set -gx OPENCODE_ENABLE_EXA true
+
+### Perforce
+
+# Needed by perforce
+set -gx P4CONFIG .perforce
+set -gx P4EDITOR $EDITOR
+
+### SSH
+
+# Use graphical SSH prompt
+set -gx SSH_ASKPASS /usr/bin/ksshaskpass
+set -gx SSH_ASKPASS_REQUIRE prefer
+
+### Stormcloud
+
+# Needed to build Stormcloud
+set -gx BUILD_OS alsi22
 
 ### Early exit
 
@@ -629,6 +651,19 @@ if type -q atuin
     source $atuin_init
 end
 
+### Cargo
+
+function update-ra -d "Download latest stable rust-analyzer binary"
+    set -f url https://github.com/rust-lang/rust-analyzer/releases/latest/download
+    set -f binary rust-analyzer-x86_64-unknown-linux-gnu.gz
+    set -f cargo_bin_dir $CARGO_HOME/bin
+
+    mkdir -p $cargo_bin_dir
+    and curl -L --progress-bar $url/$binary \
+        | gunzip -c >$cargo_bin_dir/rust-analyzer
+    and chmod +x $cargo_bin_dir/rust-analyzer
+end
+
 ### Eza
 
 if type -q eza
@@ -695,6 +730,55 @@ abbr -a ssh-copy-terminfo --set-cursor \
 # Copy less settings to the given host
 abbr -a ssh-copy-lessenv --set-cursor \
     echo "export LESS=-iMRswXz-4#5" '|' ssh % '"cat >> ~/.bashrc"' /dev/stdin
+
+### Stormcloud
+
+function ew-update-v8 -d "Update or install v8"
+    set -f git_url ssh://git@git.source.akamai.com:7999/sources/stormcloud_v8.git
+    set -f v8_dir /opt/v8
+    set -f v8_tmp_dir /tmp/v8-update
+    if not set -q argv[1]
+        set -f branch master
+    else
+        set -f branch $argv[1]
+    end
+    rm -rf $v8_tmp_dir
+    and mkdir -p $v8_tmp_dir
+    and cd $v8_tmp_dir
+    and git init
+    and git remote add origin $git_url
+    and git archive --remote=$git_url $branch v8-$BUILD_OS.tar.gz \
+        | tar -xO \
+        | git lfs smudge v8-$BUILD_OS.tar.gz \
+        | tar -zx
+    and rm -rf $v8_dir/*
+    and make -C v8-$BUILD_OS install DESTDIR=$v8_dir
+    and cd -
+end
+
+function ew-unexpire-release -d "Un-expire selected label"
+    if not set -q argv[1]
+        set -f ghost_ip $GHOST_IP
+    else
+        set -f ghost_ip $argv[1]
+    end
+
+    set -f release (ssh root@$ghost_ip grep INSTALLVERS /a/etc/install.conf | awk -F= '{print $2}')
+    ssh root@kdc.shared.qa.akamai.com /a/bin/k3c unexpire audit_data_essl $release 1
+    ssh root@kdc.shared.qa.akamai.com /a/bin/k3c unexpire kdc_content essl $release
+end
+
+abbr -a cb cargo build --package
+abbr -a cc cargo check --package
+abbr -a ct cargo nextest run --lib --package
+abbr -a ctp cargo nextest run --package
+abbr -a ctw cargo nextest run --workspace --exclude akamill-sys
+abbr -a cf cargo +nightly fmt
+abbr -a cv LD_LIBRARY_PATH=/opt/openssl/lib cargo xtask coverage --html -- cargo test --package
+
+# sql2 with configured networks
+abbr -a esql2 sql2 -q essl.lighthouse.query.akadns.net
+abbr -a fsql2 sql2 -q freeflow.lighthouse.query.akadns.net
 
 ### Vivid
 
