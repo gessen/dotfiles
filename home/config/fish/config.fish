@@ -61,9 +61,6 @@ set -gx CTEST_OUTPUT_ON_FAILURE ON
 # Report CTest progress by repeatedly updating the same line
 set -gx CTEST_PROGRESS_OUTPUT ON
 
-### Input Method framework
-set -gx XMODIFIERS im=fcit
-
 ### Kitty
 
 if type -q kitty
