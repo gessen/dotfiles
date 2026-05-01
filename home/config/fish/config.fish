@@ -448,7 +448,7 @@ abbr -a gunwipall git-unwip-all
 if type -q atuin
     set -l atuin_init $__fish_cache_dir/atuin-init.fish
     if test (type -p atuin) -nt $atuin_init; or ! test -s $atuin_init
-        atuin init fish --disable-up-arrow >$atuin_init
+        atuin init fish --disable-up-arrow --disable-ai >$atuin_init
     end
     source $atuin_init
 end
