@@ -96,22 +96,6 @@ bind ctrl-x,ctrl-e edit_command_buffer
 
 bind alt-m copy-prev-shell-word
 
-# Starts pager search mode by default when completing
-bind tab '
-    if commandline --search-field >/dev/null
-        commandline -f complete
-    else
-        commandline -f complete-and-search
-    end
-'
-bind shift-tab '
-    if commandline --search-field >/dev/null
-        commandline -f complete-and-search
-    else
-        commandline -f complete
-    end
-'
-
 # Prefix search with [M-S-up] and [M-S-down]
 bind alt-shift-up history-prefix-search-backward
 bind alt-shift-down history-prefix-search-forward
@@ -521,6 +505,9 @@ set -gx FZF_ALT_C_COMMAND "fd \
 --type directory \
 "
 set -gx FZF_ALT_C_OPTS "--preview='tree -C {} | head -200'"
+
+# Mimic the native shift-tab behavior
+set -gx FZF_COMPLETION_OPTS "--no-sort"
 
 if type -q fzf
     set -l fzf_init $__fish_cache_dir/fzf-init.fish
