@@ -459,6 +459,16 @@ abbr -a gwip git-wip
 abbr -a gunwip git-unwip
 abbr -a gunwipall git-unwip-all
 
+### Atuin
+
+if type -q atuin
+    set -l atuin_init $__fish_cache_dir/atuin-init.fish
+    if test (type -p atuin) -nt $atuin_init; or ! test -s $atuin_init
+        atuin init fish --disable-up-arrow >$atuin_init
+    end
+    source $atuin_init
+end
+
 ### Bat
 
 if type -q bat
@@ -517,18 +527,7 @@ if type -q fzf
     if test (type -p fzf) -nt $fzf_init; or ! test -s $fzf_init
         fzf --fish >$fzf_init
     end
-    source $fzf_init
-    bind --erase ctrl-r
-end
-
-### Atuin
-
-if type -q atuin
-    set -l atuin_init $__fish_cache_dir/atuin-init.fish
-    if test (type -p atuin) -nt $atuin_init; or ! test -s $atuin_init
-        atuin init fish --disable-up-arrow >$atuin_init
-    end
-    source $atuin_init
+    FZF_CTRL_R_COMMAND= source $fzf_init
 end
 
 ### Eza
