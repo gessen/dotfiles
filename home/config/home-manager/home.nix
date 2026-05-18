@@ -73,6 +73,7 @@
 
       extraPkgs.cross-completion
       extraPkgs.ew-buildenv
+      extraPkgs.ew-devenv
       extraPkgs.osc52
     ];
 
