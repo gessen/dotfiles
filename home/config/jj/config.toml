@@ -68,6 +68,21 @@ bookmark-advance-to = "closest_pushable(@)"
 
 [templates]
 draft_commit_description = "builtin_draft_commit_description_with_diff"
+git_push_bookmark = '''
+  truncate_end(
+    72,
+    separate(
+      "/",
+      "jswierk",
+      jira_ticket_prefix(description),
+    ),
+  )
+'''
 
 [template-aliases]
 "format_timestamp(ts)" = "ts.ago()"
+"jira_ticket_prefix(description)" = '''
+  description
+    .match(regex:'^\[[[:upper:]]+-[[:digit:]]+\]')
+    .replace(regex:'\[([[:upper:]]+-[[:digit:]]+)\]', "$1")
+'''
