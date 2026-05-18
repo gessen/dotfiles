@@ -27,6 +27,14 @@ patterns = [
 command = ["fish_indent"]
 patterns = ["**/*.fish"]
 
+[fix.tools.rubocop]
+command = ["rubocop", "--autocorrect", "--stdin", "$path", "--stderr"]
+patterns = ["**/*.rb"]
+
+[fix.tools.ruff]
+command = ["ruff", "-", "--stdin-filename=$path"]
+patterns = ["**/*.py"]
+
 [fix.tools.rustfmt]
 command = ["rustfmt", "+nightly", "--emit", "stdout", "--edition", "2024"]
 patterns = ["**/*.rs"]
