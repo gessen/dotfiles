@@ -5,6 +5,7 @@ packages_aur:
   - mkinitcpio-firmware
   - mpv-thumbfast-git
   - mpv-uosc
+  - opencode-bin
   - pandoc-bin
   - shellcheck-bin
   - ttf-intel-one-mono

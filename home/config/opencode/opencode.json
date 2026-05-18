@@ -1,0 +1,28 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "plugin": [
+    "oh-my-openagent@latest"
+  ],
+  "share": "disabled",
+  "enabled_providers": [
+    "github-copilot"
+  ],
+  "formatter": {
+    "cargofmt": {
+      "command": [
+        "cargo",
+        "+nightly",
+        "fmt"
+      ]
+    },
+    "rustfmt": {
+      "command": [
+        "rustfmt",
+        "+nightly"
+      ]
+    }
+  },
+  "permission": {
+    "lsp": "allow"
+  }
+}

@@ -14,7 +14,9 @@ set -l xdg_state_home $HOME/.local/state
 
 # Partial XDG support
 set -gx ANSIBLE_HOME $xdg_config_home/ansible
+set -gx BUN_INSTALL $xdg_data_home/bun
 set -gx CARGO_HOME $xdg_data_home/cargo
+set -gx CLAUDE_CONFIG_DIR $xdg_config_home/claude
 set -gx GNUPGHOME $xdg_data_home/gnupg
 set -gx GTK2_RC_FILES $xdg_config_home/gtk-2.0/settings.ini
 set -gx NPM_CONFIG_USERCONFIG $xdg_config_home/npm/npmrc
@@ -66,6 +68,18 @@ set -gx XMODIFIERS im=fcit
 
 # Include the current load to the ninja status
 set -gx NINJA_STATUS "[%s/%f/%t] (j%r/%es/%Es/%P) "
+
+### Opencode
+
+# Enable experimental LSP support
+set -gx OPENCODE_EXPERIMENTAL true
+set -gx OPENCODE_EXPERIMENTAL_LSP_TOOL true
+
+# Disable automatic LSP server download
+set -gx OPENCODE_DISABLE_LSP_DOWNLOAD true
+
+# Enable web searches using Exa AI
+set -gx OPENCODE_ENABLE_EXA true
 
 ### Early exit
 
