@@ -16,6 +16,8 @@ CompileFlags:
     -Wno-unused-macros,
     -Wno-weak-vtables,
     -Wno-ctad-maybe-unsupported,
+    -Wno-cast-align,
+    -Wno-old-style-cast,
     -Wno-error,
     ]
   Remove: [
@@ -26,5 +28,8 @@ CompileFlags:
     -fstack-usage,
     -mabi=lp64,
     ]
+Diagnostics:
+  Includes:
+    IgnoreHeader: v8\.h
 Hover:
   ShowAKA: Yes
