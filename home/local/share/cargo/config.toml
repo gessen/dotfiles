@@ -2,8 +2,17 @@
 rustflags = [
   "-Clink-arg=-fuse-ld=mold",
   "-Clink-arg=-Wl,--compress-debug-sections=zstd",
+  "-Clink-arg=-Wl,-rpath,/opt/openssl/lib",
+]
+rustdocflags = [
+  "-Clink-arg=-Wl,-rpath,/opt/openssl/lib",
 ]
 rustc-wrapper = "sccache"
+
+[env]
+AKAMILL_INSTALL_PATH = "/opt/akamill"
+OPENSSL_INSTALL_PATH = "/opt/openssl"
+V8_INSTALL_PATH = "/opt/v8"
 
 [profile.dev]
 split-debuginfo = "packed"
