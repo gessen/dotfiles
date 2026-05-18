@@ -11,6 +11,7 @@ rustc-wrapper = "sccache"
 
 [env]
 AKAMILL_INSTALL_PATH = "/opt/akamill"
+LIBCXX_INSTALL_PATH = "/opt/libc++"
 OPENSSL_INSTALL_PATH = "/opt/openssl"
 V8_INSTALL_PATH = "/opt/v8"
 
