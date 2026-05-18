@@ -1,0 +1,59 @@
+#!/usr/bin/env fish
+
+# The URL and remote name are passed as arguments:
+set REMOTE $argv[1]
+set URL    $argv[2]
+
+function check_for_jira_tags
+    set zero (git hash-object --stdin </dev/null | tr '[0-9a-f]' '0')
+
+    while read -l local_ref local_oid remote_ref remote_oid
+        if test "$local_oid" = "$zero"
+            return
+        end
+
+        if test "$remote_oid" = "$zero"
+            # New branch: all local commits not on remote
+            set range "$local_oid" "^$REMOTE"
+        else
+            # Existing branch: only new commits
+            set range "$remote_oid..$local_oid"
+        end
+
+        # Find any commits *without* an EW-XXXXX tag in their message
+        set bad_commits (git rev-list --extended-regexp --invert-grep \
+            --grep '^[^#]*EW-[0-9]+.*$' $range)
+
+        if test -n "$bad_commits"
+            echo "Jira ticket tag not found on one of the pushed commits." >&2
+            echo "Commits without jira tag:" >&2
+            git show --oneline --color=always --no-patch $bad_commits >&2
+            exit 1
+        end
+    end
+end
+
+function is_stormcloud_repo
+    set -l url "$argv[1]"
+    return (string match -qr 'stormcloud(\.git)?$' -- $url)
+end
+
+function is_stormcloud_v8_repo
+    set -l url "$argv[1]"
+    return (string match -qr 'stormcloud_v8(\.git)?$' -- $url)
+end
+
+if ! is_stormcloud_repo "$URL" or ! is_stormcloud_v8_repo "$URL"
+    exit 0
+end
+
+check_for_jira_tags
+
+if ! is_stormcloud_repo "$URL"
+    exit 0
+end
+
+if ! cargo fmt -- --check
+    echo "Run cargo fmt against your branch before pushing."
+    exit 1
+end
