@@ -3634,6 +3634,7 @@ defeats the purpose of `corfu-sort-function'."
                                   dockerfile-ts-mode
                                   json-ts-mode
                                   python-ts-mode
+                                  ruby-ts-mode
                                   rust-ts-mode
                                   toml-ts-mode)))
 
@@ -3784,6 +3785,22 @@ defeats the purpose of `corfu-sort-function'."
 
   (set-prefixes-for-major-mode! 'python-ts-mode "s" "session")
   (set-leader-keys-for-major-mode! 'python-ts-mode "s s" #'eglot))
+
+;;;; Ruby
+
+;; Feature `ruby-ts-mode' provides major mode for Ruby, powered by tree-sitter.
+(use-feature! ruby-ts-mode
+  :init
+
+  (defhook! my--ruby-ts-mode-setup ()
+    ruby-ts-mode-hook
+    "Set custom settings for `ruby-ts-mode'."
+    (setq-local fill-column 120)
+    (setq-local indent-tabs-mode t)
+    (display-fill-column-indicator-mode -1))
+
+  (set-prefixes-for-major-mode! 'ruby-ts-mode "s" "session")
+  (set-leader-keys-for-major-mode! 'ruby-ts-mode "s s" #'eglot))
 
 ;;;; Rust
 
