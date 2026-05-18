@@ -54,6 +54,9 @@ merge-args = [
   "$output"
 ]
 
+[remotes.origin]
+auto-track-bookmarks = "jswierk/*"
+
 [revsets]
 bookmark-advance-to = "closest_pushable(@)"
 
