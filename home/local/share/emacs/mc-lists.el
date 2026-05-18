@@ -26,6 +26,7 @@
         string-inflection-lower-camelcase
         string-inflection-underscore
         string-inflection-upcase
+        wdired--self-insert
         yaml-electric-backspace
         ))
 
