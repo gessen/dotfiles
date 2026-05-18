@@ -3466,7 +3466,11 @@ defeats the purpose of `corfu-sort-function'."
   :config
 
   ;; Set `diff-mode' buffers as read-only.
-  (setopt diff-default-read-only t))
+  (setopt diff-default-read-only t)
+
+  ;; Use reliable file-based syntax highlighting when available and hunk-based
+  ;; syntax highlighting otherwise as a fallback.
+  (setopt diff-font-lock-syntax 'hunk-also))
 
 ;; Feature `ediff' is a comprehensive visual interface to diff & patch.
 (use-feature! ediff
