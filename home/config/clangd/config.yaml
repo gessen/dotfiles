@@ -16,6 +16,8 @@ CompileFlags:
     -Wno-unused-macros,
     -Wno-weak-vtables,
     -Wno-ctad-maybe-unsupported,
+    -Wno-lifetime-safety-intra-tu-suggestions,
+    -Wno-unsafe-buffer-usage,
     -Wno-error,
     ]
   Remove: [
