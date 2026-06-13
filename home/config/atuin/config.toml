@@ -1,3 +1,5 @@
-style = "compact"
 inline_height = 23
 enter_accept = true
+
+[logs]
+enabled = false
