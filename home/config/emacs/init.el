@@ -2670,7 +2670,9 @@ will not refresh `column-number-mode."
 ;;; Candidate selection
 
 ;; Do not consider case significant in completion
-(setq completion-ignore-case t)
+(setq completion-ignore-case t
+      read-buffer-completion-ignore-case t
+      read-file-name-completion-ignore-case t)
 
 ;; Allow doing a command that requires candidate-selection when you are already
 ;; in the middle of candidate-selection.
