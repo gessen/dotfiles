@@ -87,3 +87,6 @@ CMakeUserPresets.json
 *.tmproj
 *.tmproject
 tmtags/
+
+# Opencode
+.opencode/

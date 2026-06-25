@@ -1,0 +1,46 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "share": "disabled",
+  "enabled_providers": [
+    "github-copilot"
+  ],
+  "formatter": {
+    "cargofmt": {
+      "command": [
+        "cargo",
+        "+nightly",
+        "fmt"
+      ]
+    },
+    "rustfmt": {
+      "command": [
+        "rustfmt",
+        "+nightly"
+      ]
+    }
+  },
+  "permission": {
+    "lsp": "allow"
+  },
+  "lsp": {
+    "rust": {
+      "command": ["rust-analyzer"],
+      "extensions": [".rs"]
+    },
+    "clangd": {
+      "command": ["clangd"],
+      "extensions": [
+        ".c",
+        ".cpp",
+        ".cc",
+        ".cxx",
+        ".c++",
+        ".h",
+        ".hpp",
+        ".hh",
+        ".hxx",
+        ".h++"
+      ]
+    }
+  }
+}
