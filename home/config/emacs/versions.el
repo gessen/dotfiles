@@ -1201,19 +1201,6 @@
                       :source "elpaca-menu-lock-file" :id transient :type git
                       :protocol https :inherit t :depth treeless :ref
                       "cd97319a851db9b2ed3faecdb735c6d089edf4e1"))
- (treesit-auto :source "elpaca-menu-lock-file" :recipe
-               (:package "treesit-auto" :fetcher github :repo
-                         "renzmann/treesit-auto" :files
-                         ("*.el" "*.el.in" "dir" "*.info" "*.texi" "*.texinfo"
-                          "doc/dir" "doc/*.info" "doc/*.texi" "doc/*.texinfo"
-                          "lisp/*.el" "docs/dir" "docs/*.info" "docs/*.texi"
-                          "docs/*.texinfo"
-                          (:exclude ".dir-locals.el" "test.el" "tests.el"
-                                    "*-test.el" "*-tests.el" "LICENSE" "README*"
-                                    "*-pkg.el"))
-                         :source "elpaca-menu-lock-file" :id treesit-auto :type
-                         git :protocol https :inherit t :depth treeless :ref
-                         "31466e4ccfd4f896ce3145c95c4c1f8b59d4bfdf"))
  (undo-fu :source "elpaca-menu-lock-file" :recipe
           (:package "undo-fu" :fetcher codeberg :repo "ideasman42/emacs-undo-fu"
                     :files
