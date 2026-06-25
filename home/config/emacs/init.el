@@ -5172,8 +5172,9 @@ possibly new window."
           ("o"   . #'compilation-display-error))
   :config
 
-  ;; Use a more specific set of regexps to avoid conflicts between patterns,
-  ;; such as the gnu pattern matching errors from rust compiler warnings.
+  ;; Use a more specific set of regexps and sort them differently to avoid
+  ;; conflicts between patterns, such as the gnu pattern matching errors from
+  ;; rust compiler warnings.
   (setopt compilation-error-regexp-alist
           '(meson
             bash
@@ -5184,7 +5185,8 @@ possibly new window."
             gcc-include
             rust
             rust-panic
-            shellcheck))
+            shellcheck
+            gnu))
 
   ;; Automatically scroll the Compilation buffer as output appears,
   ;; but stop at the first error.
