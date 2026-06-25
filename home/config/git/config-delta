@@ -1,5 +1,5 @@
 [delta]
-	features = modus-vivendi line-numbers decorations navigate
+	features = modus-operandi line-numbers decorations navigate
 [delta "decorations"]
 	file-style = yellow bold ul
 	file-decoration-style = yellow bold ul
