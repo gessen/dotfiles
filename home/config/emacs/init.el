@@ -2699,7 +2699,10 @@ possibly new window."
 (use-feature! minibuffer
   :bind ( :map minibuffer-local-completion-map
           ;; Unbind `minibuffer-complete-word'
-          ("SPC" . nil))
+          ("SPC" . nil)
+          :map minibuffer-visible-completions-up-down-map
+          ("C-n" . #'minibuffer-next-completion)
+          ("C-p" . #'minibuffer-previous-completion))
   :config
 
   ;; Show the *Completions* buffer immediately when opening a minibuffer with
@@ -2737,7 +2740,7 @@ possibly new window."
   (setopt completions-max-height 20)
 
   ;; Allow navigating completions from the minibuffer.
-  (setopt minibuffer-visible-completions t))
+  (setopt minibuffer-visible-completions 'up-down))
 
 ;; Feature `savehist' saves minibuffer history to an external file after exit.
 (use-feature! savehist
