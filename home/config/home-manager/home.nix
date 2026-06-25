@@ -16,6 +16,7 @@
       bat
       btop
       bun
+      capnproto
       cmake
       delta
       difftastic
@@ -29,7 +30,9 @@
       fd
       fzf
       git
+      git-lfs
       glib.dev
+      gn
       hunspellDicts.en_US
       jq
       jujutsu
@@ -49,6 +52,7 @@
       pandoc
       patchelf
       pcre2.dev
+      protobuf
       ripgrep
       rsync
       rust-analyzer
@@ -58,6 +62,7 @@
       shfmt
       tombi
       tree
+      typescript
       unzip
       vivid
       yazi
