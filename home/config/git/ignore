@@ -90,3 +90,8 @@ tmtags/
 
 # Opencode
 .opencode/
+
+# Stormcloud
+/.sccache/
+!/build_scripts/
+/target-deploy/
