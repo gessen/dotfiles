@@ -1504,10 +1504,28 @@ Operates on the current paragraph if no region is active."
   (clipboard-yank)
   (deactivate-mark))
 
+(defun duplicate-and-comment-dwim ()
+  "Duplicate the current line or region and comment it out.
+If the region is inactive, duplicate the current line (like `duplicate-line').
+Otherwise, duplicate the region.
+If the region is rectangular, duplicate on its right-hand side."
+  (interactive)
+  (let* ((is-region (use-region-p))
+         (beg (if is-region (region-beginning) (line-beginning-position)))
+         (end (if is-region (region-end) (line-end-position)))
+         (m-beg (set-marker (make-marker) beg))
+         (m-end (set-marker (make-marker) end)))
+    (duplicate-dwim)
+    (save-excursion
+      (comment-region m-beg m-end))
+    (set-marker m-beg nil)
+    (set-marker m-end nil)))
+
 ;; Move point to the first new line after `duplicate-line' or `duplicate-dwim'.
 (setq duplicate-line-final-position 1)
 
 (keymap-global-set "M-c" #'duplicate-dwim)
+(keymap-global-set "C-M-;" #'duplicate-and-comment-dwim)
 
 (set-leader-keys!
   "b i" #'clone-indirect-buffer
