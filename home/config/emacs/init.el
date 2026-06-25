@@ -2695,6 +2695,34 @@ possibly new window."
 (setopt minibuffer-prompt-properties
         '(read-only t cursor-intangible t face minibuffer-prompt))
 
+;; Feature `completion-preview' provides the Completion Preview mode. This minor
+;; mode displays a completion suggestion for the symbol at point in an overlay
+;; after point.
+(use-feature! completion-preview
+  :demand t
+  :bind ( :map completion-preview-active-mode-map
+          ("M-n" . #'completion-preview-next-candidate)
+          ("M-p" . #'completion-preview-prev-candidate)
+          ([remap forward-word] . #'completion-preview-insert-word)
+          ([remap forward-sexp] . #'completion-preview-insert-sexp))
+
+  :config
+
+  ;; Trigger completion after forward deletions.
+  (push #'delete-char completion-preview-commands)
+  (push #'delete-forward-char completion-preview-commands)
+
+  (with-eval-after-load 'hungry-delete
+    ;; Support `hungry-delete-mode'.
+    (push #'hungry-delete-forward completion-preview-commands)
+    (push #'hungry-delete-backward completion-preview-commands))
+
+  (with-eval-after-load 'corfu-history
+    ;; Sort preview candidates with the same function as Corfu.
+    (setopt completion-preview-sort-function #'corfu-history--sort))
+
+  (global-completion-preview-mode +1))
+
 ;; Feature `minibuffer' provides minibuffer and completion functions.
 (use-feature! minibuffer
   :bind ( :map minibuffer-local-completion-map
@@ -3286,14 +3314,6 @@ defeats the purpose of `corfu-sort-function'."
   (setopt corfu-sort-override-function #'my--corfu-sort)
 
   (global-corfu-mode +1)
-
-  ;; Feature `corfu-auto' automatically shows the popup.
-  (use-feature! corfu-auto
-    :demand t
-    :config
-
-    ;; Enable showing the popup automatically.
-    (setopt corfu-auto t))
 
   ;; Feature `corfu-echo' shows candidate documentation in echo area.
   (use-feature! corfu-echo
