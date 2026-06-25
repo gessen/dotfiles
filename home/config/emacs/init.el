@@ -4834,6 +4834,7 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
     "Call `browse-at-remote' with `browse-at-remote-prefer-symbolic' reversed
 if called with universal argument."
     (interactive "P")
+    (require 'browse-at-remote)
     (if arg
         (let ((browse-at-remote-prefer-symbolic
                (not browse-at-remote-prefer-symbolic)))
@@ -4844,6 +4845,7 @@ if called with universal argument."
     "Call `browse-at-remote-kill' with `browse-at-remote-prefer-symbolic'
 reversed if called with universal argument."
     (interactive "P")
+    (require 'browse-at-remote)
     (if arg
         (let ((browse-at-remote-prefer-symbolic
                (not browse-at-remote-prefer-symbolic)))
