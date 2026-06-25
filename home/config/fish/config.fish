@@ -129,10 +129,6 @@ set -gx SSH_ASKPASS_REQUIRE prefer
 
 ### Stormcloud
 
-# Needed to build Stormcloud
-set -gx BUILD_OS alsi22
-# set -gx CROSS_CONFIG $HOME/.nix-profile/opt/ew-buildenv/Cross_$BUILD_OS.toml
-
 # Needed by dewploy
 set -gx GHOST_IP 198.18.132.36
 
