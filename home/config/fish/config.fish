@@ -1,7 +1,6 @@
 ## Noninteractive
 
 # Create cache directory
-set -l __fish_cache_dir $HOME/.cache/fish
 test -d $__fish_cache_dir; or mkdir -p $__fish_cache_dir
 
 ### XDG
