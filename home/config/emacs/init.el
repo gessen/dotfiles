@@ -4320,10 +4320,15 @@ unhelpful."
     "h b" #'describe-bindings
     "h c" #'describe-key-briefly
     "h F" #'describe-face
+    "h f" #'describe-function
+    "h k" #'describe-key
     "h m" #'describe-mode
     "h M" #'describe-keymap
     "h n" #'view-emacs-news
-    "h t" #'describe-theme)
+    "h s" #'describe-symbol
+    "h t" #'describe-theme
+    "h v" #'describe-variable
+    "h x" #'describe-command)
 
   ;; Always select help window for viewing.
   (setq help-window-select 't))
@@ -4332,16 +4337,6 @@ unhelpful."
 ;; Emacs help facility which provides much more contextual information
 ;; in a better format.
 (use-package! helpful
-  :init
-
-  (set-leader-keys!
-    "h f" #'helpful-callable
-    "h I" #'helpful-at-point
-    "h k" #'helpful-key
-    "h s" #'helpful-symbol
-    "h v" #'helpful-variable
-    "h x" #'helpful-command)
-
   :bind (([remap describe-function] . #'helpful-callable)
          ([remap describe-variable] . #'helpful-variable)
          ([remap describe-symbol]   . #'helpful-symbol)
