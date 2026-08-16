@@ -5294,6 +5294,13 @@ possibly new window."
 
 ;;; Appearance
 
+;; When Emacs encounters Nerd Font icon characters in those ranges, render them
+;; using Symbols Nerd Font Mono instead of the normal text font.
+(dolist (chars '((#xE000   . #xF8FF)
+                 (#xF0000  . #xF1AF0)))
+  (set-fontset-font t chars (font-spec :family "Symbols Nerd Font Mono") nil
+                    'prepend))
+
 ;; Show both line and column in modeline.
 (line-number-mode +1)
 (column-number-mode +1)
