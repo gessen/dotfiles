@@ -24,8 +24,8 @@
                             (vertical-scroll-bars)
                             (user-size . t)
                             (width . 160)
-                            (height . 57)
-                            (font . "monospace-11")))
+                            (height . 55)
+                            (font . "monospace-13")))
 
 ;; Set initial frame to be maximized
 ; (setq initial-frame-alist '((fullscreen . maximized)))
