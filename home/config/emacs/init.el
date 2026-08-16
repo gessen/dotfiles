@@ -3242,9 +3242,10 @@ completing-read prompter."
     "t A" #'global-corfu-mode)
 
   :bind ( :map corfu-map
-          ("TAB"   . #'corfu-next)
-          ("<tab>"   . #'corfu-next)
-          ("<backtab>" . #'corfu-previous))
+          ("TAB"       . #'corfu-next)
+          ("<tab>"     . #'corfu-next)
+          ("<backtab>" . #'corfu-previous)
+          ("SPC"       . #'corfu-insert-separator))
 
   :config
 
