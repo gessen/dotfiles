@@ -2969,7 +2969,9 @@ completing-read prompter."
       (apply fn args))))
 
 ;; Package `embark-consult' provides integration between Embark and Consult.
-(use-package! embark-consult)
+(use-package! embark-consult
+  :demand t
+  :after embark)
 
 ;; Package `marginalia' enriches existing commands with completion annotations
 ;; by adding marginalia to the minibuffer completions. Marginalia are marks or
