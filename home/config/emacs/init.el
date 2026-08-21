@@ -773,12 +773,6 @@ window instead."
     (set-window-buffer fourth (or (caddr other-files) "*scratch*"))
     (balance-windows)))
 
-(defun switch-to-minibuffer-window ()
-  "Switch to minibuffer window (if active)."
-  (interactive)
-  (when (active-minibuffer-window)
-    (select-window (active-minibuffer-window))))
-
 ;; Set basic window management commands
 (set-leader-keys!
   "b d" #'kill-current-buffer
@@ -788,7 +782,7 @@ window instead."
   "w 2" #'split-window-double
   "w 3" #'split-window-triple
   "w 4" #'split-window-grid
-  "w b" #'switch-to-minibuffer-window
+  "w b" #'switch-to-minibuffer
   "w e" #'balance-windows
   "w m" #'maximize-buffer
   "w q" #'kill-buffer-and-window
