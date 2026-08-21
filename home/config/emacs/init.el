@@ -2100,18 +2100,6 @@ will not refresh `column-number-mode."
 
   (pulsar-global-mode +1))
 
-;; Package `rainbow-delimiters' is a "rainbow parentheses"-like mode which
-;; highlights parentheses, brackets, and braces according to their depth. Each
-;; successive level is highlighted in a different color. This makes it easy to
-;; spot matching delimiters, orient yourself in the code, and tell which
-;; statements are at a given level.
-(use-package! rainbow-delimiters
-  :init
-
-  (set-leader-keys! "t H r" #'rainbow-delimiters-mode)
-
-  :hook (prog-mode-hook . rainbow-delimiters-mode))
-
 ;; Package `symbol-overlay' highlights symbols with overlays while providing a
 ;; keymap for various operations about highlighted symbols. It was originally
 ;; inspired by the package `highlight-symbol'. The fundamental difference is

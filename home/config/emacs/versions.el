@@ -1127,20 +1127,6 @@
                    "elpaca-menu-lock-file" :id pulsar :type git :protocol https
                    :inherit t :depth treeless :ref
                    "2d0905ec126a8bc86420fa477f06bcbe90d11603"))
- (rainbow-delimiters :source "elpaca-menu-lock-file" :recipe
-                     (:package "rainbow-delimiters" :fetcher github :repo
-                               "Fanael/rainbow-delimiters" :files
-                               ("*.el" "*.el.in" "dir" "*.info" "*.texi"
-                                "*.texinfo" "doc/dir" "doc/*.info" "doc/*.texi"
-                                "doc/*.texinfo" "lisp/*.el" "docs/dir"
-                                "docs/*.info" "docs/*.texi" "docs/*.texinfo"
-                                (:exclude ".dir-locals.el" "test.el" "tests.el"
-                                          "*-test.el" "*-tests.el" "LICENSE"
-                                          "README*" "*-pkg.el"))
-                               :source "elpaca-menu-lock-file" :id
-                               rainbow-delimiters :type git :protocol https
-                               :inherit t :depth treeless :ref
-                               "f40ece58df8b2f0fb6c8576b527755a552a5e763"))
  (reformatter :source "elpaca-menu-lock-file" :recipe
               (:package "reformatter" :repo "purcell/emacs-reformatter" :fetcher
                         github :files
