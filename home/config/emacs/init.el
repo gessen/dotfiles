@@ -2866,7 +2866,11 @@ point. "
          ("M-s M-a" . #'embark-act)
          ("M-s e"   . #'embark-export)
          ("M-s M-s" . #'embark-dwim)
-         ("C-h B"   . #'embark-bindings))
+         ("C-h B"   . #'embark-bindings)
+         :map embark-flymake-map
+         ("RET" . #'eldoc-doc-buffer)
+         :map embark-identifier-map
+         ("RET" . #'eldoc-doc-buffer))
 
   :config
 
