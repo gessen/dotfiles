@@ -2201,10 +2201,8 @@ will not refresh `column-number-mode."
 
 ;; Feature `grep' provides the Grepping facilities.
 (use-feature! grep
-  :bind (("M-s g"   . #'grep)
-         ("M-s M-g" . #'grep)
-         ("M-s G"   . #'rgrep)
-         ("M-s M-G" . #'rgrep))
+  :bind (("M-s g" . #'grep)
+         ("M-s G" . #'rgrep))
   :config
 
   ;; Subdivide grep output into sections, one per file.
@@ -2862,17 +2860,11 @@ point. "
 
   :bind (("M-n"     . #'embark-next-symbol)
          ("M-p"     . #'embark-previous-symbol)
-         ("M-s a"   . #'embark-act)
-         ("M-s M-a" . #'embark-act)
          ("M-s A"   . #'embark-act-all)
-         ("M-s M-A" . #'embark-act-all)
          ("M-s b"   . #'embark-become)
-         ("M-s M-b" . #'embark-become)
          ("M-s c"   . #'embark-collect)
-         ("M-s M-c" . #'embark-collect)
+         ("M-s M-a" . #'embark-act)
          ("M-s e"   . #'embark-export)
-         ("M-s M-e" . #'embark-export)
-         ("M-s s"   . #'embark-dwim)
          ("M-s M-s" . #'embark-dwim)
          ("C-h B"   . #'embark-bindings))
 
