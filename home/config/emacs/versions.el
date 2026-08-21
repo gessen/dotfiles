@@ -362,12 +362,6 @@
                   :source "elpaca-menu-lock-file" :id eglot :type git :protocol
                   https :inherit t :depth treeless :ref
                   "4e165cc2d0cfb889ea2206a5e7a4ccf8c77aa2b5"))
- (eglot-booster :source "elpaca-menu-lock-file" :recipe
-                (:source "elpaca-menu-lock-file" :package "eglot-booster" :id
-                         eglot-booster :host github :repo
-                         "jdtsmith/eglot-booster" :type git :protocol https
-                         :inherit t :depth treeless :ref
-                         "cab7803c4f0adc7fff9da6680f90110674bb7a22"))
  (eglot-hover :source "elpaca-menu-lock-file" :recipe
               (:source "elpaca-menu-lock-file" :package "eglot-hover" :id
                        eglot-hover :host codeberg :repo "slotThe/eglot-hover"

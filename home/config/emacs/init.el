@@ -4180,20 +4180,6 @@ Return nil if there is no name or if NODE is not a defun node."
   ;; Make the inlay hints a bit smaller.
   (set-face-attribute 'eglot-inlay-hint-face nil :height 0.7))
 
-;; Package `eglot-booster' enables Eglot to use emacs-lsp-booster which is a
-;; rust-based wrapper program which substantially speeds up Emacs interactions
-;; with LSP servers
-(use-package! eglot-booster
-  :ensure (:host github :repo "jdtsmith/eglot-booster")
-  :demand t
-  :after eglot
-  :config
-
-  ;; Do not translate JSON into bytecode but still perform I/O buffering."
-  (setopt eglot-booster-io-only t)
-
-  (eglot-booster-mode +1))
-
 ;; Package `eglot-hover' provides a minor mode to improve Eglot's default hover
 ;; messages.
 (use-package! eglot-hover
