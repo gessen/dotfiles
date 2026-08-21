@@ -576,21 +576,6 @@
                               highlight-numbers :type git :protocol https
                               :inherit t :depth treeless :ref
                               "8b4744c7f46c72b1d3d599d4fb75ef8183dee307"))
- (highlight-parentheses :source "elpaca-menu-lock-file" :recipe
-                        (:package "highlight-parentheses" :fetcher sourcehut
-                                  :repo "tsdh/highlight-parentheses.el" :files
-                                  ("*.el" "*.el.in" "dir" "*.info" "*.texi"
-                                   "*.texinfo" "doc/dir" "doc/*.info"
-                                   "doc/*.texi" "doc/*.texinfo" "lisp/*.el"
-                                   "docs/dir" "docs/*.info" "docs/*.texi"
-                                   "docs/*.texinfo"
-                                   (:exclude ".dir-locals.el" "test.el"
-                                             "tests.el" "*-test.el" "*-tests.el"
-                                             "LICENSE" "README*" "*-pkg.el"))
-                                  :source "elpaca-menu-lock-file" :id
-                                  highlight-parentheses :type git :protocol
-                                  https :inherit t :depth treeless :ref
-                                  "965b18dd69eff4457e17c9e84b3cbfdbfca2ddfb"))
  (hl-todo :source "elpaca-menu-lock-file" :recipe
           (:package "hl-todo" :repo "tarsius/hl-todo" :fetcher github :files
                     ("*.el" "*.el.in" "dir" "*.info" "*.texi" "*.texinfo"

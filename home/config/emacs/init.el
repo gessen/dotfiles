@@ -2055,26 +2055,6 @@ will not refresh `column-number-mode."
 
   :hook (prog-mode-hook . highlight-numbers-mode))
 
-;; Package `highlight-parentheses' highlights surrounding parentheses in Emacs.
-(use-package! highlight-parentheses
-  :init
-
-  (set-leader-keys!
-    "t H p" #'highlight-parentheses-mode
-    "t H P" #'global-highlight-parentheses-mode)
-
-  :hook (prog-mode-hook . highlight-parentheses-mode)
-  :config
-
-  ;; Make parentheses a bit more visible.
-  (set-face-attribute 'highlight-parentheses-highlight nil :weight 'ultrabold)
-
-  ;; Make most inside parentheses greenish.
-  (setq highlight-parentheses-colors '("Springgreen3"
-                                       "IndianRed1"
-                                       "IndianRed3"
-                                       "IndianRed4")))
-
 ;; Package `hl-todo' highlights TODO and similar keywords in comments and
 ;; strings. also provides commands for moving to the next or previous keyword,
 ;; to invoke `occur' with a regexp that matches all known keywords, and to
