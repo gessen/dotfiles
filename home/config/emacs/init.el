@@ -1192,7 +1192,6 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
 ;; directories. The directory candidates are collected from user bookmarks,
 ;; project.el project roots and recentf file locations.
 (use-package! consult-dir
-  :after vertico
   :init
 
   (defun consult-dir--zoxide-dirs ()
@@ -1211,9 +1210,13 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
 
   (set-leader-keys! "f d" #'consult-dir)
 
-  :bind ( :map vertico-map
-          ("M-l" . #'consult-dir)
-          ("M-k" . #'consult-dir-jump-file))
+  (with-eval-after-load 'vertico
+    (keymap-set vertico-map "M-l" #'consult-dir)
+    (keymap-set vertico-map "M-k" #'consult-dir-jump-file))
+
+  :bind ( :map minibuffer-local-completion-map
+          ("M-l" . consult-dir)
+          ("M-k" . consult-dir-jump-file))
 
   :config
 
