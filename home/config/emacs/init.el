@@ -1973,22 +1973,6 @@ possibly new window."
   ;; Make the end of the file recentered.
   (setq ccm-recenter-at-end-of-file t))
 
-;; Package `frog-jump-buffer allows you to hop to any Emacs buffer in 2-3 key
-;; strokes. The buffers appear in order of most recent display or selection
-;; while selecting the `avy' character next to a buffer switches to that buffer.
-;; Use `0' to toggle between opening in the same window or `(other-window)'. The
-;; numbers 1 through 6 will cycle through the default buffer filters.
-(use-package! frog-jump-buffer
-  :config
-
-  ;; Use numbers instead of capital letters for the default filters.
-  (setq frog-jump-buffer-default-filters-capital-letters nil)
-
-  ;; Remove the current buffer from always being the first option.
-  (setq frog-jump-buffer-include-current-buffer nil)
-
-  :bind ("C-o" . #'frog-jump-buffer))
-
 ;; Package `mwim' stands for "Move Where I Mean".  It provides commands to
 ;; switch between various positions on the current line (particularly, to move
 ;; to the beginning/end of code, line or comment).
@@ -5144,7 +5128,6 @@ possibly new window."
 
   :hook (compilation-filter-hook . ansi-color-compilation-filter)
   :bind ( :map compilation-mode-map
-          ("C-o" . nil)
           ("o"   . #'compilation-display-error))
   :config
 

@@ -491,27 +491,6 @@
                           "elpaca-menu-lock-file" :id flymake-popon :type git
                           :protocol https :inherit t :depth treeless :ref
                           "99ea813346f3edef7220d8f4faeed2ec69af6060"))
- (frog-jump-buffer :source "elpaca-menu-lock-file" :recipe
-                   (:package "frog-jump-buffer" :repo
-                             "waymondo/frog-jump-buffer" :fetcher github :files
-                             ("*.el" "*.el.in" "dir" "*.info" "*.texi"
-                              "*.texinfo" "doc/dir" "doc/*.info" "doc/*.texi"
-                              "doc/*.texinfo" "lisp/*.el" "docs/dir"
-                              "docs/*.info" "docs/*.texi" "docs/*.texinfo"
-                              (:exclude ".dir-locals.el" "test.el" "tests.el"
-                                        "*-test.el" "*-tests.el" "LICENSE"
-                                        "README*" "*-pkg.el"))
-                             :source "elpaca-menu-lock-file" :id
-                             frog-jump-buffer :type git :protocol https :inherit
-                             t :depth treeless :ref
-                             "e2beb322d4ef1baaaf191dbc6f50e19fa5781abf"))
- (frog-menu :source "elpaca-menu-lock-file" :recipe
-            (:package "frog-menu" :repo
-                      ("https://github.com/clemera/frog-menu" . "frog-menu")
-                      :tar "0.2.11" :host gnu :files ("*" (:exclude ".git"))
-                      :source "elpaca-menu-lock-file" :id frog-menu :type git
-                      :protocol https :inherit t :depth treeless :ref
-                      "2b8d04c1a03b339e2eaf031eacd0d9d615a21322"))
  (git-modes :source "elpaca-menu-lock-file" :recipe
             (:package "git-modes" :fetcher github :repo "magit/git-modes"
                       :old-names
