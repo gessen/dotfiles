@@ -2471,8 +2471,8 @@ will not refresh `column-number-mode."
   :demand t
   :config
 
-  ;; Show the matching paren if it is visible, and the expression otherwise.
-  (setopt show-paren-style 'mixed)
+  ;; Show the entire expression enclosed by the paren.
+  (setopt show-paren-style 'expression)
 
   ;; Decrease the time after `paren' highlights matches.
   (setopt show-paren-delay 0)
