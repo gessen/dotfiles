@@ -2536,27 +2536,6 @@ will not refresh `column-number-mode."
 
   :bind ("M-/" . #'hippie-expand))
 
-;; Package `auto-yasnippet' is a hybrid of keyboard macros and yasnippet. You
-;; create the snippet on the go, usually to be used just in the one place. It's
-;; fast, because you're not leaving the current buffer, and all you do is enter
-;; the code you'd enter anyway, just placing ~ where you'd like yasnippet fields
-;; and mirrors to be.
-(use-package! auto-yasnippet
-  :commands aya-persist-snippet
-
-  :init
-
-  (set-leader-keys!
-    "i c" #'aya-create
-    "i e" #'aya-expand
-    "i o" #'aya-open-line
-    "i w" #'aya-persist-snippet)
-
-  :config
-
-  ;; Save auto snippets in persistent location outside `user-emacs-directory'.
-  (setopt aya-persist-snippets-dir (data-dir "snippets")))
-
 ;; Package `consult-yasnippet' allows to interactively select a Yasnippet
 ;; snippet through completing-read with in buffer previews.
 (use-package! consult-yasnippet

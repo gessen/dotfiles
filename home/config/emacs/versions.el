@@ -22,19 +22,6 @@
                   :source "elpaca-menu-lock-file" :id async :type git :protocol
                   https :inherit t :depth treeless :ref
                   "5faab28916603bb324d9faba057021ce028ca847"))
- (auto-yasnippet :source "elpaca-menu-lock-file" :recipe
-                 (:package "auto-yasnippet" :fetcher github :repo
-                           "abo-abo/auto-yasnippet" :files
-                           ("*.el" "*.el.in" "dir" "*.info" "*.texi" "*.texinfo"
-                            "doc/dir" "doc/*.info" "doc/*.texi" "doc/*.texinfo"
-                            "lisp/*.el" "docs/dir" "docs/*.info" "docs/*.texi"
-                            "docs/*.texinfo"
-                            (:exclude ".dir-locals.el" "test.el" "tests.el"
-                                      "*-test.el" "*-tests.el" "LICENSE"
-                                      "README*" "*-pkg.el"))
-                           :source "elpaca-menu-lock-file" :id auto-yasnippet
-                           :type git :protocol https :inherit t :depth treeless
-                           :ref "6a9e406d0d7f9dfd6dff7647f358cb05a0b1637e"))
  (avy :source "elpaca-menu-lock-file" :recipe
       (:package "avy" :repo "abo-abo/avy" :fetcher github :files
                 ("*.el" "*.el.in" "dir" "*.info" "*.texi" "*.texinfo" "doc/dir"
