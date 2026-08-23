@@ -624,18 +624,6 @@
                   :source "elpaca-menu-lock-file" :id iedit :type git :protocol
                   https :inherit t :depth treeless :ref
                   "14161daa295332a49dda92b97c00d62efd38acfe"))
- (jeison :source "elpaca-menu-lock-file" :recipe
-         (:package "jeison" :repo "SavchenkoValeriy/jeison" :fetcher github
-                   :files
-                   ("*.el" "*.el.in" "dir" "*.info" "*.texi" "*.texinfo"
-                    "doc/dir" "doc/*.info" "doc/*.texi" "doc/*.texinfo"
-                    "lisp/*.el" "docs/dir" "docs/*.info" "docs/*.texi"
-                    "docs/*.texinfo"
-                    (:exclude ".dir-locals.el" "test.el" "tests.el" "*-test.el"
-                              "*-tests.el" "LICENSE" "README*" "*-pkg.el"))
-                   :source "elpaca-menu-lock-file" :id jeison :type git
-                   :protocol https :inherit t :depth treeless :ref
-                   "19a51770f24eaa7b538c7be6a8a5c25d154b641f"))
  (jinx :source "elpaca-menu-lock-file" :recipe
        (:package "jinx" :repo "minad/jinx" :files
                  (:defaults "jinx-mod.c" "emacs-module.h") :fetcher github
@@ -1071,20 +1059,6 @@
                      :source "elpaca-menu-lock-file" :id posframe :type git
                      :protocol https :inherit t :depth treeless :ref
                      "fcf1757baee481f617fbf2dc39f8c561207df263"))
- (powerthesaurus :source "elpaca-menu-lock-file" :recipe
-                 (:package "powerthesaurus" :repo
-                           "SavchenkoValeriy/emacs-powerthesaurus" :fetcher
-                           github :files
-                           ("*.el" "*.el.in" "dir" "*.info" "*.texi" "*.texinfo"
-                            "doc/dir" "doc/*.info" "doc/*.texi" "doc/*.texinfo"
-                            "lisp/*.el" "docs/dir" "docs/*.info" "docs/*.texi"
-                            "docs/*.texinfo"
-                            (:exclude ".dir-locals.el" "test.el" "tests.el"
-                                      "*-test.el" "*-tests.el" "LICENSE"
-                                      "README*" "*-pkg.el"))
-                           :source "elpaca-menu-lock-file" :id powerthesaurus
-                           :type git :protocol https :inherit t :depth treeless
-                           :ref "4b97797cf789aaba411c61a85fe23474ebc5bedc"))
  (project :source "elpaca-menu-lock-file" :recipe
           (:package "project" :repo "emacs-mirror/emacs" :tar "0.11.2" :host
                     github :branch "master" :files

@@ -2324,16 +2324,6 @@ will not refresh `column-number-mode."
                  '(jinx grid
                         (vertico-grid-annotate . 20) (vertico-count . 4)))))
 
-;; Package `powerthesaurus' is an integration with powerthesaurus.org. It helps
-;; to look up a word in powerthesaurus and either replace or insert selected
-;; option in the buffer.
-(use-package! powerthesaurus
-  :init
-
-  (set-leader-keys!
-    "S t" #'powerthesaurus-lookup-synonyms-dwim
-    "S T" #'powerthesaurus-lookup-antonyms-dwim))
-
 ;;;; Miscellaneous
 
 ;; Package `vlf' provides the `vlf' command, which visits part of large file
