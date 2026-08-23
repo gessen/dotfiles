@@ -77,21 +77,6 @@
                  :source "elpaca-menu-lock-file" :id cape :type git :protocol
                  https :inherit t :depth treeless :ref
                  "2e15e1909754752f66096dde1b8d639d6eb25f35"))
- (centered-cursor-mode :source "elpaca-menu-lock-file" :recipe
-                       (:package "centered-cursor-mode" :fetcher github :repo
-                                 "andre-r/centered-cursor-mode.el" :files
-                                 ("*.el" "*.el.in" "dir" "*.info" "*.texi"
-                                  "*.texinfo" "doc/dir" "doc/*.info"
-                                  "doc/*.texi" "doc/*.texinfo" "lisp/*.el"
-                                  "docs/dir" "docs/*.info" "docs/*.texi"
-                                  "docs/*.texinfo"
-                                  (:exclude ".dir-locals.el" "test.el"
-                                            "tests.el" "*-test.el" "*-tests.el"
-                                            "LICENSE" "README*" "*-pkg.el"))
-                                 :source "elpaca-menu-lock-file" :id
-                                 centered-cursor-mode :type git :protocol https
-                                 :inherit t :depth treeless :ref
-                                 "67ef719e685407dbc455c7430765e4e685fd95a9"))
  (circadian :source "elpaca-menu-lock-file" :recipe
             (:package "circadian" :fetcher github :repo
                       "guidoschmidt/circadian.el" :files

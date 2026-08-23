@@ -1959,20 +1959,6 @@ possibly new window."
 
   (beginend-global-mode +1))
 
-;; Package `centered-cursor-mode' Makes the cursor stay vertically in a defined
-;; position, usually centered.
-(use-package! centered-cursor-mode
-  :init
-
-  (set-leader-keys!
-    "t -" #'centered-cursor-mode
-    "t _" #'global-centered-cursor-mode)
-
-  :config
-
-  ;; Make the end of the file recentered.
-  (setq ccm-recenter-at-end-of-file t))
-
 ;; Package `mwim' stands for "Move Where I Mean".  It provides commands to
 ;; switch between various positions on the current line (particularly, to move
 ;; to the beginning/end of code, line or comment).
