@@ -1308,6 +1308,10 @@ Operates on the current paragraph if no region is active."
 ;; Make `kill-line' delete the whole line when the cursor is at start of a line.
 (setq kill-whole-line t)
 
+;; Kill the last word as defined by the current major mode when `kill-region' is
+;; invoked without an active region.
+(setopt kill-region-dwim 'emacs-word)
+
 ;; Kill entire line.
 (keymap-global-set "C-S-k" #'kill-whole-line)
 
