@@ -436,15 +436,6 @@
                                :type git :protocol https :inherit t :depth
                                treeless :ref
                                "1c771edc125ae44d9574489f3989397027b17654"))
- (flymake-popon :source "elpaca-menu-lock-file" :recipe
-                (:package "flymake-popon" :repo
-                          ("https://codeberg.org/akib/emacs-flymake-popon"
-                           . "flymake-popon")
-                          :tar "0.5.1" :host nongnu :files
-                          ("*" (:exclude ".git")) :source
-                          "elpaca-menu-lock-file" :id flymake-popon :type git
-                          :protocol https :inherit t :depth treeless :ref
-                          "99ea813346f3edef7220d8f4faeed2ec69af6060"))
  (git-modes :source "elpaca-menu-lock-file" :recipe
             (:package "git-modes" :fetcher github :repo "magit/git-modes" :files
                       ("*.el" "*.el.in" "dir" "*.info" "*.texi" "*.texinfo"
@@ -961,25 +952,6 @@
                           :source "elpaca-menu-lock-file" :id plantuml-mode
                           :type git :protocol https :inherit t :depth treeless
                           :ref "a4a63efa4a3980bfbd825bfb3a263c6664401e79"))
- (popon :source "elpaca-menu-lock-file" :recipe
-        (:package "popon" :repo
-                  ("https://codeberg.org/akib/emacs-popon" . "popon") :tar
-                  "0.13" :host nongnu :files ("*" (:exclude ".git")) :source
-                  "elpaca-menu-lock-file" :id popon :type git :protocol https
-                  :inherit t :depth treeless :ref
-                  "bf8174cb7e6e8fe0fe91afe6b01b6562c4dc39da"))
- (posframe :source "elpaca-menu-lock-file" :recipe
-           (:package "posframe" :fetcher github :repo "tumashu/posframe" :files
-                     ("*.el" "*.el.in" "dir" "*.info" "*.texi" "*.texinfo"
-                      "doc/dir" "doc/*.info" "doc/*.texi" "doc/*.texinfo"
-                      "lisp/*.el" "docs/dir" "docs/*.info" "docs/*.texi"
-                      "docs/*.texinfo"
-                      (:exclude ".dir-locals.el" "test.el" "tests.el"
-                                "*-test.el" "*-tests.el" "LICENSE" "README*"
-                                "*-pkg.el"))
-                     :source "elpaca-menu-lock-file" :id posframe :type git
-                     :protocol https :inherit t :depth treeless :ref
-                     "ec0ec37c0d6397422a07def499e87591ca037af7"))
  (pulsar :source "elpaca-menu-lock-file" :recipe
          (:package "pulsar" :repo
                    ("https://github.com/protesilaos/pulsar" . "pulsar") :tar
