@@ -674,6 +674,15 @@ For details on DATA, CONTEXT, and signal, see
 (keymap-global-set "<escape>" #'keyboard-escape-quit)
 (keymap-global-set "C-g" #'keyboard-escape-quit)
 
+;; Feature `system-taskbar' displays a taskbar icon overlay, a progress bar
+;; report overlay, or alert the user that an Emacs session needs attention,
+;; often by flashing or bouncing the Emacs application icon.
+(use-feature! system-taskbar
+  :demand t
+  :config
+
+  (system-taskbar-mode +1))
+
 ;;; Windows management
 
 ;; When switching the buffer respect display actions specified by
