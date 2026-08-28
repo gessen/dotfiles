@@ -217,13 +217,6 @@
                   :fetcher github :source "elpaca-menu-lock-file" :id corfu
                   :type git :protocol https :inherit t :depth treeless :ref
                   "75be36fe63e78c63ac71c32039ab07836bd532ac"))
- (corfu-terminal :source "elpaca-menu-lock-file" :recipe
-                 (:package "corfu-terminal" :repo "akib/emacs-corfu-terminal"
-                           :tar "0.7" :host codeberg :files
-                           ("*" (:exclude ".git")) :source
-                           "elpaca-menu-lock-file" :id corfu-terminal :type git
-                           :protocol https :inherit t :depth treeless :ref
-                           "501548c3d51f926c687e8cd838c5865ec45d03cc"))
  (dash :source "elpaca-menu-lock-file" :recipe
        (:package "dash" :fetcher github :repo "magnars/dash.el" :files
                  ("dash.el" "dash.texi") :source "elpaca-menu-lock-file" :id
@@ -332,15 +325,6 @@
                              easy-kill-extras :type git :protocol https :inherit
                              t :depth treeless :ref
                              "3fea06322d76be78e66074b9a9dad9a6d4aa6bcd"))
- (eglot :source "elpaca-menu-lock-file" :recipe
-        (:package "eglot" :repo "emacs-mirror/emacs" :tar "1.24" :host github
-                  :branch "master" :files
-                  ("lisp/progmodes/eglot.el" "doc/emacs/doclicense.texi"
-                   "doc/emacs/docstyle.texi" "doc/misc/eglot.texi"
-                   "etc/EGLOT-NEWS" (:exclude ".git"))
-                  :source "elpaca-menu-lock-file" :id eglot :type git :protocol
-                  https :inherit t :depth treeless :ref
-                  "eadb99e7b69a152749e682d96f17abceefc233e3"))
  (eglot-hover :source "elpaca-menu-lock-file" :recipe
               (:source "elpaca-menu-lock-file" :package "eglot-hover" :id
                        eglot-hover :host codeberg :repo "slotThe/eglot-hover"
@@ -443,15 +427,6 @@
                       :source "elpaca-menu-lock-file" :id fish-mode :type git
                       :protocol https :inherit t :depth treeless :ref
                       "2526b1803b58cf145bc70ff6ce2adb3f6c246f89"))
- (flymake :source "elpaca-menu-lock-file" :recipe
-          (:package "flymake" :repo "emacs-mirror/emacs" :tar "1.4.6" :host
-                    github :branch "master" :files
-                    ("lisp/progmodes/flymake.el" "doc/emacs/doclicense.texi"
-                     "doc/emacs/docstyle.texi" "doc/misc/flymake.texi"
-                     (:exclude ".git"))
-                    :source "elpaca-menu-lock-file" :id flymake :type git
-                    :protocol https :inherit t :depth treeless :ref
-                    "eadb99e7b69a152749e682d96f17abceefc233e3"))
  (flymake-collection :source "elpaca-menu-lock-file" :recipe
                      (:package "flymake-collection" :fetcher github :repo
                                "mohkale/flymake-collection" :files
@@ -607,13 +582,6 @@
                  :source "elpaca-menu-lock-file" :id jinx :type git :protocol
                  https :inherit t :depth treeless :ref
                  "23f6d028decb6081ee30659e7e841f6046e5f511"))
- (jsonrpc :source "elpaca-menu-lock-file" :recipe
-          (:package "jsonrpc" :repo "emacs-mirror/emacs" :tar "1.0.29" :host
-                    github :branch "master" :files
-                    ("lisp/jsonrpc.el" (:exclude ".git")) :source
-                    "elpaca-menu-lock-file" :id jsonrpc :type git :protocol
-                    https :inherit t :depth treeless :ref
-                    "eadb99e7b69a152749e682d96f17abceefc233e3"))
  (keycast :source "elpaca-menu-lock-file" :recipe
           (:package "keycast" :fetcher github :repo "tarsius/keycast" :files
                     ("*.el" "*.el.in" "dir" "*.info" "*.texi" "*.texinfo"
@@ -772,19 +740,6 @@
                     :source "elpaca-menu-lock-file" :id minions :type git
                     :protocol https :inherit t :depth treeless :ref
                     "7ec2810c9b3019f8e379022b0ca7ce61e9e7c810"))
- (modus-themes :source "elpaca-menu-lock-file" :recipe
-               (:package "modus-themes" :fetcher github :repo
-                         "protesilaos/modus-themes" :files
-                         ("*.el" "*.el.in" "dir" "*.info" "*.texi" "*.texinfo"
-                          "doc/dir" "doc/*.info" "doc/*.texi" "doc/*.texinfo"
-                          "lisp/*.el" "docs/dir" "docs/*.info" "docs/*.texi"
-                          "docs/*.texinfo"
-                          (:exclude ".dir-locals.el" "test.el" "tests.el"
-                                    "*-test.el" "*-tests.el" "LICENSE" "README*"
-                                    "*-pkg.el"))
-                         :source "elpaca-menu-lock-file" :id modus-themes :type
-                         git :protocol https :inherit t :depth treeless :ref
-                         "21ffe0cd5a65365499c2e2d21a728de3cf5a7082"))
  (multiple-cursors :source "elpaca-menu-lock-file" :recipe
                    (:package "multiple-cursors" :fetcher github :repo
                              "magnars/multiple-cursors.el" :files
@@ -1036,13 +991,6 @@
                      :source "elpaca-menu-lock-file" :id posframe :type git
                      :protocol https :inherit t :depth treeless :ref
                      "ec0ec37c0d6397422a07def499e87591ca037af7"))
- (project :source "elpaca-menu-lock-file" :recipe
-          (:package "project" :repo "emacs-mirror/emacs" :tar "0.12.0" :host
-                    github :branch "master" :files
-                    ("lisp/progmodes/project.el" (:exclude ".git")) :source
-                    "elpaca-menu-lock-file" :id project :type git :protocol
-                    https :inherit t :depth treeless :ref
-                    "eadb99e7b69a152749e682d96f17abceefc233e3"))
  (pulsar :source "elpaca-menu-lock-file" :recipe
          (:package "pulsar" :repo
                    ("https://github.com/protesilaos/pulsar" . "pulsar") :tar
