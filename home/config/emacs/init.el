@@ -196,13 +196,12 @@ graphical frame is created."
 
 ;;;; Elpaca
 
-
 (defvar elpaca-installer-version 0.12)
 (defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
 (defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
 (defvar elpaca-sources-directory (expand-file-name "sources/" elpaca-directory))
 (defvar elpaca-order '(elpaca :repo "https://github.com/progfolio/elpaca.git"
-                              :ref nil :depth 1 :inherit ignore
+                              :ref "5b0cbb19421ef20c140b46a7b1fb7d04240b53f6" :inherit ignore
                               :files (:defaults "elpaca-test.el" (:exclude "extensions"))
                               :build (:not elpaca-activate)))
 (let* ((repo  (expand-file-name "elpaca/" elpaca-sources-directory))
@@ -238,6 +237,11 @@ graphical frame is created."
 
 ;; Use locked packages versions.
 (setopt elpaca-lock-file (expand-file-name "versions.el" user-emacs-directory))
+
+(defun elpaca-update-lock-file ()
+  "Write lock file to `elpaca-lock-file` for current Elpaca state."
+  (interactive)
+  (elpaca-write-lock-file elpaca-lock-file))
 
 ;;;; use-package
 
@@ -610,7 +614,7 @@ anything that can be a key's definition."
 
 ;;;; Keyboard integration
 
-;; Package `kpp' provides support for the Kitty Keyboard Protocol. KKP defines
+;; Package `kkp' provides support for the Kitty Keyboard Protocol. KKP defines
 ;; an alternative way to handle keyboard input for programs running in the
 ;; terminal. This allows, if the terminal (and intermediaries such as terminal
 ;; multiplexers) support the protocol as well, the transmission of more detailed
@@ -1413,6 +1417,7 @@ Operates on the current paragraph if no region is active."
 ;; changed, then blank lines at the end of buffer are truncated respecting
 ;; `require-final-newline'. All of this happens only when saving.
 (use-package! ws-butler
+  :ensure (:inherit elpaca-menu-nongnu-elpa)
   :hook (prog-mode-hook . ws-butler-mode)
 
   :init
@@ -2975,7 +2980,7 @@ completing-read prompter."
     :bind ( :map vertico-map
             ("M-q" . #'vertico-flat-mode)))
 
-  ;; Feature! vertico-mouse' adds mouse support for scrolling and candidate
+  ;; Feature `vertico-mouse' adds mouse support for scrolling and candidate
   ;; selection.
   (use-feature! vertico-mouse
     :demand t
@@ -3225,6 +3230,14 @@ defeats the purpose of `corfu-sort-function'."
     (setopt corfu-indexed-start 1)
 
     (corfu-indexed-mode +1))
+
+  ;; Feature `corfu-mouse' adds mouse support for scrolling and candidate
+  ;; selection.
+  (use-feature! corfu-mouse
+    :demand t
+    :config
+
+    (corfu-mouse-mode +1))
 
   ;; Feature `corfu-popupinfo' displays an information popup for completion
   ;; candidate when using Corfu. The popup displays either the candidate
