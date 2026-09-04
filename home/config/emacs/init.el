@@ -5385,6 +5385,25 @@ possibly new window."
 
   (fancy-compilation-mode +1))
 
+;;;; Debugging
+
+;; Package `dape' is a debug adapter client for Emacs. The debug adapter
+;; protocol, much like its more well-known counterpart, the language server
+;; protocol, aims to establish a common API for programming tools. However,
+;; instead of functionalities such as code completions, it provides a
+;; standardized interface for debuggers.
+(use-package! dape
+  :init
+
+  ;; Store downloaded adapters in cache directory.
+  (setopt dape-adapter-dir (file-name-as-directory
+                            (cache-dir "debug-adapters")))
+
+  ;; Display Dape buffers on the right side.
+  (setopt dape-buffer-window-arrangement 'right)
+
+  :hook (dape-repl-mode-hook . mode-line-invisible-mode))
+
 ;;; Startup
 
 ;; Disable the *About GNU Emacs* buffer at startup, and go straight for the
