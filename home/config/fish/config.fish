@@ -58,7 +58,7 @@ set -gx CTEST_OUTPUT_ON_FAILURE ON
 set -gx CTEST_PROGRESS_OUTPUT ON
 
 ### Input Method framework
-set -gx XMODIFIERS im=fcit
+set -gx XMODIFIERS @im=fcitx
 
 ### Ninja
 
@@ -67,7 +67,7 @@ set -gx NINJA_STATUS "[%s/%f/%t] (j%r/%es/%Es/%P) "
 
 ### Early exit
 
-status is-interactive || exit
+status is-interactive || return
 
 ## Interactive
 
@@ -277,7 +277,7 @@ end
 function git-unwip-all -d "Reset all WIP commits"
     set -f commit (git log --grep="--wip--" --invert-grep --max-count=1 \
         --format=format:%H)
-    if test $commit != (git rev-parse HEAD)
+    if test -n "$commit"; and test "$commit" != (git rev-parse HEAD)
         git reset $commit
     end
 end
@@ -353,7 +353,7 @@ abbr -a glols git log --graph --pretty='"%Cred%h%Creset -%C(auto)%d%Creset %s %C
 abbr -a glo git log --oneline
 abbr -a glog git log --oneline --graph --all
 
-abbr -a gignored git ls-files --others
+abbr -a gignored git ls-files -t '|' string match "'S *'"
 
 abbr -a gm git merge
 abbr -a gmff git merge --ff-only
@@ -506,7 +506,7 @@ set -gx FZF_ALT_C_COMMAND "fd \
 set -gx FZF_ALT_C_OPTS "--preview='tree -C {} | head -200'"
 
 # Mimic the native shift-tab behavior
-set -gx FZF_COMPLETION_OPTS "--no-sort"
+set -gx FZF_COMPLETION_OPTS --no-sort
 
 if type -q fzf
     set -l fzf_init $__fish_cache_dir/fzf-init.fish
@@ -562,12 +562,13 @@ end
 ### SSH
 
 # Start SSH agent
+set -l ssh_agent_env $XDG_RUNTIME_DIR/ssh-agent.fish
 if ! pgrep -u $USER ssh-agent >/dev/null
-    ssh-agent -c | sed "s|^echo|#echo|" >/tmp/ssh-agent.fish
+    ssh-agent -c | sed "s|^echo|#echo|" >$ssh_agent_env
 end
 
-if test -z $SSH_AGENT_PID
-    source "/tmp/ssh-agent.fish"
+if test -z "$SSH_AGENT_PID"
+    source $ssh_agent_env
 end
 
 # Copy current terminfo file to the given host
