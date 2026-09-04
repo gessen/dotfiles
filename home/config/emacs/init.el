@@ -6,7 +6,7 @@
 
 ;;; Code:
 
-(defconst my-minimum-emacs-version "31.1"
+(defconst my-minimum-emacs-version "32.0"
   "This Emacs configuration does not support any Emacs version below this.")
 
 ;; Make sure we are running a modern enough Emacs, otherwise abort init.
@@ -14,9 +14,6 @@
   (error (concat "This Emacs configuration requires at least Emacs %s, "
                  "but you are running Emacs %s")
          my-minimum-emacs-version emacs-version))
-
-;; Just log warnings and immediately show errors.
-(setopt warning-minimum-level :error)
 
 ;;; Load built-in utility libraries
 
@@ -2315,6 +2312,15 @@ possibly new window."
   (setopt grep-use-null-filename-separator t)
   (setopt grep-highlight-matches 'auto))
 
+;; Feature `replace' supplies the string and regular expression replace
+;; functions.
+(use-feature! replace
+  :config
+
+  ;; Show the matches visible in the window as the would look after the
+  ;; replacement.
+  (setopt query-replace-show-preview 'both))
+
 ;; Package `iedit' includes Emacs minor modes based on a API library and allows
 ;; you to edit one occurrence of some text in a buffer (possibly narrowed) or
 ;; region, and simultaneously have other occurrences edited in the same way,
@@ -2695,9 +2701,9 @@ possibly new window."
 ;;; Candidate selection
 
 ;; Do not consider case significant in completion
-(setq completion-ignore-case t
-      read-buffer-completion-ignore-case t
-      read-file-name-completion-ignore-case t)
+(setopt completion-ignore-case t
+        read-buffer-completion-ignore-case t
+        read-file-name-completion-ignore-case t)
 
 ;; Allow doing a command that requires candidate-selection when you are already
 ;; in the middle of candidate-selection.
@@ -3513,7 +3519,9 @@ defeats the purpose of `corfu-sort-function'."
   ;; Use full diagnostic text rather than truncated output.
   (setopt flymake-diagnostic-format-alist
           '((:help-echo . (origin code message))
-            (:eol . (oneliner))
+            (:inline-eol . (oneliner code))
+            (:inline-short . (oneliner))
+            (:inline-fancy . (oneliner code))
             (:eldoc . (origin code message))
             (:eldoc-echo . (origin code message))
             (t . (origin code message))))
