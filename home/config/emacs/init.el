@@ -711,6 +711,9 @@ For details on DATA, CONTEXT, and signal, see
           ("\\`\\*\\(Warnings\\|Compile-Log\\|Org Links\\)\\*\\'"
            (display-buffer-no-window)
            (allow-no-window . t))
+          ;; Make Majutsu behave like Magit.
+          ((derived-mode . majutsu-log-mode)
+           (display-buffer-full-frame))
           ;; Make Helpful behave more similar to builtin Help.
           ((derived-mode . helpful-mode)
            (display-buffer-reuse-mode-window display-buffer-pop-up-window)
@@ -1123,13 +1126,14 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
   (setopt project-compilation-buffer-name-function
           #'project-prefixed-buffer-name)
 
-  ;; Include Dired and Magit.
+  ;; Include Dired, Magit nad Majutsu.
   (setopt project-switch-commands
           '((project-find-file "Find file" ?f)
             (project-find-regexp "Find regexp" ?g)
             (project-find-dir "Find directory" ?d)
             (project-dired "Dired" ?D)
             (magit-project-status "Magit" ?m)
+            (majutsu-project-log "Majutsu" ?j)
             (project-vc-dir "VC-Dir" ?v)
             (project-eshell "Eshell" ?e)
             (project-any-command "Other" ?o)))
@@ -1481,7 +1485,14 @@ Operates on the current paragraph if no region is active."
   :hook (prog-mode-hook . ws-butler-mode)
 
   :init
-  (set-leader-keys! "t C-w" #'ws-butler-mode))
+
+  (set-leader-keys! "t C-w" #'ws-butler-mode)
+
+  :config
+
+  ;; Do not restore to the buffer trimmed whitespace right before point.
+  ;; This behavior isn't compatible with `vc-jj' and `diff-hl'.
+  (setopt ws-butler-keep-whitespace-before-point nil))
 
 ;;;; Indentation
 
@@ -4960,6 +4971,16 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
 
   ;; Feature `vc-dir' provides a directory status display under VC.
   (use-feature! vc-dir
+    :init
+
+    (defadvice! my--vc-dir-hide-state-silent
+        (vc-dir-hide-state &rest args)
+      :around #'vc-dir-hide-state
+      "Make `vc-dir-hide-state' silent when used with default argument."
+      (if (car args)
+          (apply vc-dir-hide-state args)
+        (apply #'advice-silence-messages! vc-dir-hide-state args)))
+
     :bind ( :map vc-dir-mode-map
             ("M-s" . nil)
             ("e"   . #'vc-ediff)
@@ -4971,6 +4992,8 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
     ;; Hide items whenever their state would change to 'up-to-date' or
     ;; 'ignored'.
     (setopt vc-dir-auto-hide-up-to-date t)))
+
+;;;;; Git
 
 ;; Feature `vc-git' contains a VC backend for the git version control system.
 (use-feature! vc-git
@@ -5272,6 +5295,72 @@ current theme. This will also disable line numbers and decorations."
 
   ;; Allow using `q' to quit out of popups, in addition to `C-g'.
   (transient-bind-q-to-quit))
+
+;;;;; Jujutsu
+
+;; Package `majutsu' provides a Magit-style interface for Jujutsu, offering an
+;; efficient way to interact with JJ repositories from within Emacs.
+(use-package! majutsu
+  :ensure (:host github :repo "0WD0/majutsu")
+  :init
+
+  (defadvice! my--majutsu-log-load-magit (&rest _)
+    :before #'majutsu-log
+    "Run `majutsu-log' with correct autoload."
+    (require 'magit))
+
+  (defun majutsu-project-log ()
+    "Run `majutsu-log' in the current project's root."
+    (interactive)
+    (majutsu-log (project-root (project-current t))))
+
+  (set-leader-keys! "g j" #'majutsu-log)
+
+  :bind ( :map majutsu-log-mode-map
+          ("E" . #'majutsu-ediff)
+          ("m" . #'majutsu-metaedit))
+
+  :config
+
+  (defhook! my--majutsu-jjdescription-mode-setup ()
+    majutsu-jjdescription-setup-hook
+    "Set custom settings for `majutsu-jjdescription-mode'."
+    (display-fill-column-indicator-mode +1))
+
+  ;; Show fine differences for all displayed diff hunks.
+  (setopt majutsu-diff-refine-hunk 'all))
+
+;; Package 'majutsu-delta' integrates Delta
+;; (https://github.com/dandavison/delta) with Majutsu, so that diffs in Majutsu
+;; are displayed with color highlighting provided by Delta.
+(use-package! majutsu-delta
+  :ensure (:host github :repo "gessen/majutsu-delta")
+  :after majutsu
+  :init
+
+  (defadvice! my--majutsu-delta-patch-args (args)
+    :filter-return #'majutsu-delta--make-delta-args
+    "Pick proper background and foreground colors based on the
+current theme. This will also disable line numbers and decorations."
+    (push (if (eq (frame-parameter nil 'background-mode) 'dark)
+              "--features=modus-vivendi"
+            "--features=modus-operandi") args))
+
+  (defun majutsu-delta-toggle ()
+    "Toggles `majutsu-delta-mode' and refreshes Majutsu."
+    (interactive)
+    (majutsu-delta-mode
+     (if majutsu-delta-mode -1 +1))
+    (majutsu-refresh))
+
+  (transient-append-suffix
+    'majutsu-diff '(-1 -1 -1)
+    '("l" "Toggle majutsu-delta" majutsu-delta-toggle))
+
+  :hook (majutsu-mode-hook . majutsu-delta-mode))
+
+;; Package `vc-jj' includes support for the Jujutsu version control system.
+(use-package! vc-jj)
 
 ;;;; Terminal emulator
 
