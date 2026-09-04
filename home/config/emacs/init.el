@@ -4377,10 +4377,15 @@ Return nil if there is no name or if NODE is not a defun node."
   (defun eglot-x--runnable-dir (runnable)
     "Return working directory for RUNNABLE."
     (eglot--dbind ((Runnable) label kind args)
-                  runnable
-                  (or (plist-get args :workspaceRoot)
-                      (plist-get args :cwd)
-                      default-directory)))
+        runnable
+      (or (plist-get args :workspaceRoot)
+          (plist-get args :cwd)
+          default-directory)))
+
+  (defun eglot-x-ask-related-tests ()
+    "Ask server for the list of runnable test at point."
+    (interactive)
+    (eglot-x-ask-runnables nil :rust-analyzer/relatedTests))
 
   ;; Disable experimental SnippetTextEdits as they work incorrectly with
   ;; comments that have backticks.
