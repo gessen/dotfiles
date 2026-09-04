@@ -242,6 +242,12 @@ abbr -a et emacs -nw
 
 abbr -a se sudoedit
 
+if test "$INSIDE_EMACS" = ghostel
+    source "$EMACS_GHOSTEL_PATH/etc/shell/ghostel.fish"
+
+    abbr -a f ghostel_cmd find-file
+end
+
 ### History
 
 abbr -a hm history merge
