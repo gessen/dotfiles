@@ -3930,8 +3930,63 @@ Return nil if there is no name or if NODE is not a defun node."
                  (treesit-field-text node "name"))))
         (_ (rust-ts-mode--defun-name node)))))
 
+  (defun my--cargo-run-package-command (command)
+    "Select a Cargo package in the current project and run COMMAND for it."
+    (let* ((project (project-current))
+           (root (and project (project-root project))))
+      (unless project
+        (user-error "Not inside a project"))
+      (unless (and root
+                   (file-exists-p (expand-file-name "Cargo.toml" root)))
+        (user-error "The current project is not a Cargo project"))
+
+      (let ((metadata-buffer (generate-new-buffer " *cargo-metadata*")))
+        (unwind-protect
+            (let ((status
+                   (let ((default-directory root))
+                     (call-process "cargo" nil (list metadata-buffer nil) nil
+                                   "metadata" "--no-deps"
+                                   "--format-version" "1"))))
+              (unless (and (integerp status) (= status 0))
+                (user-error "cargo metadata failed with status %s" status))
+
+              (let* ((metadata
+                      (with-current-buffer metadata-buffer
+                        (goto-char (point-min))
+                        (let ((json-array-type 'list)
+                              (json-object-type 'alist)
+                              (json-key-type 'string))
+                          (json-read))))
+                     (packages
+                      (mapcar (lambda (package)
+                                (cdr (assoc "name" package)))
+                              (cdr (assoc "packages" metadata))))
+                     (package
+                      (completing-read "Cargo package: "
+                                       packages nil t)))
+                (let ((compile-command
+                       (format "cargo %s --package %s"
+                               command
+                               (shell-quote-argument package))))
+                  (project-compile))))
+          (kill-buffer metadata-buffer)))))
+
+  (defun cargo-check-package ()
+    "Run `cargo check --package` for a selected package."
+    (interactive)
+    (my--cargo-run-package-command "check"))
+
+  (defun cargo-test-package ()
+    "Run `cargo test --package` for a selected package."
+    (interactive)
+    (my--cargo-run-package-command "test"))
+
   (set-prefixes-for-major-mode! 'rust-ts-mode "s" "session")
   (set-leader-keys-for-major-mode! 'rust-ts-mode "s s" #'eglot)
+
+  :bind ( :map rust-ts-mode-map
+          ("C-c b c" . #'cargo-check-package)
+          ("C-c b t" . #'cargo-test-package))
 
   :config
 
