@@ -2430,14 +2430,13 @@ possibly new window."
   (setq revert-without-query '(".*"))
 
   ;; Silence messages from `auto-revert-mode'.
-  (setq-local auto-revert-verbose nil)
+  (setopt auto-revert-verbose nil)
 
   (defun my-autorevert-inhibit-p (buffer)
     "Return non-nil if autorevert should be inhibited for BUFFER."
-    (or (null (get-buffer-window))
+    (or (null (get-buffer-window buffer t))
         (with-current-buffer buffer
-          (or (null buffer-file-name)
-              (file-remote-p buffer-file-name)))))
+          (file-remote-p (or buffer-file-name default-directory)))))
 
   (defadvice! my--autorevert-only-visible (bufs)
     :filter-return #'auto-revert--polled-buffers
