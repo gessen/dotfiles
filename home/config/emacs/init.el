@@ -4765,7 +4765,11 @@ help buffer.")
 ;; tables and source blocks. The styling is configurable, you can enable,
 ;; disable or modify the style of each syntax element individually.
 (use-package! org-modern
-  :hook (org-mode-hook . org-modern-mode))
+  :hook (org-mode-hook . org-modern-mode)
+  :config
+
+  ;; Decrease the width of vertical table lines.
+  (setopt org-modern-table-vertical 1))
 
 ;; Package `org-sticky-header' displays in the header-line the Org heading for
 ;; the node that's at the top of the window.  This way, if the heading for the
