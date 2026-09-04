@@ -6,7 +6,8 @@ test -d $__fish_cache_dir; or mkdir -p $__fish_cache_dir
 ### XDG
 
 # Set XDG dir vars locally
-set -l xdg_config_home $HOME/.config
+set -l xdg_config_home_rel .config
+set -l xdg_config_home $HOME/$xdg_config_home_rel
 set -l xdg_cache_home $HOME/.cache
 set -l xdg_data_home $HOME/.local/share
 set -l xdg_state_home $HOME/.local/state
@@ -20,6 +21,7 @@ set -gx CODEX_HOME $xdg_config_home/codex
 set -gx GNUPGHOME $xdg_data_home/gnupg
 set -gx GTK2_RC_FILES $xdg_config_home/gtk-2.0/settings.ini
 set -gx NPM_CONFIG_USERCONFIG $xdg_config_home/npm/npmrc
+set -gx PI_CONFIG_DIR $xdg_config_home_rel/omp
 set -gx RIPGREP_CONFIG_PATH $xdg_config_home/ripgrep/config
 set -gx RUSTUP_HOME $xdg_data_home/rustup
 

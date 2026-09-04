@@ -27,6 +27,7 @@ dotfiles:
   - config/mpv/input.conf
   - config/mpv/mpv.conf
   - config/npm/npmrc
+  - config/omp/agent/config.yml
   - config/opencode/agent
   - config/opencode/opencode.json
   - config/opencode/skills

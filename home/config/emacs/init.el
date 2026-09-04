@@ -4370,10 +4370,10 @@ help buffer.")
   (setopt agent-shell-show-welcome-message nil)
 
   ;; Use OpenCode as a default provider.
-  (setopt agent-shell-preferred-agent-config 'opencode)
+  (setopt agent-shell-preferred-agent-config '(preselect . opencode))
 
-  ;; Set GPT 5.6 Luna as the default model.
-  (setopt agent-shell-opencode-default-model-id "github-copilot/gpt-5.6-luna")
+  ;; Set GPT 5.6 Sol as the default model.
+  (setopt agent-shell-opencode-default-model-id "github-copilot/gpt-5.6-sol")
 
   ;; Display a formatted box showing token counts, context window usage, and
   ;; cost information after each agent response.
@@ -4433,8 +4433,8 @@ help buffer.")
                            :models my--gptel-models)))
     (setopt gptel-backend backend-copilot))
 
-  ;; Set GPT 5.6 Luna as the default model.
-  (setopt gptel-model 'gpt-5.6-luna)
+  ;; Set GPT 5.6 Sol as the default model.
+  (setopt gptel-model 'gpt-5.6-sol)
 
   ;; Enable advanced options in `gptel-menu'.
   (setopt gptel-expert-commands t)
