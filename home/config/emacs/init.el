@@ -5452,6 +5452,39 @@ possibly new window."
   :demand t
   :config
 
+  (defvar my-tab-line-excluded-name-patterns
+    '("*Completions" "*EGLOT" "*diff-hl" "acp-client-stderr")
+    "Patterns identifying buffer names excluded from the tab line.")
+
+  (defvar my-tab-line-excluded-modes
+    '(magit-diff-mode
+      magit-process-mode
+      magit-revision-mode
+      majutsu-diff-mode
+      majutsu-process-mode)
+    "Major modes excluded from the tab line.")
+
+  (defun my--tab-line-buffer-p (buffer)
+    "Return non-nil when BUFFER should be shown in the tab line."
+    (when (buffer-live-p buffer)
+      (with-current-buffer buffer
+        (let ((name (buffer-name)))
+          (and
+           (not (string-prefix-p " " name))
+           (not (string-match-p
+                 (concat "\\`" (regexp-opt my-tab-line-excluded-name-patterns))
+                 name))
+           (not (derived-mode-p my-tab-line-excluded-modes)))))))
+
+  (defadvice! my--tab-line-tabs-buffer-list ()
+    :override
+    #'tab-line-tabs-buffer-list
+    "Overwrite `tab-line-tabs-buffer-list' to use ignore some buffers."
+    (seq-filter #'my--tab-line-buffer-p
+                (seq-uniq (append (list (current-buffer))
+                                  (mapcar #'car (window-prev-buffers))
+                                  (buffer-list)))))
+
   ;; Group buffers by projects.
   (setopt tab-line-tabs-function #'tab-line-tabs-buffer-groups)
   (setopt tab-line-tabs-buffer-group-function
