@@ -4073,10 +4073,7 @@ Return nil if there is no name or if NODE is not a defun node."
   ;; Increase the amount of data which Emacs reads from the process. The Emacs
   ;; default is too low (4k) considering that the some of the language server
   ;; responses are in 800k - 3M range.
-  (setq read-process-output-max (* 1024 1024 4))
-
-  ;; Inhibit logging a JSONRPC-related events.
-  (fset #'jsonrpc--log-event #'ignore)
+  (setq read-process-output-max (* 1024 1024 1))
 
   :bind ( :map eglot-mode-map
           ("<f5>" . #'eglot-momentary-inlay-hints))
@@ -4137,9 +4134,15 @@ Return nil if there is no name or if NODE is not a defun node."
   ;; Tree-sitter produces a better Imenu.
   (setq eglot-stay-out-of '(imenu))
 
+  ;; Inhibit logging a JSONRPC-related events.
+  (setq jsonrpc-event-hook nil)
+
   ;; Filter list of possible completions with Orderless.
   (setopt completion-category-overrides '((eglot (styles orderless))
                                           (eglot-capf (styles orderless))))
+
+  ;; Prevent Eglot from blocking Emacs UI on connection.
+  (setopt eglot-sync-connect 0)
 
   ;; Increase the idle time after Eglot will notify servers of any changes.
   (setopt eglot-send-changes-idle-time 1.0)
