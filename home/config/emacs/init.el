@@ -3029,7 +3029,25 @@ completing-read prompter."
     (which-key--hide-popup-ignore-command)
     (let ((embark-indicators
            (remq #'embark-which-key-indicator embark-indicators)))
-      (apply fn args))))
+      (apply fn args)))
+
+  (defun embark--all-bindings (keymap &optional nested)
+    "Return an alist of all bindings in KEYMAP.
+If NESTED is non-nil subkeymaps are not flattened."
+    (let (bindings maps)
+      (map-keymap
+       (lambda (key def)
+         (let ((binding (keymap--menu-item-binding def)))
+           (cond
+            ((keymapp binding)
+             (if nested
+                 (push (cons (vector key) binding) maps)
+               (dolist (bind (embark--all-bindings binding))
+                 (push (cons (vconcat (vector key) (car bind)) (cdr bind))
+                       maps))))
+            (binding (push (cons (vector key) def) bindings)))))
+       (keymap-canonicalize keymap))
+      (nconc (nreverse bindings) (nreverse maps)))))
 
 ;; Package `embark-consult' provides integration between Embark and Consult.
 (use-package! embark-consult
