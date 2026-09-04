@@ -4,15 +4,22 @@
 
 (setq mc/cmds-to-run-for-all
       '(
+        backward-sexp
         backward-symbol
         beginning-of-visual-line
+        capitalize-dwim
+        comment-dwim
         comment-dwim-2
+        downcase-dwim
+        duplicate-and-comment-dwim
         easy-kill
         electric-pair-delete-pair
         end-of-visual-line
+        forward-sexp
         forward-symbol
         hungry-delete-backward
         hungry-delete-forward
+        indent-for-tab-command
         keyboard-escape-quit
         kill-region
         kill-visual-line
@@ -26,12 +33,23 @@
         string-inflection-lower-camelcase
         string-inflection-underscore
         string-inflection-upcase
+        upcase-dwim
+        wdired--self-insert
         yaml-electric-backspace
+        yaml-electric-dash-and-dot
+        zop-up-to-char
         ))
 
 (setq mc/cmds-to-run-once
       '(
         iedit-switch-to-mc-mode
+        indent-rigidly
+        indent-rigidly-left
+        indent-rigidly-left-to-tab-stop
+        indent-rigidly-right
+        indent-rigidly-right-to-tab-stop
+        mouse-select-window
         mouse-set-region
         pixel-scroll-precision
+        tab-line-select-tab
         ))
