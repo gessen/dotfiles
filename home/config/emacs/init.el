@@ -2406,8 +2406,8 @@ possibly new window."
 ;; reverting the buffer to match the file (unless it has unsaved changes).
 (use-feature! autorevert
   :defer 2
-  :commands (auto-revert--polled-buffers
-             my-autorevert-inhibit-p)
+  :functions (auto-revert--polled-buffers
+              my-autorevert-inhibit-p)
   :init
 
   (set-leader-keys!
@@ -3160,7 +3160,6 @@ completing-read prompter."
 ;; works" instantly for dozens of languages with zero configuration.
 (use-package! dumb-jump
   :after xref
-  :commands xref-backend-functions
   :init
 
   ;; Reuse `xref' interface.
