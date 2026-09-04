@@ -962,12 +962,11 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
         (filename (buffer-file-name)))
     (unless (and filename (file-exists-p filename))
       (user-error "Buffer '%s' is not visiting a file" name))
-    (if (y-or-n-p (concat "Delete file " filename " ?"))
-        (progn
-          (delete-file filename)
-          (kill-buffer)
-          (recentf-remove-if-non-kept filename)
-          (message "File '%s' deleted" filename)))))
+    (when (y-or-n-p (concat "Delete file " filename " ?"))
+      (when (kill-buffer)
+        (delete-file filename)
+        (recentf-remove-if-non-kept filename)
+        (message "File '%s' deleted" filename)))))
 
 (defun open-in-external-app ()
   "Open current file in external application."
@@ -4563,7 +4562,7 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
                (when current-prefix-arg
                  (propertize "NOT " 'face 'warning))
                "matching PATTERN: ")
-       nil 'prot-dired--limit-hist)
+       nil 'dired--limit-hist)
       current-prefix-arg))
     (dired-mark-files-regexp regexp)
     (unless omit (dired-toggle-marks))
