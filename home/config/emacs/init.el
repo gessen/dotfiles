@@ -4339,6 +4339,35 @@ help buffer.")
 ;;; Applications
 ;;;; Large Language Models
 
+;; Package `agent-shell' is a native Emacs shell to interact with LLM agents
+;; powered by Agent Client Protocol. With `agent-shell', you can chat with the
+;; likes of Gemini CLI, Claude Code, Mistral Vibe, or any other ACP-driven
+;; agent.
+(use-package! agent-shell
+  :commands agent-shell-send-file
+  :init
+
+  (set-leader-keys!
+    "a f" #'agent-shell-send-file
+    "a p" #'agent-shell-prompt-compose
+    "a r" #'agent-shell-send-region
+    "a s" #'agent-shell)
+
+  :config
+
+  ;; Hide welcome message.
+  (setopt agent-shell-show-welcome-message nil)
+
+  ;; Use OpenCode as a default provider.
+  (setopt agent-shell-preferred-agent-config 'opencode)
+
+  ;; Set GPT 5.6 Luna as the default model.
+  (setopt agent-shell-opencode-default-model-id "github-copilot/gpt-5.6-luna")
+
+  ;; Display a formatted box showing token counts, context window usage, and
+  ;; cost information after each agent response.
+  (setopt agent-shell-show-usage-at-turn-end t))
+
 ;; Package `gptel' provides a simple Large Language Model chat client for Emacs,
 ;; offering support for multiple models and backends. It integrates seamlessly
 ;; with Emacs, remaining accessible at any time and working uniformly across
@@ -4481,6 +4510,14 @@ help buffer.")
   ;; Register all tools.
   (mapc (apply-partially #'apply #'gptel-make-tool)
         (llm-tool-collection-get-all)))
+
+;; Package `shell-maker' is a convenience wrapper around Comint mode used for
+;; building concrete shells.
+(use-package! shell-maker
+  :config
+
+  ;; Do not litter `user-emacs-directory' with `shell-maker' files.
+  (setopt shell-maker-root-path my-cache-dir))
 
 ;;;; Organisation
 
