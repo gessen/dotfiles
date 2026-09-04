@@ -102,8 +102,10 @@ This is an `:around' advice for many different functions."
 Run queued function in `my--with-display-graphic-list' to do any
 setup that needs to have the display system initialized."
   (when (display-graphic-p)
-    (dolist (fn (reverse my--with-display-graphic-list))
-      (funcall fn))))
+    (let ((queued (nreverse my--with-display-graphic-list)))
+      (setq my--with-display-graphic-list nil)
+      (dolist (fn queued)
+        (funcall fn)))))
 
 (defhook! my--without-display-graphic ()
   server-after-make-frame-hook
@@ -111,8 +113,10 @@ setup that needs to have the display system initialized."
 Run queued function in `my--without-display-graphic-list' to do
 any setup that is needed for terminal Emacs."
   (unless (display-graphic-p)
-    (dolist (fn (reverse my--without-display-graphic-list))
-      (funcall fn))))
+    (let ((queued (nreverse my--without-display-graphic-list)))
+      (setq my--without-display-graphic-list nil)
+      (dolist (fn queued)
+        (funcall fn)))))
 
 (defmacro with-display-graphic! (&rest body)
   "Run `BODY' after display graphic is initialised.
@@ -4816,17 +4820,16 @@ if called with universal argument."
       (browse-at-remote)))
 
   (defun browse-at-remote-kill-dwim (arg)
-    "Call `browse-at-remote-kill' with `browse-at-remote-prefer-symbolic'
-reversed if called with universal argument."
+    "Call `browse-at-remote-kill', toggling symbolic URLs with a prefix ARG."
     (interactive "P")
     (require 'browse-at-remote)
-    (if arg
-        (let ((browse-at-remote-prefer-symbolic
-               (not browse-at-remote-prefer-symbolic)))
-          (browse-at-remote-kill))
+    (let ((browse-at-remote-prefer-symbolic
+           (if arg
+               (not browse-at-remote-prefer-symbolic)
+             browse-at-remote-prefer-symbolic)))
       (browse-at-remote-kill))
-    ;; Prevent URL escapes from being interpreted as format strings.
-    (message (replace-regexp-in-string "%" "%%" (car kill-ring) t t)))
+    ;; Pass the URL as data rather than as a message format string.
+    (message "%s" (car kill-ring)))
 
   (set-leader-keys!
     "g r" #'browse-at-remote-dwim
@@ -4837,6 +4840,7 @@ reversed if called with universal argument."
       :around #'browse-at-remote-get-url
       "Allow `browse-at-remote' commands in `magit-blob-mode' buffers to open
 that file in your browser at the visited revision."
+      (require 'f)
       (if magit-blob-mode
           (let* ((filename magit-buffer-file-name)
                  (remote-ref (browse-at-remote--remote-ref filename))
@@ -5012,8 +5016,11 @@ that file in your browser at the visited revision."
 
   ;; Insert worktrees section (only with more than one worktree) just after the
   ;; status section.
-  (setcdr magit-status-sections-hook
-          (push 'magit-insert-worktrees (cdr magit-status-sections-hook))))
+  (magit-add-section-hook
+   'magit-status-sections-hook
+   #'magit-insert-worktrees
+   #'magit-insert-status-headers
+   t))
 
 ;; Package `magit-blame-color-by-age' colors Magit-blame headers by age.
 (use-package! magit-blame-color-by-age
