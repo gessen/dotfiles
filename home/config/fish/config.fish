@@ -24,6 +24,7 @@ set -gx BUN_INSTALL $xdg_data_home/bun
 set -gx CARGO_HOME $xdg_data_home/cargo
 set -gx CLAUDE_CONFIG_DIR $xdg_config_home/claude
 set -gx CODEX_HOME $xdg_config_home/codex
+set -gx COPILOT_HOME $xdg_config_home/copilot
 set -gx DOCKER_CONFIG $xdg_config_home/docker
 set -gx GEM_HOME $xdg_data_home/gem
 set -gx GEM_SPEC_CACHE $xdg_cache_home/gem
