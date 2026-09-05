@@ -676,7 +676,8 @@ end
 # Start SSH agent
 set -l ssh_agent_env $XDG_RUNTIME_DIR/ssh-agent.fish
 if ! pgrep -u $USER ssh-agent >/dev/null
-    ssh-agent -c | sed "s|^echo|#echo|" >$ssh_agent_env
+    ssh-agent -c -a $XDG_RUNTIME_DIR/ssh_agent \
+        | sed "s|^echo|#echo|" >$ssh_agent_env
 end
 
 if test -z "$SSH_AGENT_PID"
