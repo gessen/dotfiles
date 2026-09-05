@@ -5145,6 +5145,32 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
 (use-feature! log-edit
   :config
 
+  (defun log-edit-extract-ticket-name (branch)
+    "Extract ticket name from BRANCH."
+    (let ((pattern (rx bos (regexp (regexp-quote (user-login-name))) "/"
+                       (group "EW-" (+ digit)) (opt "-" (* nonl)) eos)))
+      (when (string-match-p pattern branch)
+        (replace-regexp-in-string pattern "[\\1] " branch))))
+
+  (defun log-edit-get-current-branch ()
+    "Returns current branch (for Git) or bookmark (for JJ)."
+    (cond
+     ((eq log-edit-vc-backend 'Git)
+      (vc-git--current-branch))
+     ((eq log-edit-vc-backend 'JJ)
+      (car (last (vc-jj--process-lines
+                  nil "log" "--no-graph"
+                  "-r" "closest_bookmark(@)"
+                  "-T" "local_bookmarks.map(|b| b.name())"))))))
+
+  (defun log-edit-insert-jira-ticket ()
+    "Insert the ticket name in the commit buffer if feasible."
+    (when-let* ((ticket (log-edit-extract-ticket-name
+                         (or (log-edit-get-current-branch) ""))))
+      (insert ticket)
+      (end-of-line -1)
+      (end-of-line)))
+
   (defhook! my--log-edit-mode-setup ()
     log-edit-mode-hook
     "Set custom settings for `log-edit-mode'."
@@ -5154,6 +5180,7 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
 
   ;; Remove unnecessary hook functions and show diff by default.
   (setopt log-edit-hook '(log-edit-insert-message-template
+                          log-edit-insert-jira-ticket
                           log-edit-maybe-show-diff)))
 
 ;; Feature `vc' allows you to use a version control system from within Emacs,
@@ -5402,12 +5429,20 @@ that file in your browser at the visited revision."
   (use-feature! git-commit
     :config
 
+    (defun git-commit-insert-ticket-name ()
+      "Insert the ticket name in the commit buffer if feasible."
+      (when-let* ((tag (log-edit-extract-ticket-name
+                        (magit-get-current-branch))))
+        (unless (string-search tag (or (git-commit-buffer-message) ""))
+          (insert tag))))
+
     (defhook! my--git-commit-mode-setup ()
       git-commit-mode-hook
       "Set custom settings for `git-commit-mode'."
       (setq-local fill-column 72)
       (auto-fill-mode +1)
-      (display-fill-column-indicator-mode +1))
+      (display-fill-column-indicator-mode +1)
+      (git-commit-insert-ticket-name))
 
     ;; List of checks performed by `git-commit'.
     (setq git-commit-style-convention-checks '(non-empty-second-line
@@ -5567,10 +5602,21 @@ current theme. This will also disable line numbers and decorations."
 
   :config
 
+  (defun majutsu-jjdescription-insert-ticket-name ()
+    "Insert a ticket prefix from the closest local bookmark."
+    (when-let* ((ticket
+                 (cl-some #'log-edit-extract-ticket-name
+                          (majutsu-jj-lines "log" "--no-graph" "-r" "closest_bookmark(@)"
+                                            "-T" "local_bookmarks.map(|b| b.name() ++ \"\\n\")"))))
+      (unless (string-search ticket
+                             (or (majutsu-jjdescription-buffer-message) ""))
+        (insert ticket))))
+
   (defhook! my--majutsu-jjdescription-mode-setup ()
     majutsu-jjdescription-setup-hook
     "Set custom settings for `majutsu-jjdescription-mode'."
-    (display-fill-column-indicator-mode +1))
+    (display-fill-column-indicator-mode +1)
+    (majutsu-jjdescription-insert-ticket-name))
 
   ;; Show fine differences for all displayed diff hunks.
   (setopt majutsu-diff-refine-hunk 'all))
