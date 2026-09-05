@@ -6088,6 +6088,20 @@ in the system taskbar. STATE is one of `remove', `set', `error',
 (use-package! tabgo
   :bind ("M-J" . #'tabgo))
 
+;;; Profiling
+
+;; Feature `profiler' provides  helper functions for Emacs's native profiler.
+(use-feature! profiler
+  :init
+
+  (defun cpu-profiler-start ()
+    (interactive)
+    (profiler-start 'cpu))
+
+  :bind (("<f6>" . #'cpu-profiler-start)
+         ("<f7>" . #'profiler-stop)
+         ("<f8>" . #'profiler-report)))
+
 ;;; Closing
 
 ;; Restore default values after startup.
