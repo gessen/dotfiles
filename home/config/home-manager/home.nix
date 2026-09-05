@@ -17,6 +17,7 @@
       btop
       bun
       capnproto
+      cargo-cross
       cmake
       delta
       difftastic
@@ -67,6 +68,8 @@
       zoxide
       zstd
 
+      extraPkgs.cross-completion
+      extraPkgs.ew-buildenv
       extraPkgs.osc52
     ];
 

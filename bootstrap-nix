@@ -11,9 +11,11 @@ mkdir -p "${HOME}/.config/kitty"
 mkdir -p "${HOME}/.local/share/cargo"
 mkdir -p "${HOME}/.local/share/emacs"
 mkdir -p "${HOME}/.ssh"
+rm -f "${HOME}/.local/share/cargo/config.toml"
 stow --dir "${DIR}/home/config" . --target "${HOME}/.config" -v
 stow --dir "${DIR}/home/local" . --target "${HOME}/.local" -v
 stow --dir "${DIR}/home/ssh" . --target "${HOME}/.ssh" -v
+ln -fn "${DIR}/home/local/share/cargo/config.toml" "${HOME}/.local/share/cargo/config.toml"
 
 export NIX_INSTALLER_NO_MODIFY_PROFILE=1
 bash <(curl -L https://nixos.org/nix/install) --no-daemon

@@ -16,3 +16,11 @@ V8_INSTALL_PATH = "/opt/v8"
 
 [profile.dev]
 split-debuginfo = "packed"
+
+[profile.deploy]
+inherits = "dev"
+debug = "line-tables-only"
+split-debuginfo = "off"
+
+[profile.deploy.package."*"]
+debug = false
