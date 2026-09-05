@@ -689,15 +689,6 @@ For details on DATA, CONTEXT, and signal, see
 (keymap-global-set "<escape>" #'keyboard-escape-quit)
 (keymap-global-set "C-g" #'keyboard-escape-quit)
 
-;; Feature `system-taskbar' displays a taskbar icon overlay, a progress bar
-;; report overlay, or alert the user that an Emacs session needs attention,
-;; often by flashing or bouncing the Emacs application icon.
-(use-feature! system-taskbar
-  :demand t
-  :config
-
-  (system-taskbar-mode +1))
-
 ;;; Windows management
 
 ;; When switching the buffer respect display actions specified by
@@ -5736,7 +5727,10 @@ current theme. This will also disable line numbers and decorations."
   ;; Set to EdgeWorkers Jiras.
   (setq bug-reference-url-format "https://track.akamai.com/jira/browse/%s")
   (setopt bug-reference-bug-regexp
-          (rx (group (group word-start "EW-" (+ digit) word-end)))))
+          (rx (group (group word-start "EW-" (+ digit) word-end))))
+
+  ;; Instead of opening the link, just copy it to the kill-ring.
+  (setopt browse-url-handlers '(("https://track.akamai.com" . kill-new))))
 
 ;;;; Terminal emulator
 
@@ -5848,19 +5842,6 @@ possibly new window."
     (ghostel-compile-global-mode +1))
 
   :config
-
-  (defun ghostel-system-taskbar-progress (state progress)
-    "Handler for OSC 9;4 ConEmu progress reports.
-Shows STATE and PROGRESS in `mode-line-process' and determinate progress
-in the system taskbar. STATE is one of `remove', `set', `error',
-`indeterminate', or `pause'; PROGRESS is an integer 0-100 or nil."
-    (pcase state
-      ('remove (system-taskbar-progress nil))
-      ('set (system-taskbar-progress (/ (or progress 0) 100.0))))
-    (ghostel-default-progress state progress))
-
-  ;; Use default progress function but also include `system-taskbar'.
-  (setopt ghostel-progress-function #'ghostel-system-taskbar-progress)
 
   ;; Download a pre-built binary from GitHub releases without asking.
   (setopt ghostel-module-auto-install 'download)
