@@ -5,7 +5,7 @@
         "dark": "One Dark"
     },
     "base_keymap": "VSCode",
-    "buffer_font_family": "Roboto Mono",
+    "buffer_font_family": "Maple Mono Normal",
     "buffer_font_size": 17.0,
     "ui_font_size": 19.0,
     "helix_mode": true,
