@@ -5217,6 +5217,10 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
   ;; Display VC async command buffers when the command fails.
   (setopt vc-display-failed-async-commands t)
 
+  ;; Set up EdgeWorkers feature branches.
+  (setopt vc-topic-branch-regexps
+          `(,(rx string-start "EW-" (+ digit) string-end)))
+
   ;; Feature `vc-dir' provides a directory status display under VC.
   (use-feature! vc-dir
     :init
