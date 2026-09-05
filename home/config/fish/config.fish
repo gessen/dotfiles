@@ -769,21 +769,6 @@ end
 
 ### SSH
 
-# Start SSH agent
-set -l ssh_agent_env $XDG_RUNTIME_DIR/ssh-agent.fish
-if ! pgrep -u $USER ssh-agent >/dev/null
-    ssh-agent -c -a $XDG_RUNTIME_DIR/ssh_agent \
-        | sed "s|^echo|#echo|" >$ssh_agent_env
-end
-
-if test -z "$SSH_AGENT_PID"
-    source $ssh_agent_env
-end
-
-# Add SSH key
-ssh-add -l | grep -q (ssh-keygen -lf $HOME/.ssh/id_rsa | awk '{print $2}')
-or ssh-add
-
 # Copy current terminfo file to the given host
 abbr -a ssh-copy-terminfo --set-cursor \
     infocmp -a '|' ssh % tic -x -o ~/.terminfo /dev/stdin
