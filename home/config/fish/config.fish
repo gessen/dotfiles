@@ -66,6 +66,13 @@ set -gx CTEST_PROGRESS_OUTPUT ON
 ### Input Method framework
 set -gx XMODIFIERS @im=fcitx
 
+### Kitty
+
+if type -q kitty
+    set -q TERMINFO; or set -gx TERMINFO (readlink -f (which kitty) | \
+        string replace bin/kitty lib/kitty/terminfo)
+end
+
 ### Ninja
 
 # Include the current load to the ninja status
