@@ -997,6 +997,42 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
       (let ((process-connection-type nil))
         (start-process "" nil "xdg-open" filepath)))))
 
+(defadvice! my--find-file-with-position (fn filename &rest args)
+  :around #'find-file
+  "Call FN on FILENAME, supporting FILENAME:LINE[:COLUMN].
+ARGS are passed to FN. LINE and COLUMN are interpreted as one-based."
+  (save-match-data
+    (let* ((position
+            (and (not (file-exists-p filename))
+                 (let ((position
+                        (string-match
+                         (rx ":" (group (+ digit))
+                             (optional ":" (group (+ digit)))
+                             string-end)
+                         filename)))
+                   (and position
+                        (file-exists-p (substring filename 0 position))
+                        position))))
+           (line
+            (and position
+                 (string-to-number (match-string 1 filename))))
+           (column
+            (and position
+                 (when-let* ((column (match-string 2 filename)))
+                   (string-to-number column))))
+           (filename
+            (if position
+                (substring filename 0 position)
+              filename))
+           (buffer (apply fn filename args)))
+      (when (and line (bufferp buffer))
+        (with-current-buffer buffer
+          (goto-char (point-min))
+          (forward-line (1- (max 1 line)))
+          (when column
+            (move-to-column (1- (max 1 column))))))
+      buffer)))
+
 ;; Follow symlinks when opening files. This has the concrete impact, for
 ;; instance, that when you edit real init.el with M-m f e i and then later do
 ;; C-x C-f, you will be in the repository instead of your home directory.
