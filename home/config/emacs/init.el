@@ -323,6 +323,9 @@ NAME and ARGS are as in `use-package'."
 (defconst my-major-mode-leader-key-alt2 "M-m M-m"
   "Another alternative major mode leader key.")
 
+(defconst my-major-mode-leader-key-alt3 "C-c"
+  "Yet another alternative major mode leader key.")
+
 (defvar my-major-modes-alist '()
   "Each element takes the form (MAP-ACTIVE . MAJOR-MODE). The car is
 the variable used to activate a map when the major mode is an
@@ -347,7 +350,8 @@ The options are controlled through the keyword arguments ARGS"
          (active (intern (format "%s-active" map)))
          (keys '(my-major-mode-leader-key
                  my-major-mode-leader-key-alt
-                 my-major-mode-leader-key-alt2))
+                 my-major-mode-leader-key-alt2
+                 my-major-mode-leader-key-alt3))
          (minor (plist-get args :minor-mode))
          (major (plist-get args :major-mode)))
     (append
