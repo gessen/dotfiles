@@ -5435,6 +5435,13 @@ current theme. This will also disable line numbers and decorations."
               "--features=modus-vivendi"
             "--features=modus-operandi") args))
 
+  (defadvice! my--magit-delta-unset-features (fn &rest args)
+    :around #'magit-delta-call-delta-and-convert-ansi-escape-sequences
+    "Ignore terminal-specific Delta features for this invocation."
+    (let ((process-environment (copy-sequence process-environment)))
+      (setenv "DELTA_FEATURES" nil)
+      (apply fn args)))
+
   (defun magit-delta-toggle ()
     "Toggles `magit-delta-mode' and refreshes Magit."
     (interactive)
@@ -5532,6 +5539,13 @@ current theme. This will also disable line numbers and decorations."
     (push (if (eq (frame-parameter nil 'background-mode) 'dark)
               "--features=modus-vivendi"
             "--features=modus-operandi") args))
+
+  (defadvice! my--majutsu-delta-unset-features (fn &rest args)
+    :around #'majutsu-delta-call-delta-and-convert-ansi-escape-sequences
+    "Ignore terminal-specific Delta features for this invocation."
+    (let ((process-environment (copy-sequence process-environment)))
+      (setenv "DELTA_FEATURES" nil)
+      (apply fn args)))
 
   (defun majutsu-delta-toggle ()
     "Toggles `majutsu-delta-mode' and refreshes Majutsu."
