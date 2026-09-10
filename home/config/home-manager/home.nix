@@ -69,6 +69,7 @@
       zstd
 
       extraPkgs.cross-completion
+      extraPkgs.dewploy
       extraPkgs.ew-buildenv
       extraPkgs.ew-devenv
       extraPkgs.osc52
