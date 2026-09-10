@@ -5429,11 +5429,18 @@ that file in your browser at the visited revision."
 
   (defadvice! my--magit-delta-patch-args (args)
     :filter-return #'magit-delta--make-delta-args
-    "Pick proper background and foreground colors based on the
-current theme. This will also disable line numbers and decorations."
-    (push (if (eq (frame-parameter nil 'background-mode) 'dark)
-              "--features=modus-vivendi"
-            "--features=modus-operandi") args))
+    "Use the current frame's Delta feature instead of an explicit syntax theme.
+This also disables line numbers and decorations."
+    (let (filtered)
+      (while args
+        (let ((arg (pop args)))
+          (cond ((equal arg "--syntax-theme") (pop args))
+                ((string-prefix-p "--syntax-theme=" arg))
+                (t (push arg filtered)))))
+      (cons (if (eq (frame-parameter nil 'background-mode) 'dark)
+                "--features=modus-vivendi"
+              "--features=modus-operandi")
+            (nreverse filtered))))
 
   (defadvice! my--magit-delta-unset-features (fn &rest args)
     :around #'magit-delta-call-delta-and-convert-ansi-escape-sequences
@@ -5534,11 +5541,18 @@ current theme. This will also disable line numbers and decorations."
 
   (defadvice! my--majutsu-delta-patch-args (args)
     :filter-return #'majutsu-delta--make-delta-args
-    "Pick proper background and foreground colors based on the
-current theme. This will also disable line numbers and decorations."
-    (push (if (eq (frame-parameter nil 'background-mode) 'dark)
-              "--features=modus-vivendi"
-            "--features=modus-operandi") args))
+    "Use the current frame's Delta feature instead of an explicit syntax theme.
+This also disables line numbers and decorations."
+    (let (filtered)
+      (while args
+        (let ((arg (pop args)))
+          (cond ((equal arg "--syntax-theme") (pop args))
+                ((string-prefix-p "--syntax-theme=" arg))
+                (t (push arg filtered)))))
+      (cons (if (eq (frame-parameter nil 'background-mode) 'dark)
+                "--features=modus-vivendi"
+              "--features=modus-operandi")
+            (nreverse filtered))))
 
   (defadvice! my--majutsu-delta-unset-features (fn &rest args)
     :around #'majutsu-delta-call-delta-and-convert-ansi-escape-sequences
