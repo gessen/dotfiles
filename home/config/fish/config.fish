@@ -18,6 +18,7 @@ set -l xdg_state_home $HOME/.local/state
 # Partial XDG support
 set -gx ANSIBLE_HOME $xdg_config_home/ansible
 set -gx CARGO_HOME $xdg_data_home/cargo
+set -gx DOCKER_CONFIG $xdg_config_home/docker
 set -gx GNUPGHOME $xdg_data_home/gnupg
 set -gx GTK2_RC_FILES $xdg_config_home/gtk-2.0/settings.ini
 set -gx NPM_CONFIG_USERCONFIG $xdg_config_home/npm/npmrc
@@ -98,6 +99,7 @@ end
 
 # Needed to build Stormcloud
 set -gx BUILD_OS alsi22
+# set -gx CROSS_CONFIG $HOME/.nix-profile/opt/ew-buildenv/Cross_$BUILD_OS.toml
 
 ### Early exit
 
@@ -793,6 +795,8 @@ abbr -a ctp cargo nextest run --package
 abbr -a ctw cargo nextest run --workspace
 abbr -a cf cargo +nightly fmt
 abbr -a cv LD_LIBRARY_PATH=/opt/openssl/lib cargo xtask coverage --html -- cargo test --package
+abbr -a xb cross build --target-dir target --profile deploy --package
+abbr -a xc cross check --target-dir target --profile deploy --package
 
 # sql2 with configured networks
 abbr -a esql2 sql2 -q essl.lighthouse.query.akadns.net
