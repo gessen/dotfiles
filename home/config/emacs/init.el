@@ -5337,19 +5337,18 @@ possibly new window."
          ("M-<f9>" . modus-themes-rotate))
   :config
 
-  ;; Make references of properties italic, they are not modified by
-  ;; `modus-themes'.
-  (set-face-attribute 'font-lock-property-use-face nil :slant 'italic)
-
   (defun my--modus-custom-faces (theme &rest _)
-    "Custom faces that use Modus colors."
-    (modus-themes-with-colors
-      (custom-set-faces
-       `(hs-ellipsis ((,c :height 0.8 :box (:line-width -1))))
-       `(eglot-highlight-symbol-face ((,c :background ,bg-cyan-subtle)))
-       ;; Make function calls and references of variables italic.
-       `(font-lock-function-call-face ((,c :slant italic)))
-       `(font-lock-variable-use-face ((,c :slant italic))))))
+    "Add custom faces to the enabled Modus THEME."
+    (when (memq theme (modus-themes-get-themes))
+      (modus-themes-with-colors
+        (custom-theme-set-faces
+         (modus-themes-get-current-theme)
+         `(hs-ellipsis ((,c :height 0.8 :box (:line-width -1))))
+         `(eglot-highlight-symbol-face ((,c :background ,bg-cyan-subtle)))
+         ;; Make calls and references italic.
+         `(font-lock-function-call-face ((,c :slant italic)))
+         `(font-lock-property-use-face ((,c :slant italic)))
+         `(font-lock-variable-use-face ((,c :slant italic)))))))
   (add-hook 'enable-theme-functions #'my--modus-custom-faces)
 
   ;; Use only main themes and their tinted versions.
