@@ -753,7 +753,7 @@ When called with a prefix argument KEEP it splits the current
 window instead."
   (interactive "P")
   (unless keep
-    (maximize-buffer))
+    (delete-other-windows))
   (let* ((other-files (seq-filter #'buffer-file-name
                                   (delq (current-buffer) (buffer-list))))
          (second (split-window-right)))
@@ -766,7 +766,7 @@ When called with a prefix argument KEEP it splits the current
 window instead."
   (interactive "P")
   (unless keep
-    (maximize-buffer))
+    (delete-other-windows))
   (let* ((other-files (seq-filter #'buffer-file-name
                                   (delq (current-buffer) (buffer-list))))
          (second (split-window-right))
@@ -781,7 +781,7 @@ When called with a prefix argument KEEP it splits the current
 window instead."
   (interactive "P")
   (unless keep
-    (maximize-buffer))
+    (delete-other-windows))
   (let* ((other-files (seq-filter #'buffer-file-name
                                   (delq (current-buffer) (buffer-list))))
          (second (split-window-below))
