@@ -4654,13 +4654,11 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
   :after dired
   :config
 
-  :config
-
-  ;; Remap find-file{-other-window} to dired-x-find-file{-other-window}
-  (setq dired-x-hands-off-my-keys nil)
+  ;; Remap find-file{-other-window} to dired-x-find-file{-other-window}.
+  (setopt dired-x-hands-off-my-keys nil)
 
   ;; Prevent annoying "Omitted N lines" messages when auto-reverting.
-  (setq dired-omit-verbose nil))
+  (setopt dired-omit-verbose nil))
 
 ;; Feature `wdired' allows to rename files editing their names in `dired'
 ;; buffers.
