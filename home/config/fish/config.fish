@@ -526,6 +526,22 @@ abbr -a jsqi jj squash --interactive
 
 abbr -a jst jj status
 
+### Agents
+
+function agent-skills-add
+    for skill in \
+        blader/humanizer \
+        bassuniz/explain-diff-html \
+        dietrichgebert/ponytail \
+
+    npx skills add $skill --global --yes --agent universal
+    end
+end
+
+function agent-skills-update
+    npx skills update --global --yes
+end
+
 ### Atuin
 
 if type -q atuin
