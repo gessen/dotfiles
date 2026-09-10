@@ -687,7 +687,7 @@ if test $status -eq 2
 
     ssh-add -l &>/dev/null
     if test $status -eq 2
-        ssh-agent -c >$ssh_agent_env
+        ssh-agent -c -a $XDG_RUNTIME_DIR/ssh_agent >$ssh_agent_env
         and source $ssh_agent_env >/dev/null
     end
 end
