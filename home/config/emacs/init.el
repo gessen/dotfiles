@@ -1051,6 +1051,37 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
 ;; know which package handles detection of that project type, parsing its config
 ;; files, etc.
 (use-feature! project
+  :init
+
+  (set-leader-keys!
+    "p !" #'project-shell-command
+    "p %" #'project-query-replace-regexp
+    "p &" #'project-async-shell-command
+    "p /" #'project-search
+    "p B" #'project-display-buffer
+    "p c" #'project-compile
+    "p C" #'project-customize-dirlocals
+    "p d" #'project-find-dir
+    "p D" #'project-dired
+    "p e" #'project-eshell
+    "p f" #'project-find-file
+    "p F" #'project-or-external-find-file
+    "p g" #'project-find-regexp
+    "p G" #'project-or-external-find-regexp
+    "p k" #'project-kill-buffers
+    "p l" #'project-list-buffers
+    "p o" #'project-any-command
+    "p p" #'project-switch-project
+    "p r" #'project-recompile
+    "p s" #'project-save-some-buffers
+    "p v" #'project-vc-dir
+    "p x" #'project-execute-extended-command
+
+    "p m f" #'project-forget-project
+    "p m F" #'project-forget-projects-under
+    "p m z" #'project-forget-zombie-projects
+    "p m r" #'project-remember-projects-under)
+
   :config
 
   ;; Mark C++-based projects without any supported version control as projects.
@@ -1082,36 +1113,7 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
   (setopt project-mode-line t)
 
   ;; Do not litter `user-emacs-directory' with Project persistent history.
-  (setopt project-list-file (cache-dir "projects.el"))
-
-  (set-leader-keys!
-    "p !" #'project-shell-command
-    "p %" #'project-query-replace-regexp
-    "p &" #'project-async-shell-command
-    "p /" #'project-search
-    "p B" #'project-display-buffer
-    "p c" #'project-compile
-    "p C" #'project-customize-dirlocals
-    "p d" #'project-find-dir
-    "p D" #'project-dired
-    "p e" #'project-eshell
-    "p f" #'project-find-file
-    "p F" #'project-or-external-find-file
-    "p g" #'project-find-regexp
-    "p G" #'project-or-external-find-regexp
-    "p k" #'project-kill-buffers
-    "p l" #'project-list-buffers
-    "p o" #'project-any-command
-    "p p" #'project-switch-project
-    "p r" #'project-recompile
-    "p s" #'project-save-some-buffers
-    "p v" #'project-vc-dir
-    "p x" #'project-execute-extended-command
-
-    "p m f" #'project-forget-project
-    "p m F" #'project-forget-projects-under
-    "p m z" #'project-forget-zombie-projects
-    "p m r" #'project-remember-projects-under))
+  (setopt project-list-file (cache-dir "projects.el")))
 
 ;; Feature `recentf' maintains a menu for visiting files that were operated on
 ;; recently. The recent files list is automatically saved across Emacs sessions.
