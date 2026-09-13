@@ -27,6 +27,7 @@ dotfiles:
   - config/mpv/input.conf
   - config/mpv/mpv.conf
   - config/npm/npmrc
+  - config/omp/agent/config.yml
   - config/ripgrep/config
   - config/rustfmt/rustfmt.toml
   - config/sccache/config
