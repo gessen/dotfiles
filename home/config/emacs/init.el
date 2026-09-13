@@ -670,7 +670,15 @@ For details on DATA, CONTEXT, and signal, see
 ;; Silence Emacs in terminal.
 (setq ring-bell-function #'ignore)
 
-;; Disable ESC key as a modifier and use better `keyboard-quit' by default.
+(defadvice! my--keyboard-escape-quit-without-window-collapse (fn)
+  :around #'keyboard-escape-quit
+  "Use `keyboard-quit' instead of collapsing windows."
+  (let ((buffer-quit-function
+         (or buffer-quit-function #'keyboard-quit)))
+    (funcall fn)))
+
+;; Disable ESC as a modifier and use context-aware quitting without changing the
+;; window layout.
 (keymap-global-set "<escape>" #'keyboard-escape-quit)
 (keymap-global-set "C-g" #'keyboard-escape-quit)
 
