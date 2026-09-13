@@ -4901,7 +4901,9 @@ that file in your browser at the visited revision."
          (vc-dir-mode-hook . diff-hl-dir-mode))
 
   :bind (("M-g ]" . #'diff-hl-next-hunk)
-         ("M-g [" . #'diff-hl-previous-hunk))
+         ("M-g [" . #'diff-hl-previous-hunk)
+         ("M-g }" . #'diff-hl-show-hunk-next)
+         ("M-g {" . #'diff-hl-show-hunk-previous))
   :config
 
   (with-eval-after-load 'magit
