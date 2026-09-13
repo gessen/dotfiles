@@ -4708,11 +4708,20 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
 
   :config
 
+  ;; Inhibit writing the created buffer to file with `vc-find-revision'.
+  (setopt vc-find-revision-no-save t)
+
   ;; `C-x v I' and `C-x v O' become prefix commands with log and diff command.
   (setopt vc-use-incoming-outgoing-prefixes t)
 
   ;; Prompt to allow VCS operations that may rewrite published history.
   (setopt vc-allow-rewriting-published-history 'ask)
+
+  ;; Checkin operations should be done asynchronously.
+  (setopt vc-async-checkin t)
+
+  ;; Display VC async command buffers when the command fails.
+  (setopt vc-display-failed-async-commands t)
 
   ;; Feature `vc-dir' provides a directory status display under VC.
   (use-feature! vc-dir
