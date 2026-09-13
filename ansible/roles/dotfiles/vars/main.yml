@@ -35,6 +35,7 @@ dotfiles:
   - config/ripgrep/config
   - config/rustfmt/rustfmt.toml
   - config/sccache/config
+  - config/serie/config.toml
   - config/yazi/yazi.toml
   - config/zed/settings.json
   - local/share/cargo/config.toml
