@@ -355,15 +355,18 @@ abbr -a gdtoolg git difftool --gui
 
 abbr -a gf git fetch
 
+abbr -a gF git pull
+
 abbr -a gcount git shortlog --summary --numbered
-abbr -a glg git log --stat
-abbr -a glgp git log --stat --patch
-abbr -a glod git log --graph --pretty='"%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%an>%Creset"'
-abbr -a glol git log --graph --pretty='"%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset"'
-abbr -a glola git log --graph --pretty='"%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset"' --all
-abbr -a glols git log --graph --pretty='"%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset"' --stat
+abbr -a gl git log
+abbr -a glg git log --graph --pretty='"%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset"'
+abbr -a glga git log --graph --pretty='"%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset"' --all
+abbr -a glgd git log --graph --pretty='"%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%an>%Creset"'
+abbr -a glgs git log --graph --pretty='"%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset"' --stat
 abbr -a glo git log --oneline
 abbr -a glog git log --oneline --graph --all
+abbr -a gls git log --stat
+abbr -a glsp git log --stat --patch
 
 abbr -a gignored git ls-files -t '|' string match "'S *'"
 
@@ -375,8 +378,6 @@ abbr -a gms git merge --squash
 abbr -a gmtool git mergetool
 abbr -a gmtoolg git mergetool --gui
 
-abbr -a gl git pull
-
 abbr -a gp git push
 abbr -a gpf git push --force-with-lease --force-if-includes
 
@@ -384,8 +385,6 @@ abbr -a grb git rebase
 abbr -a grba git rebase --abort
 abbr -a grbc git rebase --continue
 abbr -a grbi git rebase --interactive
-abbr -a grbo git rebase --onto
-abbr -a grbs git rebase --skip
 abbr -a grbd git rebase '(git-develop-branch)'
 abbr -a grbm git rebase '(git-master-branch)'
 abbr -a grbod git rebase origin/'(git-develop-branch)'
@@ -400,14 +399,11 @@ abbr -a gpristine git reset --hard '&&' git clean --force -dfx
 abbr -a grh git reset
 abbr -a grhh git reset --hard
 abbr -a grhu git reset --hard @{upstream}
-abbr -a grhk git reset --keep
-abbr -a grhs git reset --soft
 
 abbr -a grs git restore
 abbr -a grss git restore --source
 abbr -a grst git restore --staged
 
-abbr -a grev git revert
 abbr -a grm git rm
 abbr -a grmc git rm --cached
 
@@ -416,8 +412,6 @@ abbr -a gshs git show --stat
 abbr -a gshn git show --no-patch
 
 abbr -a gsta git stash push
-abbr -a gstaa git stash apply
-abbr -a gstall git stash --all
 abbr -a gstc git stash clear
 abbr -a gstd git stash drop
 abbr -a gstl git stash list
@@ -427,9 +421,6 @@ abbr -a gstu git stash push --include-untracked
 
 abbr -a gst git status
 abbr -a gsl git status --long
-
-abbr -a gsi git submodule init
-abbr -a gsu git submodule update
 
 abbr -a gsd git switch '(git-develop-branch)'
 abbr -a gsm git switch '(git-master-branch)'
@@ -447,7 +438,6 @@ abbr -a gunignore git update-index --no-skip-worktree
 abbr -a gwt git worktree
 abbr -a gwta git worktree add
 abbr -a gwtls git worktree list
-abbr -a gwtmv git worktree move
 abbr -a gwtrm git worktree remove
 
 abbr -a gwip git-wip
