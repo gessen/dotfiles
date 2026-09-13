@@ -102,8 +102,10 @@ This is an `:around' advice for many different functions."
 Run queued function in `my--with-display-graphic-list' to do any
 setup that needs to have the display system initialized."
   (when (display-graphic-p)
-    (dolist (fn (reverse my--with-display-graphic-list))
-      (funcall fn))))
+    (let ((queued (nreverse my--with-display-graphic-list)))
+      (setq my--with-display-graphic-list nil)
+      (dolist (fn queued)
+        (funcall fn)))))
 
 (defhook! my--without-display-graphic ()
   server-after-make-frame-hook
@@ -111,8 +113,10 @@ setup that needs to have the display system initialized."
 Run queued function in `my--without-display-graphic-list' to do
 any setup that is needed for terminal Emacs."
   (unless (display-graphic-p)
-    (dolist (fn (reverse my--without-display-graphic-list))
-      (funcall fn))))
+    (let ((queued (nreverse my--without-display-graphic-list)))
+      (setq my--without-display-graphic-list nil)
+      (dolist (fn queued)
+        (funcall fn)))))
 
 (defmacro with-display-graphic! (&rest body)
   "Run `BODY' after display graphic is initialised.
@@ -1520,8 +1524,9 @@ Operates on the current paragraph if no region is active."
 (defun copy-clipboard-to-buffer ()
   "Copy clipboard and replace buffer with its content."
   (interactive)
-  (delete-region (point-min) (point-max))
-  (clipboard-yank)
+  (atomic-change-group
+    (delete-region (point-min) (point-max))
+    (clipboard-yank))
   (deactivate-mark))
 
 (defun duplicate-and-comment-dwim ()
@@ -1626,8 +1631,8 @@ Else, if you move from the mark and call this command at same
 column as mark, it add cursor to each line."
   (interactive)
   (cond
-   ;; Region does not exist - call `set-mark-command'
-   ((not (region-active-p))
+   ;; Preserve prefix commands even when a region is active.
+   ((or current-prefix-arg (not (region-active-p)))
     (setq this-command 'set-mark-command
           this-original-command 'set-mark-command)
     (call-interactively 'set-mark-command))
@@ -1845,6 +1850,9 @@ column as mark, it add cursor to each line."
   ;; Ignore undo session for the following files.
   (setopt undo-fu-session-incompatible-files
           '("\\.gpg$" "/COMMIT_EDITMSG\\'" "/git-rebase-todo\\'"))
+
+  ;; Org Crypt leaves plaintext in undo history, even after re-encryption.
+  (setopt undo-fu-session-incompatible-major-modes '(org-mode))
 
   (undo-fu-session-global-mode +1))
 
@@ -2237,7 +2245,14 @@ possibly new window."
   ;; Use ripgrep instead.
   (defvar rg-options "-nH --null --no-heading --no-messages -e")
   (setopt grep-command (format "rg %s " rg-options))
-  (setopt grep-template (format "%s<R> -g '<F>'" grep-command))
+  ;; Give each file pattern its own quoted ripgrep glob argument.
+  (add-to-list 'grep-expand-keywords
+               '("<G>" . (mapconcat
+                          (lambda (glob)
+                            (concat "-g " (shell-quote-argument
+                                           glob grep-quoting-style)))
+                          (split-string files nil t) " ")))
+  (setopt grep-template (format "%s<R> <G>" grep-command))
   (setopt grep-find-command
           (format "%s . -type f -print0 | \"%s\" -0 %s"
                   find-program xargs-program grep-command))
@@ -4575,9 +4590,16 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
                "matching PATTERN: ")
        nil 'dired--limit-hist)
       current-prefix-arg))
-    (dired-mark-files-regexp regexp)
-    (unless omit (dired-toggle-marks))
-    (dired-do-kill-lines)
+    (let ((marks (dired-remember-marks (point-min) (point-max)))
+          (dired-mark-region nil)
+          (inhibit-read-only t))
+      (unwind-protect
+          (progn
+            (dired-unmark-all-marks)
+            (dired-mark-files-regexp regexp)
+            (unless omit (dired-toggle-marks))
+            (dired-do-kill-lines))
+        (dired-mark-remembered marks)))
     (add-to-history 'dired--limit-hist regexp))
 
   (set-leader-keys!
@@ -4653,7 +4675,7 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
 
   ;; Open common video extensions with `shell-command' by default.
   (setopt dired-guess-shell-alist-user
-          '(("\\.\\(mp4\\|webm\\|mkv\\)" (open-in-external-app)))))
+          '(("\\.\\(mp4\\|webm\\|mkv\\)" "xdg-open"))))
 
 ;; Feature `dired-x' provides extra `dired' functionality.
 (use-feature! dired-x
@@ -4816,17 +4838,16 @@ if called with universal argument."
       (browse-at-remote)))
 
   (defun browse-at-remote-kill-dwim (arg)
-    "Call `browse-at-remote-kill' with `browse-at-remote-prefer-symbolic'
-reversed if called with universal argument."
+    "Call `browse-at-remote-kill', toggling symbolic URLs with a prefix ARG."
     (interactive "P")
     (require 'browse-at-remote)
-    (if arg
-        (let ((browse-at-remote-prefer-symbolic
-               (not browse-at-remote-prefer-symbolic)))
-          (browse-at-remote-kill))
+    (let ((browse-at-remote-prefer-symbolic
+           (if arg
+               (not browse-at-remote-prefer-symbolic)
+             browse-at-remote-prefer-symbolic)))
       (browse-at-remote-kill))
-    ;; Prevent URL escapes from being interpreted as format strings.
-    (message (replace-regexp-in-string "%" "%%" (car kill-ring) t t)))
+    ;; Pass the URL as data rather than as a message format string.
+    (message "%s" (car kill-ring)))
 
   (set-leader-keys!
     "g r" #'browse-at-remote-dwim
@@ -4837,6 +4858,7 @@ reversed if called with universal argument."
       :around #'browse-at-remote-get-url
       "Allow `browse-at-remote' commands in `magit-blob-mode' buffers to open
 that file in your browser at the visited revision."
+      (require 'f)
       (if magit-blob-mode
           (let* ((filename magit-buffer-file-name)
                  (remote-ref (browse-at-remote--remote-ref filename))
@@ -5012,8 +5034,11 @@ that file in your browser at the visited revision."
 
   ;; Insert worktrees section (only with more than one worktree) just after the
   ;; status section.
-  (setcdr magit-status-sections-hook
-          (push 'magit-insert-worktrees (cdr magit-status-sections-hook))))
+  (magit-add-section-hook
+   'magit-status-sections-hook
+   #'magit-insert-worktrees
+   #'magit-insert-status-headers
+   t))
 
 ;; Package `magit-blame-color-by-age' colors Magit-blame headers by age.
 (use-package! magit-blame-color-by-age
@@ -5132,7 +5157,7 @@ current theme. This will also disable line numbers and decorations."
     "Go to the last compilation buffer.
 If prefix argument ARG is given, switch to it in an other,
 possibly new window."
-    (interactive)
+    (interactive "P")
     (if next-error-last-buffer
         (if arg
             (pop-to-buffer-other-window next-error-last-buffer)
