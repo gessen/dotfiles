@@ -188,6 +188,7 @@ function ef -d "Open selected files with EDITOR or xdg-open with fd+fzf"
         | xargs -0 -n 1 xdg-open 2>/dev/null"
     set -f fzf_cmd fzf --layout=reverse --ansi --exit-0 --multi \
         --preview="bat --style=default --color=always \
+        --theme=$fish_terminal_color_theme \
         {}" \
         --preview-window="up,60%" \
         --bind="enter:execute($fzf_execute)+deselect-all" \
@@ -211,6 +212,7 @@ function eg -d "Open files with EDITOR with rg+fzf"
     end
     set -f fzf_cmd fzf --layout=reverse --ansi --exit-0 --multi --delimiter=: \
         --preview="bat --style=default --color=always \
+        --theme=$fish_terminal_color_theme \
         --highlight-line={2} {1}" \
         --preview-window="up,60%,+{2}+3/3,~3" \
         --bind="enter:execute($fzf_execute)+deselect-all"
@@ -545,6 +547,19 @@ if type -q bat
     abbr -a --position anywhere -- --help "--help 2>&1 | bat --plain --language help"
 end
 
+### Delta
+
+function __delta_update_features --on-variable fish_terminal_color_theme
+    switch $fish_terminal_color_theme
+        case light
+            set -gx DELTA_FEATURES '+modus-operandi'
+        case dark
+            set -gx DELTA_FEATURES '+modus-vivendi'
+    end
+end
+
+__delta_update_features
+
 ### Dua
 
 if type -q dua
@@ -556,6 +571,7 @@ end
 if type -q fd
     abbr -a fdh fd -HL
     abbr -a fdi fd -HIL
+    set -gx LS_COLORS
 end
 
 ### Fzf
