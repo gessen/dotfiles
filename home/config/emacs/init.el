@@ -3579,6 +3579,11 @@ defeats the purpose of `corfu-sort-function'."
 ;; based on major modes.
 (use-package! flymake-collection)
 
+;; Package `flymake-ruff' provides a Flymake plugin to run a linter for Python
+;; buffers using ruff.
+(use-package! flymake-ruff
+  :hook (python-ts-mode-hook . flymake-ruff-load))
+
 ;;;; Online documentation
 
 ;; Package `devdocs' is a documentation viewer for Emacs similar to the built-in
