@@ -546,7 +546,7 @@ abbr -a rsync-sync $rsync_cp --update --delete
 ### Serie
 
 if type -q serie
-    bind alt-g 'serie -g single -s angular -o topo -n 200'
+    bind alt-g 'serie --max-count 200'
 end
 
 ### SSH
