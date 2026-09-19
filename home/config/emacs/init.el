@@ -613,7 +613,7 @@ anything that can be a key's definition."
   (keymap-unset pixel-scroll-precision-mode-map "<next>"))
 
 ;; Display tool-tips in TTY child frames.
-(without-display-graphic! (tty-tip-mode t))
+(without-display-graphic! (tty-tip-mode +1))
 
 ;;;; Keyboard integration
 
@@ -816,8 +816,7 @@ window instead."
   "w s" #'split-window-below
   "w S" #'split-window-below-and-focus
   "w v" #'split-window-right
-  "w V" #'split-window-right-and-focus
-  "w x" #'kill-buffer-and-window)
+  "w V" #'split-window-right-and-focus)
 
 ;; Overwrite default `delete-other-windows' maximize-buffer
 (keymap-global-set "<remap> <delete-other-windows>" #'maximize-buffer)
@@ -1032,7 +1031,7 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
 
 ;; Feature `mule' provides basic commands for multilingual environment
 (use-feature! mule
-  :commands (dos2unix unix2dox)
+  :commands (dos2unix unix2dos)
   :init
 
   (set-prefixes! "f C" "convert")
