@@ -1,0 +1,38 @@
+modelRoles:
+  default: openai-codex/gpt-5.6-sol:high
+  smol: openai-codex/gpt-5.6-luna:high
+  slow: openai-codex/gpt-5.6-sol:high
+  plan: "@slow"
+  commit: openai-codex/gpt-5.6-sol:high
+  task: "@default"
+  advisor: openai-codex/gpt-5.6-sol:xhigh
+symbolPreset: nerd
+theme:
+  dark: titanium
+  light: light
+setupVersion: 2
+defaultThinkingLevel: high
+tools:
+  format: auto
+  approvalMode: write
+  approval:
+    read: allow
+    edit: allow
+    write: allow
+    bash: allow
+  intentTracing: true
+bash:
+  enabled: true
+  patterns:
+    - match: rm -rf *
+      approval: prompt
+    - match: git reset --hard*
+      approval: prompt
+    - match: git clean *
+      approval: prompt
+astGrep:
+  enabled: true
+statusLine:
+  compactThinkingLevel: false
+dev:
+  autoqaConsent: granted
