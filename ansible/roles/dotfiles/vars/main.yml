@@ -2,6 +2,8 @@
 dotfiles:
   - config/atuin/config.toml
   - config/bat/config
+  - config/bat/themes/Modus Operandi.tmTheme
+  - config/bat/themes/Modus Vivendi.tmTheme
   - config/btop/btop.conf
   - config/ccache/ccache.conf
   - config/clangd/config.yaml
