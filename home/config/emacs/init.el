@@ -1465,7 +1465,14 @@ Operates on the current paragraph if no region is active."
     (keymap-set embark-identifier-map "x"
                 '("inflections" . hydra-string-inflection/body))
     (keymap-set embark-flymake-map "x"
-                '("inflections" . hydra-string-inflection/body))))
+                '("inflections" . hydra-string-inflection/body))
+    (keymap-set embark-region-map "x"
+                '("inflections" . hydra-string-inflection/body)))
+
+  :config
+
+  ;; Apply conversion to each symbol in the region.
+  (setopt string-inflection-region-selection-behavior 'apply-to-each-symbols))
 
 ;; Package `ws-butler' unobtrusively remove trailing whitespace. What this means
 ;; is that only lines touched get trimmed. If the whitespace at end of buffer is
