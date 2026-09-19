@@ -3699,9 +3699,9 @@ defeats the purpose of `corfu-sort-function'."
     plantuml-mode-hook
     "Set custom settings for `plantuml-mode'."
     ;; Enable custom `completion-at-point'.
-    (add-hook #'completion-at-point-functions #'plantuml-completion-at-point
+    (add-hook 'completion-at-point-functions #'plantuml-completion-at-point
               nil 'local)
-    (add-hook #'flymake-diagnostic-functions 'flymake-plantuml)
+    (add-hook 'flymake-diagnostic-functions #'flymake-plantuml nil 'local)
     (flymake-mode +1))
 
   :config
