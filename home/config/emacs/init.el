@@ -4347,6 +4347,50 @@ help buffer.")
 ;;; Applications
 ;;;; Large Language Models
 
+;; Package `agent-shell' is a native Emacs shell to interact with LLM agents
+;; powered by Agent Client Protocol. With `agent-shell', you can chat with the
+;; likes of Gemini CLI, Claude Code, Mistral Vibe, or any other ACP-driven
+;; agent.
+(use-package! agent-shell
+  :commands (agent-shell-send-file agent-shell-send-region)
+  :init
+
+  (set-leader-keys!
+    "a f" #'agent-shell-send-file
+    "a p" #'agent-shell-prompt-compose
+    "a r" #'agent-shell-send-region
+    "a s" #'agent-shell)
+
+  :config
+
+  ;; Hide welcome message.
+  (setopt agent-shell-show-welcome-message nil)
+
+  ;; Use Oh-My-Pi as a default provider.
+  (setopt agent-shell-preferred-agent-config 'omp)
+
+  ;; Display a formatted box showing token counts, context window usage, and
+  ;; cost information after each agent response.
+  (setopt agent-shell-show-usage-at-turn-end t)
+
+  ;; Show the session's cumulative cost in the header.
+  (setopt agent-shell-show-cost-indicator t))
+
+;; Package `agent-shell-permission-transient' provides a compact Transient
+;; interface for responding to queued agent-shell permission requests. The
+;; package replaces the inline permission card with a popup below the requesting
+;; `agent-shell' window. It keeps requests from multiple shells in one queue,
+;; shows an in-buffer reminder, and preserves the responder that was installed
+;; before its global minor mode was enabled.
+(use-package! agent-shell-permission-transient
+  :ensure (:host github :repo "Jamie-Cui/agent-shell-permission-transient")
+  :after agent-shell
+  :bind ( :map agent-shell-mode-map
+          ("C-c C-p" . #'agent-shell-permission-transient-menu))
+  :config
+
+  (agent-shell-permission-transient-mode +1))
+
 ;; Package `gptel' provides a simple Large Language Model chat client for Emacs,
 ;; offering support for multiple models and backends. It integrates seamlessly
 ;; with Emacs, remaining accessible at any time and working uniformly across
@@ -4510,6 +4554,14 @@ help buffer.")
   ;; Register all tools.
   (mapc (apply-partially #'apply #'gptel-make-tool)
         (llm-tool-collection-get-all)))
+
+;; Package `shell-maker' is a convenience wrapper around Comint mode used for
+;; building concrete shells.
+(use-package! shell-maker
+  :config
+
+  ;; Do not litter `user-emacs-directory' with `shell-maker' files.
+  (setopt shell-maker-root-path my-cache-dir))
 
 ;;;; Organisation
 
