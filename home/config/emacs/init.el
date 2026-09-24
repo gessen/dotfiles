@@ -2994,9 +2994,7 @@ TYPES is the mode-specific types configuration."
              embark-previous-symbol)
   :init
 
-  (set-leader-keys!
-    "?"   (cons "describe keybinds" #'embark-bindings)
-    "h B" #'embark-bindings)
+  (set-leader-keys! "h B" #'embark-bindings)
 
   ;; Replace the key help with a completing-read interface.
   (setq prefix-help-command #'embark-prefix-help-command)
@@ -3019,6 +3017,12 @@ TYPES is the mode-specific types configuration."
          ("RET" . #'eldoc-doc-buffer))
 
   :config
+
+  (defadvice! my--embark-prefix-help-question-mark (fn)
+    :around #'embark-prefix-help-command
+    "Let Embark recognize `?' as a prefix help event."
+    (let ((help-char (if (eq last-command-event ??) ?? help-char)))
+      (funcall fn)))
 
   (defun embark-which-key-indicator ()
     "An embark indicator that displays keymaps using which-key.
@@ -3057,7 +3061,25 @@ completing-read prompter."
     (which-key--hide-popup-ignore-command)
     (let ((embark-indicators
            (remq #'embark-which-key-indicator embark-indicators)))
-      (apply fn args))))
+      (apply fn args)))
+
+  (defun embark--all-bindings (keymap &optional nested)
+    "Return an alist of all bindings in KEYMAP.
+If NESTED is non-nil subkeymaps are not flattened."
+    (let (bindings maps)
+      (map-keymap
+       (lambda (key def)
+         (let ((binding (keymap--menu-item-binding def)))
+           (cond
+            ((keymapp binding)
+             (if nested
+                 (push (cons (vector key) binding) maps)
+               (dolist (bind (embark--all-bindings binding))
+                 (push (cons (vconcat (vector key) (car bind)) (cdr bind))
+                       maps))))
+            (binding (push (cons (vector key) def) bindings)))))
+       (keymap-canonicalize keymap))
+      (nconc (nreverse bindings) (nreverse maps)))))
 
 ;; Package `embark-consult' provides integration between Embark and Consult.
 (use-package! embark-consult
