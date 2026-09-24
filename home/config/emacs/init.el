@@ -3571,7 +3571,7 @@ defeats the purpose of `corfu-sort-function'."
 
   ;; Increase the idle time after Flymake will start a syntax check as 0.5s is
   ;; a bit too naggy.
-  (setopt flymake-no-changes-timeout 1.0)
+  (setopt flymake-no-changes-timeout 5.0)
 
   ;; Suppress the display of Flymake counters when there are no errors or
   ;; warnings.
@@ -4154,7 +4154,7 @@ NODE should be a tree-sitter function node with a `parameters' field."
             :rustfmt ( :extraArgs ["+nightly"]
                        :rangeFormatting (:enable t))
             :workspace (:symbol (:search (:kind "all_symbols")))
-            :check (:command "clippy")))))
+            :check (:command "check")))))
 
     (with-eval-after-load 'eglot-x
       (set-prefixes-for-minor-mode! 'eglot--managed-mode
@@ -4424,7 +4424,7 @@ NODE should be a tree-sitter function node with a `parameters' field."
   (setopt eglot-sync-connect 0)
 
   ;; Increase the idle time after Eglot will notify servers of any changes.
-  (setopt eglot-send-changes-idle-time 1.0)
+  (setopt eglot-send-changes-idle-time 5.0)
 
   ;; Activate Eglot in referenced non-project files.
   (setopt eglot-extend-to-xref t)
@@ -6011,7 +6011,7 @@ in the system taskbar. STATE is one of `remove', `set', `error',
 (setq suggest-key-bindings 0)
 
 ;; Defer fontification after 0.05s of being idle.
-(setq jit-lock-defer-time 0.05)
+(setq jit-lock-defer-time 0.25)
 
 ;; Reduce rendering/line scan work for Emacs by not rendering cursors or regions
 ;; in non-focused windows.
