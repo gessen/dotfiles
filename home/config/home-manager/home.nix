@@ -37,6 +37,7 @@
       hunspellDicts.en_US
       jq
       jujutsu
+      kitty.terminfo
       less
       librsync
       libsysprof-capture
