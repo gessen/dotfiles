@@ -35,6 +35,7 @@
 	manyfiles = true
 [fetch]
 	prune = true
+	prunetags = true
 	all = true
 	showforcedupdates = true
 	parallel = 0
