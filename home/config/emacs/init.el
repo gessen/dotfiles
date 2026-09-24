@@ -3786,9 +3786,11 @@ defeats the purpose of `corfu-sort-function'."
                     ("Method" ,(rx bos (or "function_item"
                                            "function_signature_item")
                                    eos) ,node-method-p nil)
-                    ("Module" "\\`mod_item\\'" nil nil)
+                    ("Module" "\\`mod_item\\'" nil rust-ts-mode--defun-name)
                     ("Object" "\\`impl_item\\'" nil nil)
-                    ("Struct" "\\`struct_item\\'" nil nil)
+                    ("Struct" ,(rx bos (or "struct_item"
+                                           "union_item")
+                                   eos) nil nil)
                     ("TypeParameter" ,(rx bos (or "type_item"
                                                   "associated_type")
                                           eos) nil nil))))
@@ -3803,7 +3805,8 @@ defeats the purpose of `corfu-sort-function'."
                               "impl_item"
                               "macro_definition"
                               "struct_item"
-                              "trait_item")))
+                              "trait_item"
+                              "union_item")))
     ;; Improve the builtin Imenu with additional nodes
     (setq-local treesit-defun-name-function #'my--rust-ts-mode--defun-name))
 
@@ -3823,43 +3826,36 @@ NODE should be a tree-sitter function node with a `parameters' field."
     (not (my--rust-ts-mode--node-method-p node)))
 
   (defun my--rust-ts-mode--defun-name (node)
-    "Return the defun name of NODE.
-Return nil if there is no name or if NODE is not a defun node."
-    (cl-flet
-        ((treesit-field-text (node field)
-           (treesit-node-text (treesit-node-child-by-field-name node field) t))
-         (treesit-node-grandparent (node)
-           (let ((grandparent (treesit-node-parent (treesit-node-parent node))))
-             (unless (equal (treesit-node-type grandparent) "mod_item")
-               grandparent)))
-         (join (&rest parts) (string-join (delq nil parts) " ")))
-      (pcase (treesit-node-type node)
-        ((or "function_item"
-             "function_signature_item"
-             "type_item")
-         (let* ((grandparent (treesit-node-grandparent node))
-                (trait-text (treesit-field-text grandparent "trait"))
-                (type-text (treesit-field-text grandparent "type"))
-                (name-text (treesit-field-text grandparent "name")))
-           (join (when trait-text "impl") trait-text
-                 (when type-text (if trait-text "for" "impl")) type-text
-                 name-text (treesit-field-text node "name"))))
-        ("impl_item"
-         (let ((trait-text (treesit-field-text node "trait")))
-           (join "impl" trait-text
-                 (when trait-text "for") (treesit-field-text node "type"))))
-        ((or "const_item"
-             "macro_definition"
-             "static_item"
-             "trait_item")
-         (treesit-field-text node "name"))
-        ((or "associated_type"
-             "enum_variant"
-             "field_declaration")
-         (let ((grandparent (treesit-node-grandparent node)))
-           (join (treesit-field-text grandparent "name")
-                 (treesit-field-text node "name"))))
-        (_ (rust-ts-mode--defun-name node)))))
+    "Return the name of NODE, qualified by its enclosing Rust scopes."
+    (cl-flet ((field-text (node field)
+                (treesit-node-text
+                 (treesit-node-child-by-field-name node field) t)))
+      (let* ((type (treesit-node-type node))
+             (name
+              (pcase type
+                ("impl_item"
+                 (let ((trait (field-text node "trait")))
+                   (string-join
+                    (delq nil (list "impl" trait (when trait "for")
+                                    (field-text node "type")))
+                    " ")))
+                ((or "function_item" "function_signature_item" "type_item"
+                     "const_item" "static_item" "macro_definition"
+                     "trait_item" "associated_type" "enum_variant"
+                     "field_declaration" "enum_item" "struct_item" "mod_item"
+                     "union_item")
+                 (field-text node "name"))))
+             (parent (treesit-node-parent node)))
+        (when name
+          (while (and parent
+                      (not (member (treesit-node-type parent)
+                                   '("mod_item" "trait_item" "impl_item"
+                                     "struct_item" "union_item" "enum_item"
+                                     "enum_variant" "function_item"))))
+            (setq parent (treesit-node-parent parent)))
+          (if parent
+              (string-join (list (my--rust-ts-mode--defun-name parent) name) " ")
+            name)))))
 
   (set-prefixes-for-major-mode! 'rust-ts-mode "s" "session")
   (set-leader-keys-for-major-mode! 'rust-ts-mode "s s" #'eglot)
