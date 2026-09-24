@@ -8,7 +8,7 @@ if [ -f /etc/os-release ]; then
   case "${ID_LIKE}" in
     arch)
       if [ ! -x /usr/bin/ansible ]; then
-        sudo pacman -S --needed --noconfirm ansible
+        sudo pacman -S --needed --noconfirm ansible || exit "$?"
       fi
       ;;
     *)
@@ -18,10 +18,10 @@ if [ -f /etc/os-release ]; then
   esac
 fi
 
-export ANSIBLE_HOME="${HOME}/.config/ansible"
-export CARGO_HOME="${HOME}/.local/share/cargo"
-export RUSTUP_HOME="${HOME}/.local/share/rustup"
-
-echo ""
-echo "To install everything run:"
-echo "$ ansible-playbook ansible/playbook.yml --ask-become-pass"
+printf '\nTo install everything run:\n'
+cat <<'EOF'
+ANSIBLE_HOME="$HOME/.config/ansible" \
+CARGO_HOME="$HOME/.local/share/cargo" \
+RUSTUP_HOME="$HOME/.local/share/rustup" \
+ansible-playbook ansible/playbook.yml --ask-become-pass
+EOF
