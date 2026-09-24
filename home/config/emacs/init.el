@@ -4421,10 +4421,24 @@ NODE should be a tree-sitter function node with a `parameters' field."
   (defun eglot-x--runnable-dir (runnable)
     "Return working directory for RUNNABLE."
     (eglot--dbind ((Runnable) label kind args)
-                  runnable
-                  (or (plist-get args :workspaceRoot)
-                      (plist-get args :cwd)
-                      default-directory)))
+        runnable
+      (or (plist-get args :workspaceRoot)
+          (plist-get args :cwd)
+          default-directory)))
+
+  (defun eglot-x-ask-related-tests ()
+    "Ask the server for runnable tests related to point."
+    (interactive)
+    (let* ((tests (jsonrpc-request (eglot--current-server-or-lose)
+                                  :rust-analyzer/relatedTests
+                                  (eglot--TextDocumentPositionParams)))
+           (xrefs (mapcar (lambda (test)
+                            (eglot-x--make-xref-runnable
+                             (plist-get test :runnable)))
+                          tests)))
+      (if xrefs
+          (xref-show-xrefs (lambda () xrefs) nil)
+        (eglot--message "Server returned no related tests."))))
 
   ;; Disable experimental SnippetTextEdits as they work incorrectly with
   ;; comments that have backticks.
