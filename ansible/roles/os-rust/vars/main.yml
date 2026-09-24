@@ -2,4 +2,5 @@
 rust_toolchain: stable
 
 rust_components:
+  - rust-analyzer
   - rust-src
