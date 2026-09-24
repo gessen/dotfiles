@@ -3961,8 +3961,76 @@ NODE should be a tree-sitter function node with a `parameters' field."
                       name)
             name)))))
 
+  (defun my--cargo-run-package-command (command)
+    "Collect Cargo metadata asynchronously, then run COMMAND for a package."
+    (let ((root (locate-dominating-file default-directory "Cargo.toml")))
+      (unless root
+        (user-error "No Cargo.toml found above the current directory"))
+      (let ((default-directory root)
+            (metadata-buffer (generate-new-buffer " *cargo-metadata*"))
+            (error-buffer (generate-new-buffer "*cargo-metadata-errors*")))
+        (condition-case err
+            (make-process
+             :name "cargo-metadata"
+             :buffer metadata-buffer
+             :stderr error-buffer
+             :command '("cargo" "metadata" "--no-deps" "--format-version" "1")
+             :connection-type 'pipe
+             :file-handler t
+             :noquery t
+             :sentinel
+             (lambda (process _event)
+               (when (memq (process-status process) '(exit signal))
+                 (unwind-protect
+                     (if (and (eq (process-status process) 'exit)
+                              (zerop (process-exit-status process)))
+                         (let* ((metadata
+                                 (with-current-buffer metadata-buffer
+                                   (goto-char (point-min))
+                                   (json-parse-buffer :object-type 'alist
+                                                      :array-type 'list)))
+                                (packages
+                                 (mapcar (lambda (package)
+                                           (alist-get 'name package))
+                                         (alist-get 'packages metadata)))
+                                (default-directory
+                                 (file-name-as-directory
+                                  (concat (file-remote-p root)
+                                          (alist-get 'workspace_root metadata))))
+                                (package (completing-read "Cargo package: "
+                                                          packages nil t)))
+                           (compile (format "cargo %s --package %s"
+                                            command
+                                            (shell-quote-argument package))))
+                       (display-buffer error-buffer)
+                       (message "cargo metadata failed (%s); see %s"
+                                (process-exit-status process)
+                                (buffer-name error-buffer)))
+                   (kill-buffer metadata-buffer)
+                   (when (and (eq (process-status process) 'exit)
+                              (zerop (process-exit-status process)))
+                     (kill-buffer error-buffer))))))
+          (error
+           (kill-buffer metadata-buffer)
+           (kill-buffer error-buffer)
+           (signal (car err) (cdr err)))))))
+
+  (defun cargo-check-package ()
+    "Run `cargo check --package` for a selected package."
+    (interactive)
+    (my--cargo-run-package-command "check"))
+
+  (defun cargo-test-package ()
+    "Run `cargo test --package` for a selected package."
+    (interactive)
+    (my--cargo-run-package-command "test"))
+
   (set-prefixes-for-major-mode! 'rust-ts-mode "s" "session")
   (set-leader-keys-for-major-mode! 'rust-ts-mode "s s" #'eglot)
+
+  :bind ( :map rust-ts-mode-map
+          ("C-c b c" . #'cargo-check-package)
+          ("C-c b t" . #'cargo-test-package))
 
   :config
 
