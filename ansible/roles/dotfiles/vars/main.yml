@@ -22,8 +22,10 @@ dotfiles:
   - config/git/ignore
   - config/jj/config.toml
   - config/keepassxc/keepassxc.ini
+  - config/kitty/dark-theme.auto.conf
   - config/kitty/kitty.conf
-  - config/kitty/themes
+  - config/kitty/light-theme.auto.conf
+  - config/kitty/no-preference-theme.auto.conf
   - config/mpv/input.conf
   - config/mpv/mpv.conf
   - config/npm/npmrc
