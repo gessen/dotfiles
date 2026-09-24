@@ -28,6 +28,7 @@ dotfiles:
   - config/ripgrep/config
   - config/rustfmt/rustfmt.toml
   - config/sccache/config
+  - config/serie/config.toml
   - config/yazi/yazi.toml
   - local/share/cargo/config.toml
   - local/share/emacs/mc-lists.el

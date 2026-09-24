@@ -1,0 +1,4 @@
+[core.option]
+order = "topo"
+graph_style = "angular"
+initial_selection = "head"
