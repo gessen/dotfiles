@@ -81,6 +81,8 @@
 	branch = true
 	showstash = true
 	submodulesummary = true
+[tag]
+	sort = version:refname
 [include]
 	path = config-delta
 	path = config-local
