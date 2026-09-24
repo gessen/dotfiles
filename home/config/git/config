@@ -76,6 +76,7 @@
 	updaterefs = true
 [rerere]
 	enabled = true
+	autoupdate = true
 [status]
 	short = true
 	branch = true
