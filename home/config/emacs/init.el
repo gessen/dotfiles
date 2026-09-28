@@ -4590,7 +4590,9 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
           ("\]"  . #'dired-create-directory)
           ("/"   . #'dired-limit-regexp)
           ("M-n" . #'dired-next-subdir)
-          ("M-p" . #'dired-prev-subdir))
+          ("M-p" . #'dired-prev-subdir)
+          :map dired-jump-map
+          ("d"   . #'dired-jump))
 
   :config
 
