@@ -73,7 +73,6 @@
 	stat = true
 	autosquash = true
 	autostash = true
-	abbreviatecommands = true
 	updaterefs = true
 [rerere]
 	enabled = true
