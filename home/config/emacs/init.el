@@ -2641,6 +2641,9 @@ possibly new window."
 
   :config
 
+  ;; Do not consider case significant in completion.
+  (setopt completion-preview-ignore-case t)
+
   ;; Trigger completion after forward deletions.
   (push #'delete-char completion-preview-commands)
   (push #'delete-forward-char completion-preview-commands)
@@ -2656,9 +2659,21 @@ possibly new window."
 
 ;; Feature `minibuffer' provides minibuffer and completion functions.
 (use-feature! minibuffer
-  :bind ( :map minibuffer-local-completion-map
+  :init
+
+  (defun my--truncate-completion-lines ()
+    "Keep completion lines unwrapped."
+    (visual-line-mode -1)
+    (setq-local truncate-lines t))
+
+  :hook (completion-list-mode-hook . my--truncate-completion-lines)
+  :bind ( :map completion-list-mode-map
+          ("M-e" . #'switch-to-minibuffer)
+          :map minibuffer-local-completion-map
           ;; Unbind `minibuffer-complete-word'
-          ("SPC" . nil)
+          ("SPC"     . nil)
+          ("<next>"  . #'minibuffer-scroll-other-window)
+          ("<prior>" . #'minibuffer-scroll-other-window-down)
           :map minibuffer-visible-completions-up-down-map
           ("C-n" . #'minibuffer-next-completion)
           ("C-p" . #'minibuffer-previous-completion))
@@ -2682,6 +2697,9 @@ possibly new window."
   ;; Do not show help in the *Completions* buffer.
   (setopt completion-show-help nil)
 
+  ;; Disable printing inline messages during completion.
+  (setopt completion-show-inline-help nil)
+
   ;; Sort candidates in the *Completions* buffer according to the order of the
   ;; candidates in the minibuffer history.
   (setopt completions-sort 'historical)
@@ -2696,10 +2714,16 @@ possibly new window."
   (setopt completions-detailed t)
 
   ;; Limit *Completions* buffer height.
-  (setopt completions-max-height 20)
+  (setopt completions-max-height 10)
 
   ;; Allow navigating completions from the minibuffer.
-  (setopt minibuffer-visible-completions 'up-down))
+  (setopt minibuffer-visible-completions 'up-down)
+
+  ;; Show the recursion depth in the minibuffer prompt
+  (minibuffer-depth-indicate-mode +1)
+
+  ;; Automatically displays a default value in minibuffer prompt.
+  (minibuffer-electric-default-mode +1))
 
 ;; Feature `savehist' saves minibuffer history to an external file after exit.
 (use-feature! savehist
