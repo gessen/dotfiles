@@ -8,6 +8,7 @@
 	hunk-header-decoration-style = blue box
 [delta "modus-operandi"]
 	light = true
+	syntax-theme = Modus Operandi
 	line-numbers-minus-style = "#d84a4f"
 	line-numbers-plus-style = "#6cc06c"
 	minus-style = syntax "#ffd8d5"
@@ -17,6 +18,7 @@
 	map-styles = bold magenta => syntax "#ffddff", bold cyan => syntax "#bfefff"
 [delta "modus-vivendi"]
 	dark = true
+	syntax-theme = Modus Vivendi
 	line-numbers-minus-style = "#b81a1f"
 	line-numbers-plus-style = "#237f3f"
 	minus-style = syntax "#4f1119"
