@@ -3754,6 +3754,7 @@ defeats the purpose of `corfu-sort-function'."
                                   c-or-c++-ts-mode
                                   cmake-ts-mode
                                   dockerfile-ts-mode
+                                  js-ts-mode
                                   json-ts-mode
                                   python-ts-mode
                                   ruby-ts-mode
@@ -3813,6 +3814,17 @@ defeats the purpose of `corfu-sort-function'."
 
 ;; Package `fish-mode' provides a major mode for Fish shell scripts.
 (use-package! fish-mode)
+
+;;;; JavaScript
+
+;; Feature `js' provides major mode for JavaScript, powered by tree-sitter.
+(use-feature! js
+  :init
+
+  (defhook! my--js-ts-mode-setup ()
+    js-ts-mode-hook
+    "Set custom settings for `js-ts-mode'."
+    (setq-local fill-column 120)))
 
 ;;;; Markdown
 
