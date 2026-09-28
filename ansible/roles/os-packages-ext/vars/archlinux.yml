@@ -6,4 +6,3 @@ packages_aur:
   - mpv-uosc
   - pandoc-bin
   - shellcheck-bin
-  - ttf-intel-one-mono
