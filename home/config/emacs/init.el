@@ -2919,13 +2919,24 @@ point. "
   (with-eval-after-load 'consult-imenu
     (defun consult-imenu--decorate (name prefix face kind)
       "Return imenu NAME decorated with PREFIX, FACE and KIND metadata."
-      (let ((key (concat (if prefix (concat prefix " " name) name))))
-        (when (and prefix face)
-          (add-face-text-property (1+ (length prefix)) (length key)
-                                  face 'append key))
+      (when (and kind prefix (get-text-property 0 'consult--type prefix))
+        (let ((end (next-single-property-change 0 'consult--type prefix
+                                               (length prefix))))
+          (setq prefix (and (< end (length prefix))
+                            (substring prefix (1+ end))))))
+      (let* ((key (concat (if prefix (concat prefix " " name) name)))
+             (start (if prefix (1+ (length prefix)) 0))
+             (qualifier (and (get-text-property 0 'my--imenu-qualifier name)
+                             (next-single-property-change
+                              0 'my--imenu-qualifier name (length name)))))
+        (when qualifier
+          (add-face-text-property start (+ start qualifier)
+                                  'consult-imenu-prefix 'append key)
+          (setq start (+ start qualifier)))
+        (when (and prefix face (not kind))
+          (add-face-text-property start (length key) face 'append key))
         (when kind
-          (add-face-text-property (if prefix (1+ (length prefix)) 0) (length key)
-                                  (nth 2 kind) 'append key)
+          (add-face-text-property start (length key) (nth 2 kind) 'append key)
           (setq key (concat (car kind) " " key))
           (put-text-property 0 (length (car kind)) 'consult--type (nth 1 kind) key))
         key))
@@ -2943,18 +2954,23 @@ TYPES is the mode-specific types configuration."
            (if (imenu--subalist-p item)
                (let* ((next-prefix name)
                       (next-face face)
-                      (region (get-text-property 0 'imenu-region name)))
+                      (children (cdr item))
+                      (self (and (equal (car-safe (car children)) " ")
+                                 (pop children)))
+                      (region (get-text-property 0 'imenu-region name))
+                      (pos (if region (car region) (cdr self))))
                  (add-face-text-property 0 (length name)
                                          'consult-imenu-prefix 'append name)
                  (if prefix
                      (setq next-prefix (concat prefix "/" name))
-                   (when-let* ((type (cdr (assoc name types))))
+                   (when-let* ((_ (not (or pos
+                                          (get-text-property 0 'imenu-kind name))))
+                               (type (cdr (assoc name types))))
                      (put-text-property 0 (length name) 'consult--type (car type) name)
                      (setq next-face (cadr type))))
                  (nconc
-                  (and region
-                       (list (cons key (consult-imenu--normalize (car region)))))
-                  (consult-imenu--flatten next-prefix next-face (cdr item) types)))
+                  (and pos (list (cons key (consult-imenu--normalize pos))))
+                  (consult-imenu--flatten next-prefix next-face children types)))
              (list (cons key (consult-imenu--normalize (cdr item)))))))
        list)))
 
@@ -3917,7 +3933,10 @@ NODE should be a tree-sitter function node with a `parameters' field."
                                      "enum_variant" "function_item"))))
             (setq parent (treesit-node-parent parent)))
           (if parent
-              (string-join (list (my--rust-ts-mode--defun-name parent) name) " ")
+              (concat (propertize
+                       (concat (my--rust-ts-mode--defun-name parent) " ")
+                       'my--imenu-qualifier t)
+                      name)
             name)))))
 
   (set-prefixes-for-major-mode! 'rust-ts-mode "s" "session")
