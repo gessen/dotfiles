@@ -2735,7 +2735,7 @@ possibly new window."
 ;; Package `nerd-icons-completion' adds icons to completion candidates using
 ;; the built in completion metadata functions.
 (use-package! nerd-icons-completion
-  :after (marginalia nerd-icons)
+  :after marginalia
   :hook (marginalia-mode-hook . nerd-icons-completion-marginalia-setup)
   :init
 
