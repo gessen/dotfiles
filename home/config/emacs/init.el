@@ -5314,7 +5314,7 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
     (let ((pattern (rx bos (regexp (regexp-quote (user-login-name))) "/"
                        (group "EW-" (+ digit)) (opt "-" (* nonl)) eos)))
       (when (string-match-p pattern branch)
-        (replace-regexp-in-string pattern "[\\1] " branch))))
+        (replace-regexp-in-string pattern "[\\1]" branch))))
 
   (defun log-edit-get-current-branch ()
     "Returns current branch (for Git) or bookmark (for JJ)."
@@ -5328,12 +5328,12 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
                   "-T" "local_bookmarks.map(|b| b.name())"))))))
 
   (defun log-edit-insert-jira-ticket ()
-    "Insert the ticket name in the commit buffer if feasible."
+    "Insert the ticket name at the end of the subject line if feasible.
+Point stays before the ticket, so the subject is typed in front of it."
     (when-let* ((ticket (log-edit-extract-ticket-name
                          (or (log-edit-get-current-branch) ""))))
-      (insert ticket)
-      (end-of-line -1)
-      (end-of-line)))
+      (save-excursion
+        (insert " " ticket))))
 
   (defhook! my--log-edit-mode-setup ()
     log-edit-mode-hook
@@ -5590,11 +5590,13 @@ if called with universal argument."
     :config
 
     (defun git-commit-insert-ticket-name ()
-      "Insert the ticket name in the commit buffer if feasible."
+      "Insert the ticket name at the end of the subject line if feasible.
+Point stays before the ticket, so the subject is typed in front of it."
       (when-let* ((tag (log-edit-extract-ticket-name
                         (magit-get-current-branch))))
         (unless (string-search tag (or (git-commit-buffer-message) ""))
-          (insert tag))))
+          (save-excursion
+            (insert " " tag)))))
 
     (defhook! my--git-commit-mode-setup ()
       git-commit-mode-hook
@@ -5777,14 +5779,17 @@ This also disables line numbers and decorations."
   :config
 
   (defun majutsu-jjdescription-insert-ticket-name ()
-    "Insert a ticket prefix from the closest local bookmark."
+    "Insert the ticket name from the closest local bookmark if feasible.
+The ticket goes at the end of the subject line. Point stays before the
+ticket, so the subject is typed in front of it."
     (when-let* ((ticket
                  (cl-some #'log-edit-extract-ticket-name
                           (majutsu-jj-lines "log" "--no-graph" "-r" "closest_bookmark(@)"
                                             "-T" "local_bookmarks.map(|b| b.name() ++ \"\\n\")"))))
       (unless (string-search ticket
                              (or (majutsu-jjdescription-buffer-message) ""))
-        (insert ticket))))
+        (save-excursion
+          (insert " " ticket)))))
 
   (defhook! my--majutsu-jjdescription-mode-setup ()
     majutsu-jjdescription-setup-hook
