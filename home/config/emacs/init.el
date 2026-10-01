@@ -971,14 +971,16 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
 (defun open-in-external-app ()
   "Open current file in external application."
   (interactive)
-  (let* ((filename (if (derived-mode-p 'dired-mode)
-                       (dired-get-file-for-visit)
-                     (buffer-file-name)))
-         (filepath (expand-file-name filename)))
-    (unless (and filepath (file-exists-p filepath))
-      (user-error "File '%s' does not exist" filepath))
-    (let ((process-connection-type nil))
-      (start-process "" nil "xdg-open" filepath))))
+  (let ((filename (if (derived-mode-p 'dired-mode)
+                      (dired-get-file-for-visit)
+                    (buffer-file-name))))
+    (unless filename
+      (user-error "Current buffer is not visiting a file"))
+    (let ((filepath (expand-file-name filename)))
+      (unless (file-exists-p filepath)
+        (user-error "File '%s' does not exist" filepath))
+      (let ((process-connection-type nil))
+        (start-process "" nil "xdg-open" filepath)))))
 
 ;; Follow symlinks when opening files. This has the concrete impact, for
 ;; instance, that when you edit real init.el with M-m f e i and then later do
