@@ -60,6 +60,9 @@ dkms.conf
 # Emacs directory configuration
 .dir-locals.el
 
+# Emacs agent-shell transcripts
+.agent-shell
+
 # CMake
 CMakeLists.txt.user
 CMakeCache.txt
