@@ -15,6 +15,7 @@ set -l xdg_state_home $HOME/.local/state
 # Partial XDG support
 set -gx ANSIBLE_HOME $xdg_config_home/ansible
 set -gx CARGO_HOME $xdg_data_home/cargo
+set -gx CODEX_HOME $xdg_config_home/codex
 set -gx GNUPGHOME $xdg_data_home/gnupg
 set -gx GTK2_RC_FILES $xdg_config_home/gtk-2.0/settings.ini
 set -gx NPM_CONFIG_USERCONFIG $xdg_config_home/npm/npmrc
