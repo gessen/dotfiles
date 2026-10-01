@@ -66,6 +66,9 @@ merge-args = [
   "(ediff-merge-files-with-ancestor \"$left\" \"$right\" \"$base\" nil \"$output\")",
 ]
 
+[remotes.origin]
+auto-track-bookmarks = "jswierk/*"
+
 [revsets]
 bookmark-advance-to = "closest_pushable(@)"
 
