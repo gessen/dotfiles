@@ -386,20 +386,6 @@
               :source "elpaca-menu-lock-file" :id f :type git :protocol https
               :inherit t :depth treeless :ref
               "931b6d0667fe03e7bf1c6c282d6d8d7006143c52"))
- (fancy-compilation :source "elpaca-menu-lock-file" :recipe
-                    (:package "fancy-compilation" :fetcher codeberg :repo
-                              "ideasman42/emacs-fancy-compilation" :files
-                              ("*.el" "*.el.in" "dir" "*.info" "*.texi"
-                               "*.texinfo" "doc/dir" "doc/*.info" "doc/*.texi"
-                               "doc/*.texinfo" "lisp/*.el" "docs/dir"
-                               "docs/*.info" "docs/*.texi" "docs/*.texinfo"
-                               (:exclude ".dir-locals.el" "test.el" "tests.el"
-                                         "*-test.el" "*-tests.el" "LICENSE"
-                                         "README*" "*-pkg.el"))
-                              :source "elpaca-menu-lock-file" :id
-                              fancy-compilation :type git :protocol https
-                              :inherit t :depth treeless :ref
-                              "502d36e0fb4c4daedc16ea5d732dcbc8285d6fb1"))
  (fish-mode :source "elpaca-menu-lock-file" :recipe
             (:package "fish-mode" :fetcher github :repo "wwwjfy/emacs-fish"
                       :files
