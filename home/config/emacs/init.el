@@ -2119,6 +2119,7 @@ possibly new window."
     ("C-g" nil :exit t))
 
   (defun symbol-overlay ()
+    "Highlight the symbol at point and open the symbol-overlay hydra."
     (interactive)
     (symbol-overlay-put)
     (hydra-symbol-overlay/body))
