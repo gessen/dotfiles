@@ -3593,6 +3593,11 @@ defeats the purpose of `corfu-sort-function'."
 ;; based on major modes.
 (use-package! flymake-collection)
 
+;; Package `flymake-ruff' provides a Flymake plugin to run a linter for Python
+;; buffers using ruff.
+(use-package! flymake-ruff
+  :hook (python-ts-mode-hook . flymake-ruff-load))
+
 ;;;; Online documentation
 
 ;; Package `devdocs' is a documentation viewer for Emacs similar to the built-in
@@ -3913,11 +3918,21 @@ defeats the purpose of `corfu-sort-function'."
   (defhook! my--python-ts-mode-setup ()
     python-ts-mode-hook
     "Set custom settings for `python-ts-mode'."
-    (setq-local fill-column 100)
-    (display-fill-column-indicator-mode -1))
+    (setq-local fill-column 100))
 
   (set-prefixes-for-major-mode! 'python-ts-mode "s" "session")
   (set-leader-keys-for-major-mode! 'python-ts-mode "s s" #'eglot))
+
+;; Package `pyvenv' is a simple global minor mode which will replicate the
+;; changes done by virtualenv activation inside Emacs.
+(use-package! pyvenv
+  :hook (python-ts-mode-hook . pyvenv-mode))
+
+;; Package `pyvenv-auto' automatically activates a Python venv with pyvenv. When
+;; you open a file in `python-mode', it searches for the venv directory near the
+;; file, and activates it.
+(use-package! pyvenv-auto
+  :hook (python-ts-mode-hook . pyvenv-auto-run))
 
 ;;;; Ruby
 
