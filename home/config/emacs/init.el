@@ -3152,7 +3152,7 @@ completing-read prompter."
   :init
 
   ;; Reuse `xref' interface.
-  (add-hook #'xref-backend-functions #'dumb-jump-xref-activate)
+  (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
 
   :config
 
@@ -4884,7 +4884,7 @@ that file in your browser at the visited revision."
   :config
 
   (with-eval-after-load 'magit
-    (add-hook #'magit-post-refresh-hook #'diff-hl-magit-post-refresh))
+    (add-hook 'magit-post-refresh-hook #'diff-hl-magit-post-refresh))
 
   ;; Run `diff-hl' updates asynchronously.
   (setopt diff-hl-update-async t)
