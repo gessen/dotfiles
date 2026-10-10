@@ -955,17 +955,6 @@
               :source "elpaca-menu-lock-file" :id s :type git :protocol https
               :inherit t :depth treeless :ref
               "d7c04b84d03481a1ed62ee13dbe595224ccbe57c"))
- (shfmt :source "elpaca-menu-lock-file" :recipe
-        (:package "shfmt" :fetcher github :repo "purcell/emacs-shfmt" :files
-                  ("*.el" "*.el.in" "dir" "*.info" "*.texi" "*.texinfo"
-                   "doc/dir" "doc/*.info" "doc/*.texi" "doc/*.texinfo"
-                   "lisp/*.el" "docs/dir" "docs/*.info" "docs/*.texi"
-                   "docs/*.texinfo"
-                   (:exclude ".dir-locals.el" "test.el" "tests.el" "*-test.el"
-                             "*-tests.el" "LICENSE" "README*" "*-pkg.el"))
-                  :source "elpaca-menu-lock-file" :id shfmt :type git :protocol
-                  https :inherit t :depth treeless :ref
-                  "284823c7db1aebbb1bc1fdaf06e92aaba7ebceb0"))
  (ssh-config-mode :source "elpaca-menu-lock-file" :recipe
                   (:package "ssh-config-mode" :fetcher github :repo
                             "peterhoeg/ssh-config-mode-el" :files
