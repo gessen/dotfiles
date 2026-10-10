@@ -3871,6 +3871,13 @@ defeats the purpose of `corfu-sort-function'."
     "f f" #'prettier-buffer
     "f r" #'prettier-region))
 
+;;;; Jenkinsfile
+
+;; Package `jenkinsfile-mode' provides a major mode for editing Jenkins
+;; declarative pipeline files.
+(use-package! jenkinsfile-mode
+  :mode ("Jenkinsfile-" "\\.pipeline$"))
+
 ;;;; Markdown
 
 ;; Package `markdown-mode' provides a major mode for Markdown-formatted text.
