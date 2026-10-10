@@ -1243,8 +1243,17 @@ ARGS are passed to FN. LINE and COLUMN are interpreted as one-based."
 
   :config
 
+  (defhook! my--find-file-disable-vc ()
+    find-file-hook
+    "Disable VC for remote files."
+    (if (file-remote-p (buffer-file-name))
+        (setq-local vc-handled-backends nil)))
+
+  (advice-add #'tramp-handle-lock-file :override #'ignore)
+  (advice-add #'tramp-handle-unlock-file :override #'ignore)
+
   ;; Show only warnings and errors.
-  (setopt tramp-verbose 2)
+  (setopt tramp-verbose 4)
 
   ;; Use rsync instead of default scp in order to utilize control master.
   (setopt tramp-default-method "rsync")
@@ -1258,8 +1267,41 @@ ARGS are passed to FN. LINE and COLUMN are interpreted as one-based."
   ;; Let ssh_config define them.
   (setopt tramp-use-connection-share nil)
 
+  ;; The attributes of remote files are cached for better performance. If they
+  ;; are changed outside of Emacs's control, the cached values become invalid,
+  ;; and must be reread. Never expire cached values.
+  (setopt remote-file-name-inhibit-cache nil)
+
   ;; Disable file locks for remote files.
   (setopt remote-file-name-inhibit-locks t)
+
+  ;; Use direct asynchronous process for both ssh and rsync.
+  (connection-local-set-profile-variables
+   'remote-direct-async-process
+   '((tramp-direct-async-process . t)))
+
+  (dolist (protocol '("ssh" "rsync"))
+    (connection-local-set-profiles
+     `(:application tramp :protocol ,protocol)
+     'remote-direct-async-process))
+
+  (defun my--tramp-add-sconfig-completion (protocol)
+    "Add SSH config snippets to completion for Tramp PROTOCOL."
+    (when-let* ((directory (expand-file-name "~/.ssh/conf.d"))
+                ((file-directory-p directory))
+                (functions
+                 (cl-loop for file in (directory-files
+                                       directory t "\\.conf\\'" t)
+                          when (file-regular-p file)
+                          collect `(tramp-parse-sconfig ,file))))
+      (tramp-set-completion-function
+       protocol
+       (append (cdr (assoc protocol tramp-completion-function-alist))
+               functions))))
+
+  ;; Read ssh config files to improve Tramp auto completion.
+  (dolist (protocol '("ssh" "rsync"))
+    (my--tramp-add-sconfig-completion protocol))
 
   ;; Do not litter `user-emacs-directory' with tramp files.
   (setopt tramp-auto-save-directory (cache-dir "tramp-auto-save")
@@ -1317,6 +1359,29 @@ ARGS are passed to FN. LINE and COLUMN are interpreted as one-based."
 
   ;; Use `consult-fd' for finding.
   (setopt consult-dir-jump-file-command 'consult-fd))
+
+;; Package `tramp-rpc' provides a high-performance TRAMP backend for Emacs that
+;; uses a binary RPC server instead of parsing shell command output. Traditional
+;; TRAMP works by piping shell commands over SSH and parsing their output. This
+;; approach is robust but slow, especially for operations that require many
+;; round-trips (like directory listings or VC operations). TRAMP-RPC replaces
+;; this with a lightweight Rust server that runs on the remote host. Emacs
+;; communicates with it using MessagePack-RPC over SSH, resulting in
+;; significantly faster file operations.
+(use-package! tramp-rpc
+  :ensure (:host github :repo "ArthurHeymans/emacs-tramp-rpc")
+  :after tramp
+  :demand t
+  :config
+
+  ;; Read ssh config files to improve Tramp auto completion.
+  (my--tramp-add-sconfig-completion "rpc")
+
+  ;; Disable magit prefetch optimizations.
+  (setopt tramp-rpc-magit-optimize nil)
+
+  ;; Do not litter `user-emacs-directory' with `tramp-rpc' binaries.
+  (setopt tramp-rpc-deploy-local-cache-directory (cache-dir "tramp-rpc")))
 
 ;;; Saving files
 
