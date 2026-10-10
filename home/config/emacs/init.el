@@ -3771,6 +3771,7 @@ defeats the purpose of `corfu-sort-function'."
                                   c-or-c++-ts-mode
                                   cmake-ts-mode
                                   dockerfile-ts-mode
+                                  js-ts-mode
                                   json-ts-mode
                                   python-ts-mode
                                   ruby-ts-mode
@@ -3847,6 +3848,28 @@ defeats the purpose of `corfu-sort-function'."
   (set-leader-keys-for-major-mode! 'fish-mode
     "f f" #'fish-format-buffer
     "f r" #'fish-format-region))
+
+;;;; JavaScript
+
+;; Feature `js' provides major mode for JavaScript, powered by tree-sitter.
+(use-feature! js
+  :config
+
+  (defhook! my--js-ts-mode-setup ()
+    js-ts-mode-hook
+    "Set custom settings for `js-ts-mode'."
+    (setq-local fill-column 120))
+
+  (reformatter-define prettier
+    :program "prettier"
+    :args (list "--stdin-filepath" (or buffer-file-name "stdin.js"))
+    :mode nil)
+
+  (set-prefixes-for-major-mode! 'js-ts-mode "f" "format")
+
+  (set-leader-keys-for-major-mode! 'js-ts-mode
+    "f f" #'prettier-buffer
+    "f r" #'prettier-region))
 
 ;;;; Markdown
 
