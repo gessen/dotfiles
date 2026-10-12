@@ -522,10 +522,10 @@ abbr -a gtv git tag '|' sort -V
 abbr -a gignore git update-index --skip-worktree
 abbr -a gunignore git update-index --no-skip-worktree
 
-abbr -a gwt git worktree
-abbr -a gwta git worktree add
-abbr -a gwtls git worktree list
-abbr -a gwtrm git worktree remove
+abbr -a gw git worktree
+abbr -a gwa git worktree add
+abbr -a gwl git worktree list
+abbr -a gwr git worktree remove
 
 abbr -a gwip git-wip
 abbr -a gunwip git-unwip
@@ -602,6 +602,11 @@ abbr -a jsqf jj squash --ignore-immutable
 abbr -a jsqi jj squash --interactive
 
 abbr -a jst jj status
+
+abbr -a jw jj workspace
+abbr -a jwa jj workspace add
+abbr -a jwl jj workspace list
+abbr -a jwr jj workspace remove
 
 ### Agents
 
