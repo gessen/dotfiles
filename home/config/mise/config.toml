@@ -5,6 +5,7 @@ idiomatic_version_file_enable_tools = []
 
 [tasks.install-deps]
 description = "Install dependencies"
+dir = "{{cwd}}"
 run = "uv pip install -r requirements.txt"
 
 [tools]
