@@ -1,5 +1,5 @@
 # Disable all default components - line numbers, file headers, grid borders and
 # Git modifications.
 --style=rule,snip
---theme-dark="Catppuccin Mocha"
---theme-light="Catppuccin Latte"
+--theme-dark="Modus Vivendi"
+--theme-light="Modus Operandi"
