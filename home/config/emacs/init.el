@@ -1044,6 +1044,8 @@ ARGS are passed to FN. LINE and COLUMN are interpreted as one-based."
 ;; it will just redirect you to the existing buffer.
 (setq find-file-suppress-same-file-warnings t)
 
+(setopt trusted-content :all)
+
 (set-prefixes! "f e" "emacs")
 
 (set-leader-keys!
