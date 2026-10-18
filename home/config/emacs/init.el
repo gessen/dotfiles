@@ -4112,6 +4112,77 @@ defeats the purpose of `corfu-sort-function'."
 (use-package! pyvenv-auto
   :hook (python-ts-mode-hook . pyvenv-auto-run))
 
+;; ;;;; Python
+
+;; ;; Feature `python' provides major mode for Python, powered by tree-sitter.
+;; (use-feature! python
+;;   :config
+
+;;   (defhook! my--python-ts-mode-setup ()
+;;     python-ts-mode-hook
+;;     "Set custom settings for `python-ts-mode'."
+;;     (setq-local fill-column 100)
+;;     ;; Lint with Ruff through the built-in backend. Passing the real file name
+;;     ;; lets Ruff find the project config and apply `per-file-ignores'.
+;;     (setq-local python-flymake-command
+;;                 `("ruff" "check" "--quiet" "--no-fix" "--output-format=concise"
+;;                   "--stdin-filename" ,(or buffer-file-name "stdin.py") "-"))
+;;     ;; Run `run-python' inside the project's virtualenv (created by uv).
+;;     (when-let* ((root (locate-dominating-file default-directory ".venv")))
+;;       (setq-local python-shell-virtualenv-root (expand-file-name ".venv" root)))
+;;     (flymake-mode +1))
+
+;;   (defhook! my--python-eglot-setup ()
+;;     eglot-managed-mode-hook
+;;     "Keep Ruff diagnostics next to the ones from the language server."
+;;     (when (derived-mode-p 'python-base-mode)
+;;       (add-hook 'flymake-diagnostic-functions #'python-flymake nil 'local)))
+
+;;   ;; Ruff prints the file name relative to the working directory.
+;;   (setopt python-flymake-command-output-pattern
+;;           '("^[^:\n]+:\\([0-9]+\\):\\([0-9]+\\): \\(\\([[:alnum:]-]+\\):? .*\\)$"
+;;             1 2 4 3))
+
+;;   ;; Report syntax errors as errors and all Ruff rules as warnings.
+;;   (setopt python-flymake-msg-alist '(("\\`invalid-syntax\\'" . :error)
+;;                                      ("" . :warning)))
+
+;;   (defvar my--ruff-format-range nil
+;;     "Range for \"ruff format --range\", or nil to format the whole buffer.")
+
+;;   (reformatter-define ruff-format
+;;     :program "ruff"
+;;     :args `("format"
+;;             ,@(when my--ruff-format-range
+;;                 (list "--range" my--ruff-format-range))
+;;             "--stdin-filename" ,(or buffer-file-name "stdin.py"))
+;;     :mode nil)
+
+;;   (defun my-ruff-format-region (beg end)
+;;     "Format the region between BEG and END with Ruff.
+;; Ruff gets the whole buffer, so indented code is formatted correctly."
+;;     (interactive "r")
+;;     (cl-flet ((pos (p)
+;;                 (format "%d:%d" (line-number-at-pos p t)
+;;                         (1+ (- p (save-excursion (goto-char p) (pos-bol)))))))
+;;       (let ((my--ruff-format-range (concat (pos beg) "-" (pos end))))
+;;         (ruff-format-buffer))))
+
+;;   ;; ty cannot format, so keep Ruff when Eglot's leader keys take precedence.
+;;   (keymap-set python-ts-mode-map "<remap> <eglot-format-buffer>"
+;;               #'ruff-format-buffer)
+;;   (keymap-set python-ts-mode-map "<remap> <eglot-format>"
+;;               #'my-ruff-format-region)
+
+;;   (set-prefixes-for-major-mode! 'python-ts-mode
+;;     "f" "format"
+;;     "s" "session")
+
+;;   (set-leader-keys-for-major-mode! 'python-ts-mode
+;;     "f f" #'ruff-format-buffer
+;;     "f r" #'my-ruff-format-region
+;;     "s s" #'eglot))
+
 ;;;; Ruby
 
 ;; Feature `ruby-ts-mode' provides major mode for Ruby, powered by tree-sitter.
@@ -5493,7 +5564,7 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
     (let ((pattern (rx bos (regexp (regexp-quote (user-login-name))) "/"
                        (group "EW-" (+ digit)) (opt "-" (* nonl)) eos)))
       (when (string-match-p pattern branch)
-        (replace-regexp-in-string pattern "[\\1] " branch))))
+        (replace-regexp-in-string pattern "[\\1]" branch))))
 
   (defun log-edit-get-current-branch ()
     "Returns current branch (for Git) or bookmark (for JJ)."
@@ -5507,12 +5578,12 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
                   "-T" "local_bookmarks.map(|b| b.name())"))))))
 
   (defun log-edit-insert-jira-ticket ()
-    "Insert the ticket name in the commit buffer if feasible."
+    "Insert the ticket name at the end of the subject line if feasible.
+Point stays before the ticket, so the subject is typed in front of it."
     (when-let* ((ticket (log-edit-extract-ticket-name
                          (or (log-edit-get-current-branch) ""))))
-      (insert ticket)
-      (end-of-line -1)
-      (end-of-line)))
+      (save-excursion
+        (insert " " ticket))))
 
   (defhook! my--log-edit-mode-setup ()
     log-edit-mode-hook
@@ -5769,11 +5840,13 @@ if called with universal argument."
     :config
 
     (defun git-commit-insert-ticket-name ()
-      "Insert the ticket name in the commit buffer if feasible."
+      "Insert the ticket name at the end of the subject line if feasible.
+Point stays before the ticket, so the subject is typed in front of it."
       (when-let* ((tag (log-edit-extract-ticket-name
                         (magit-get-current-branch))))
         (unless (string-search tag (or (git-commit-buffer-message) ""))
-          (insert tag))))
+          (save-excursion
+            (insert " " tag)))))
 
     (defhook! my--git-commit-mode-setup ()
       git-commit-mode-hook
@@ -5956,14 +6029,17 @@ This also disables line numbers and decorations."
   :config
 
   (defun majutsu-jjdescription-insert-ticket-name ()
-    "Insert a ticket prefix from the closest local bookmark."
+    "Insert the ticket name from the closest local bookmark if feasible.
+The ticket goes at the end of the subject line. Point stays before the
+ticket, so the subject is typed in front of it."
     (when-let* ((ticket
                  (cl-some #'log-edit-extract-ticket-name
                           (majutsu-jj-lines "log" "--no-graph" "-r" "closest_bookmark(@)"
                                             "-T" "local_bookmarks.map(|b| b.name() ++ \"\\n\")"))))
       (unless (string-search ticket
                              (or (majutsu-jjdescription-buffer-message) ""))
-        (insert ticket))))
+        (save-excursion
+          (insert " " ticket)))))
 
   (defhook! my--majutsu-jjdescription-mode-setup ()
     majutsu-jjdescription-setup-hook
