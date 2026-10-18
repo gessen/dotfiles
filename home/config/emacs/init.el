@@ -4207,6 +4207,27 @@ NODE should be a tree-sitter function node with a `parameters' field."
           ("<f5>" . #'eglot-momentary-inlay-hints))
   :config
 
+  (defun set-leader-keys-for-eglot! (key definition capability &rest more)
+    "Add Eglot leader bindings as KEY, DEFINITION, CAPABILITY triples.
+Use DEFINITION when the server supports CAPABILITY, otherwise resolve
+KEY with Eglot's map disabled, so `which-key' sees the fallback command.
+MORE contains further triples. Capabilities are checked in the current
+buffer at lookup time."
+    (declare (indent defun))
+    (while key
+      (let ((required-capability capability)
+            (fallback-key (kbd (concat my-major-mode-leader-key " " key))))
+        (set-leader-keys-for-minor-mode! 'eglot--managed-mode
+          key `(menu-item "" ,definition
+                 :filter ,(lambda (command)
+                            (if (eglot-server-capable required-capability)
+                                command
+                              (let ((eglot--managed-mode nil))
+                                (key-binding fallback-key)))))))
+      (setq key (pop more)
+            definition (pop more)
+            capability (pop more))))
+
   (set-prefixes-for-minor-mode! 'eglot--managed-mode
     "a" "code actions"
     "f" "format"
@@ -4216,34 +4237,41 @@ NODE should be a tree-sitter function node with a `parameters' field."
     "s" "session"
     "t" "toggle")
 
-  (set-leader-keys-for-minor-mode! 'eglot--managed-mode
+  (set-leader-keys-for-eglot!
     ;; Code actions
-    "a a" #'eglot-code-actions
-    "a e" #'eglot-code-action-extract
-    "a f" #'eglot-code-action-quickfix
-    "a i" #'eglot-code-action-organize-imports
-    "a l" #'eglot-code-action-inline
-    "a w" #'eglot-code-action-rewrite
+    "a a" #'eglot-code-actions :codeActionProvider
+    "a e" #'eglot-code-action-extract :codeActionProvider
+    "a f" #'eglot-code-action-quickfix :codeActionProvider
+    "a i" #'eglot-code-action-organize-imports :codeActionProvider
+    "a l" #'eglot-code-action-inline :codeActionProvider
+    "a w" #'eglot-code-action-rewrite :codeActionProvider
 
     ;; Format
-    "f f" #'eglot-format-buffer
-    "f r" #'eglot-format
+    "f f" #'eglot-format-buffer :documentFormattingProvider
+    "f r" #'eglot-format :documentRangeFormattingProvider
 
     ;; Goto
-    "g c" #'eglot-show-call-hierarchy
-    "g d" #'eglot-find-declaration
+    "g c" #'eglot-show-call-hierarchy :callHierarchyProvider
+    "g d" #'eglot-find-declaration :declarationProvider
+    "g i" #'eglot-find-implementation :implementationProvider
+    "g t" #'eglot-find-type-definition :typeDefinitionProvider
+    "g T" #'eglot-show-type-hierarchy :typeHierarchyProvider
+
+    ;; Refactor
+    "r r" #'eglot-rename :renameProvider
+
+    ;; Toggle
+    "t i" #'eglot-inlay-hints-mode :inlayHintProvider
+    "t s" #'eglot-semantic-tokens-mode :semanticTokensProvider)
+
+  (set-leader-keys-for-minor-mode! 'eglot--managed-mode
+    ;; Goto
     "g e" #'flymake-show-project-diagnostics
     "g g" #'xref-find-definitions
-    "g i" #'eglot-find-implementation
     "g r" #'xref-find-references
-    "g t" #'eglot-find-typeDefinition
-    "g T" #'eglot-show-type-hierarchy
 
     ;; Help
     "h h" #'eldoc-doc-buffer
-
-    ;; Refactor
-    "r r" #'eglot-rename
 
     ;; Session
     "s d" #'eglot-describe-connection
@@ -4253,11 +4281,7 @@ NODE should be a tree-sitter function node with a `parameters' field."
     "s l" #'eglot-list-connections
     "s q" #'eglot-shutdown
     "s Q" #'eglot-shutdown-all
-    "s r" #'eglot-reconnect
-
-    ;; Toggle
-    "t i" #'eglot-inlay-hints-mode
-    "t s" #'eglot-semantic-tokens-mode)
+    "s r" #'eglot-reconnect)
 
   ;; Tree-sitter produces a better Imenu.
   (setq eglot-stay-out-of '(imenu))
