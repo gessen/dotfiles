@@ -79,6 +79,10 @@
     ];
 
     stateVersion = "25.05";
+
+    extraProfileCommands = ''
+      rm -rf "$out/share/mime"
+    '';
   };
 
   programs.home-manager.enable = true;
