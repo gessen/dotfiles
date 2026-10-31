@@ -227,6 +227,12 @@ abbr -a et emacs -nw
 
 abbr -a se sudoedit
 
+if test "$INSIDE_EMACS" = ghostel
+    abbr -a f ghostel_cmd find-file
+    abbr -a g ghostel_cmd magit-status-setup-buffer '(pwd)'
+    abbr -a j ghostel_cmd majutsu-log-setup-buffer
+end
+
 ### History
 
 abbr -a hm history merge
