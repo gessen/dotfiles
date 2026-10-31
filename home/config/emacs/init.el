@@ -3449,6 +3449,23 @@ defeats the purpose of `corfu-sort-function'."
 ;; based on major modes.
 (use-package! flymake-collection)
 
+;;;; Automatic formatting
+
+;; Package `reformatter' lets authors easily define an idiomatic command to
+;; reformat the current buffer using a command-line program, together with an
+;; optional minor mode which can apply this command automatically on save.
+(use-package! reformatter
+  :ensure (:wait t)
+  :demand t
+  :config
+
+  (defadvice! my--reformatter-kill-empty-error-buffer (name &rest _)
+    :after #'reformatter--do-region
+    "Kill the error buffer of reformatter NAME if it is empty."
+    (when-let* ((buffer (get-buffer (format "*%s errors*" name))))
+      (when (zerop (buffer-size buffer))
+        (kill-buffer buffer)))))
+
 ;;;; Online documentation
 
 ;; Package `devdocs' is a documentation viewer for Emacs similar to the built-in
@@ -3656,11 +3673,38 @@ defeats the purpose of `corfu-sort-function'."
          ;; Append to BSD style
          ,@(cdr (car (c-ts-mode--simple-indent-rules 'cpp 'bsd))))))))
 
-  (set-prefixes-for-major-mode! 'c-ts-mode "s" "session")
-  (set-prefixes-for-major-mode! 'c++-ts-mode "s" "session")
+  (defvar my--clang-format-region-args nil
+    "Arguments selecting the region for clang-format.")
 
-  (set-leader-keys-for-major-mode! 'c-ts-mode "s s" #'eglot)
-  (set-leader-keys-for-major-mode! 'c++-ts-mode "s s" #'eglot)
+  (reformatter-define clang-format
+    :program "clang-format"
+    :args (append (when buffer-file-name
+                    (list (concat "--assume-filename=" buffer-file-name)))
+                  my--clang-format-region-args)
+    :mode nil)
+
+  (defadvice! my--clang-format-region-with-context
+      (fn beg end &optional display-errors)
+    :around #'clang-format-region
+    "Format BEG to END with the whole buffer as clang-format's context."
+    (save-restriction
+      (widen)
+      (let ((my--clang-format-region-args
+             (list (format "--lines=%d:%d"
+                           (line-number-at-pos beg)
+                           (line-number-at-pos (max beg (1- end)))))))
+        (funcall fn (point-min) (point-max) display-errors))))
+
+  (dolist (mode '(c-ts-mode c++-ts-mode))
+    (set-prefixes-for-major-mode! mode
+      "f" "format"
+      "s" "session")
+
+    (set-leader-keys-for-major-mode! mode
+      "f f" #'clang-format-buffer
+      "f r" #'clang-format-region
+
+      "s s" #'eglot))
 
   ;; Set custom indent style based on BSD for both C and C++.
   (setopt c-ts-mode-indent-style 'my--c-ts-mode-indent-style)
@@ -3671,7 +3715,18 @@ defeats the purpose of `corfu-sort-function'."
 ;;;; Fish
 
 ;; Package `fish-mode' provides a major mode for Fish shell scripts.
-(use-package! fish-mode)
+(use-package! fish-mode
+  :config
+
+  (reformatter-define fish-format
+    :program "fish_indent"
+    :mode nil)
+
+  (set-prefixes-for-major-mode! 'fish-mode "f" "format")
+
+  (set-leader-keys-for-major-mode! 'fish-mode
+    "f f" #'fish-format-buffer
+    "f r" #'fish-format-region))
 
 ;;;; Markdown
 
@@ -3745,9 +3800,8 @@ defeats the purpose of `corfu-sort-function'."
 
 ;;;; Python
 
-;; Feature `python-ts-mode' provides major mode for Python, powered by
-;; tree-sitter.
-(use-feature! python-ts-mode
+;; Feature `python' provides major mode for Python, powered by tree-sitter.
+(use-feature! python
   :config
 
   (defhook! my--python-ts-mode-setup ()
@@ -3756,8 +3810,44 @@ defeats the purpose of `corfu-sort-function'."
     (setq-local fill-column 100)
     (display-fill-column-indicator-mode -1))
 
-  (set-prefixes-for-major-mode! 'python-ts-mode "s" "session")
-  (set-leader-keys-for-major-mode! 'python-ts-mode "s s" #'eglot))
+  (defvar my--ruff-format-region-args nil
+    "Arguments selecting the region for ruff.")
+
+  (reformatter-define ruff-format
+    :program "ruff"
+    :args (append '("format" "-")
+                  (when buffer-file-name
+                    (list "--stdin-filename" buffer-file-name))
+                  my--ruff-format-region-args)
+    :mode nil)
+
+  (defadvice! my--ruff-format-region-with-context
+      (fn beg end &optional display-errors)
+    :around #'ruff-format-region
+    "Format BEG to END with the whole buffer as ruff's context."
+    (save-restriction
+      (widen)
+      (let ((my--ruff-format-region-args
+             (unless (and (= beg (point-min)) (= end (point-max)))
+               (list "--range"
+                     (save-excursion
+                       (mapconcat
+                        (lambda (pos)
+                          (goto-char pos)
+                          (format "%d:%d" (line-number-at-pos)
+                                  (1+ (- pos (line-beginning-position)))))
+                        (list beg end) "-"))))))
+        (funcall fn (point-min) (point-max) display-errors))))
+
+  (set-prefixes-for-major-mode! 'python-ts-mode
+    "f" "format"
+    "s" "session")
+
+  (set-leader-keys-for-major-mode! 'python-ts-mode
+    "f f" #'ruff-format-buffer
+    "f r" #'ruff-format-region
+
+    "s s" #'eglot))
 
 ;;;; Rust
 
@@ -3862,8 +3952,20 @@ NODE should be a tree-sitter function node with a `parameters' field."
               (string-join (list (my--rust-ts-mode--defun-name parent) name) " ")
             name)))))
 
-  (set-prefixes-for-major-mode! 'rust-ts-mode "s" "session")
-  (set-leader-keys-for-major-mode! 'rust-ts-mode "s s" #'eglot)
+  (reformatter-define rustfmt
+    :program "rustfmt"
+    :args '("+nightly")
+    :mode nil)
+
+  (set-prefixes-for-major-mode! 'rust-ts-mode
+    "f" "format"
+    "s" "session")
+
+  (set-leader-keys-for-major-mode! 'rust-ts-mode
+    "f f" #'rustfmt-buffer
+    "f r" #'rustfmt-region
+
+    "s s" #'eglot)
 
   ;; Fontify suffixes of number literals as types.
   (setopt rust-ts-mode-fontify-number-suffix-as-type t)
@@ -3939,17 +4041,27 @@ NODE should be a tree-sitter function node with a `parameters' field."
   :hook (sh-base-mode-hook . flymake-mode)
   :config
 
-  ;; Set the default indentation.
-  (setopt sh-basic-offset 2)
-
-  ;; Always indent relative to the continued line's beginning.
-  (setopt sh-indent-after-continuation 'always)
+  (reformatter-define shfmt
+    :program "shfmt"
+    :args (append '("--indent" "2"
+                    "--binary-next-line"
+                    "--space-redirects"
+                    "--case-indent")
+                  (when buffer-file-name
+                    (list (concat "--filename=" buffer-file-name))))
+    :mode nil)
 
   (dolist (mode '(bash-ts-mode sh-mode))
-    (set-prefixes-for-major-mode! mode "i" "insert")
+    (set-prefixes-for-major-mode! mode
+      "f" "format"
+      "i" "insert")
 
     (set-leader-keys-for-major-mode! mode
       "\\"  #'sh-backslash-region
+
+      "f f" #'shfmt-buffer
+      "f r" #'shfmt-region
+
       "i c" #'sh-case
       "i e" #'sh-indexed-loop
       "i f" #'sh-function
@@ -3960,30 +4072,18 @@ NODE should be a tree-sitter function node with a `parameters' field."
       "i s" #'sh-select
       "i u" #'sh-until
       "i w" #'sh-while
-      "s"   #'sh-set-shell))
 
+      "s"   #'sh-set-shell))
 
   ;; Silence messages when opening Shell scripts.
   (dolist (func '(sh-set-shell sh-make-vars-local))
-    (advice-add func :around #'advice-silence-messages!)))
+    (advice-add func :around #'advice-silence-messages!))
 
-;; Package `'shfmt' provides commands and a minor mode for easily reformatting
-;; shell scripts using the external "shfmt" program.
-(use-package! shfmt
-  :init
+  ;; Set the default indentation.
+  (setopt sh-basic-offset 2)
 
-  (dolist (mode '(bash-ts-mode sh-mode))
-    (set-prefixes-for-major-mode! mode "=" "format")
-
-    (set-leader-keys-for-major-mode! mode
-      "= =" #'shfmt-buffer
-      "= r" #'shfmt-region))
-
-  :config
-
-  ;; Set indentation to 2 spaces, allow binary ops to start a line and follow
-  ;; redirect operators by a space.
-  (setq shfmt-arguments '("-i" "2" "-bn" "-sr" "-ci")))
+  ;; Always indent relative to the continued line's beginning.
+  (setopt sh-indent-after-continuation 'always))
 
 ;;; Configuration file formats
 
@@ -4094,8 +4194,8 @@ NODE should be a tree-sitter function node with a `parameters' field."
   :config
 
   (set-prefixes-for-minor-mode! 'eglot--managed-mode
-    "=" "format"
     "a" "code actions"
+    "f" "format"
     "g" "goto"
     "h" "help"
     "r" "refactor"
@@ -4103,10 +4203,6 @@ NODE should be a tree-sitter function node with a `parameters' field."
     "t" "toggle")
 
   (set-leader-keys-for-minor-mode! 'eglot--managed-mode
-    ;; Format
-    "= =" #'eglot-format-buffer
-    "= r" #'eglot-format
-
     ;; Code actions
     "a a" #'eglot-code-actions
     "a e" #'eglot-code-action-extract
@@ -4114,6 +4210,10 @@ NODE should be a tree-sitter function node with a `parameters' field."
     "a i" #'eglot-code-action-organize-imports
     "a l" #'eglot-code-action-inline
     "a w" #'eglot-code-action-rewrite
+
+    ;; Format
+    "f f" #'eglot-format-buffer
+    "f r" #'eglot-format
 
     ;; Goto
     "g c" #'eglot-show-call-hierarchy
