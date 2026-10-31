@@ -3620,7 +3620,7 @@ defeats the purpose of `corfu-sort-function'."
 ;; Feature `c-ts-mode' provides major mode for editing both C and C++, powered
 ;; by tree-sitter.
 (use-feature! c-ts-mode
-  :init
+  :config
 
   (defhook! my--c-ts-mode-setup ()
     c-ts-mode-hook
@@ -3633,14 +3633,6 @@ defeats the purpose of `corfu-sort-function'."
     "Set custom settings for `c++-ts-mode'."
     ;; Select C++ documents when inside `c++-ts-mode' buffers.
     (setq-local devdocs-current-docs '("cpp")))
-
-  (set-prefixes-for-major-mode! 'c-ts-mode "s" "session")
-  (set-prefixes-for-major-mode! 'c++-ts-mode "s" "session")
-
-  (set-leader-keys-for-major-mode! 'c-ts-mode "s s" #'eglot)
-  (set-leader-keys-for-major-mode! 'c++-ts-mode "s s" #'eglot)
-
-  :config
 
   (defun my--c-ts-mode-indent-style ()
     "Override the built-in BSD indentation style with some additional rules."
@@ -3663,6 +3655,12 @@ defeats the purpose of `corfu-sort-function'."
          ((n-p-gp nil nil "namespace_definition") grand-parent 0)
          ;; Append to BSD style
          ,@(cdr (car (c-ts-mode--simple-indent-rules 'cpp 'bsd))))))))
+
+  (set-prefixes-for-major-mode! 'c-ts-mode "s" "session")
+  (set-prefixes-for-major-mode! 'c++-ts-mode "s" "session")
+
+  (set-leader-keys-for-major-mode! 'c-ts-mode "s s" #'eglot)
+  (set-leader-keys-for-major-mode! 'c++-ts-mode "s s" #'eglot)
 
   ;; Set custom indent style based on BSD for both C and C++.
   (setopt c-ts-mode-indent-style 'my--c-ts-mode-indent-style)
@@ -3709,7 +3707,7 @@ defeats the purpose of `corfu-sort-function'."
 ;; case diagram, class diagram, activity diagram, component diagram, state
 ;; diagram and object diagram.
 (use-package! plantuml-mode
-  :init
+  :config
 
   (defun plantuml-completion-at-point ()
     "Get PlantUML keyword completion."
@@ -3726,8 +3724,6 @@ defeats the purpose of `corfu-sort-function'."
               nil 'local)
     (add-hook 'flymake-diagnostic-functions #'flymake-plantuml nil 'local)
     (flymake-mode +1))
-
-  :config
 
   ;; Use binary version instead of server, we do not want to send stuff to
   ;; plantuml servers
@@ -3752,7 +3748,7 @@ defeats the purpose of `corfu-sort-function'."
 ;; Feature `python-ts-mode' provides major mode for Python, powered by
 ;; tree-sitter.
 (use-feature! python-ts-mode
-  :init
+  :config
 
   (defhook! my--python-ts-mode-setup ()
     python-ts-mode-hook
@@ -3768,7 +3764,7 @@ defeats the purpose of `corfu-sort-function'."
 ;; Feature `rust-ts-mode' provides major mode for editing Rust, powered by
 ;; tree-sitter.
 (use-feature! rust-ts-mode
-  :init
+  :config
 
   (defhook! my--rust-ts-mode-setup ()
     rust-ts-mode-hook
@@ -3868,8 +3864,6 @@ NODE should be a tree-sitter function node with a `parameters' field."
 
   (set-prefixes-for-major-mode! 'rust-ts-mode "s" "session")
   (set-leader-keys-for-major-mode! 'rust-ts-mode "s s" #'eglot)
-
-  :config
 
   ;; Fontify suffixes of number literals as types.
   (setopt rust-ts-mode-fontify-number-suffix-as-type t)
@@ -4008,7 +4002,7 @@ NODE should be a tree-sitter function node with a `parameters' field."
 ;; Feature `toml-ts-mode' provides major mode for editing TOML, powered by
 ;; tree-sitter
 (use-feature! toml-ts-mode
-  :init
+  :config
 
   (set-prefixes-for-major-mode! 'toml-ts-mode "s" "session")
   (set-leader-keys-for-major-mode! 'toml-ts-mode "s s" #'eglot))
