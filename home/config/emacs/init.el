@@ -4479,6 +4479,35 @@ help buffer.")
 ;;; Applications
 ;;;; Large Language Models
 
+;; Package `agent-shell' is a native Emacs shell to interact with LLM agents
+;; powered by Agent Client Protocol. With `agent-shell', you can chat with the
+;; likes of Gemini CLI, Claude Code, Mistral Vibe, or any other ACP-driven
+;; agent.
+(use-package! agent-shell
+  :commands (agent-shell-send-file agent-shell-send-region)
+  :init
+
+  (set-leader-keys!
+    "a f" #'agent-shell-send-file
+    "a p" #'agent-shell-prompt-compose
+    "a r" #'agent-shell-send-region
+    "a s" #'agent-shell)
+
+  :config
+
+  ;; Hide welcome message.
+  (setopt agent-shell-show-welcome-message nil)
+
+  ;; Use Oh-My-Pi as a default provider.
+  (setopt agent-shell-preferred-agent-config 'omp)
+
+  ;; Display a formatted box showing token counts, context window usage, and
+  ;; cost information after each agent response.
+  (setopt agent-shell-show-usage-at-turn-end t)
+
+  ;; Show the session's cumulative cost in the header.
+  (setopt agent-shell-show-cost-indicator t))
+
 ;; Package `gptel' provides a simple Large Language Model chat client for Emacs,
 ;; offering support for multiple models and backends. It integrates seamlessly
 ;; with Emacs, remaining accessible at any time and working uniformly across
@@ -4516,6 +4545,14 @@ help buffer.")
        :input-cost 0.1
        :output-cost 0.5
        :cutoff-date "2026-05")
+      (gpt-6.1-terra
+       :description "Fast, efficient model"
+       :capabilities (media tool-use json url responses-api)
+       :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp")
+       :context-window 1050
+       :input-cost 1
+       :output-cost 5
+       :cutoff-date "2026-06")
       (gpt-6.1-sol
        :description "Complex coding and agentic workflows"
        :capabilities (media tool-use json url responses-api)
@@ -4566,8 +4603,8 @@ help buffer.")
                                            my--gptel-anthropic-models))))
     (setopt gptel-backend backend-copilot))
 
-  ;; Set GPT-6.1 Sol as the default model.
-  (setopt gptel-model 'gpt-6.1-sol)
+  ;; Set GPT-6.1 Terra as the default model.
+  (setopt gptel-model 'gpt-6.1-terra)
 
   ;; Enable advanced options in `gptel-menu'.
   (setopt gptel-expert-commands t)
@@ -4655,6 +4692,14 @@ help buffer.")
   ;; Register all tools.
   (mapc (apply-partially #'apply #'gptel-make-tool)
         (llm-tool-collection-get-all)))
+
+;; Package `shell-maker' is a convenience wrapper around Comint mode used for
+;; building concrete shells.
+(use-package! shell-maker
+  :config
+
+  ;; Do not litter `user-emacs-directory' with `shell-maker' files.
+  (setopt shell-maker-root-path my-cache-dir))
 
 ;;;; Organisation
 
