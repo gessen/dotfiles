@@ -36,6 +36,7 @@
       hunspellDicts.en_US
       jq
       jujutsu
+      kache
       less
       librsync
       libsysprof-capture
