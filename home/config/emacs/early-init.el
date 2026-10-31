@@ -17,18 +17,13 @@
 (setq autoload-compute-prefixes nil)
 
 ;; Prevent the glimpse of un-styled Emacs by disabling these UI elements early.
-;; Set frame size to be slightly larger and always create frames in top left
-;; corner of the screen.
+;; Set frame size to be larger.
 (setq default-frame-alist '((menu-bar-lines . 0)
                             (tool-bar-lines . 0)
                             (vertical-scroll-bars)
-                            (user-size . t)
                             (width . 160)
                             (height . 55)
                             (font . "monospace-13")))
-
-;; Set initial frame to be maximized
-; (setq initial-frame-alist '((fullscreen . maximized)))
 
 ;; Resizing the Emacs frame can be a terribly expensive part of changing the
 ;; font. By inhibiting this, we easily halve startup times with fonts that are
