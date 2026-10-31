@@ -77,6 +77,16 @@ if type -q kitty
         string replace bin/kitty lib/kitty/terminfo)
 end
 
+### Mise
+
+if type -q mise
+    set -l mise_init $__fish_cache_dir/mise-init.fish
+    if test (type -p mise) -nt $mise_init; or ! test -s $mise_init
+        mise activate --shims >$mise_init
+    end
+    source $mise_init
+end
+
 ### Ninja
 
 # Include the current load to the ninja status
