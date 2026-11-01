@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+set -eo
+
+docker buildx build \
+  --tag ew-devenv:alsi22 \
+  --tag ew-devenv:latest \
+  --network host \
+  --ssh default \
+  --build-arg BASE_IMAGE=jammy \
+  --build-arg BUILD_OS=alsi22 \
+  --build-arg USER="$(whoami)" \
+  --build-arg USER_ID="$(id -u)" \
+  --build-arg GROUP_ID="$(id -g)" \
+  .
