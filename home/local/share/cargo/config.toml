@@ -7,9 +7,12 @@ rustflags = [
 rustdocflags = [
   "-Clink-arg=-Wl,-rpath,/opt/openssl/lib",
 ]
-rustc-wrapper = "sccache"
+rustc-wrapper = "kache"
 
 [env]
+HOST_CC = "kache cc"
+HOST_CXX = "kache c++"
+CC_KNOWN_WRAPPER_CUSTOM = "kache"
 LIBCXX_INSTALL_PATH = "/opt/libc++"
 OPENSSL_INSTALL_PATH = "/opt/openssl"
 V8_INSTALL_PATH = "/opt/v8"
