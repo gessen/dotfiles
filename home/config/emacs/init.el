@@ -724,7 +724,8 @@ For details on DATA, CONTEXT, and signal, see
                      grep-mode))
            (body-function . select-window))
           ;; Compilation window in fullscreen
-          ((derived-mode . compilation-mode)
+          ((or . ((derived-mode . compilation-mode)
+                  (derived-mode . ghostel-mode)))
            (display-buffer-full-frame))
           ;; Select Eldoc window when launching it
           ("\\*eldoc.*\\*"
@@ -1120,7 +1121,7 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
   (setopt project-compilation-buffer-name-function
           #'project-prefixed-buffer-name)
 
-  ;; Include Dired and Magit.
+  ;; Include Dired, Magit and Ghostel.
   (setopt project-switch-commands
           '((project-find-file "Find file" ?f)
             (project-find-regexp "Find regexp" ?g)
@@ -1128,6 +1129,8 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
             (project-dired "Dired" ?D)
             (magit-project-status "Magit" ?m)
             (project-vc-dir "VC-Dir" ?v)
+            (ghostel-project "Ghostel" ?t)
+            (ghostel-project-list-buffers "Ghostel buffers" ?T)
             (project-eshell "Eshell" ?e)
             (project-any-command "Other" ?o)))
 
@@ -5259,14 +5262,8 @@ This also disables line numbers and decorations."
 ;; Show current directory when prompting for a shell command.
 (setopt shell-command-prompt-show-cwd t)
 
-(defun start-terminal ()
-  "Start a terminal emulator in a subprocess."
-  (interactive)
-  (start-process "term" nil "kitty"))
-
 (set-leader-keys! "!" (cons "shell cmd" #'shell-command))
 (set-leader-keys! "&" (cons "async shell cmd" #'async-shell-command))
-(set-leader-keys! "@" (cons "term" #'start-terminal))
 
 ;; Feature `compile' provides a way to run a shell command from Emacs and view
 ;; the output in real time, with errors and warnings highlighted and
@@ -5337,23 +5334,65 @@ possibly new window."
   :bind (("M-g c"   . #'consult-compile-error)
          ("M-g M-c" . #'consult-compile-error)))
 
-;; Package `fancy-compilation' enhances `compilation-mode' in the following
-;; ways:
-;; - support color output
-;; - support progress updates on a single line (as used by e.g. ninja)
-;; - use scrolling behavior similar to most terminals
-(use-package! fancy-compilation
-  :demand t
-  :after compile
+;; Package `ghostel' is a terminal emulator for Emacs powered by libghostty-vt,
+;; the VT engine behind the Ghostty terminal. It aims to be featureful, fast,
+;; robust and correct. Ghostel's features include synchronized output, true
+;; color, the Kitty keyboard and graphics protocols, hyperlinks, desktop
+;; notifications, progress reports and a lot more. Shell integration (directory
+;; tracking, prompt navigation) all works out of the box for bash, zsh, fish and
+;; nushell.
+(use-package! ghostel
+  :init
+
+  (set-leader-keys!
+    "@"   (cons "term" #'ghostel)
+    "p t" #'ghostel-project
+    "p T" #'ghostel-project-list-buffers)
+
+  ;; Feature `ghostel-compile' runs `compile'-style shell commands inside a
+  ;; Ghostel terminal buffer. Unlike `compile' (which runs commands through
+  ;; Comint), `ghostel-compile' runs them in a real TTY via Ghostel so programs
+  ;; that detect a terminal (progress bars, Colours, curses tools) behave as
+  ;; they would in an interactive shell.
+  (use-feature! ghostel-compile
+    :demand t
+    :config
+
+    (ghostel-compile-global-mode +1))
+
+  ;; Feature `ghostel-shell-command' wraps `async-shell-command' backed by a
+  ;; real TTY.
+  (use-feature! ghostel-shell-command
+    :demand t
+    :config
+
+    (ghostel-shell-command-global-mode +1))
+
   :config
 
-  ;; Behave as default `compilation-mode'.
-  (setopt fancy-compilation-override-colors nil
-          fancy-compilation-quiet-prelude nil
-          fancy-compilation-quiet-prolog nil
-          fancy-compilation-scroll-output 'first-error)
+  (defun ghostel-system-taskbar-progress (state progress)
+    "Handler for OSC 9;4 ConEmu progress reports.
+Shows STATE and PROGRESS in `mode-line-process' and determinate progress
+in the system taskbar. STATE is one of `remove', `set', `error',
+`indeterminate', or `pause'; PROGRESS is an integer 0-100 or nil."
+    (pcase state
+      ('remove (system-taskbar-progress nil))
+      ('set (system-taskbar-progress (/ (or progress 0) 100.0))))
+    (ghostel-default-progress state progress))
 
-  (fancy-compilation-mode +1))
+  ;; Use default progress function but also include `system-taskbar'.
+  (setopt ghostel-progress-function #'ghostel-system-taskbar-progress)
+
+  ;; Download a pre-built binary from GitHub releases without asking.
+  (setopt ghostel-module-auto-install 'download)
+
+  ;; Add leader key and `kill-current-buffer' keybind to exceptions list.
+  (setopt ghostel-keymap-exceptions
+          (append (list my-leader-key "C-q") ghostel-keymap-exceptions))
+
+  ;; Allow to call Magit from within Ghostel buffers.
+  (dolist (cmd '(magit-status-setup-buffer))
+    (push (list (symbol-name cmd) cmd) ghostel-eval-cmds)))
 
 ;;; Startup
 
