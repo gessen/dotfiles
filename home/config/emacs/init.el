@@ -5250,8 +5250,7 @@ possibly new window."
 ;; using Symbols Nerd Font Mono instead of the normal text font.
 (dolist (chars '((#xE000   . #xF8FF)
                  (#xF0000  . #xF1AF0)))
-  (set-fontset-font t chars (font-spec :family "Symbols Nerd Font Mono") nil
-                    'prepend))
+  (set-fontset-font t chars (font-spec :family "Symbols Nerd Font Mono")))
 
 ;; Show both line and column in modeline.
 (line-number-mode +1)
