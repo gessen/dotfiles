@@ -37,6 +37,7 @@
       jq
       jujutsu
       kache
+      kitty.terminfo
       less
       librsync
       libsysprof-capture
