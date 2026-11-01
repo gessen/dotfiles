@@ -5529,6 +5529,49 @@ This also disables line numbers and decorations."
   ;; Show fine differences for all displayed diff hunks.
   (setopt majutsu-diff-refine-hunk 'all))
 
+;; Package 'majutsu-delta' integrates Delta
+;; (https://github.com/dandavison/delta) with Majutsu, so that diffs in Majutsu
+;; are displayed with color highlighting provided by Delta.
+(use-package! majutsu-delta
+  :ensure (:host github :repo "gessen/majutsu-delta")
+  :after majutsu
+  :init
+
+  (defadvice! my--majutsu-delta-patch-args (args)
+    :filter-return #'majutsu-delta--make-delta-args
+    "Use the current frame's Delta feature instead of an explicit syntax theme.
+This also disables line numbers and decorations."
+    (let (filtered)
+      (while args
+        (let ((arg (pop args)))
+          (cond ((equal arg "--syntax-theme") (pop args))
+                ((string-prefix-p "--syntax-theme=" arg))
+                (t (push arg filtered)))))
+      (cons (if (eq (frame-parameter nil 'background-mode) 'dark)
+                "--features=modus-vivendi"
+              "--features=modus-operandi")
+            (nreverse filtered))))
+
+  (defadvice! my--majutsu-delta-unset-features (fn &rest args)
+    :around #'majutsu-delta-call-delta-and-convert-ansi-escape-sequences
+    "Ignore terminal-specific Delta features for this invocation."
+    (let ((process-environment (copy-sequence process-environment)))
+      (setenv "DELTA_FEATURES" nil)
+      (apply fn args)))
+
+  (defun majutsu-delta-toggle ()
+    "Toggles `majutsu-delta-mode' and refreshes Majutsu."
+    (interactive)
+    (majutsu-delta-mode
+     (if majutsu-delta-mode -1 +1))
+    (majutsu-refresh))
+
+  (transient-append-suffix
+    'majutsu-diff '(-1 -1 -1)
+    '("l" "Toggle majutsu-delta" majutsu-delta-toggle))
+
+  :hook (majutsu-mode-hook . majutsu-delta-mode))
+
 ;; Package `vc-jj' includes support for the Jujutsu version control system.
 (use-package! vc-jj)
 
