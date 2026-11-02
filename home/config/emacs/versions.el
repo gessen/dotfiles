@@ -556,16 +556,6 @@
                     :source "elpaca-menu-lock-file" :id keycast :type git
                     :protocol https :inherit t :depth treeless :ref
                     "a6518e1b48b08ba883e9b1a2db0872d5bf3d85f4"))
- (kkp :source "elpaca-menu-lock-file" :recipe
-      (:package "kkp" :fetcher github :repo "benotn/kkp" :files
-                ("*.el" "*.el.in" "dir" "*.info" "*.texi" "*.texinfo" "doc/dir"
-                 "doc/*.info" "doc/*.texi" "doc/*.texinfo" "lisp/*.el"
-                 "docs/dir" "docs/*.info" "docs/*.texi" "docs/*.texinfo"
-                 (:exclude ".dir-locals.el" "test.el" "tests.el" "*-test.el"
-                           "*-tests.el" "LICENSE" "README*" "*-pkg.el"))
-                :source "elpaca-menu-lock-file" :id kkp :type git :protocol
-                https :inherit t :depth treeless :ref
-                "82b7443e10a2ba287467b62e90b6adb6dd93dc99"))
  (llama :source "elpaca-menu-lock-file" :recipe
         (:package "llama" :fetcher github :repo "tarsius/llama" :files
                   ("llama.el" ".dir-locals.el") :source "elpaca-menu-lock-file"
