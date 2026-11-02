@@ -1484,7 +1484,14 @@ Operates on the current paragraph if no region is active."
   :hook (prog-mode-hook . ws-butler-mode)
 
   :init
-  (set-leader-keys! "t C-w" #'ws-butler-mode))
+
+  (set-leader-keys! "t C-w" #'ws-butler-mode)
+
+  :config
+
+  ;; Do not restore to the buffer trimmed whitespace right before point.
+  ;; This behavior isn't compatible with `vc-jj' and `diff-hl'.
+  (setopt ws-butler-keep-whitespace-before-point nil))
 
 ;;;; Indentation
 
@@ -5152,6 +5159,16 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
 
   ;; Feature `vc-dir' provides a directory status display under VC.
   (use-feature! vc-dir
+    :init
+
+    (defadvice! my--vc-dir-hide-state-silent
+        (vc-dir-hide-state &rest args)
+      :around #'vc-dir-hide-state
+      "Make `vc-dir-hide-state' silent when used with default argument."
+      (if (car args)
+          (apply vc-dir-hide-state args)
+        (apply #'advice-silence-messages! vc-dir-hide-state args)))
+
     :bind ( :map vc-dir-mode-map
             ("M-s" . nil)
             ("e"   . #'vc-ediff)
@@ -5163,6 +5180,8 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
     ;; Hide items whenever their state would change to 'up-to-date' or
     ;; 'ignored'.
     (setopt vc-dir-auto-hide-up-to-date t)))
+
+;;;;; Git
 
 ;; Feature `vc-git' contains a VC backend for the git version control system.
 (use-feature! vc-git
@@ -5470,6 +5489,11 @@ This also disables line numbers and decorations."
 
   ;; Allow using `q' to quit out of popups, in addition to `C-g'.
   (transient-bind-q-to-quit))
+
+;;;;; Jujutsu
+
+;; Package `vc-jj' includes support for the Jujutsu version control system.
+(use-package! vc-jj)
 
 ;;;; Terminal emulator
 
