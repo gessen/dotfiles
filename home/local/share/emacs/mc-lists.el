@@ -4,34 +4,87 @@
 
 (setq mc/cmds-to-run-for-all
       '(
+        backward-kill-sexp
+        backward-sexp
         backward-symbol
         beginning-of-visual-line
+        capitalize-dwim
+        comment-dwim
         comment-dwim-2
+        delete-horizontal-space
+        downcase-dwim
+        duplicate-and-comment-dwim
+        duplicate-dwim
         easy-kill
+        easy-kill-abort
+        easy-kill-append
+        easy-kill-delete-region
+        easy-kill-digit-argument
+        easy-kill-expand
+        easy-kill-mark-region
+        easy-kill-region
+        easy-kill-shrink
+        easy-kill-thing
+        easy-kill-unhighlight
+        easy-mark
+        easy-mark-word
         electric-pair-delete-pair
         end-of-visual-line
+        forward-sexp
         forward-symbol
         hungry-delete-backward
         hungry-delete-forward
-        keyboard-escape-quit
+        hydra-string-inflection/nil
+        hydra-string-inflection/string-inflection-camel-case
+        hydra-string-inflection/string-inflection-kebab-case
+        hydra-string-inflection/string-inflection-lower-camel-case
+        hydra-string-inflection/string-inflection-snake-case
+        hydra-string-inflection/string-inflection-upcase
+        indent-for-tab-command
         kill-region
+        kill-sexp
         kill-visual-line
+        mark-sexp
         markdown-outdent-or-delete
         mwim-beginning
         mwim-end
         org-self-insert-command
         set-mark-command-dwim
-        string-inflection-camelcase
+        string-inflection-camel-case
+        string-inflection-capital-snake-case
         string-inflection-kebab-case
-        string-inflection-lower-camelcase
-        string-inflection-underscore
+        string-inflection-lower-camel-case
+        string-inflection-snake-case
+        string-inflection-toggle
         string-inflection-upcase
+        transpose-sexps
+        transpose-words
+        upcase-dwim
+        wdired--self-insert
         yaml-electric-backspace
+        yaml-electric-dash-and-dot
+        zop-up-to-char
         ))
 
 (setq mc/cmds-to-run-once
       '(
+        copy-buffer-to-clipboard
+        copy-clipboard-to-buffer
+        easy-kill-help
+        golden-ratio-scroll-screen-down
+        golden-ratio-scroll-screen-up
+        hydra-string-inflection/body
         iedit-switch-to-mc-mode
+        indent-rigidly
+        indent-rigidly-left
+        indent-rigidly-left-to-tab-stop
+        indent-rigidly-right
+        indent-rigidly-right-to-tab-stop
+        keyboard-escape-quit
+        mouse-select-window
         mouse-set-region
         pixel-scroll-precision
+        tab-line-select-tab
+        undo-fu-only-redo-all
+        vundo
         ))
