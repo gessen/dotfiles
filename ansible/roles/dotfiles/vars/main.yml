@@ -22,6 +22,7 @@ dotfiles:
   - config/git/config-delta
   - config/git/config-local
   - config/git/ignore
+  - config/jj/config.toml
   - config/keepassxc/keepassxc.ini
   - config/kitty/dark-theme.auto.conf
   - config/kitty/kitty.conf
