@@ -709,6 +709,9 @@ For details on DATA, CONTEXT, and signal, see
           ("\\`\\*\\(Warnings\\|Compile-Log\\|Org Links\\)\\*\\'"
            (display-buffer-no-window)
            (allow-no-window . t))
+          ;; Make Majutsu behave like Magit.
+          ((derived-mode . majutsu-log-mode)
+           (display-buffer-full-frame))
           ;; Make Helpful behave more similar to builtin Help.
           ((derived-mode . helpful-mode)
            (display-buffer-reuse-mode-window display-buffer-pop-up-window)
@@ -1122,13 +1125,14 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
   (setopt project-compilation-buffer-name-function
           #'project-prefixed-buffer-name)
 
-  ;; Include Dired, Magit and Ghostel.
+  ;; Include Dired, Magit, Majutsu and Ghostel.
   (setopt project-switch-commands
           '((project-find-file "Find file" ?f)
             (project-find-regexp "Find regexp" ?g)
             (project-find-dir "Find directory" ?d)
             (project-dired "Dired" ?D)
             (magit-project-status "Magit" ?m)
+            (majutsu-project-log "Majutsu" ?j)
             (project-vc-dir "VC-Dir" ?v)
             (ghostel-project "Ghostel" ?t)
             (ghostel-project-list-buffers "Ghostel buffers" ?T)
@@ -5492,6 +5496,39 @@ This also disables line numbers and decorations."
 
 ;;;;; Jujutsu
 
+;; Package `majutsu' provides a Magit-style interface for Jujutsu, offering an
+;; efficient way to interact with JJ repositories from within Emacs.
+(use-package! majutsu
+  :ensure (:host github :repo "0WD0/majutsu")
+  :commands (majutsu-log-setup-buffer)
+  :init
+
+  (defadvice! my--majutsu-log-load-magit (&rest _)
+    :before #'majutsu-log
+    "Run `majutsu-log' with correct autoload."
+    (require 'magit))
+
+  (defun majutsu-project-log ()
+    "Run `majutsu-log' in the current project's root."
+    (interactive)
+    (majutsu-log (project-root (project-current t))))
+
+  (set-leader-keys! "g j" #'majutsu-log)
+
+  :bind ( :map majutsu-log-mode-map
+          ("E" . #'majutsu-ediff)
+          ("m" . #'majutsu-metaedit))
+
+  :config
+
+  (defhook! my--majutsu-jjdescription-mode-setup ()
+    majutsu-jjdescription-setup-hook
+    "Set custom settings for `majutsu-jjdescription-mode'."
+    (display-fill-column-indicator-mode +1))
+
+  ;; Show fine differences for all displayed diff hunks.
+  (setopt majutsu-diff-refine-hunk 'all))
+
 ;; Package `vc-jj' includes support for the Jujutsu version control system.
 (use-package! vc-jj)
 
@@ -5639,8 +5676,9 @@ in the system taskbar. STATE is one of `remove', `set', `error',
   (setopt ghostel-keymap-exceptions
           (append (list my-leader-key "C-q") ghostel-keymap-exceptions))
 
-  ;; Allow to call Magit from within Ghostel buffers.
-  (dolist (cmd '(magit-status-setup-buffer))
+  ;; Allow to call Magit and Majutsu from within Ghostel buffers.
+  (dolist (cmd '(magit-status-setup-buffer
+                 majutsu-log-setup-buffer))
     (push (list (symbol-name cmd) cmd) ghostel-eval-cmds)))
 
 ;;;; Debugging
