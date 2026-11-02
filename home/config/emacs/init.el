@@ -3728,6 +3728,20 @@ defeats the purpose of `corfu-sort-function'."
     "f f" #'fish-format-buffer
     "f r" #'fish-format-region))
 
+;;;; JSON
+
+;; Feature `json-ts-mode' provides major mode for JSON, powered by tree-sitter.
+(use-feature! json-ts-mode
+  :config
+
+  (set-prefixes-for-major-mode! 'json-ts-mode "f" "format")
+
+  (set-leader-keys-for-major-mode! 'json-ts-mode
+    "f f" #'json-pretty-print-buffer
+    "f F" #'json-pretty-print-buffer-ordered
+    "f r" #'json-pretty-print
+    "f R" #'json-pretty-print-ordered))
+
 ;;;; Markdown
 
 ;; Package `markdown-mode' provides a major mode for Markdown-formatted text.
