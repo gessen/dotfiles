@@ -6341,7 +6341,7 @@ in the system taskbar. STATE is one of `remove', `set', `error',
   (setq calendar-longitude 19.944981)
 
   ;; Set Modus themes as light and dark respectively.
-  (setopt circadian-themes '((:sunrise . (modus-operandi modus-operandi-tinted))
+  (setopt circadian-themes '((:sunrise . (modus-vivendi modus-vivendi-tinted))
                              (:sunset . (modus-vivendi modus-vivendi-tinted))))
 
   (circadian-setup))
