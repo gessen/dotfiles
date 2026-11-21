@@ -35,7 +35,7 @@ set -gx RUSTUP_HOME $xdg_data_home/rustup
 ### Editor
 
 # Set both EDITOR and VISUAL to emacsclient with autostarted server
-set -gx EDITOR emacsclient --tty
+set -gx EDITOR emacsclient --create-frame
 set -gx VISUAL $EDITOR
 
 # emacsclient starts emacs in daemon mode if it can't connect to it
