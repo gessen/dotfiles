@@ -5389,6 +5389,20 @@ possibly new window."
   :defer 1
   :config
 
+  (defadvice! my--server-load-message-modes (files proc &optional _nowait)
+    :before #'server-visit-files
+    "Load VCS commit message support before PROC visits FILES."
+    (pcase-dolist (`(,file . ,_) files)
+      (cond
+       ((and (not (featurep 'git-commit))
+             (string-match-p
+              (rx (or "COMMIT_EDITMSG" "MERGE_MSG" "NOTES_EDITMSG" "TAG_EDITMSG"
+                      "PULLREQ_EDITMSG" "MERGEREQ_EDITMSG" "MSG"
+                      "BRANCH_DESCRIPTION" "EDIT_DESCRIPTION")
+                  eos)
+              file))
+        (require 'git-commit)))))
+
   ;; Inhibit displaying instructions on how to exit the client on connection.
   (setopt server-client-instructions nil)
 
