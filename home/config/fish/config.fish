@@ -3,6 +3,9 @@
 # Create cache directory
 test -d $__fish_cache_dir; or mkdir -p $__fish_cache_dir
 
+# Add locally installed binaries
+fish_add_path -P $HOME/.local/bin
+
 ### XDG
 
 # Set XDG dir vars locally
@@ -233,7 +236,7 @@ abbr -a mjg emacsclient --create-frame --no-wait --eval '"(majutsu-log)"'
 abbr -a e emacs
 abbr -a et emacs --tty
 
-abbr -a se sudoedit
+abbr -a se EDITOR='(which $EDITOR)' sudoedit
 
 if test "$INSIDE_EMACS" = ghostel
     abbr -a f ghostel_cmd find-file
