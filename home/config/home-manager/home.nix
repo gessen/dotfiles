@@ -16,6 +16,7 @@
       bat
       btop
       bun
+      capnproto
       cmake
       delta
       diffnav
@@ -29,6 +30,7 @@
       fd
       fzf
       git
+      git-lfs
       glib.dev
       hunspellDicts.en_US
       jq
@@ -50,15 +52,20 @@
       patchelf
       pcre2.dev
       prettier
+      protobuf
       ripgrep
       rsync
+      ruff
       sccache
       serie
       shellcheck
       shfmt
       tombi
       tree
+      ty
+      typescript
       unzip
+      uv
       yazi
       zoxide
       zstd
