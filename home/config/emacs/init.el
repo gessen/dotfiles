@@ -4826,43 +4826,36 @@ reversed if called with universal argument."
     "g R" #'browse-at-remote-kill-dwim)
 
   (with-eval-after-load 'magit
-    (defadvice! my--browse-at-remote-with-magit-blob-mode (fn)
+    (defadvice! my--browse-at-remote-magit-blob-file (fn)
       :around #'browse-at-remote-get-url
-      "Allow `browse-at-remote' commands in `magit-blob-mode' buffers to open
-that file in your browser at the visited revision."
+      "Treat Magit blob buffers as visiting their historical file."
       (if magit-blob-mode
-          (let* ((filename magit-buffer-file-name)
-                 (remote-ref (browse-at-remote--remote-ref filename))
-                 (remote (car remote-ref))
-                 (ref magit-buffer-revision)
-                 (relname (f-relative filename (f-expand
-                                                (vc-git-root filename))))
-                 (target-repo (browse-at-remote--get-url-from-remote remote))
-                 (remote-type (browse-at-remote--get-remote-type
-                               (plist-get target-repo :unresolved-host)))
-                 (repo-url (plist-get target-repo :url))
-                 (url-formatter (browse-at-remote--get-formatter 'region-url
-                                                                 remote-type))
-                 (start (and (use-region-p) (min (region-beginning)
-                                                 (region-end))))
-                 (point-end (and (use-region-p) (max (region-beginning)
-                                                     (region-end))))
-                 (end (when point-end (if (eq (char-before point-end) ?\n)
-                                          (- point-end 1)
-                                        point-end)))
-                 (start-line (when start (line-number-at-pos start)))
-                 (end-line (when end (line-number-at-pos end)))
-                 (line
-                  (when browse-at-remote-add-line-number-if-no-region-selected
-                    (line-number-at-pos (point)))))
-            (unless url-formatter
-              (error (format "Origin repo parsing failed: %s" repo-url)))
+          (progn
+            (unless magit-buffer-revision-oid
+              (user-error "Cannot link a blob without a commit revision"))
+            (let ((buffer-file-name magit-buffer-file-name))
+              (funcall fn)))
+        (funcall fn)))
 
-            (funcall url-formatter repo-url ref relname
-                     (or start-line line)
-                     (when (and end-line (not (equal start-line end-line)))
-                       end-line)))
-        (funcall fn))))
+    (defadvice! my--browse-at-remote-magit-blob-revision (remote-ref)
+      :filter-return #'browse-at-remote--remote-ref
+      "Use a symbolic ref only when it names the visited Magit commit."
+      (if magit-blob-mode
+          (progn
+            (unless (car remote-ref)
+              (user-error "Cannot find a Git remote for this blob"))
+            (let* ((commit magit-buffer-revision-oid)
+                   (current-ref (cdr remote-ref))
+                   (symbolic-ref
+                    (and browse-at-remote-prefer-symbolic
+                         (or (and (equal commit (vc-git-working-revision
+                                                 magit-buffer-file-name))
+                                  (not (equal current-ref commit))
+                                  current-ref)
+                             (magit-name-local-branch commit)
+                             (magit-name-tag commit)))))
+              (cons (car remote-ref) (or symbolic-ref commit))))
+        remote-ref)))
 
   :config
 
