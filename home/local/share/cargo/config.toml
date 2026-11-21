@@ -21,3 +21,11 @@ debug = false
 inherits = "dev"
 debug = true
 split-debuginfo = "packed"
+
+[profile.deploy]
+inherits = "debug"
+debug = "line-tables-only"
+split-debuginfo = "off"
+
+[profile.deploy.package."*"]
+debug = false
