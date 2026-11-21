@@ -3850,7 +3850,11 @@ defeats the purpose of `corfu-sort-function'."
   (setopt c-ts-mode-indent-style 'my--c-ts-mode-indent-style)
 
   ;; Syntax-highlight Doxygen comment blocks.
-  (setopt c-ts-mode-enable-doxygen t))
+  (setopt c-ts-mode-enable-doxygen t)
+
+  (with-eval-after-load 'eglot
+    (add-to-list 'eglot-server-programs
+                 '((c-ts-mode c++-ts-mode) . ("clice" "serve")))))
 
 ;;;; Fish
 
