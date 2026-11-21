@@ -194,7 +194,7 @@ graphical frame is created."
 (defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
 (defvar elpaca-sources-directory (expand-file-name "sources/" elpaca-directory))
 (defvar elpaca-order '(elpaca :repo "https://github.com/progfolio/elpaca.git"
-                              :ref "5b0cbb19421ef20c140b46a7b1fb7d04240b53f6" :inherit ignore
+                              :ref "78b8e7cc98c198c8dbeb18140649e2d668126712" :inherit ignore
                               :files (:defaults "elpaca-test.el" (:exclude "extensions"))
                               :build (:not elpaca-activate)))
 (let* ((repo  (expand-file-name "elpaca/" elpaca-sources-directory))
