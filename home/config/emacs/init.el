@@ -3770,6 +3770,7 @@ defeats the purpose of `corfu-sort-function'."
                                   json-ts-mode
                                   markdown-ts-mode
                                   python-ts-mode
+                                  ruby-ts-mode
                                   rust-ts-mode
                                   toml-ts-mode)))
 
@@ -3993,6 +3994,38 @@ defeats the purpose of `corfu-sort-function'."
   (set-leader-keys-for-major-mode! 'python-ts-mode
     "f f" #'ruff-format-buffer
     "f r" #'ruff-format-region
+
+    "s s" #'eglot))
+
+;;;; Ruby
+
+;; Feature `ruby-ts-mode' provides major mode for Ruby, powered by tree-sitter.
+(use-feature! ruby-ts-mode
+  :config
+
+  (defhook! my--ruby-ts-mode-setup ()
+    ruby-ts-mode-hook
+    "Set custom settings for `ruby-ts-mode'."
+    (setq-local fill-column 120)
+    (setq-local indent-tabs-mode t)
+    (display-fill-column-indicator-mode -1))
+
+  (reformatter-define rubocop-format
+    :program "rubocop"
+    :args (list "--stdin" (or buffer-file-name "stdin.rb")
+                "--autocorrect"
+                "--stderr"
+                "--format" "quiet"
+                "--fail-level" "fatal")
+    :mode nil)
+
+  (set-prefixes-for-major-mode! 'ruby-ts-mode
+    "f" "format"
+    "s" "session")
+
+  (set-leader-keys-for-major-mode! 'ruby-ts-mode
+    "f f" #'rubocop-format-buffer
+    "f r" #'rubocop-format-region
 
     "s s" #'eglot))
 
