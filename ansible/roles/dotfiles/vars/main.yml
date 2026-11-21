@@ -30,11 +30,13 @@ dotfiles:
   - config/kitty/no-preference-theme.auto.conf
   - config/mpv/input.conf
   - config/mpv/mpv.conf
+  - config/npm/npmrc
   - config/ripgrep/config
   - config/rustfmt/rustfmt.toml
   - config/sccache/config
   - config/serie/config.toml
   - config/yazi/yazi.toml
+  - config/zed/settings.json
   - local/share/cargo/config.toml
   - local/share/emacs/mc-lists.el
   - ssh/config
