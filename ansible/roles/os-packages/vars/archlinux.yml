@@ -17,6 +17,7 @@ packages:
   - calibre
   - clang
   - cmake
+  - diffnav
   - difftastic
   - discord
   - dos2unix
