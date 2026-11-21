@@ -21,6 +21,7 @@ set -gx BUNDLE_USER_CACHE $xdg_cache_home/bundle
 set -gx BUNDLE_USER_CONFIG $xdg_config_home/bundle
 set -gx BUNDLE_USER_PLUGIN $xdg_data_home/bundle
 set -gx CARGO_HOME $xdg_data_home/cargo
+set -gx COPILOT_HOME $xdg_config_home/copilot
 set -gx DOCKER_CONFIG $xdg_config_home/docker
 set -gx GEM_HOME $xdg_data_home/gem
 set -gx GEM_SPEC_CACHE $xdg_cache_home/gem
