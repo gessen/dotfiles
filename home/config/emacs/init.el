@@ -1063,6 +1063,22 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
 (use-feature! project
   :init
 
+  (defun project-copy-path ()
+    "Copy the current file's path relative to the project root.
+In Dired, copy the path of the file at point, or of the listed
+directory when point is not on a file."
+    (interactive)
+    (let ((file (if (derived-mode-p 'dired-mode)
+                    (or (dired-get-filename nil t)
+                        (dired-current-directory))
+                  buffer-file-name)))
+      (unless file
+        (user-error "Current buffer is not visiting a file"))
+      (let* ((project (project-current t))
+             (path (file-relative-name file (project-root project))))
+        (kill-new path)
+        (message "%s" path))))
+
   (set-leader-keys!
     "p !" #'project-shell-command
     "p %" #'project-query-replace-regexp
@@ -1086,6 +1102,7 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
     "p s" #'project-save-some-buffers
     "p v" #'project-vc-dir
     "p x" #'project-execute-extended-command
+    "p w" #'project-copy-path
 
     "p m f" #'project-forget-project
     "p m F" #'project-forget-projects-under
