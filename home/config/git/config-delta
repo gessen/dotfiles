@@ -1,3 +1,5 @@
+[core]
+	pager = delta
 [delta]
 	features = line-numbers decorations navigate
 [delta "decorations"]
@@ -26,3 +28,5 @@
 	plus-style = syntax "#00381f"
 	plus-emph-style = syntax bold "#034f2f"
 	map-styles = bold magenta => syntax "#552f5f", bold cyan => syntax "#004065"
+[interactive]
+	difffilter = delta --color-only

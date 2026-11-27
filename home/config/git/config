@@ -1,5 +1,3 @@
-[core]
-	pager = delta
 [branch]
 	autosetuprebase = always
 	sort = committerdate
@@ -46,7 +44,6 @@
 	defaultbranch = master
 [interactive]
 	singlekey = true
-	difffilter = delta --color-only
 [merge]
 	conflictstyle = diff3
 	tool = emergeclient
