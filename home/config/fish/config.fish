@@ -331,13 +331,13 @@ abbr -a gcf git config --list
 abbr -a gdct git describe --tags '(git rev-list --tags --max-count=1)'
 
 abbr -a gd git diff
-abbr -a gd2 git -c delta.side-by-side=true diff
 abbr -a gds git diff --staged
-abbr -a gds2 git -c delta.side-by-side=true diff --staged
+abbr -a gd2 git -c delta.side-by-side=true diff
+abbr -a gd2s git -c delta.side-by-side=true diff --staged
 abbr -a gdt git -c diff.external=difft diff
-abbr -a gdst git -c diff.external=difft diff --staged
+abbr -a gdts git -c diff.external=difft diff --staged
 abbr -a gdw git diff --word-diff
-abbr -a gdsw git diff --staged --word-diff
+abbr -a gdws git diff --word-diff --staged
 abbr -a gdu git diff @{upstream}
 abbr -a gduc git diff @ @{upstream}
 abbr -a gdtool git difftool
