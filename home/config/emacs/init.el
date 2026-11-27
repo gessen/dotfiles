@@ -1166,7 +1166,10 @@ directory when point is not on a file."
   (setopt project-mode-line t)
 
   ;; Do not litter `user-emacs-directory' with Project persistent history.
-  (setopt project-list-file (cache-dir "projects.el")))
+  (setopt project-list-file (cache-dir "projects.el"))
+
+  ;; Ignore certain directories which are generated.
+  (setopt project-vc-ignores '(".understand-anything/")))
 
 ;; Feature `recentf' maintains a menu for visiting files that were operated on
 ;; recently. The recent files list is automatically saved across Emacs sessions.
