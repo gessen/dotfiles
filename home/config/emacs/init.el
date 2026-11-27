@@ -3772,6 +3772,25 @@ defeats the purpose of `corfu-sort-function'."
                                   rust-ts-mode
                                   toml-ts-mode)))
 
+;;;; C-like languages
+
+;; Feature `c-ts-common' provides comment, indentation and filling utilities
+;; shared by tree-sitter modes for C-like languages.
+(use-feature! c-ts-common
+  :config
+
+  ;; Treat `//!' as a comment marker rather than `//' followed by text `!', so
+  ;; `fill-paragraph' handles it like correctly.
+  (setq c-ts-common-comment-start-skip
+        (rx (or (seq "/" (+ "/"))
+                (seq "//!")
+                (seq "/" (+ "*")))
+            (* (syntax whitespace)))
+
+        c-ts-common-comment-start-line-regexp
+        (rx (or "//!" (seq "/" (+ "/")))
+            (* (syntax whitespace)))))
+
 ;;;; C/C++
 
 ;; Feature `c-ts-mode' provides major mode for editing both C and C++, powered
