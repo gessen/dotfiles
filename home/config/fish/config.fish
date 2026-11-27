@@ -334,8 +334,8 @@ abbr -a gd git diff
 abbr -a gds git diff --staged
 abbr -a gd2 git -c delta.side-by-side=hunk diff
 abbr -a gd2s git -c delta.side-by-side=hunk diff --staged
-abbr -a gdt git -c diff.external=difft diff
-abbr -a gdts git -c diff.external=difft diff --staged
+abbr -a gdt git -c pager.diff='"delta --tui"' diff
+abbr -a gdts git -c pager.diff='"delta --tui"' diff --staged
 abbr -a gdw git diff --word-diff
 abbr -a gdws git diff --word-diff --staged
 abbr -a gdu git diff @{upstream}

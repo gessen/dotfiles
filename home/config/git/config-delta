@@ -1,7 +1,15 @@
 [core]
 	pager = delta
 [delta]
-	features = line-numbers decorations navigate
+	features = line-numbers decorations navigate tui
+[delta "tui"]
+	file-header = stat
+	start-folded = true
+	view = diff-since git diff {commit}...
+	feature-key = side-by-side S
+	feature-key = line-numbers L
+	feature-key = difftastic *
+	feature-key = diff-since D
 [delta "decorations"]
 	file-style = yellow bold ul
 	file-decoration-style = yellow bold ul
@@ -30,3 +38,6 @@
 	map-styles = bold magenta => syntax "#552f5f", bold cyan => syntax "#004065"
 [interactive]
 	difffilter = delta --color-only
+[pager]
+	log = delta --tui
+	show = delta --tui
