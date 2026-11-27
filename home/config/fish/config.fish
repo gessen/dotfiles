@@ -945,6 +945,7 @@ abbr -a cc cargo check --package
 abbr -a cdoc cargo doc --no-deps --document-private-items --open --package
 abbr -a ct cargo nextest run --lib --package
 abbr -a ctp cargo nextest run --package
+abbr -a ctr cargo nextest run --rerun latest --retries 0
 abbr -a ctw cargo nextest run --workspace
 abbr -a cf cargo +nightly fmt
 abbr -a cv LD_LIBRARY_PATH=/opt/openssl/lib cargo xtask coverage --html -- cargo test --package
