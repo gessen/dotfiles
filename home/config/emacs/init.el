@@ -6,7 +6,7 @@
 
 ;;; Code:
 
-(defconst my-minimum-emacs-version "31.1"
+(defconst my-minimum-emacs-version "32.0"
   "This Emacs configuration does not support any Emacs version below this.")
 
 ;; Make sure we are running a modern enough Emacs, otherwise abort init.
@@ -14,9 +14,6 @@
   (error (concat "This Emacs configuration requires at least Emacs %s, "
                  "but you are running Emacs %s")
          my-minimum-emacs-version emacs-version))
-
-;; Just log warnings and immediately show errors.
-(setopt warning-minimum-level :error)
 
 ;;; Load built-in utility libraries
 
@@ -513,10 +510,6 @@ anything that can be a key's definition."
   ;; `which-key-replacement-alist'
   (setq which-key-allow-multiple-replacements t)
 
-  ;; Show remapped command if a command has been remapped given the currently
-  ;; active keymaps
-  (setq which-key-compute-remaps t)
-
   ;; Echo keystrokes almost instantly. It needs to be less than
   ;; `which-key-idle-delay' or else the keystroke echo will erase the
   ;; `which-key' popup.
@@ -624,24 +617,6 @@ anything that can be a key's definition."
 
 ;; Display tool-tips in TTY child frames.
 (without-display-graphic! (tty-tip-mode +1))
-
-;;;; Keyboard integration
-
-;; Package `kkp' provides support for the Kitty Keyboard Protocol. KKP defines
-;; an alternative way to handle keyboard input for programs running in the
-;; terminal. This allows, if the terminal (and intermediaries such as terminal
-;; multiplexers) support the protocol as well, the transmission of more detailed
-;; information about a key event from the terminal to Emacs, e.g., it transmits
-;; "<tab>" and "C-i" differently. Currently, there exists another solution which
-;; solves the same problem, xterm’s "modifyOtherKeys", which is already
-;; supported by Emacs (and activated by default if the terminal supports it).
-;; KKP has the advantage of supporting more keys (e.g., "<menu>" or
-;; "<Scroll_Lock>"), more key combinations (e.g., "C-M-S-z") and more modifiers,
-;; i.e., the Hyper and Super keys. It can also dynamically detect if a terminal
-;; supports the protocol, whereas Emacs has to deduce "modifyOtherKeys" support
-;; from the TERM variable.
-(use-package! kkp
-  :hook (tty-setup-hook . global-kkp-mode))
 
 ;;;; Encryption
 
@@ -2332,6 +2307,15 @@ possibly new window."
   (setopt grep-use-null-filename-separator t)
   (setopt grep-highlight-matches 'auto))
 
+;; Feature `replace' supplies the string and regular expression replace
+;; functions.
+(use-feature! replace
+  :config
+
+  ;; Show the matches visible in the window as the would look after the
+  ;; replacement.
+  (setopt query-replace-show-preview #'both))
+
 ;; Package `iedit' includes Emacs minor modes based on a API library and allows
 ;; you to edit one occurrence of some text in a buffer (possibly narrowed) or
 ;; region, and simultaneously have other occurrences edited in the same way,
@@ -2712,9 +2696,9 @@ possibly new window."
 ;;; Candidate selection
 
 ;; Do not consider case significant in completion
-(setq completion-ignore-case t
-      read-buffer-completion-ignore-case t
-      read-file-name-completion-ignore-case t)
+(setopt completion-ignore-case t
+        read-buffer-completion-ignore-case t
+        read-file-name-completion-ignore-case t)
 
 ;; Allow doing a command that requires candidate-selection when you are already
 ;; in the middle of candidate-selection.
@@ -3550,7 +3534,9 @@ defeats the purpose of `corfu-sort-function'."
   ;; Use full diagnostic text rather than truncated output.
   (setopt flymake-diagnostic-format-alist
           '((:help-echo . (origin code message))
-            (:eol . (oneliner))
+            (:inline-eol . (oneliner code))
+            (:inline-short . (oneliner))
+            (:inline-fancy . (oneliner code))
             (:eldoc . (origin code message))
             (:eldoc-echo . (origin code message))
             (t . (origin code message))))
@@ -3589,6 +3575,19 @@ defeats the purpose of `corfu-sort-function'."
 ;; syntax checkers and help selectively enable or disable diagnostic functions
 ;; based on major modes.
 (use-package! flymake-collection)
+
+;;;; Refactoring
+
+;; Feature `refactor' is a library for adding refactoring support for any
+;; programming language. A refactoring, or refactor, is any rewrite to a program
+;; that maintains its intended meaning, while improving it. It could be
+;; extracting a function, inlining a variable, renaming an identifier,
+;; organizing imports, or automatically fixing a diagnostic.
+(use-feature! refactor
+  :config
+
+  ;; Do not hint about code actions at point.
+  (setopt refactor-indications '(eldoc-hint)))
 
 ;;;; Automatic formatting
 
@@ -3769,6 +3768,7 @@ defeats the purpose of `corfu-sort-function'."
                                   cmake-ts-mode
                                   dockerfile-ts-mode
                                   json-ts-mode
+                                  markdown-ts-mode
                                   python-ts-mode
                                   rust-ts-mode
                                   toml-ts-mode)))
@@ -3812,26 +3812,18 @@ defeats the purpose of `corfu-sort-function'."
     (setq-local devdocs-current-docs '("cpp")))
 
   (defun my--c-ts-mode-indent-style ()
-    "Override the built-in BSD indentation style with some additional rules."
-    (cond
-     ((eq major-mode 'c-ts-mode)
-      `((c
-         ;; Align function arguments with the offset.
+    "Return BSD-based indentation rules for `c-ts-mode' and `c++-ts-mode'."
+    (let ((c-ts-mode-indent-style 'bsd)
+          (lang (if (derived-mode-p 'c-ts-mode) 'c 'cpp)))
+      (c-ts-mode--simple-indent-rules lang)
+      (append
+       '(;; Align function arguments and parameters with the offset.
          ((match nil "argument_list") parent-bol c-ts-indent-offset)
-         ;; Same for parameters.
-         ((match nil "parameter_list") parent-bol c-ts-indent-offset)
-         ;; Append to BSD style
-         ,@(cdr (car (c-ts-mode--simple-indent-rules 'c 'bsd))))))
-     ((eq major-mode 'c++-ts-mode)
-      `((cpp
-         ;; Align function arguments with the offset.
-         ((match nil "argument_list") parent-bol c-ts-indent-offset)
-         ;; Same for parameters.
-         ((match nil "parameter_list") parent-bol c-ts-indent-offset)
-         ;; Do not indent inside namespaces.
-         ((n-p-gp nil nil "namespace_definition") grand-parent 0)
-         ;; Append to BSD style
-         ,@(cdr (car (c-ts-mode--simple-indent-rules 'cpp 'bsd))))))))
+         ((match nil "parameter_list") parent-bol c-ts-indent-offset))
+       ;; Do not indent inside namespaces.
+       (when (eq lang 'cpp)
+         '(((n-p-gp nil nil "namespace_definition") grand-parent 0)))
+       (alist-get lang treesit-simple-indent-rules))))
 
   (defvar my--clang-format-region-args nil
     "Arguments selecting the region for clang-format.")
@@ -4469,14 +4461,6 @@ buffer at lookup time."
     "t" "toggle")
 
   (set-leader-keys-for-eglot!
-    ;; Code actions
-    "a a" #'eglot-code-actions :codeActionProvider
-    "a e" #'eglot-code-action-extract :codeActionProvider
-    "a f" #'eglot-code-action-quickfix :codeActionProvider
-    "a i" #'eglot-code-action-organize-imports :codeActionProvider
-    "a l" #'eglot-code-action-inline :codeActionProvider
-    "a w" #'eglot-code-action-rewrite :codeActionProvider
-
     ;; Format
     "f f" #'eglot-format-buffer :documentFormattingProvider
     "f r" #'eglot-format :documentRangeFormattingProvider
@@ -4485,11 +4469,17 @@ buffer at lookup time."
     "g c" #'eglot-show-call-hierarchy :callHierarchyProvider
     "g d" #'eglot-find-declaration :declarationProvider
     "g i" #'eglot-find-implementation :implementationProvider
-    "g t" #'eglot-find-type-definition :typeDefinitionProvider
+    "g t" #'eglot-find-typeDefinition :typeDefinitionProvider
     "g T" #'eglot-show-type-hierarchy :typeHierarchyProvider
 
     ;; Refactor
-    "r r" #'eglot-rename :renameProvider
+    "r e" #'refactor-extract :codeActionProvider
+    "r f" #'refactor-quickfix :codeActionProvider
+    "r i" #'refactor-organize-imports :codeActionProvider
+    "r l" #'refactor-inline :codeActionProvider
+    "r n" #'refactor-rename :renameProvider
+    "r r" #'refactor :codeActionProvider
+    "r w" #'refactor-rewrite :codeActionProvider
 
     ;; Toggle
     "t i" #'eglot-inlay-hints-mode :inlayHintProvider
@@ -4532,9 +4522,6 @@ buffer at lookup time."
 
   ;; Use *Messages* buffer to show progress.
   (setopt eglot-report-progress 'messages)
-
-  ;; Do not hint about code actions at point.
-  (setopt eglot-code-action-indications nil)
 
   ;; Disable Eglot events buffer, increase it only when debugging is needed.
   (setopt eglot-events-buffer-config '(:size 0))
@@ -5403,7 +5390,11 @@ Restore the buffer with \\<dired-mode-map>`\\[revert-buffer]'."
 
     ;; Hide items whenever their state would change to 'up-to-date' or
     ;; 'ignored'.
-    (setopt vc-dir-auto-hide-up-to-date t)))
+    (setopt vc-dir-auto-hide-up-to-date t)
+
+    ;; Unmarks all files without any prefix argument with
+    ;; `vc-dir-unmark-all-files'.
+    (setopt vc-dir-simple-unmark-all-files t)))
 
 ;;;;; Git
 
