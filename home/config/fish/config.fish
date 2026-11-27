@@ -813,6 +813,40 @@ function pr-remove -d "Remove previously downloaded branch"
     end
 end
 
+function ew-devenv-start -d "Start dev container"
+    if not set -q argv[1]
+        set -f alsi latest
+    else
+        set -f alsi $argv[1]
+    end
+    docker container stop ew-devenv-$alsi 2>/dev/null || true
+    docker container rm ew-devenv-$alsi 2>/dev/null || true
+    docker run \
+        --name ew-devenv-$alsi \
+        --detach \
+        --init \
+        --tty \
+        --mount type=bind,src=$SSH_AUTH_SOCK,target=$SSH_AUTH_SOCK \
+        --mount type=bind,src=$HOME/Projects,target=$HOME/Projects \
+        --env SSH_AUTH_SOCK \
+        --network host \
+        --hostname ew-devenv-$alsi \
+        ew-devenv:$alsi
+end
+
+function ew-devenv-shell -d "Attach to dev container"
+    if not set -q argv[1]
+        set -f alsi latest
+    else
+        set -f alsi $argv[1]
+    end
+    docker exec \
+        --interactive \
+        --tty \
+        ew-devenv-$alsi \
+        $SHELL -l
+end
+
 function __ew-ensure-install-dir --argument-names dir
     if test -e "$dir"; and not test -d "$dir"
         printf 'Not a directory: %s\n' $dir >&2
