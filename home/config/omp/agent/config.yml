@@ -1,0 +1,48 @@
+enabledModels:
+  - github-copilot/claude-haiku-5.5
+  - github-copilot/claude-sonnet-5.5
+  - github-copilot/claude-opus-5.5
+  - github-copilot/gpt-6-luna
+  - github-copilot/gpt-6.1-terra
+  - github-copilot/gpt-6.2-sol
+  - github-copilot/gpt-6.2-astra
+modelRoles:
+  default: github-copilot/claude-opus-5.5:medium
+  smol: github-copilot/gpt-6-luna:high
+  slow: github-copilot/claude-opus-5.5:high
+  plan: "@slow"
+  commit: github-copilot/gpt-6.2-sol:high
+  task: github-copilot/gpt-6.2-sol:high
+  advisor: github-copilot/gpt-6.2-astra:medium
+symbolPreset: nerd
+theme:
+  dark: titanium
+  light: light
+setupVersion: 3
+defaultThinkingLevel: high
+tools:
+  format: auto
+  approvalMode: yolo
+  approval:
+    read: allow
+    edit: allow
+    write: allow
+    bash: allow
+  intentTracing: true
+bash:
+  enabled: true
+  patterns:
+    - match: rm -rf *
+      approval: prompt
+    - match: git reset --hard*
+      approval: prompt
+    - match: git clean *
+      approval: prompt
+astGrep:
+  enabled: true
+statusLine:
+  compactThinkingLevel: false
+dev:
+  autoqaConsent: granted
+update:
+  auto: false
