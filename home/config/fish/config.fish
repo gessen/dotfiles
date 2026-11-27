@@ -42,6 +42,11 @@ if type -q bat
     set -gx MANROFFOPT -c
 end
 
+### Cargo
+
+# Add locally installed cargo
+fish_add_path -P $CARGO_HOME/bin
+
 ### CMake
 
 # By default, use nproc number of threads
@@ -74,6 +79,25 @@ end
 
 # Include the current load to the ninja status
 set -gx NINJA_STATUS "[%s/%f/%t] (j%r/%es/%Es/%P) "
+
+### Perforce
+
+# Needed by perforce
+set -gx P4CONFIG .perforce
+set -gx P4EDITOR $EDITOR
+
+### SSH
+
+# Use graphical SSH prompt
+if test -x /usr/bin/ksshaskpass
+    set -gx SSH_ASKPASS /usr/bin/ksshaskpass
+    set -gx SSH_ASKPASS_REQUIRE prefer
+end
+
+### Stormcloud
+
+# Needed to build Stormcloud
+set -gx BUILD_OS alsi22
 
 ### Early exit
 
@@ -714,6 +738,155 @@ abbr -a ssh-copy-terminfo --set-cursor \
 # Copy less settings to the given host
 abbr -a ssh-copy-lessenv --set-cursor \
     echo "export LESS=-iMRswXz-4#5" '|' ssh % '"cat >> ~/.bashrc"' /dev/stdin
+
+### Stormcloud
+
+function __pr-fetch-git -d "Download selected branch into new git worktree"
+    set -f branch $argv[1]
+    set -f root (git rev-parse --show-toplevel)
+    set -f project (path basename $root)
+    set -f suffix (string replace -a "/" "_" -- $branch)
+    set -f dest $root/../$project-$suffix
+    git fetch origin $branch
+    and git worktree add $dest $branch
+    and cd $dest
+end
+
+function __pr-fetch-jj -d "Download selected branch into new jujutsu workspace"
+    set -f branch $argv[1]
+    set -f root (jj root)
+    set -f project (path basename $root)
+    set -f suffix (string replace -a "/" "_" -- $branch)
+    set -f dest $root/../$project-$suffix
+    jj git fetch --remote origin --branch $branch
+    and jj workspace add --name $branch -r $branch@origin $dest
+    and cd $dest
+end
+
+function __pr-remove-git -d "Remove git worktree used by pr-fetch"
+    set -f branch $argv[1]
+    set -f root (git rev-parse --show-toplevel)
+    set -f project (path basename $root)
+    set -f suffix (string replace -a "/" "_" -- $branch)
+    set -f worktree (git worktree list | grep $branch | awk '{print $1}')
+    git worktree remove -f $worktree
+    or git worktree prune
+end
+
+function __pr-remove-jj -d "Remove jujutsu workspace used by pr-fetch"
+    set -f branch $argv[1]
+    jj workspace remove $branch
+    or jj workspace forget $branch
+end
+
+function pr-fetch -d "Download selected branch"
+    if not set -q argv[1]
+        echo "usage: pr-fetch <branch>" >&2
+        return 1
+    end
+    set -f branch $argv[1]
+    if jj root >/dev/null 2>&1
+        __pr-fetch-jj $branch
+    else if git rev-parse --show-toplevel >/dev/null 2>&1
+        __pr-fetch-git $branch
+    else
+        echo "pr-fetch: not in a git or jj repository" >&2
+        return 1
+    end
+end
+
+function pr-remove -d "Remove previously downloaded branch"
+    if not set -q argv[1]
+        echo "usage: pr-remove <branch>" >&2
+        return 1
+    end
+    set -f branch $argv[1]
+    if jj root >/dev/null 2>&1
+        __pr-remove-jj $branch
+    else if git rev-parse --show-toplevel >/dev/null 2>&1
+        __pr-remove-git $branch
+    else
+        echo "pr-remove: not in a git or jj repository" >&2
+        return 1
+    end
+end
+
+function __ew-ensure-install-dir --argument-names dir
+    if test -e "$dir"; and not test -d "$dir"
+        printf 'Not a directory: %s\n' $dir >&2
+        return 1
+    end
+    test -O "$dir"; and return 0
+
+    if not test -e "$dir"
+        sudo mkdir -- $dir; or return 1
+    end
+    sudo chown -- (id -u) $dir
+end
+
+function __ew-install-lfs-artifact --argument-names git_url branch name dest
+    set -f archive $name-$BUILD_OS.tar.gz
+    set -f tmp (mktemp -d --tmpdir ew-$name.XXXXXX); or return 1
+
+    git -C $tmp init -q
+    and git -C $tmp remote add origin $git_url
+    and begin
+        git archive --remote=$git_url $branch $archive \
+            | tar -xO \
+            | git -C $tmp lfs smudge $archive \
+            | tar -C $tmp -zx
+        not string match -qv 0 -- $pipestatus
+    end
+    and __ew-ensure-install-dir $dest
+    and find -H $dest -mindepth 1 -maxdepth 1 -exec rm -rf -- {} +
+    and make -C $tmp/$name-$BUILD_OS install DESTDIR=$dest
+    set -f ret $status
+
+    rm -rf -- $tmp
+    if test $ret -ne 0
+        printf 'Failed to install %s (%s) into %s\n' $archive $branch $dest >&2
+    end
+    return $ret
+end
+
+function ew-update-v8 -d "Update or install v8 and libc++"
+    if not set -q BUILD_OS[1]
+        echo 'BUILD_OS is not set' >&2
+        return 1
+    end
+
+    set -f git_url ssh://git@git.source.akamai.com:7999/sources/stormcloud_v8.git
+    set -f branch master
+    set -q argv[1]; and set -f branch $argv[1]
+
+    __ew-install-lfs-artifact $git_url $branch v8 /opt/v8
+    and __ew-install-lfs-artifact $git_url $branch libc++ /opt/libc++
+end
+
+function ew-unexpire-release -d "Un-expire selected label"
+    if not set -q argv[1]
+        set -f ghost_ip $GHOST_IP
+    else
+        set -f ghost_ip $argv[1]
+    end
+
+    set -f release (ssh root@$ghost_ip grep INSTALLVERS /a/etc/install.conf | awk -F= '{print $2}')
+    ssh root@kdc.shared.qa.akamai.com /a/bin/k3c unexpire audit_data_essl $release 1
+    ssh root@kdc.shared.qa.akamai.com /a/bin/k3c unexpire kdc_content essl $release
+end
+
+abbr -a cb cargo build --package
+abbr -a cc cargo check --package
+abbr -a cdoc cargo doc --no-deps --document-private-items --open --package
+abbr -a ct cargo nextest run --lib --package
+abbr -a ctp cargo nextest run --package
+abbr -a ctw cargo nextest run --workspace
+abbr -a cf cargo +nightly fmt
+abbr -a cv LD_LIBRARY_PATH=/opt/openssl/lib cargo xtask coverage --html -- cargo test --package
+
+# sql2 with configured networks
+abbr -a esql2 sql2 -q essl.lighthouse.query.akadns.net
+abbr -a fsql2 sql2 -q freeflow.lighthouse.query.akadns.net
 
 ### Yazi
 
