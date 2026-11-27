@@ -17,8 +17,13 @@ set -l xdg_state_home $HOME/.local/state
 
 # Partial XDG support
 set -gx ANSIBLE_HOME $xdg_config_home/ansible
+set -gx BUNDLE_USER_CACHE $xdg_cache_home/bundle
+set -gx BUNDLE_USER_CONFIG $xdg_config_home/bundle
+set -gx BUNDLE_USER_PLUGIN $xdg_data_home/bundle
 set -gx CARGO_HOME $xdg_data_home/cargo
 set -gx DOCKER_CONFIG $xdg_config_home/docker
+set -gx GEM_HOME $xdg_data_home/gem
+set -gx GEM_SPEC_CACHE $xdg_cache_home/gem
 set -gx GNUPGHOME $xdg_data_home/gnupg
 set -gx GTK2_RC_FILES $xdg_config_home/gtk-2.0/settings.ini
 set -gx NPM_CONFIG_USERCONFIG $xdg_config_home/npm/npmrc
@@ -97,6 +102,11 @@ set -gx NINJA_STATUS "[%s/%f/%t] (j%r/%es/%Es/%P) "
 set -gx P4CONFIG .perforce
 set -gx P4EDITOR $EDITOR
 
+### Ruby
+
+# Add locally installed gems
+fish_add_path -P $GEM_HOME/bin
+
 ### SSH
 
 # Use graphical SSH prompt
@@ -113,6 +123,12 @@ set -gx BUILD_OS alsi22
 
 # Needed by dewploy
 set -gx GHOST_IP 198.18.132.36
+
+# Needed by e2e tests
+set -gx EW_ENSURE_AUDIT_PASSING false
+set -gx EW_ENSURE_NOT_SUSPENDED false
+set -gx EW_FALLBACK_TO_SSH_BUNDLES false
+set -gx EW_LOG_LEVEL 0
 
 ### Early exit
 
