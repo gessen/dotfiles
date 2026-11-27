@@ -347,6 +347,8 @@ abbr -a gd2 git -c delta.side-by-side=hunk diff
 abbr -a gd2s git -c delta.side-by-side=hunk diff --staged
 abbr -a gdt git -c pager.diff='"delta --tui"' diff
 abbr -a gdts git -c pager.diff='"delta --tui"' diff --staged
+abbr -a gdn git -c pager.diff=diffnav diff
+abbr -a gdns git -c pager.diff=diffnav diff --staged
 abbr -a gdw git diff --word-diff
 abbr -a gdws git diff --word-diff --staged
 abbr -a gdu git diff @{upstream}
@@ -475,6 +477,7 @@ abbr -a jd jj diff
 abbr -a jdp jj diff -r @-
 abbr -a jdr jj diff -r
 abbr -a jd2 jj diff --config ui.pager='"delta --side-by-side hunk"'
+abbr -a jdn jj diff --config ui.pager=diffnav
 
 abbr -a je jj edit
 abbr -a jep jj edit @-
