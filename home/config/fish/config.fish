@@ -527,6 +527,23 @@ abbr -a jwf jj workspace forget
 abbr -a jwl jj workspace list
 abbr -a jwr jj workspace remove
 
+### Agents
+
+function agent-skills-add
+    for skill in \
+        AminBlg/SimpleEnglish \
+        blader/humanizer \
+        bassuniz/explain-diff-html \
+        dietrichgebert/ponytail \
+
+    npx skills add $skill --global --yes --agent universal
+    end
+end
+
+function agent-skills-update
+    npx skills update --global --yes
+end
+
 ### Atuin
 
 if type -q atuin
