@@ -219,16 +219,19 @@ end
 abbr -a ec emacsclient --tty
 abbr -a ecg emacsclient --create-frame --no-wait
 abbr -a mg emacsclient --tty --eval '"(magit-status)"'
+abbr -a mj emacsclient --tty --eval '"(majutsu-log)"'
 abbr -a mgg emacsclient --create-frame --no-wait --eval '"(magit-status)"'
+abbr -a mjg emacsclient --create-frame --no-wait --eval '"(majutsu-log)"'
 
 abbr -a e emacs
-abbr -a et emacs -nw
+abbr -a et emacs --tty
 
 abbr -a se sudoedit
 
 if test "$INSIDE_EMACS" = ghostel
     abbr -a f ghostel_cmd find-file
     abbr -a g ghostel_cmd magit-status-setup-buffer '(pwd)'
+    abbr -a j ghostel_cmd majutsu-log-setup-buffer
 end
 
 ### History
