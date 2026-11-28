@@ -101,7 +101,7 @@ git_push_bookmark = '''
 '''
 
 [template-aliases]
-"format_timestamp(ts)" = "ts.ago()"
+# "format_timestamp(ts)" = "ts.ago()"
 "jira_ticket_prefix(description)" = '''
   description
     .match(regex:'\[[[:upper:]]+-[[:digit:]]+\]')

@@ -6027,7 +6027,20 @@ This also disables line numbers and decorations."
   :hook (majutsu-mode-hook . majutsu-delta-mode))
 
 ;; Package `vc-jj' includes support for the Jujutsu version control system.
-(use-package! vc-jj)
+(use-package! vc-jj
+  :config
+
+  ;; Emacs 32 turned `vc-log-view-type' (a symbol) into `vc-log-view-types' (a
+  ;; list) but `vc-jj-log-view-mode' still tests it with `memq'.
+  (defadvice! my--vc-jj-log-view-type-as-symbol (fn &rest args)
+    :around #'vc-jj-log-view-mode
+    "Bind `vc-log-view-type' to its primary type symbol while FN runs."
+    (defvar vc-log-view-type)
+    (with-suppressed-warnings ((obsolete vc-log-view-type))
+      (let ((vc-log-view-type (if (consp vc-log-view-type)
+                                  (car vc-log-view-type)
+                                vc-log-view-type)))
+        (apply fn args)))))
 
 ;;;; Bug references
 
